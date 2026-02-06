@@ -52,8 +52,8 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="max-w-3xl font-display text-4xl font-bold leading-tight text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Votre talent mérite{" "}
-          <span className="italic">d'être entendu</span>
+          Le concours musical{" "}
+          <span className="italic">100% gratuit</span>
         </motion.h1>
 
         <motion.p
@@ -62,8 +62,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 max-w-xl text-base text-primary-foreground/70 sm:text-lg"
         >
-          Concours musical hebdomadaire. Soumettez votre musique, 
-          recevez des votes de la communauté et montez sur le podium.
+          Soumettez un morceau → La communauté vote → Montez sur le podium chaque semaine.
         </motion.p>
 
         {/* FREE participation badge */}
