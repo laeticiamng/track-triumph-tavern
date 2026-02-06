@@ -1,0 +1,76 @@
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+
+export function HeroSection() {
+  return (
+    <section className="relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-hero opacity-90" />
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-primary/20 blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-48 w-48 rounded-full bg-primary-glow/15 blur-[80px]" />
+      </div>
+
+      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-6"
+        >
+          <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm">
+            🎵 Saison 1 — Semaine 1 ouverte
+          </span>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="max-w-3xl font-display text-4xl font-bold leading-tight text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+        >
+          Votre talent mérite{" "}
+          <span className="italic">d'être entendu</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-6 max-w-xl text-base text-primary-foreground/70 sm:text-lg"
+        >
+          Concours musical hebdomadaire. Soumettez votre musique, 
+          recevez des votes de la communauté et montez sur le podium.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mt-10 flex flex-col gap-3 sm:flex-row"
+        >
+          <Button
+            size="lg"
+            className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-semibold px-8"
+            asChild
+          >
+            <Link to="/auth?tab=signup">
+              Participer gratuitement
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+            asChild
+          >
+            <Link to="/explore">Découvrir les artistes</Link>
+          </Button>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
