@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { RewardPoolBanner } from "@/components/rewards/RewardPoolBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Clock, Crown, Medal } from "lucide-react";
@@ -64,6 +65,10 @@ const Results = () => {
           <p className="mt-2 text-muted-foreground">
             {activeWeek?.title || "Semaine en cours"} — {isResultsPublished ? "Résultats publiés" : "En attente de publication"}
           </p>
+        </div>
+
+        <div className="mb-6">
+          <RewardPoolBanner />
         </div>
 
         {!isResultsPublished ? (

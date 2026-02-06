@@ -6,6 +6,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { VoteButton } from "@/components/vote/VoteButton";
+import { AIFeedback } from "@/components/elite/AIFeedback";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
@@ -120,14 +121,14 @@ const SubmissionDetail = () => {
 
             <h1 className="font-display text-3xl font-bold sm:text-4xl">{submission.title}</h1>
 
-            <div className="mt-3 flex items-center gap-3">
+            <Link to={`/artist/${submission.user_id}`} className="mt-3 flex items-center gap-3 group">
               {profile?.avatar_url && (
                 <img src={profile.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
               )}
-              <span className="text-lg text-muted-foreground">
+              <span className="text-lg text-muted-foreground group-hover:text-foreground transition-colors">
                 {submission.artist_name}
               </span>
-            </div>
+            </Link>
 
             {submission.description && (
               <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
@@ -183,6 +184,21 @@ const SubmissionDetail = () => {
                 </div>
               )}
             </div>
+
+            {/* AI Feedback (Elite only) */}
+            {isOwnSubmission && (
+              <div className="mt-8">
+                <AIFeedback
+                  submission={{
+                    title: submission.title,
+                    artist_name: submission.artist_name,
+                    description: submission.description,
+                    tags: submission.tags,
+                    category_name: category?.name,
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

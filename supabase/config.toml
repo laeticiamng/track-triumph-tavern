@@ -14,3 +14,9 @@ verify_jwt = false
 
 [functions.customer-portal]
 verify_jwt = false
+
+[functions.update-reward-pool]
+verify_jwt = false
+
+[functions.ai-feedback]
+verify_jwt = false
