@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const CONSENT_KEY = "wma-cookie-consent";
 
-export function CookieConsent() {
+export const CookieConsent = forwardRef<HTMLDivElement>(function CookieConsent(_, ref) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -54,4 +54,4 @@ export function CookieConsent() {
       )}
     </AnimatePresence>
   );
-}
+});

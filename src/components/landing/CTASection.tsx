@@ -21,11 +21,11 @@ export function CTASection() {
 
           <div className="relative z-10">
             <h2 className="font-display text-3xl font-bold text-primary-foreground sm:text-4xl">
-              Prêt à montrer votre talent ?
+              Rejoignez le concours cette semaine
             </h2>
             <p className="mx-auto mt-4 max-w-md text-primary-foreground/70">
-              Inscrivez-vous gratuitement et participez au concours de la semaine. 
-              Aucun frais d'entrée requis.
+              Créez votre compte en 30 secondes et soumettez votre premier morceau.
+              Participation gratuite, sans engagement.
             </p>
             <Button
               size="lg"
@@ -33,7 +33,7 @@ export function CTASection() {
               asChild
             >
               <Link to="/auth?tab=signup">
-                Commencer maintenant
+                Créer mon compte gratuit
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
