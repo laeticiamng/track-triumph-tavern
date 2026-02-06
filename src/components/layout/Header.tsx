@@ -10,7 +10,7 @@ const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
   { label: "Concours", href: "/compete", icon: Music },
   { label: "Résultats", href: "/results", icon: Trophy },
-  { label: "Pricing", href: "/pricing", icon: CreditCard },
+  { label: "Tarifs", href: "/pricing", icon: CreditCard },
 ];
 
 export function Header() {

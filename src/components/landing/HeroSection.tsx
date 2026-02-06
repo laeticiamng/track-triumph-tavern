@@ -1,9 +1,28 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 export function HeroSection() {
+  const [weekLabel, setWeekLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("weeks")
+      .select("title, week_number, season_id, seasons(name)")
+      .eq("is_active", true)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          const season = (data as any).seasons?.name || "Saison 1";
+          const title = data.title || `Semaine ${data.week_number}`;
+          setWeekLabel(`${season} — ${title} ouverte`);
+        }
+      });
+  }, []);
+
   return (
     <section className="relative overflow-hidden">
       {/* Background */}
@@ -14,16 +33,18 @@ export function HeroSection() {
       </div>
 
       <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-6"
-        >
-          <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm">
-            🎵 Saison 1 — Semaine 1 ouverte
-          </span>
-        </motion.div>
+        {weekLabel && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-6"
+          >
+            <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm">
+              🎵 {weekLabel}
+            </span>
+          </motion.div>
+        )}
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -45,7 +66,7 @@ export function HeroSection() {
           recevez des votes de la communauté et montez sur le podium.
         </motion.p>
 
-        {/* FREE participation badge - prominent */}
+        {/* FREE participation badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
