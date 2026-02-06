@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -45,6 +45,27 @@ export function HeroSection() {
           recevez des votes de la communauté et montez sur le podium.
         </motion.p>
 
+        {/* FREE participation badge - prominent */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.25 }}
+          className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-primary-foreground/80"
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <CheckCircle className="h-4 w-4 text-success" />
+            Participation 100% gratuite
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <CheckCircle className="h-4 w-4 text-success" />
+            Aucun frais d'entrée
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <CheckCircle className="h-4 w-4 text-success" />
+            Récompenses sponsorisées
+          </span>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +74,7 @@ export function HeroSection() {
         >
           <Button
             size="lg"
-            className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-semibold px-8"
+            className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-semibold px-8 text-base"
             asChild
           >
             <Link to="/auth?tab=signup">
@@ -70,6 +91,15 @@ export function HeroSection() {
             <Link to="/explore">Découvrir les artistes</Link>
           </Button>
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-4 text-xs text-primary-foreground/50"
+        >
+          Concours artistique basé sur le mérite — aucun paiement n'influence le classement
+        </motion.p>
       </div>
     </section>
   );
