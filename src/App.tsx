@@ -11,7 +11,8 @@ import SubmissionDetail from "./pages/SubmissionDetail";
 import Results from "./pages/Results";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
-import AdminModeration from "./pages/AdminModeration";
+import ArtistProfile from "./pages/ArtistProfile";
+import AdminDashboard from "./pages/AdminDashboard";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ContestRules from "./pages/ContestRules";
@@ -35,7 +36,9 @@ const App = () => (
           <Route path="/results" element={<Results />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/admin/moderation" element={<AdminModeration />} />
+          <Route path="/artist/:id" element={<ArtistProfile />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/moderation" element={<AdminDashboard />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contest-rules" element={<ContestRules />} />
