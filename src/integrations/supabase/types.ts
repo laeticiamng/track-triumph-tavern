@@ -414,6 +414,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_vote_count: {
+        Args: { _submission_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

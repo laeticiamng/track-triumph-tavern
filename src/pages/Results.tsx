@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Trophy, Clock, Award } from "lucide-react";
+import { Trophy, Clock, Crown, Medal } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -48,8 +46,15 @@ const Results = () => {
   const getTopByCategory = (catId: string) =>
     submissions.filter((s) => s.category_id === catId).slice(0, 3);
 
-  const podiumColors = ["text-yellow-500", "text-gray-400", "text-amber-700"];
+  const podiumIcons = [
+    <Crown className="h-5 w-5 text-yellow-500" />,
+    <Medal className="h-5 w-5 text-muted-foreground" />,
+    <Medal className="h-5 w-5 text-amber-700" />,
+  ];
   const podiumLabels = ["🥇", "🥈", "🥉"];
+
+  // Grand winner across all categories
+  const grandWinner = isResultsPublished && submissions.length > 0 ? submissions[0] : null;
 
   return (
     <Layout>
@@ -75,36 +80,88 @@ const Results = () => {
           </motion.div>
         ) : (
           <div className="space-y-10">
-            {categories.map((cat) => {
+            {/* Grand Winner */}
+            {grandWinner && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
+                  <CardHeader>
+                    <CardTitle className="font-display flex items-center gap-2 text-xl">
+                      <Crown className="h-6 w-6 text-yellow-500" />
+                      Grand Gagnant de la Semaine
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={grandWinner.cover_image_url}
+                        alt=""
+                        className="h-20 w-20 rounded-xl object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-display text-xl font-bold truncate">{grandWinner.title}</p>
+                        <p className="text-muted-foreground">{grandWinner.artist_name}</p>
+                      </div>
+                      <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
+                        {grandWinner.vote_count} votes
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* Per-category results */}
+            {categories.map((cat, catIndex) => {
               const top = getTopByCategory(cat.id);
               if (top.length === 0) return null;
 
               return (
-                <Card key={cat.id}>
-                  <CardHeader>
-                    <CardTitle className="font-display flex items-center gap-2">
-                      <Trophy className="h-5 w-5 text-primary" />
-                      {cat.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {top.map((sub, i) => (
-                        <div key={sub.id} className="flex items-center gap-4 rounded-xl bg-secondary/50 p-3">
-                          <span className="text-2xl">{podiumLabels[i]}</span>
-                          <img src={sub.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium truncate">{sub.title}</p>
-                            <p className="text-sm text-muted-foreground">{sub.artist_name}</p>
-                          </div>
-                          <Badge variant="secondary" className="font-display">
-                            {sub.vote_count} votes
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: catIndex * 0.1 }}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="font-display flex items-center gap-2">
+                        <Trophy className="h-5 w-5 text-primary" />
+                        {cat.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {top.map((sub, i) => (
+                          <motion.div
+                            key={sub.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: catIndex * 0.1 + i * 0.15 }}
+                            className={`flex items-center gap-4 rounded-xl p-3 ${
+                              i === 0
+                                ? "bg-primary/10 border border-primary/20"
+                                : "bg-secondary/50"
+                            }`}
+                          >
+                            <span className="text-2xl">{podiumLabels[i]}</span>
+                            <img src={sub.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium truncate">{sub.title}</p>
+                              <p className="text-sm text-muted-foreground">{sub.artist_name}</p>
+                            </div>
+                            <Badge variant="secondary" className="font-display">
+                              {sub.vote_count} votes
+                            </Badge>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
