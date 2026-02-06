@@ -1,0 +1,118 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
+import { Layout } from "@/components/layout/Layout";
+import { Footer } from "@/components/layout/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Trophy, Clock, Award } from "lucide-react";
+import { motion } from "framer-motion";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Submission = Tables<"submissions">;
+
+const Results = () => {
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [categories, setCategories] = useState<Tables<"categories">[]>([]);
+  const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      const [{ data: cats }, { data: week }] = await Promise.all([
+        supabase.from("categories").select("*").order("sort_order"),
+        supabase.from("weeks").select("*").eq("is_active", true).single(),
+      ]);
+
+      if (cats) setCategories(cats);
+      if (week) {
+        setActiveWeek(week);
+        const { data: subs } = await supabase
+          .from("submissions")
+          .select("*")
+          .eq("week_id", week.id)
+          .eq("status", "approved")
+          .order("vote_count", { ascending: false });
+        if (subs) setSubmissions(subs);
+      }
+      setLoading(false);
+    };
+    load();
+  }, []);
+
+  const isResultsPublished = activeWeek?.results_published_at
+    ? new Date(activeWeek.results_published_at) <= new Date()
+    : false;
+
+  const getTopByCategory = (catId: string) =>
+    submissions.filter((s) => s.category_id === catId).slice(0, 3);
+
+  const podiumColors = ["text-yellow-500", "text-gray-400", "text-amber-700"];
+  const podiumLabels = ["🥇", "🥈", "🥉"];
+
+  return (
+    <Layout>
+      <div className="container py-8">
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">Résultats</h1>
+          <p className="mt-2 text-muted-foreground">
+            {activeWeek?.title || "Semaine en cours"} — {isResultsPublished ? "Résultats publiés" : "En attente de publication"}
+          </p>
+        </div>
+
+        {!isResultsPublished ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center py-20 text-center"
+          >
+            <Clock className="h-16 w-16 text-muted-foreground/30 mb-4" />
+            <h2 className="font-display text-2xl font-bold">Résultats à venir</h2>
+            <p className="mt-2 max-w-md text-muted-foreground">
+              Les résultats seront publiés à la fin de la période de vote. Revenez bientôt pour découvrir le podium !
+            </p>
+          </motion.div>
+        ) : (
+          <div className="space-y-10">
+            {categories.map((cat) => {
+              const top = getTopByCategory(cat.id);
+              if (top.length === 0) return null;
+
+              return (
+                <Card key={cat.id}>
+                  <CardHeader>
+                    <CardTitle className="font-display flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-primary" />
+                      {cat.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {top.map((sub, i) => (
+                        <div key={sub.id} className="flex items-center gap-4 rounded-xl bg-secondary/50 p-3">
+                          <span className="text-2xl">{podiumLabels[i]}</span>
+                          <img src={sub.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{sub.title}</p>
+                            <p className="text-sm text-muted-foreground">{sub.artist_name}</p>
+                          </div>
+                          <Badge variant="secondary" className="font-display">
+                            {sub.vote_count} votes
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <Footer />
+    </Layout>
+  );
+};
+
+export default Results;
