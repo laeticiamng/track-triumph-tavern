@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
+import { VoteButton } from "@/components/vote/VoteButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
@@ -14,10 +16,12 @@ type Submission = Tables<"submissions">;
 
 const SubmissionDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [category, setCategory] = useState<{ name: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -32,12 +36,31 @@ const SubmissionDetail = () => {
         ]);
         setProfile(prof);
         setCategory(cat);
+
+        // Check if user already voted in this category/week
+        if (user) {
+          const { data: existingVote } = await supabase
+            .from("votes")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("category_id", sub.category_id)
+            .eq("week_id", sub.week_id)
+            .maybeSingle();
+          setHasVoted(!!existingVote);
+        }
       }
       setLoading(false);
     };
 
     load();
-  }, [id]);
+  }, [id, user]);
+
+  const handleVoted = () => {
+    setHasVoted(true);
+    if (submission) {
+      setSubmission({ ...submission, vote_count: submission.vote_count + 1 });
+    }
+  };
 
   if (loading) {
     return (
@@ -61,6 +84,8 @@ const SubmissionDetail = () => {
       </Layout>
     );
   }
+
+  const isOwnSubmission = user?.id === submission.user_id;
 
   return (
     <Layout>
@@ -138,10 +163,25 @@ const SubmissionDetail = () => {
               </Button>
             )}
 
-            {/* Vote count */}
-            <div className="mt-8 rounded-xl bg-secondary/50 p-4 text-center">
-              <p className="text-3xl font-display font-bold">{submission.vote_count}</p>
-              <p className="text-sm text-muted-foreground">votes reçus</p>
+            {/* Vote Section */}
+            <div className="mt-8">
+              {isOwnSubmission ? (
+                <div className="rounded-xl bg-secondary/50 p-4 text-center">
+                  <p className="text-3xl font-display font-bold">{submission.vote_count}</p>
+                  <p className="text-sm text-muted-foreground">votes reçus</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <VoteButton
+                    submissionId={submission.id}
+                    hasVoted={hasVoted}
+                    onVoted={handleVoted}
+                  />
+                  <p className="text-center text-sm text-muted-foreground">
+                    {submission.vote_count} vote{submission.vote_count !== 1 ? "s" : ""}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

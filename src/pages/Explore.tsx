@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
+import { VoteButton } from "@/components/vote/VoteButton";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Music } from "lucide-react";
+import { Search, Music, Heart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import type { Tables } from "@/integrations/supabase/types";
@@ -140,8 +141,14 @@ const Explore = () => {
                       <p className="truncate text-sm text-white/70">{sub.artist_name}</p>
                     </div>
                   </div>
-                  <div className="p-3">
+                  <div className="p-3 space-y-2">
                     <AudioPlayer src={sub.audio_excerpt_url} compact />
+                    <div className="flex items-center justify-between" onClick={(e) => e.preventDefault()}>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Heart className="h-3 w-3" /> {sub.vote_count}
+                      </span>
+                      <VoteButton submissionId={sub.id} compact />
+                    </div>
                   </div>
                 </Link>
               ))}
