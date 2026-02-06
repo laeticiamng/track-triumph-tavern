@@ -14,16 +14,411 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          banner_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          social_links: Json | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          social_links?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          social_links?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reward_pools: {
+        Row: {
+          created_at: string
+          current_cents: number
+          fallback_label: string | null
+          id: string
+          minimum_cents: number
+          sponsors: Json | null
+          status: Database["public"]["Enums"]["reward_pool_status"]
+          top1_amount_cents: number
+          top2_amount_cents: number
+          top3_amount_cents: number
+          updated_at: string
+          week_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_cents?: number
+          fallback_label?: string | null
+          id?: string
+          minimum_cents?: number
+          sponsors?: Json | null
+          status?: Database["public"]["Enums"]["reward_pool_status"]
+          top1_amount_cents?: number
+          top2_amount_cents?: number
+          top3_amount_cents?: number
+          updated_at?: string
+          week_id: string
+        }
+        Update: {
+          created_at?: string
+          current_cents?: number
+          fallback_label?: string | null
+          id?: string
+          minimum_cents?: number
+          sponsors?: Json | null
+          status?: Database["public"]["Enums"]["reward_pool_status"]
+          top1_amount_cents?: number
+          top2_amount_cents?: number
+          top3_amount_cents?: number
+          updated_at?: string
+          week_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_pools_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: true
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seasons: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          id: string
+          is_active: boolean
+          name: string
+          start_date: string
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          start_date: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          start_date?: string
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          artist_name: string
+          audio_excerpt_url: string
+          category_id: string
+          cover_image_url: string
+          created_at: string
+          description: string | null
+          external_url: string | null
+          id: string
+          rejection_reason: string | null
+          rights_declaration: boolean
+          status: Database["public"]["Enums"]["submission_status"]
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          vote_count: number
+          week_id: string
+        }
+        Insert: {
+          artist_name: string
+          audio_excerpt_url: string
+          category_id: string
+          cover_image_url: string
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          rejection_reason?: string | null
+          rights_declaration?: boolean
+          status?: Database["public"]["Enums"]["submission_status"]
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+          vote_count?: number
+          week_id: string
+        }
+        Update: {
+          artist_name?: string
+          audio_excerpt_url?: string
+          category_id?: string
+          cover_image_url?: string
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          rejection_reason?: string | null
+          rights_declaration?: boolean
+          status?: Database["public"]["Enums"]["submission_status"]
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          vote_count?: number
+          week_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submissions_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vote_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: number
+          ip_address: unknown
+          user_agent: string | null
+          user_id: string
+          vote_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type?: string
+          id?: never
+          ip_address?: unknown
+          user_agent?: string | null
+          user_id: string
+          vote_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: never
+          ip_address?: unknown
+          user_agent?: string | null
+          user_id?: string
+          vote_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_events_vote_id_fkey"
+            columns: ["vote_id"]
+            isOneToOne: false
+            referencedRelation: "votes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      votes: {
+        Row: {
+          category_id: string
+          comment: string | null
+          created_at: string
+          emotion_score: number | null
+          id: string
+          is_valid: boolean
+          originality_score: number | null
+          production_score: number | null
+          submission_id: string
+          user_id: string
+          week_id: string
+        }
+        Insert: {
+          category_id: string
+          comment?: string | null
+          created_at?: string
+          emotion_score?: number | null
+          id?: string
+          is_valid?: boolean
+          originality_score?: number | null
+          production_score?: number | null
+          submission_id: string
+          user_id: string
+          week_id: string
+        }
+        Update: {
+          category_id?: string
+          comment?: string | null
+          created_at?: string
+          emotion_score?: number | null
+          id?: string
+          is_valid?: boolean
+          originality_score?: number | null
+          production_score?: number | null
+          submission_id?: string
+          user_id?: string
+          week_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      weeks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          results_published_at: string | null
+          season_id: string
+          submission_close_at: string
+          submission_open_at: string
+          title: string | null
+          voting_close_at: string
+          voting_open_at: string
+          week_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          results_published_at?: string | null
+          season_id: string
+          submission_close_at: string
+          submission_open_at: string
+          title?: string | null
+          voting_close_at: string
+          voting_open_at: string
+          week_number: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          results_published_at?: string | null
+          season_id?: string
+          submission_close_at?: string
+          submission_open_at?: string
+          title?: string | null
+          voting_close_at?: string
+          voting_open_at?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weeks_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      reward_pool_status: "active" | "inactive" | "threshold_met"
+      submission_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +545,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      reward_pool_status: ["active", "inactive", "threshold_met"],
+      submission_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
