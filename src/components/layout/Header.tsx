@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
   { label: "Concours", href: "/compete", icon: Music },
   { label: "Résultats", href: "/results", icon: Trophy },
+  { label: "Pricing", href: "/pricing", icon: CreditCard },
 ];
 
 export function Header() {

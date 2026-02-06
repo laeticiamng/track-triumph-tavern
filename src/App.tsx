@@ -9,6 +9,7 @@ import Explore from "./pages/Explore";
 import Compete from "./pages/Compete";
 import SubmissionDetail from "./pages/SubmissionDetail";
 import Results from "./pages/Results";
+import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
 import AdminModeration from "./pages/AdminModeration";
 import Terms from "./pages/Terms";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/compete" element={<Compete />} />
           <Route path="/submissions/:id" element={<SubmissionDetail />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin/moderation" element={<AdminModeration />} />
           <Route path="/terms" element={<Terms />} />
