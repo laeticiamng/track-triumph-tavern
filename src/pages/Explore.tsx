@@ -126,17 +126,31 @@ const Explore = () => {
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Music className="h-12 w-12 text-muted-foreground/50 mb-4" />
-              <h3 className="font-display text-lg font-semibold">Aucune soumission</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {activeCategory !== "all" ? "Aucune soumission dans cette catégorie." : "Les soumissions apparaîtront ici une fois approuvées."}
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
+                <Music className="h-10 w-10 text-accent-foreground" />
+              </div>
+              <h3 className="font-display text-xl font-semibold">Pas encore de soumissions</h3>
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
+                {noActiveWeek
+                  ? "Aucune semaine de concours n'est active pour le moment. Revenez bientôt !"
+                  : activeCategory !== "all"
+                    ? "Aucune soumission dans cette catégorie cette semaine."
+                    : "Les soumissions apparaîtront ici une fois approuvées par notre équipe. Soyez parmi les premiers à soumettre !"}
               </p>
-              <Link
-                to="/compete"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                Soumettre un morceau
-              </Link>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  to="/auth?tab=signup"
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  Créer mon compte
+                </Link>
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+                >
+                  En savoir plus
+                </Link>
+              </div>
             </div>
           ) : (
             <motion.div
