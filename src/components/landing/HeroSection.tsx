@@ -32,7 +32,7 @@ export function HeroSection() {
         <div className="absolute bottom-1/4 right-1/4 h-48 w-48 rounded-full bg-primary-glow/15 blur-[80px]" />
       </div>
 
-      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center text-center">
+      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center pt-20 pb-12 text-center">
         {weekLabel && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
