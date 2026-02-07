@@ -13,9 +13,10 @@ import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import {
-  Shield, Check, X, Calendar, Trophy, DollarSign, AlertTriangle,
+  Shield, Check, X, Calendar, Trophy, DollarSign,
   Download, Clock, Plus, Trash2, Lock
 } from "lucide-react";
+import { FraudMonitoring } from "@/components/admin/FraudMonitoring";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -435,38 +436,7 @@ const AdminDashboard = () => {
 
           {/* Fraud Tab */}
           <TabsContent value="fraud" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-xl font-semibold flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-destructive" /> Monitoring Anti-Fraude
-              </h2>
-              <Button variant="outline" size="sm" onClick={() => {
-                supabase.from("votes").select("*").eq("is_valid", false).then(({ data }) => {
-                  if (data) exportCSV(data, "suspicious-votes");
-                });
-              }}>
-                <Download className="mr-1 h-3.5 w-3.5" /> Export suspects
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Card>
-                <CardContent className="py-4 text-center">
-                  <p className="text-3xl font-bold font-display">{voteStats.total}</p>
-                  <p className="text-xs text-muted-foreground">Votes totaux</p>
-                </CardContent>
-              </Card>
-              <Card className={voteStats.suspicious > 0 ? "border-destructive/30" : ""}>
-                <CardContent className="py-4 text-center">
-                  <p className="text-3xl font-bold font-display text-destructive">{voteStats.suspicious}</p>
-                  <p className="text-xs text-muted-foreground">Votes invalidés</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <p className="text-sm text-muted-foreground">
-              Le système anti-fraude vérifie automatiquement : rate limiting (5 votes/min), 
-              1 vote par catégorie par semaine, détection d'auto-vote, et journalisation complète via vote_events.
-            </p>
+            <FraudMonitoring weeks={weeks} />
           </TabsContent>
         </Tabs>
       </div>

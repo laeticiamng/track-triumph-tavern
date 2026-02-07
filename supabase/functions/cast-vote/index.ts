@@ -73,6 +73,14 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ── Email verification check ──
+    if (!user.email_confirmed_at) {
+      return new Response(JSON.stringify({ error: "Veuillez confirmer votre email avant de voter." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json();
     const { submission_id, originality_score, production_score, emotion_score, comment } = body;
 
@@ -224,7 +232,17 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Insert audit event
+    // ── Build fraud metadata signals ──
+    const metadata: Record<string, any> = {};
+
+    // New account detection (< 1 hour)
+    const accountCreatedAt = user.created_at ? new Date(user.created_at) : null;
+    if (accountCreatedAt && (Date.now() - accountCreatedAt.getTime()) < 3_600_000) {
+      metadata.is_new_account = true;
+      metadata.account_age_minutes = Math.floor((Date.now() - accountCreatedAt.getTime()) / 60_000);
+    }
+
+    // Insert audit event with metadata
     const userAgent = req.headers.get("user-agent") || null;
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || null;
 
@@ -234,6 +252,7 @@ Deno.serve(async (req) => {
       event_type: "cast",
       user_agent: userAgent,
       ip_address: ip,
+      metadata,
     });
 
     // Increment vote_count on submission

@@ -307,6 +307,7 @@ export type Database = {
           event_type: string
           id: number
           ip_address: unknown
+          metadata: Json | null
           user_agent: string | null
           user_id: string
           vote_id: string
@@ -316,6 +317,7 @@ export type Database = {
           event_type?: string
           id?: never
           ip_address?: unknown
+          metadata?: Json | null
           user_agent?: string | null
           user_id: string
           vote_id: string
@@ -325,6 +327,7 @@ export type Database = {
           event_type?: string
           id?: never
           ip_address?: unknown
+          metadata?: Json | null
           user_agent?: string | null
           user_id?: string
           vote_id?: string
