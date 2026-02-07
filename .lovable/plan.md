@@ -1,158 +1,96 @@
 
 
-# Audit fonctionnel complet -- /pricing et pages associees
+# Audit des features annoncees dans les abonnements /pricing
 
-## Score global : 8.5/10
-
----
-
-## 1. Page /pricing -- Score : 9/10
-
-### Ce qui fonctionne bien
-- Titre "Choisissez votre plan" -- vouvoiement coherent
-- Sous-titre clair : "Ecoutez et votez gratuitement. Debloquez la soumission..."
-- Mention anti-manipulation : "Les abonnements n'influencent pas le classement"
-- 3 cards bien structurees avec animations framer-motion
-- Badge "Populaire" sur Pro, badge "Votre plan" sur le plan actif
-- Plan Free enrichi avec 6 features (plus de sensation de "plan vide")
-- Pro et Elite avec features explicites (plus de jargon "Tout Free +")
-- Reassurance Stripe en bas de page
-- Bouton "Gerer mon abonnement" visible pour les abonnes (appelle customer-portal)
-- Toast "Paiement annule" sur retour `?checkout=cancelled`
-
-### Problemes restants
-
-| Probleme | Gravite | Detail |
-|----------|---------|--------|
-| Bouton Free "Plan actuel" disabled quand connecte en Free -- OK. Mais si connecte et deja Pro/Elite, le bouton Free dit toujours "Creer mon compte" au lieu de "Plan Free" | Mineur | Confusion legere pour un abonne qui voit "Creer mon compte" sur le plan Free |
-| Checkout ouvre dans un nouvel onglet (`window.open`) | Mineur | L'utilisateur quitte le contexte de l'app -- `window.location.href` serait plus fluide pour un checkout |
-| Pas de distinction visuelle entre Pro et Elite quand l'un est le plan actuel et l'autre non | Mineur | Si l'utilisateur est Pro, le bouton Elite dit juste "S'abonner" sans mentionner "Upgrader" |
+## Methodologie
+Verification feature par feature : chaque element liste dans les plans Free, Pro et Elite a ete trace dans le code source pour verifier s'il est implemente, fonctionnel et accessible.
 
 ---
 
-## 2. Page /auth -- Score : 8/10
+## Plan FREE (6 features annoncees)
 
-### Ce qui fonctionne
-- Redirect parameter fonctionne : `useEffect` lit `searchParams.get("redirect")` et redirige correctement
-- Messaging clarifie : "Inscription gratuite -- ecoutez, votez et decouvrez des artistes"
-- Toggle connexion/inscription fluide
-- Validation : email requis, mot de passe min 6 caracteres
-- Gestion erreur "already registered" avec message clair
-
-### Problemes restants
-
-| Probleme | Gravite | Detail |
-|----------|---------|--------|
-| Si l'utilisateur est deja connecte et visite /auth, il est redirige -- mais l'ecran blanc flash brievement avant la redirection | Mineur | Manque un etat de chargement pendant la verification de session |
-| Pas de lien "Mot de passe oublie" | Moyen | Fonctionnalite basique absente -- l'utilisateur ne peut pas recuperer son compte |
-| Pas de social login (Google/Discord) | Moyen | Friction a l'inscription pour le public cible (artistes musicaux) |
+| Feature annoncee | Statut | Detail |
+|------------------|--------|--------|
+| Ecouter toutes les soumissions | OK | Pages /explore et /vote avec AudioPlayer fonctionnel |
+| 5 votes par semaine | OK | `use-vote-state.ts` lit `votes_per_week: 5` et bloque au-dela. VoteQuotaBar affiche le compteur |
+| Acces au classement en direct | OK | Pages /results et /hall-of-fame accessibles sans abonnement |
+| Decouvrir tous les artistes | OK | Page /explore + /artist/:id accessible sans restriction |
+| Notifications hebdomadaires | ABSENT | Aucun systeme de notifications implemente (ni email, ni push, ni in-app). La feature est promise mais inexistante |
+| Profil basique | OK | Page /profile avec edition nom + bio |
 
 ---
 
-## 3. Page /compete -- Score : 9/10
+## Plan PRO (6 features annoncees)
 
-### Ce qui fonctionne
-- Gate Free : Message "Abonnement requis" avec icone Lock, texte clair et CTA vers /pricing
-- Gate "Deja soumis" : Message correct avec lien vers /explore
-- Formulaire complet : titre, artiste, categorie, description, tags, audio, cover, lien externe
-- Declarations checkboxes (droits + reglement)
-- Upload vers storage buckets (audio-excerpts, cover-images)
-- Gestion de la periode de soumission (open/close)
-
-### Problemes restants
-
-| Probleme | Gravite | Detail |
-|----------|---------|--------|
-| Pas de validation de taille de fichier audio | Moyen | Un utilisateur pourrait uploader un fichier de 100MB -- pas de limite visible |
-| Pas de preview audio avant envoi | Mineur | L'utilisateur ne peut pas verifier son extrait |
-| Le redirect non-connecte va vers `/auth?tab=signup` sans `redirect=/compete` | Moyen | Apres inscription, l'utilisateur est redirige vers /profile au lieu de revenir sur /compete |
+| Feature annoncee | Statut | Detail |
+|------------------|--------|--------|
+| Soumettre 1 morceau par semaine | OK | Page /compete gate par `tier !== "free"`, verifie `alreadySubmitted` pour limiter a 1/semaine |
+| Votes illimites | OK | `votes_per_week: Infinity` dans les limits, `use-vote-state.ts` retourne `"unlimited"` |
+| Analytics de base | ABSENT | `limits.analytics: true` est defini mais aucune page/composant analytics n'existe. Pas de dashboard de stats pour les artistes Pro |
+| Profil artiste personnalise | PARTIEL | Le profil /profile permet nom + bio, mais pas d'avatar, pas de banner, pas de liens sociaux. La page /artist/:id affiche ces champs mais ils ne sont pas editables |
+| 5 commentaires par semaine | ABSENT | Le systeme de commentaires dans VoteButton est optionnel et non limite. Aucun quota de 5 commentaires/semaine n'est implemente |
+| Ecoute, classement et decouverte inclus | OK | Meme acces que Free |
 
 ---
 
-## 4. Page /profile -- Score : 8.5/10
+## Plan ELITE (7 features annoncees)
 
-### Ce qui fonctionne
-- Card abonnement avec badge Actif/Gratuit et icone par tier
-- Bouton "Gerer l'abonnement" (customer-portal) pour les abonnes
-- Bouton "Voir les plans Pro & Elite" pour les non-abonnes
-- Toast de succes apres checkout (`?checkout=success`)
-- Stats : soumissions, votes donnes, votes recus
-- Edition profil (nom d'artiste, bio) fonctionnelle
-- Liste des soumissions avec statut (En attente/Approuve/Rejete)
-
-### Problemes restants
-
-| Probleme | Gravite | Detail |
-|----------|---------|--------|
-| Pas d'avatar/photo de profil | Mineur | Profil basique sans image |
-| La date de renouvellement s'affiche mais pas le montant du plan | Mineur | L'utilisateur ne voit pas combien il paie |
+| Feature annoncee | Statut | Detail |
+|------------------|--------|--------|
+| Soumettre 1 morceau par semaine | OK | Meme logique que Pro |
+| Votes et commentaires illimites | PARTIEL | Votes illimites OK. Commentaires : aucun quota n'est en place (ni pour Pro ni pour Elite), donc c'est deja illimite pour tous |
+| Analytics avances (evolution jour par jour) | ABSENT | Meme probleme que Pro : aucune page analytics n'existe |
+| Feedback IA structure (analyse detaillee) | OK | Composant `AIFeedback.tsx` gate par `tier === "elite"`, appelle la edge function `ai-feedback`, affiche vibe/structure/production/suggestions |
+| Kit marketing automatique (visuels promo) | ABSENT | `marketing_kit: true` est defini dans les limits mais aucun composant, page ou edge function ne genere de visuels promo. Feature promise mais totalement absente |
+| Badge Elite sur le profil | ABSENT | Aucun badge Elite n'est affiche sur la page /profile ni sur /artist/:id. Le code ArtistProfile.tsx a un state `tier` mais il reste toujours `"free"` (jamais mis a jour) |
+| Page artiste premium | ABSENT | La page /artist/:id est identique pour tous les tiers. Aucune difference visuelle ou fonctionnelle pour les Elite |
 
 ---
 
-## 5. Edge Functions -- Score : 9/10
+## Resume des problemes
 
-### check-subscription
-- Mapping produit/tier correct (prod_TvnnCLdThflvd5 = pro, prod_Tvnn1RBP7qVms7 = elite)
-- Retourne `tier`, `subscribed`, `subscription_end`
-- Fallback "free" pour client Stripe sans abonnement actif
-- Logging detaille
+### Features totalement absentes (a implementer ou retirer de la liste)
 
-### create-checkout
-- Verifie l'existence du client Stripe, bloque la double souscription
-- Success URL : `/profile?checkout=success`
-- Cancel URL : `/pricing?checkout=cancelled`
-- Gestion d'erreurs propre
+1. **Notifications hebdomadaires** (Free) -- Aucun systeme de notifications
+2. **Analytics de base** (Pro) -- Aucune page analytics
+3. **Analytics avances** (Elite) -- Idem
+4. **Kit marketing automatique** (Elite) -- Aucune implementation
+5. **Badge Elite sur le profil** (Elite) -- Non affiche
+6. **Page artiste premium** (Elite) -- Pas de difference avec les autres tiers
 
-### customer-portal
-- Retourne l'URL du portail Stripe
-- Return URL vers `/profile`
-- Gestion erreur "No Stripe customer found"
+### Features partiellement implementees (a corriger)
 
-### Probleme edge function
-
-| Probleme | Gravite | Detail |
-|----------|---------|--------|
-| `create-checkout` retourne status 500 meme pour des erreurs metier ("deja abonne") | Mineur | Devrait retourner 400 pour les erreurs utilisateur vs 500 pour les erreurs serveur |
+7. **Profil artiste personnalise** (Pro) -- Edition avatar, banner et liens sociaux manquante
+8. **5 commentaires par semaine** (Pro) -- Aucun quota en place, commentaires illimites pour tous
+9. **Votes et commentaires illimites** (Elite) -- Les commentaires sont deja illimites pour tous, donc pas de difference avec Free/Pro
 
 ---
 
-## 6. Coherence inter-pages
+## Plan de corrections recommande
 
-| Flux | Statut | Detail |
-|------|--------|--------|
-| Pricing -> Auth (signup) -> redirect /pricing | OK | Le parametre redirect est supporte |
-| Pricing -> Checkout -> Stripe -> retour success | OK | Redirige vers /profile avec toast |
-| Pricing -> Checkout -> Stripe -> retour annule | OK | Redirige vers /pricing avec toast |
-| Pricing -> Gerer abonnement -> Stripe Portal | OK | Ouvre le portail dans un nouvel onglet |
-| Compete -> Gate Free -> Pricing | OK | Lien "Voir les offres" fonctionne |
-| Compete -> redirect non-connecte | BUG | Manque `redirect=/compete` dans la redirection vers /auth |
-| Profile -> Gerer abonnement -> Stripe Portal | OK | Fonctionne |
-| Profile -> Voir les plans -> Pricing | OK | Lien fonctionne |
+### Option A : Implementer les features manquantes (effort eleve)
+Creer les pages/composants pour : analytics basique (Pro), analytics avances (Elite), kit marketing (Elite), badge Elite, page artiste premium, systeme de notifications, quota commentaires Pro, edition profil etendue.
 
----
+### Option B : Ajuster les features annoncees (effort faible)
+Retirer ou reformuler les features non implementees dans `subscription-tiers.ts` pour ne promettre que ce qui existe reellement. Par exemple :
+- Retirer "Notifications hebdomadaires" du Free
+- Remplacer "Analytics de base" par "Statistiques de votes (sur votre profil)"
+- Retirer "Kit marketing automatique" de Elite
+- Remplacer "Badge Elite sur le profil" par "Badge Elite (a venir)"
+- Remplacer "5 commentaires par semaine" par "Commentaires sur les votes"
 
-## Plan de corrections
-
-### 1. Corriger le redirect de /compete vers /auth (`Compete.tsx` ligne 55)
-Changer `navigate("/auth?tab=signup")` en `navigate("/auth?tab=signup&redirect=/compete")` pour que l'utilisateur revienne sur /compete apres inscription.
-
-### 2. Changer le texte du bouton Free pour les abonnes (`Pricing.tsx` ligne 179)
-Si l'utilisateur est connecte ET n'est pas sur le plan Free, afficher "Plan Free" au lieu de "Creer mon compte".
-
-### 3. Ameliorer le bouton d'upgrade (`Pricing.tsx` ligne 190)
-Quand l'utilisateur est Pro et regarde Elite, afficher "Upgrader" au lieu de "S'abonner".
-
-### 4. Rediriger le checkout dans le meme onglet (`Pricing.tsx` ligne 60)
-Remplacer `window.open(result.url, "_blank")` par `window.location.href = result.url` pour un flux plus fluide.
-
-### 5. Meme correction pour le portail (`Pricing.tsx` ligne 75 et `Profile.tsx` ligne 90)
-Remplacer `window.open(result.url, "_blank")` par `window.location.href = result.url`.
+### Option C : Approche mixte (recommandee)
+- Implementer les corrections rapides : Badge Elite sur profil/artist, edition avatar + liens sociaux
+- Reformuler les features complexes non implementees (analytics avances, kit marketing) avec mention "a venir" ou les retirer
+- Ajouter un quota de commentaires pour Pro (5/semaine) pour differencier reellement des tiers
 
 ---
 
-## Fichiers a modifier
+## Fichiers concernes
 
-1. **`src/pages/Compete.tsx`** -- Ajouter `redirect=/compete` dans le navigate vers /auth
-2. **`src/pages/Pricing.tsx`** -- Texte bouton Free dynamique, label "Upgrader", checkout dans le meme onglet
-3. **`src/pages/Profile.tsx`** -- Portail dans le meme onglet
+1. `src/lib/subscription-tiers.ts` -- Ajuster les features annoncees
+2. `src/pages/Profile.tsx` -- Ajouter badge Elite, edition avatar
+3. `src/pages/ArtistProfile.tsx` -- Afficher badge Elite, differencier page premium
+4. `src/components/vote/VoteButton.tsx` -- Implementer quota commentaires Pro
+5. Nouveaux fichiers potentiels : page analytics, composant kit marketing
 
