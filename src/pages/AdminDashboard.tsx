@@ -6,7 +6,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,8 +13,8 @@ import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import {
-  Shield, Check, X, Calendar, Users, Trophy, DollarSign, AlertTriangle,
-  ChevronDown, ChevronUp, BarChart3, Download, Clock, Play, Pause
+  Shield, Check, X, Calendar, Trophy, DollarSign, AlertTriangle,
+  Download, Clock, Plus, Trash2, Lock
 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -23,13 +22,17 @@ type Submission = Tables<"submissions">;
 type Week = Tables<"weeks">;
 type RewardPool = Tables<"reward_pools">;
 
+interface Sponsor {
+  name: string;
+  url: string;
+}
+
 const AdminDashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Data
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [rewardPools, setRewardPools] = useState<RewardPool[]>([]);
@@ -45,6 +48,7 @@ const AdminDashboard = () => {
   const [rpTop2, setRpTop2] = useState("");
   const [rpTop3, setRpTop3] = useState("");
   const [rpFallback, setRpFallback] = useState("");
+  const [rpSponsors, setRpSponsors] = useState<Sponsor[]>([]);
   const [rpSaving, setRpSaving] = useState(false);
 
   useEffect(() => {
@@ -79,6 +83,24 @@ const AdminDashboard = () => {
     setLoading(false);
   };
 
+  // Pre-fill form when week changes
+  useEffect(() => {
+    if (!rpWeekId) return;
+    const existing = rewardPools.find((rp) => rp.week_id === rpWeekId);
+    if (existing) {
+      setRpMinimum(String(existing.minimum_cents / 100));
+      setRpCurrent(String(existing.current_cents / 100));
+      setRpTop1(String(existing.top1_amount_cents / 100));
+      setRpTop2(String(existing.top2_amount_cents / 100));
+      setRpTop3(String(existing.top3_amount_cents / 100));
+      setRpFallback(existing.fallback_label || "");
+      setRpSponsors(Array.isArray(existing.sponsors) ? (existing.sponsors as any as Sponsor[]) : []);
+    } else {
+      setRpMinimum(""); setRpCurrent(""); setRpTop1(""); setRpTop2(""); setRpTop3("");
+      setRpFallback(""); setRpSponsors([]);
+    }
+  }, [rpWeekId, rewardPools]);
+
   const updateSubmissionStatus = async (id: string, status: "approved" | "rejected", reason?: string) => {
     const update: any = { status };
     if (reason) update.rejection_reason = reason;
@@ -92,13 +114,13 @@ const AdminDashboard = () => {
   };
 
   const publishResults = async (weekId: string) => {
-    const { data, error } = await supabase.functions.invoke("compute-results", {
+    const { data, error } = await supabase.functions.invoke("publish-results", {
       body: { week_id: weekId },
     });
     if (error) {
       toast({ title: "Erreur", description: "Impossible de publier les résultats.", variant: "destructive" });
     } else {
-      toast({ title: "Résultats publiés ! 🎉" });
+      toast({ title: `Résultats publiés ! 🎉 (${data?.winners_count || 0} gagnants, mode: ${data?.reward_mode})` });
       loadData();
     }
   };
@@ -106,7 +128,7 @@ const AdminDashboard = () => {
   const saveRewardPool = async () => {
     if (!rpWeekId) return;
     setRpSaving(true);
-    const { data, error } = await supabase.functions.invoke("update-reward-pool", {
+    const { error } = await supabase.functions.invoke("update-reward-pool", {
       body: {
         action: "update_pool",
         week_id: rpWeekId,
@@ -116,7 +138,7 @@ const AdminDashboard = () => {
         top2_amount_cents: parseInt(rpTop2 || "0") * 100,
         top3_amount_cents: parseInt(rpTop3 || "0") * 100,
         fallback_label: rpFallback || "Récompenses alternatives disponibles",
-        sponsors: [],
+        sponsors: rpSponsors,
       },
     });
     if (error) {
@@ -128,6 +150,24 @@ const AdminDashboard = () => {
     setRpSaving(false);
   };
 
+  const lockPool = async (poolId: string) => {
+    const { error } = await supabase.from("reward_pools").update({ status: "locked" as any }).eq("id", poolId);
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Pool verrouillé ✓" });
+      loadData();
+    }
+  };
+
+  const addSponsor = () => setRpSponsors([...rpSponsors, { name: "", url: "" }]);
+  const removeSponsor = (i: number) => setRpSponsors(rpSponsors.filter((_, idx) => idx !== i));
+  const updateSponsor = (i: number, field: "name" | "url", val: string) => {
+    const copy = [...rpSponsors];
+    copy[i] = { ...copy[i], [field]: val };
+    setRpSponsors(copy);
+  };
+
   const exportCSV = (data: any[], filename: string) => {
     if (data.length === 0) return;
     const headers = Object.keys(data[0]).join(",");
@@ -135,16 +175,22 @@ const AdminDashboard = () => {
     const blob = new Blob([`${headers}\n${rows}`], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `${filename}.csv`;
-    a.click();
+    a.href = url; a.download = `${filename}.csv`; a.click();
     URL.revokeObjectURL(url);
   };
 
   if (authLoading || !isAdmin) return null;
 
   const pending = submissions.filter((s) => s.status === "pending");
-  const approved = submissions.filter((s) => s.status === "approved");
+
+  const getPoolStatusColor = (status: string) => {
+    switch (status) {
+      case "active": case "threshold_met": return "bg-green-600 text-white";
+      case "locked": return "bg-primary text-primary-foreground";
+      case "pending": return "bg-yellow-600 text-white";
+      default: return "bg-muted text-muted-foreground";
+    }
+  };
 
   return (
     <Layout>
@@ -273,15 +319,32 @@ const AdminDashboard = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Badge className={rp.status === "active" ? "bg-green-600 text-white" : rp.status === "threshold_met" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}>
-                        {rp.status.toUpperCase()}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge className={getPoolStatusColor(rp.status)}>
+                          {rp.status.toUpperCase()}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {weeks.find((w) => w.id === rp.week_id)?.title || ""}
+                        </span>
+                      </div>
                       <p className="mt-1 text-sm text-muted-foreground">
                         Budget: {rp.current_cents / 100}€ / Seuil: {rp.minimum_cents / 100}€
                       </p>
                       <p className="text-xs text-muted-foreground">
                         🥇 {rp.top1_amount_cents / 100}€ · 🥈 {rp.top2_amount_cents / 100}€ · 🥉 {rp.top3_amount_cents / 100}€
                       </p>
+                      {Array.isArray(rp.sponsors) && (rp.sponsors as any[]).length > 0 && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Sponsors: {(rp.sponsors as any[]).map((s: any) => s.name).join(", ")}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      {rp.status === "active" && (
+                        <Button size="sm" variant="outline" onClick={() => lockPool(rp.id)}>
+                          <Lock className="mr-1 h-3.5 w-3.5" /> Verrouiller
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -332,9 +395,37 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Fallback (si seuil non atteint)</Label>
+                  <Label>Fallback (si budget non confirmé)</Label>
                   <Input value={rpFallback} onChange={(e) => setRpFallback(e.target.value)} placeholder="Récompenses alternatives..." />
                 </div>
+
+                {/* Sponsors */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label>Sponsors</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addSponsor}>
+                      <Plus className="mr-1 h-3.5 w-3.5" /> Ajouter
+                    </Button>
+                  </div>
+                  {rpSponsors.map((sp, i) => (
+                    <div key={i} className="flex gap-2">
+                      <Input
+                        placeholder="Nom du sponsor"
+                        value={sp.name}
+                        onChange={(e) => updateSponsor(i, "name", e.target.value)}
+                      />
+                      <Input
+                        placeholder="https://..."
+                        value={sp.url}
+                        onChange={(e) => updateSponsor(i, "url", e.target.value)}
+                      />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => removeSponsor(i)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
                 <Button onClick={saveRewardPool} disabled={rpSaving || !rpWeekId}>
                   {rpSaving ? "..." : "Sauvegarder"}
                 </Button>

@@ -127,6 +127,57 @@ export type Database = {
           },
         ]
       }
+      rewards: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: string
+          label: string | null
+          reward_type: string
+          status: string
+          updated_at: string
+          week_id: string
+          winner_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          label?: string | null
+          reward_type: string
+          status?: string
+          updated_at?: string
+          week_id: string
+          winner_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          label?: string | null
+          reward_type?: string
+          status?: string
+          updated_at?: string
+          week_id?: string
+          winner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rewards_winner_id_fkey"
+            columns: ["winner_id"]
+            isOneToOne: false
+            referencedRelation: "winners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seasons: {
         Row: {
           created_at: string
@@ -402,6 +453,61 @@ export type Database = {
           },
         ]
       }
+      winners: {
+        Row: {
+          category_id: string
+          created_at: string
+          id: string
+          rank: number
+          submission_id: string
+          user_id: string
+          vote_count: number
+          week_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          id?: string
+          rank: number
+          submission_id: string
+          user_id: string
+          vote_count?: number
+          week_id: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          id?: string
+          rank?: number
+          submission_id?: string
+          user_id?: string
+          vote_count?: number
+          week_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "winners_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -421,7 +527,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
-      reward_pool_status: "active" | "inactive" | "threshold_met"
+      reward_pool_status:
+        | "active"
+        | "inactive"
+        | "threshold_met"
+        | "pending"
+        | "locked"
       submission_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
@@ -551,7 +662,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      reward_pool_status: ["active", "inactive", "threshold_met"],
+      reward_pool_status: [
+        "active",
+        "inactive",
+        "threshold_met",
+        "pending",
+        "locked",
+      ],
       submission_status: ["pending", "approved", "rejected"],
     },
   },

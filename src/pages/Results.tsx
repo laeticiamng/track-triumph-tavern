@@ -5,14 +5,13 @@ import { Footer } from "@/components/layout/Footer";
 import { RewardPoolBanner } from "@/components/rewards/RewardPoolBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Clock, Crown, Medal } from "lucide-react";
+import { Trophy, Clock, Crown, Medal, DollarSign, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Tables } from "@/integrations/supabase/types";
 
-type Submission = Tables<"submissions">;
-
 const Results = () => {
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [winners, setWinners] = useState<any[]>([]);
+  const [rewards, setRewards] = useState<any[]>([]);
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,13 +26,23 @@ const Results = () => {
       if (cats) setCategories(cats);
       if (week) {
         setActiveWeek(week);
-        const { data: subs } = await supabase
-          .from("submissions")
-          .select("*")
+
+        // Load winners with submission details
+        const { data: w } = await supabase
+          .from("winners")
+          .select("*, submissions(title, artist_name, cover_image_url)")
           .eq("week_id", week.id)
-          .eq("status", "approved")
-          .order("vote_count", { ascending: false });
-        if (subs) setSubmissions(subs);
+          .order("rank");
+
+        if (w) setWinners(w);
+
+        // Load rewards for these winners
+        const { data: r } = await supabase
+          .from("rewards")
+          .select("*")
+          .eq("week_id", week.id);
+
+        if (r) setRewards(r);
       }
       setLoading(false);
     };
@@ -44,18 +53,18 @@ const Results = () => {
     ? new Date(activeWeek.results_published_at) <= new Date()
     : false;
 
-  const getTopByCategory = (catId: string) =>
-    submissions.filter((s) => s.category_id === catId).slice(0, 3);
+  const getWinnersByCategory = (catId: string) =>
+    winners.filter((w) => w.category_id === catId).sort((a: any, b: any) => a.rank - b.rank);
 
-  const podiumIcons = [
-    <Crown className="h-5 w-5 text-yellow-500" />,
-    <Medal className="h-5 w-5 text-muted-foreground" />,
-    <Medal className="h-5 w-5 text-amber-700" />,
-  ];
+  const getRewardForWinner = (winnerId: string) =>
+    rewards.find((r) => r.winner_id === winnerId);
+
   const podiumLabels = ["🥇", "🥈", "🥉"];
 
-  // Grand winner across all categories
-  const grandWinner = isResultsPublished && submissions.length > 0 ? submissions[0] : null;
+  // Grand winner: rank 1 with highest vote_count across all categories
+  const grandWinner = isResultsPublished && winners.length > 0
+    ? winners.filter((w) => w.rank === 1).sort((a: any, b: any) => b.vote_count - a.vote_count)[0]
+    : null;
 
   return (
     <Layout>
@@ -102,13 +111,26 @@ const Results = () => {
                   <CardContent>
                     <div className="flex items-center gap-4">
                       <img
-                        src={grandWinner.cover_image_url}
+                        src={grandWinner.submissions?.cover_image_url}
                         alt=""
                         className="h-20 w-20 rounded-xl object-cover"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-display text-xl font-bold truncate">{grandWinner.title}</p>
-                        <p className="text-muted-foreground">{grandWinner.artist_name}</p>
+                        <p className="font-display text-xl font-bold truncate">{grandWinner.submissions?.title}</p>
+                        <p className="text-muted-foreground">{grandWinner.submissions?.artist_name}</p>
+                        {(() => {
+                          const reward = getRewardForWinner(grandWinner.id);
+                          if (!reward) return null;
+                          return reward.reward_type === "cash" ? (
+                            <Badge className="mt-1 bg-green-600 text-white">
+                              <DollarSign className="mr-1 h-3 w-3" /> {reward.amount_cents / 100}€
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="mt-1">
+                              <Gift className="mr-1 h-3 w-3" /> {reward.label}
+                            </Badge>
+                          );
+                        })()}
                       </div>
                       <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
                         {grandWinner.vote_count} votes
@@ -121,8 +143,8 @@ const Results = () => {
 
             {/* Per-category results */}
             {categories.map((cat, catIndex) => {
-              const top = getTopByCategory(cat.id);
-              if (top.length === 0) return null;
+              const catWinners = getWinnersByCategory(cat.id);
+              if (catWinners.length === 0) return null;
 
               return (
                 <motion.div
@@ -140,29 +162,44 @@ const Results = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {top.map((sub, i) => (
-                          <motion.div
-                            key={sub.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: catIndex * 0.1 + i * 0.15 }}
-                            className={`flex items-center gap-4 rounded-xl p-3 ${
-                              i === 0
-                                ? "bg-primary/10 border border-primary/20"
-                                : "bg-secondary/50"
-                            }`}
-                          >
-                            <span className="text-2xl">{podiumLabels[i]}</span>
-                            <img src={sub.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium truncate">{sub.title}</p>
-                              <p className="text-sm text-muted-foreground">{sub.artist_name}</p>
-                            </div>
-                            <Badge variant="secondary" className="font-display">
-                              {sub.vote_count} votes
-                            </Badge>
-                          </motion.div>
-                        ))}
+                        {catWinners.map((w: any, i: number) => {
+                          const reward = getRewardForWinner(w.id);
+                          return (
+                            <motion.div
+                              key={w.id}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: catIndex * 0.1 + i * 0.15 }}
+                              className={`flex items-center gap-4 rounded-xl p-3 ${
+                                i === 0
+                                  ? "bg-primary/10 border border-primary/20"
+                                  : "bg-secondary/50"
+                              }`}
+                            >
+                              <span className="text-2xl">{podiumLabels[i]}</span>
+                              <img src={w.submissions?.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium truncate">{w.submissions?.title}</p>
+                                <p className="text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {reward && reward.reward_type === "cash" && reward.amount_cents > 0 && (
+                                  <Badge className="bg-green-600 text-white text-xs">
+                                    {reward.amount_cents / 100}€
+                                  </Badge>
+                                )}
+                                {reward && reward.reward_type === "fallback" && (
+                                  <Badge variant="outline" className="text-xs">
+                                    <Gift className="mr-1 h-3 w-3" /> Reward
+                                  </Badge>
+                                )}
+                                <Badge variant="secondary" className="font-display">
+                                  {w.vote_count} votes
+                                </Badge>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
