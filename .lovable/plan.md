@@ -1,48 +1,76 @@
 
+# Audit complet des categories musicales -- Corrections et enrichissements
 
-# Ajout des categories Reggae, Country, Jazz et mise a jour de Open
+## Resultats de l'audit
 
-## Ce qui change
+### Etat visuel et technique
 
-3 nouvelles categories musicales seront ajoutees avec leur histoire et grandes figures. La categorie "Open" sera mise a jour pour retirer les references aux genres desormais couverts (reggae, jazz).
+**Landing page (/)** : Les 12 categories s'affichent correctement dans une grille 4 colonnes. Chaque carte a son icone, gradient et lien vers `/categories/:slug`. Le titre dynamique "12 categories musicales" fonctionne. OK.
+
+**Pages de detail (/categories/:slug)** : Toutes les pages testees (rap-trap, reggae, jazz, lofi, open, dj) s'affichent correctement avec :
+- Banniere avec icone et gradient
+- Section "Histoire du genre"
+- Section "Grandes figures" avec badges
+- Boutons CTA (Voir les soumissions + Participer)
+
+**Page Explore (/explore)** : Les 12 categories apparaissent comme filtres avec les liens info. OK.
+
+### Problemes identifies
+
+| # | Probleme | Severite | Detail |
+|---|----------|----------|--------|
+| 1 | **Contenu trop court pour certaines categories** | Moyenne | Lofi, DJ et Open ont des histoires plus courtes (1 seul paragraphe) par rapport a Reggae, Country, Jazz (3 paragraphes). Manque d'homogeneite |
+| 2 | **Artistes manquants ou desequilibres** | Moyenne | Lofi n'a que 6 artistes (dont "Lofi Girl" qui est une chaine, pas un artiste). Pop n'a que 6 artistes. D'autres en ont 7. Certains artistes contemporains majeurs manquent |
+| 3 | **Descriptions pas assez distinctives** | Faible | Certaines descriptions sont generiques et ne capturent pas l'essence du genre |
+| 4 | **Pas de sous-genres mentionnes** | Faible | Les histoires ne mentionnent pas les sous-genres importants qui aideraient les artistes a se positionner |
+| 5 | **Lien "Voir les soumissions" utilise category.id** | Info | Le lien fonctionne (`/explore?category={id}`) mais l'UX est coherente |
+
+### Pas de bugs techniques detectes
+- Navigation OK entre toutes les pages
+- Icones et gradients OK pour les 12 categories
+- Donnees chargees correctement depuis la base
+- Routes toutes fonctionnelles
 
 ---
 
-## 1. Base de donnees (INSERT + UPDATE)
+## Plan d'enrichissement
 
-Inserer 3 nouvelles categories :
+### Mise a jour SQL pour chaque categorie
 
-| Slug | Nom | sort_order | Description | Grandes figures |
-|------|-----|-----------|-------------|-----------------|
-| `reggae` | Reggae | 10 | Musique nee en Jamaique, portee par des rythmes offbeat et des messages de paix | Bob Marley, Peter Tosh, Jimmy Cliff, Burning Spear, Damian Marley, Alpha Blondy, Lee "Scratch" Perry |
-| `country` | Country | 11 | Musique americaine aux racines folk, portee par la guitare et le storytelling | Johnny Cash, Dolly Parton, Willie Nelson, Patsy Cline, Hank Williams, Taylor Swift, Chris Stapleton |
-| `jazz` | Jazz | 12 | Genre ne a La Nouvelle-Orleans, berceau de l'improvisation et du swing | Miles Davis, John Coltrane, Louis Armstrong, Duke Ellington, Ella Fitzgerald, Thelonious Monk, Herbie Hancock |
+Enrichir les 12 categories avec :
+- Des **descriptions** plus percutantes et distinctives
+- Des **histoires** plus completes et homogenes (3 paragraphes minimum par genre)
+- Des listes d'**artistes** enrichies et equilibrees (7-8 par genre), en retirant les entrees non pertinentes
 
-Chaque categorie aura un texte d'histoire complet (origines, evolution, moments cles).
+Voici le contenu enrichi par categorie :
 
-Mettre a jour **Open** :
-- Retirer Bob Marley et Miles Davis des `notable_artists` (ils seront dans Reggae et Jazz)
-- Mettre a jour la description et l'histoire pour ne plus mentionner reggae/jazz comme exemples
+**Rap / Trap** : Ajouter Drake, Nicki Minaj. Enrichir l'histoire avec le rap francais (IAM, NTM, PNL) et le trap moderne.
 
----
+**Pop** : Ajouter Lady Gaga, Bruno Mars. Developper l'histoire avec la K-pop et la pop latine.
 
-## 2. Frontend -- icones et couleurs
+**Afro** : Ajouter Yemi Alade, Tems. Enrichir avec l'Amapiano et les collaborations internationales.
 
-Ajouter dans `CategoriesSection.tsx` et `CategoryDetail.tsx` les entrees pour les 3 nouveaux slugs :
+**Electronic** : Ajouter Avicii, Flume. Enrichir avec la scene techno berlinoise et les festivals.
 
-| Slug | Icone Lucide | Gradient |
-|------|-------------|----------|
-| `reggae` | `Palmtree` | from-green-500/20 to-yellow-500/20 |
-| `country` | `Wheat` | from-yellow-500/20 to-amber-500/20 |
-| `jazz` | `Music2` | from-blue-500/20 to-indigo-500/20 |
+**R&B** : Ajouter Aaliyah, Bryson Tiller. Developper le new jack swing et le R&B alternatif.
 
-Le titre dynamique s'adaptera automatiquement (passera a "12 categories musicales").
+**Lofi** : Remplacer "Lofi Girl" par "Nymano", ajouter Kupla, Saib. Enrichir l'histoire avec la scene Bandcamp et les origines dans le boom-bap.
+
+**Rock / Indie** : Ajouter Foo Fighters, Muse. Enrichir avec le post-rock, le shoegaze et la scene indie actuelle.
+
+**Open** : Ajouter Yann Tiersen, Ludovico Einaudi. Enrichir avec le neoclassique, le metal et la world music.
+
+**DJ** : Ajouter Peggy Gou, Amelie Lens. Enrichir avec le vinylisme, les battles DMC et la culture club.
+
+**Reggae** : Ajouter Toots Hibbert, Sean Paul. Enrichir avec le dancehall, le dub et les sound systems.
+
+**Country** : Ajouter Garth Brooks, Shania Twain. Enrichir avec le outlaw country et le country-pop.
+
+**Jazz** : Ajouter Nina Simone, Billie Holiday. Enrichir avec le free jazz, le jazz-fusion et la scene contemporaine.
 
 ---
 
 ## Fichiers concernes
 
-1. **Donnees SQL** (via outil d'insertion) : INSERT des 3 categories + UPDATE de Open
-2. **`src/components/landing/CategoriesSection.tsx`** : ajout des 3 entrees dans `categoryMeta` + import des icones
-3. **`src/pages/CategoryDetail.tsx`** : ajout des 3 entrees dans `iconMap` et `gradientMap` + import des icones
-
+1. **Migration SQL** : UPDATE des 12 categories avec descriptions, histoires enrichies et artistes completes
+2. Aucun changement frontend necessaire (les composants affichent deja les donnees dynamiquement)
