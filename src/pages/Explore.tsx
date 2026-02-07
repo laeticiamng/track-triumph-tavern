@@ -21,6 +21,8 @@ const Explore = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [activeWeekId, setActiveWeekId] = useState<string | null>(null);
+  const [noActiveWeek, setNoActiveWeek] = useState(false);
 
   const activeCategory = searchParams.get("category") || "all";
 
@@ -28,14 +30,30 @@ const Explore = () => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
     });
+
+    supabase
+      .from("weeks")
+      .select("id")
+      .eq("is_active", true)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setActiveWeekId(data.id);
+        } else {
+          setNoActiveWeek(true);
+          setLoading(false);
+        }
+      });
   }, []);
 
   useEffect(() => {
+    if (!activeWeekId) return;
     setLoading(true);
     let query = supabase
       .from("submissions")
       .select("*")
       .eq("status", "approved")
+      .eq("week_id", activeWeekId)
       .order("created_at", { ascending: false });
 
     if (activeCategory !== "all") {
@@ -46,7 +64,7 @@ const Explore = () => {
       setSubmissions(data || []);
       setLoading(false);
     });
-  }, [activeCategory]);
+  }, [activeCategory, activeWeekId]);
 
   const filtered = submissions.filter((s) =>
     !search || s.title.toLowerCase().includes(search.toLowerCase()) || s.artist_name.toLowerCase().includes(search.toLowerCase())
