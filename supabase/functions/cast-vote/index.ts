@@ -13,6 +13,7 @@ const PRODUCT_IDS = {
 };
 
 const FREE_VOTE_LIMIT = 5;
+const PRO_COMMENT_LIMIT = 5;
 
 async function getUserTier(email: string): Promise<"free" | "pro" | "elite"> {
   const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
@@ -82,7 +83,8 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    const { submission_id, originality_score, production_score, emotion_score, comment } = body;
+    const { submission_id, originality_score, production_score, emotion_score } = body;
+    let comment: string | undefined = body.comment;
 
     if (!submission_id) {
       return new Response(JSON.stringify({ error: "submission_id requis" }), {
@@ -205,6 +207,26 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+    }
+
+    // PRO TIER: weekly comment quota (5 comments/week)
+    if (tier === "pro" && comment?.trim()) {
+      const { count: weeklyComments } = await supabaseAdmin
+        .from("votes")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("week_id", submission.week_id)
+        .not("comment", "is", null);
+
+      if ((weeklyComments || 0) >= PRO_COMMENT_LIMIT) {
+        console.log(`Pro user ${user.id} reached comment limit (${PRO_COMMENT_LIMIT}/week), stripping comment`);
+        comment = undefined;
+      }
+    }
+
+    // FREE TIER: no comments allowed
+    if (tier === "free" && comment?.trim()) {
+      comment = undefined;
     }
 
     // Insert vote
