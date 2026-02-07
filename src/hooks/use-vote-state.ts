@@ -12,6 +12,8 @@ interface VoteState {
   remainingVotes: number | "unlimited";
   recordVote: (categoryId: string) => void;
   tier: string;
+  commentsUsed: number;
+  commentsMax: number | "unlimited";
 }
 
 export function useVoteState(activeWeekId: string | null): VoteState {
@@ -19,6 +21,7 @@ export function useVoteState(activeWeekId: string | null): VoteState {
   const { tier } = useSubscription();
   const [votedCategories, setVotedCategories] = useState<Set<string>>(new Set());
   const [voteCount, setVoteCount] = useState(0);
+  const [commentsUsed, setCommentsUsed] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const maxVotes = SUBSCRIPTION_TIERS[tier]?.limits.votes_per_week ?? 5;
@@ -32,7 +35,7 @@ export function useVoteState(activeWeekId: string | null): VoteState {
     setLoading(true);
     supabase
       .from("votes")
-      .select("category_id")
+      .select("category_id, comment")
       .eq("user_id", user.id)
       .eq("week_id", activeWeekId)
       .then(({ data }) => {
@@ -40,6 +43,7 @@ export function useVoteState(activeWeekId: string | null): VoteState {
           const cats = new Set(data.map((v) => v.category_id));
           setVotedCategories(cats);
           setVoteCount(data.length);
+          setCommentsUsed(data.filter((v) => v.comment && v.comment.trim().length > 0).length);
         }
         setLoading(false);
       });
@@ -60,10 +64,16 @@ export function useVoteState(activeWeekId: string | null): VoteState {
     return Math.max(0, maxVotes - voteCount);
   }, [maxVotes, voteCount]);
 
-  const recordVote = useCallback((categoryId: string) => {
+  const recordVote = useCallback((categoryId: string, hadComment?: boolean) => {
     setVotedCategories((prev) => new Set(prev).add(categoryId));
     setVoteCount((prev) => prev + 1);
+    if (hadComment) setCommentsUsed((prev) => prev + 1);
   }, []);
 
-  return { votedCategories, voteCount, loading, canVote, remainingVotes, recordVote, tier };
+  const commentsMax = useMemo(() => {
+    const limit = SUBSCRIPTION_TIERS[tier]?.limits.comments_per_week ?? 0;
+    return limit === Infinity ? ("unlimited" as const) : limit;
+  }, [tier]);
+
+  return { votedCategories, voteCount, loading, canVote, remainingVotes, recordVote, tier, commentsUsed, commentsMax };
 }

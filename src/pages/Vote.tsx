@@ -167,6 +167,9 @@ const Vote = () => {
             votedCategories={voteState.votedCategories}
             onVoted={voteState.recordVote}
             isAuthenticated={!!user}
+            tier={voteState.tier}
+            commentsUsed={voteState.commentsUsed}
+            commentsMax={voteState.commentsMax}
           />
         )}
       </main>

@@ -18,8 +18,11 @@ interface VoteFeedProps {
   submissions: FeedSubmission[];
   canVote: (categoryId: string) => boolean;
   votedCategories: Set<string>;
-  onVoted: (categoryId: string) => void;
+  onVoted: (categoryId: string, hadComment?: boolean) => void;
   isAuthenticated: boolean;
+  tier: string;
+  commentsUsed: number;
+  commentsMax: number | "unlimited";
 }
 
 export function VoteFeed({
@@ -28,6 +31,9 @@ export function VoteFeed({
   votedCategories,
   onVoted,
   isAuthenticated,
+  tier,
+  commentsUsed,
+  commentsMax,
 }: VoteFeedProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
@@ -76,6 +82,9 @@ export function VoteFeed({
             categoryName={sub.category_name}
             onVoted={onVoted}
             isAuthenticated={isAuthenticated}
+            tier={tier}
+            commentsUsed={commentsUsed}
+            commentsMax={commentsMax}
           />
         </div>
       ))}

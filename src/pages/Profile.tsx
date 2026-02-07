@@ -13,8 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus } from "lucide-react";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
+import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
 import type { Tables } from "@/integrations/supabase/types";
 
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
@@ -36,7 +37,9 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [bannerUploading, setBannerUploading] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
 
   // Show success toast after checkout
   useEffect(() => {
@@ -93,6 +96,32 @@ const Profile = () => {
       toast({ title: "Erreur", description: err.message, variant: "destructive" });
     } finally {
       setAvatarUploading(false);
+    }
+  };
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "Fichier trop volumineux", description: "Max 5 MB.", variant: "destructive" });
+      return;
+    }
+    setBannerUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/banner.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("cover-images").upload(path, file, { upsert: true });
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("cover-images").getPublicUrl(path);
+      const bannerUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+      const { error: updateErr } = await supabase.from("profiles").update({ banner_url: bannerUrl }).eq("id", user.id);
+      if (updateErr) throw updateErr;
+      setProfile((prev) => prev ? { ...prev, banner_url: bannerUrl } : prev);
+      toast({ title: "Bannière mise à jour ✓" });
+    } catch (err: any) {
+      toast({ title: "Erreur", description: err.message, variant: "destructive" });
+    } finally {
+      setBannerUploading(false);
     }
   };
 
@@ -231,6 +260,45 @@ const Profile = () => {
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><BarChart3 className="h-3 w-3" /> Votes reçus</p>
           </Card>
         </div>
+
+        {/* Stats Chart (Pro/Elite) */}
+        {tier !== "free" && (
+          <VoteStatsChart userId={user.id} tier={tier} />
+        )}
+
+        {/* Banner Upload (Elite only) */}
+        {tier === "elite" && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="font-display text-xl flex items-center gap-2">
+                <ImagePlus className="h-5 w-5" /> Bannière de profil
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {profile?.banner_url ? (
+                <div className="relative rounded-lg overflow-hidden">
+                  <img src={profile.banner_url} alt="Bannière" className="w-full h-32 object-cover" />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                    <Button variant="secondary" size="sm" onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
+                      <Camera className="mr-1 h-3.5 w-3.5" /> {bannerUploading ? "..." : "Changer"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => bannerInputRef.current?.click()}
+                  disabled={bannerUploading}
+                  className="w-full h-32 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center gap-2 text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors"
+                >
+                  <ImagePlus className="h-6 w-6" />
+                  <span className="text-sm">{bannerUploading ? "Upload..." : "Ajouter une bannière"}</span>
+                </button>
+              )}
+              <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
+              <p className="text-xs text-muted-foreground">Image max 5 MB. S'affiche sur votre page artiste publique.</p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Profile Info */}
         <Card className="mb-8">
