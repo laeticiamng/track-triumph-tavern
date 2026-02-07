@@ -21,22 +21,31 @@ export function CTASection() {
 
           <div className="relative z-10">
             <h2 className="font-display text-3xl font-bold text-primary-foreground sm:text-4xl">
-              Rejoignez le concours cette semaine
+              Prêt à rejoindre le concours ?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-primary-foreground/80">
-              Créez votre compte en 30 secondes et soumettez votre premier morceau.
-              Participation gratuite, sans engagement.
+              Créez votre compte en 30 secondes. Écoutez, votez gratuitement et soumettez vos morceaux avec un abonnement Pro.
             </p>
-            <Button
-              size="lg"
-              className="mt-8 bg-primary-foreground text-background hover:bg-primary-foreground/90 font-semibold px-8"
-              asChild
-            >
-              <Link to="/auth?tab=signup">
-                Créer mon compte gratuit
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button
+                size="lg"
+                className="bg-primary-foreground text-background hover:bg-primary-foreground/90 font-semibold px-8"
+                asChild
+              >
+                <Link to="/auth?tab=signup">
+                  Créer mon compte
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+                asChild
+              >
+                <Link to="/pricing">Voir les abonnements</Link>
+              </Button>
+            </div>
           </div>
         </motion.div>
       </div>

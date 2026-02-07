@@ -146,16 +146,18 @@ const Vote = () => {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
-            <Music className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h3 className="font-display text-lg font-semibold">Aucune soumission</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Les morceaux apparaîtront ici une fois approuvés.
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
+              <Music className="h-10 w-10 text-accent-foreground" />
+            </div>
+            <h3 className="font-display text-xl font-semibold">Pas encore de morceaux</h3>
+            <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
+              Les morceaux de cette semaine apparaîtront ici une fois approuvés. Revenez bientôt !
             </p>
             <Link
-              to="/compete"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              to="/explore"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Soumettre un morceau
+              Explorer le concours
             </Link>
           </div>
         ) : (

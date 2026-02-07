@@ -4,18 +4,21 @@ import { Upload, Headphones, Trophy } from "lucide-react";
 const steps = [
   {
     icon: Upload,
-    title: "Soumettez",
-    description: "Uploadez un extrait de votre morceau et remplissez les informations. C'est rapide et gratuit pour participer.",
+    title: "Créez un compte",
+    description: "Inscrivez-vous gratuitement en 30 secondes. Votre compte vous donne accès à l'écoute et au vote.",
+    badge: "Gratuit",
   },
   {
     icon: Headphones,
     title: "Écoutez & Votez",
-    description: "Découvrez les soumissions de la semaine. Écoutez, votez pour vos favoris dans chaque catégorie.",
+    description: "Découvrez les soumissions de la semaine et votez pour vos favoris dans chaque catégorie. Le vote est gratuit pour tous.",
+    badge: "Gratuit",
   },
   {
     icon: Trophy,
-    title: "Résultats & Podium",
-    description: "À la fin de chaque semaine, les artistes les mieux notés montent sur le podium. Récompenses sponsorisées à la clé.",
+    title: "Soumettez & Montez sur le podium",
+    description: "Avec un abonnement Pro, soumettez vos morceaux et visez le podium chaque semaine. Récompenses à la clé.",
+    badge: "Pro",
   },
 ];
 
@@ -75,6 +78,15 @@ export function HowItWorks() {
               <h3 className="mt-6 font-display text-xl font-semibold">
                 {step.title}
               </h3>
+              {step.badge && (
+                <span className={`mt-2 inline-block rounded-full px-3 py-0.5 text-xs font-medium ${
+                  step.badge === "Gratuit"
+                    ? "bg-success/15 text-success"
+                    : "bg-primary/15 text-primary"
+                }`}>
+                  {step.badge}
+                </span>
+              )}
               <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
                 {step.description}
               </p>
