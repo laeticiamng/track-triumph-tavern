@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,11 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X } from "lucide-react";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import type { Tables } from "@/integrations/supabase/types";
+
+const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -29,8 +32,11 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
+  const [socialLinks, setSocialLinks] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   // Show success toast after checkout
   useEffect(() => {
@@ -57,18 +63,47 @@ const Profile = () => {
         setProfile(prof);
         setDisplayName(prof.display_name || "");
         setBio(prof.bio || "");
+        setSocialLinks((prof.social_links as Record<string, string>) || {});
       }
       setSubmissions(subs || []);
       setVoteCount(count || 0);
     });
   }, [user]);
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: "Fichier trop volumineux", description: "Max 2 MB.", variant: "destructive" });
+      return;
+    }
+    setAvatarUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/avatar.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("cover-images").upload(path, file, { upsert: true });
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("cover-images").getPublicUrl(path);
+      const avatarUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+      const { error: updateErr } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", user.id);
+      if (updateErr) throw updateErr;
+      setProfile((prev) => prev ? { ...prev, avatar_url: avatarUrl } : prev);
+      toast({ title: "Avatar mis à jour ✓" });
+    } catch (err: any) {
+      toast({ title: "Erreur", description: err.message, variant: "destructive" });
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
+    const filteredLinks = Object.fromEntries(Object.entries(socialLinks).filter(([, v]) => v.trim()));
     const { error } = await supabase.from("profiles").update({
       display_name: displayName.trim(),
       bio: bio.trim() || null,
+      social_links: Object.keys(filteredLinks).length > 0 ? filteredLinks : null,
     }).eq("id", user.id);
 
     if (error) {
@@ -76,6 +111,7 @@ const Profile = () => {
     } else {
       toast({ title: "Profil mis à jour ✓" });
       setEditing(false);
+      setProfile((prev) => prev ? { ...prev, display_name: displayName.trim(), bio: bio.trim() || null, social_links: filteredLinks } : prev);
     }
     setSaving(false);
   };
@@ -103,9 +139,22 @@ const Profile = () => {
     navigate("/");
   };
 
+  const addSocialLink = (platform: string) => {
+    setSocialLinks((prev) => ({ ...prev, [platform]: "" }));
+  };
+
+  const removeSocialLink = (platform: string) => {
+    setSocialLinks((prev) => {
+      const copy = { ...prev };
+      delete copy[platform];
+      return copy;
+    });
+  };
+
   if (authLoading || !user) return null;
 
   const currentPlan = SUBSCRIPTION_TIERS[tier];
+  const canEditProfile = tier !== "free";
   const statusColor: Record<string, string> = {
     pending: "bg-yellow-500/10 text-yellow-500",
     approved: "bg-green-500/10 text-green-500",
@@ -116,7 +165,14 @@ const Profile = () => {
     <Layout>
       <div className="container max-w-2xl py-8">
         <div className="mb-8 flex items-center justify-between">
-          <h1 className="font-display text-3xl font-bold">Mon Profil</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-3xl font-bold">Mon Profil</h1>
+            {tier === "elite" && (
+              <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
+                <Crown className="h-3 w-3" /> Elite
+              </Badge>
+            )}
+          </div>
           <Button variant="ghost" size="sm" onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" /> Déconnexion
           </Button>
@@ -126,10 +182,11 @@ const Profile = () => {
         <Card className="mb-8 border-primary/20">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
-              {tier === "elite" ? <Crown className="h-5 w-5 text-primary" /> :
+              {tier === "elite" ? <Crown className="h-5 w-5 text-yellow-500" /> :
                tier === "pro" ? <Star className="h-5 w-5 text-primary" /> :
                <CreditCard className="h-5 w-5" />}
               Plan {currentPlan.name}
+              {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€/mois</span>}
             </CardTitle>
             {subscribed ? (
               <Badge className="bg-green-600 text-white">Actif</Badge>
@@ -188,10 +245,38 @@ const Profile = () => {
             )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <Label className="text-xs text-muted-foreground">Email</Label>
-              <p className="text-sm">{user.email}</p>
+            {/* Avatar */}
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Avatar className="h-16 w-16">
+                  <AvatarImage src={profile?.avatar_url || undefined} />
+                  <AvatarFallback className="text-lg font-bold">{(profile?.display_name || "?")[0]}</AvatarFallback>
+                </Avatar>
+                {canEditProfile && (
+                  <>
+                    <button
+                      onClick={() => avatarInputRef.current?.click()}
+                      disabled={avatarUploading}
+                      className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+                      aria-label="Changer l'avatar"
+                    >
+                      <Camera className="h-3 w-3" />
+                    </button>
+                    <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
+                  </>
+                )}
+              </div>
+              <div>
+                <p className="font-medium">{profile?.display_name || "Non défini"}</p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
+                {!canEditProfile && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    <Link to="/pricing" className="text-primary hover:underline">Passez à Pro</Link> pour personnaliser votre profil
+                  </p>
+                )}
+              </div>
             </div>
+
             {editing ? (
               <>
                 <div className="space-y-2">
@@ -202,6 +287,37 @@ const Profile = () => {
                   <Label>Bio</Label>
                   <Textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} maxLength={500} />
                 </div>
+
+                {/* Social Links (Pro/Elite only) */}
+                {canEditProfile && (
+                  <div className="space-y-2">
+                    <Label>Liens sociaux</Label>
+                    {Object.entries(socialLinks).map(([platform, url]) => (
+                      <div key={platform} className="flex items-center gap-2">
+                        <span className="text-sm w-24 shrink-0">{platform}</span>
+                        <Input
+                          value={url}
+                          onChange={(e) => setSocialLinks((prev) => ({ ...prev, [platform]: e.target.value }))}
+                          placeholder={`https://${platform.toLowerCase()}.com/...`}
+                          className="flex-1"
+                        />
+                        <Button variant="ghost" size="icon" onClick={() => removeSocialLink(platform)} className="shrink-0">
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    {SOCIAL_PLATFORMS.filter((p) => !(p in socialLinks)).length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {SOCIAL_PLATFORMS.filter((p) => !(p in socialLinks)).map((p) => (
+                          <Button key={p} variant="outline" size="sm" onClick={() => addSocialLink(p)} className="text-xs">
+                            <Plus className="mr-1 h-3 w-3" /> {p}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex gap-2">
                   <Button onClick={handleSave} disabled={saving} size="sm">
                     <Save className="mr-1 h-3.5 w-3.5" /> {saving ? "..." : "Enregistrer"}
@@ -211,14 +327,25 @@ const Profile = () => {
               </>
             ) : (
               <>
-                <div>
-                  <Label className="text-xs text-muted-foreground">Nom d'artiste</Label>
-                  <p className="text-sm">{profile?.display_name || "Non défini"}</p>
-                </div>
                 {profile?.bio && (
                   <div>
                     <Label className="text-xs text-muted-foreground">Bio</Label>
                     <p className="text-sm">{profile.bio}</p>
+                  </div>
+                )}
+                {/* Display social links */}
+                {profile?.social_links && Object.keys(profile.social_links as Record<string, string>).length > 0 && (
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Liens sociaux</Label>
+                    <div className="mt-1 flex flex-wrap gap-2">
+                      {Object.entries(profile.social_links as Record<string, string>).map(([platform, url]) => (
+                        <Button key={platform} variant="outline" size="sm" asChild>
+                          <a href={url} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-1 h-3 w-3" /> {platform}
+                          </a>
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </>

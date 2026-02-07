@@ -10,7 +10,6 @@ export const SUBSCRIPTION_TIERS = {
       "5 votes par semaine",
       "Accès au classement en direct",
       "Découvrir tous les artistes",
-      "Notifications hebdomadaires",
       "Profil basique",
     ],
     limits: {
@@ -19,6 +18,7 @@ export const SUBSCRIPTION_TIERS = {
       analytics: false,
       ai_feedback: false,
       marketing_kit: false,
+      comments_per_week: 0,
     },
   },
   pro: {
@@ -29,9 +29,9 @@ export const SUBSCRIPTION_TIERS = {
     features: [
       "Soumettre 1 morceau par semaine",
       "Votes illimités",
-      "Analytics de base",
-      "Profil artiste personnalisé",
-      "5 commentaires par semaine",
+      "5 commentaires par semaine sur les votes",
+      "Profil artiste personnalisé (avatar, liens sociaux)",
+      "Statistiques de votes sur votre profil",
       "Écoute, classement et découverte inclus",
     ],
     limits: {
@@ -40,6 +40,7 @@ export const SUBSCRIPTION_TIERS = {
       analytics: true,
       ai_feedback: false,
       marketing_kit: false,
+      comments_per_week: 5,
     },
   },
   elite: {
@@ -50,18 +51,18 @@ export const SUBSCRIPTION_TIERS = {
     features: [
       "Soumettre 1 morceau par semaine",
       "Votes et commentaires illimités",
-      "Analytics avancés (évolution jour par jour)",
       "Feedback IA structuré (analyse détaillée)",
-      "Kit marketing automatique (visuels promo)",
+      "Profil artiste premium (avatar, banner, liens sociaux)",
       "Badge Elite sur le profil",
-      "Page artiste premium",
+      "Statistiques de votes détaillées",
     ],
     limits: {
       votes_per_week: Infinity,
       can_submit: true,
       analytics: true,
       ai_feedback: true,
-      marketing_kit: true,
+      marketing_kit: false,
+      comments_per_week: Infinity,
     },
   },
 } as const;

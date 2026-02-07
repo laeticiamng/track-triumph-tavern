@@ -34,6 +34,18 @@ const ArtistProfile = () => {
           .eq("status", "approved")
           .order("created_at", { ascending: false });
         setSubmissions(subs || []);
+
+        // Check artist tier via check-subscription-public (or infer from badge)
+        // We check if the user has an elite badge by calling a lightweight query
+        try {
+          const { data: tierData } = await supabase.functions.invoke("check-subscription-public", {
+            body: { user_id: id },
+          });
+          const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
+          if (result?.tier) setTier(result.tier);
+        } catch {
+          // Silently fail - default to "free"
+        }
       }
       setLoading(false);
     };
@@ -94,6 +106,16 @@ const ArtistProfile = () => {
         <div className="mt-12">
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl font-bold">{profile.display_name || "Artiste"}</h1>
+            {tier === "elite" && (
+              <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
+                <Crown className="h-3 w-3" /> Elite
+              </Badge>
+            )}
+            {tier === "pro" && (
+              <Badge className="bg-primary/10 text-primary border-primary/20 gap-1">
+                <Star className="h-3 w-3" /> Pro
+              </Badge>
+            )}
           </div>
           {profile.bio && <p className="mt-2 text-muted-foreground">{profile.bio}</p>}
 

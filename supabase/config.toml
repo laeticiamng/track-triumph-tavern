@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.fraud-scan]
 verify_jwt = false
+
+[functions.check-subscription-public]
+verify_jwt = false
