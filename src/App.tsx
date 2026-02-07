@@ -20,6 +20,7 @@ import ContestRules from "./pages/ContestRules";
 import Cookies from "./pages/Cookies";
 import ScoringMethod from "./pages/ScoringMethod";
 import HallOfFame from "./pages/HallOfFame";
+import Vote from "./pages/Vote";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/scoring-method" element={<ScoringMethod />} />
           <Route path="/hall-of-fame" element={<HallOfFame />} />
+          <Route path="/vote" element={<Vote />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
