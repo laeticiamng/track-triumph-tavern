@@ -103,17 +103,25 @@ const Explore = () => {
               Toutes
             </button>
             {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSearchParams({ category: cat.id })}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  activeCategory === cat.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-accent"
-                }`}
-              >
-                {cat.name}
-              </button>
+              <div key={cat.id} className="flex items-center gap-1">
+                <button
+                  onClick={() => setSearchParams({ category: cat.id })}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                    activeCategory === cat.id
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-secondary-foreground hover:bg-accent"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+                <Link
+                  to={`/categories/${cat.slug}`}
+                  className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                  title={`En savoir plus sur ${cat.name}`}
+                >
+                  ℹ️
+                </Link>
+              </div>
             ))}
           </div>
 
