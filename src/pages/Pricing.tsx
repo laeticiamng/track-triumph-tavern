@@ -63,9 +63,10 @@ const Pricing = () => {
               Choisis ton plan
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Participe gratuitement ou débloque des outils pro pour booster ta carrière musicale.
-              <br />
-              <span className="text-sm">Aucun avantage compétitif payant — les abonnements offrent uniquement des services SaaS.</span>
+              Écoutez et votez gratuitement. Débloquez la soumission et des outils pro avec un abonnement.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground/70">
+              Les abonnements n'influencent pas le classement — seuls les votes comptent.
             </p>
           </div>
 
@@ -95,7 +96,7 @@ const Pricing = () => {
                         </Badge>
                       )}
                       {isCurrentPlan && (
-                        <Badge className="absolute -top-3 right-4 bg-green-600 text-white">
+                        <Badge className="absolute -top-3 right-4 bg-success text-success-foreground">
                           Votre plan
                         </Badge>
                       )}
@@ -128,8 +129,15 @@ const Pricing = () => {
 
                       <CardFooter>
                         {key === "free" ? (
-                          <Button variant="outline" className="w-full" disabled={isCurrentPlan}>
-                            {isCurrentPlan ? "Plan actuel" : "Commencer"}
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            disabled={isCurrentPlan}
+                            onClick={() => {
+                              if (!user && !isCurrentPlan) navigate("/auth?tab=signup");
+                            }}
+                          >
+                            {isCurrentPlan ? "Plan actuel" : "Créer mon compte"}
                           </Button>
                         ) : (
                           <Button
@@ -150,6 +158,11 @@ const Pricing = () => {
               }
             )}
           </div>
+
+          {/* Reassurance */}
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            Sans engagement · Annulable à tout moment · Paiement sécurisé par Stripe
+          </p>
         </div>
       </section>
       <Footer />
