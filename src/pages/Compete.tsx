@@ -52,7 +52,7 @@ const Compete = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/auth?tab=signup");
+      navigate("/auth?tab=signup&redirect=/compete");
     }
   }, [user, authLoading, navigate]);
 

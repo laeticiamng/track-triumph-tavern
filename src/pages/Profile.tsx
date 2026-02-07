@@ -87,7 +87,7 @@ const Profile = () => {
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.url) {
-        window.open(result.url, "_blank");
+        window.location.href = result.url;
       } else if (result.error) {
         toast({ title: "Erreur", description: result.error, variant: "destructive" });
       }
