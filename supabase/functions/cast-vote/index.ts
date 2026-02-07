@@ -1,10 +1,44 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import Stripe from "https://esm.sh/stripe@18.5.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const PRODUCT_IDS = {
+  pro: "prod_TvnnCLdThflvd5",
+  elite: "prod_Tvnn1RBP7qVms7",
+};
+
+const FREE_VOTE_LIMIT = 5;
+
+async function getUserTier(email: string): Promise<"free" | "pro" | "elite"> {
+  const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (!stripeKey) return "free";
+
+  try {
+    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    const customers = await stripe.customers.list({ email, limit: 1 });
+    if (customers.data.length === 0) return "free";
+
+    const subs = await stripe.subscriptions.list({
+      customer: customers.data[0].id,
+      status: "active",
+      limit: 1,
+    });
+    if (subs.data.length === 0) return "free";
+
+    const productId = subs.data[0].items.data[0]?.price?.product;
+    if (productId === PRODUCT_IDS.elite) return "elite";
+    if (productId === PRODUCT_IDS.pro) return "pro";
+    return "free";
+  } catch (err) {
+    console.error("Stripe tier check error:", err);
+    return "free";
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -31,7 +65,6 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    // Authenticate user
     const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
     if (authError || !user) {
       return new Response(JSON.stringify({ error: "Non authentifié" }), {
@@ -81,7 +114,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Prevent self-vote
     if (submission.user_id === user.id) {
       return new Response(JSON.stringify({ error: "Vous ne pouvez pas voter pour votre propre soumission" }), {
         status: 400,
@@ -145,6 +177,28 @@ Deno.serve(async (req) => {
       });
     }
 
+    // FREE TIER: weekly vote quota (5 votes/week)
+    const tier = await getUserTier(user.email!);
+    console.log(`User tier: ${tier} (${user.email})`);
+
+    if (tier === "free") {
+      const { count: weeklyVotes } = await supabaseAdmin
+        .from("votes")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("week_id", submission.week_id);
+
+      if ((weeklyVotes || 0) >= FREE_VOTE_LIMIT) {
+        return new Response(JSON.stringify({
+          error: "Limite de 5 votes par semaine atteinte. Passez à Pro pour des votes illimités.",
+          votes_remaining: 0,
+        }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Insert vote
     const { data: vote, error: voteError } = await supabaseAdmin
       .from("votes")
@@ -184,14 +238,13 @@ Deno.serve(async (req) => {
 
     // Increment vote_count on submission
     await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(() => {
-      // Fallback: manual update
       return supabaseAdmin
         .from("submissions")
         .update({ vote_count: (submission as any).vote_count + 1 })
         .eq("id", submission.id);
     });
 
-    console.log(`Vote cast: user=${user.id}, submission=${submission.id}, category=${submission.category_id}`);
+    console.log(`Vote cast: user=${user.id}, submission=${submission.id}, tier=${tier}`);
 
     return new Response(
       JSON.stringify({ success: true, vote_id: vote.id }),

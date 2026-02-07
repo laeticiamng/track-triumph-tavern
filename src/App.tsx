@@ -18,6 +18,8 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ContestRules from "./pages/ContestRules";
 import Cookies from "./pages/Cookies";
+import ScoringMethod from "./pages/ScoringMethod";
+import HallOfFame from "./pages/HallOfFame";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +47,8 @@ const App = () => (
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contest-rules" element={<ContestRules />} />
           <Route path="/cookies" element={<Cookies />} />
+          <Route path="/scoring-method" element={<ScoringMethod />} />
+          <Route path="/hall-of-fame" element={<HallOfFame />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

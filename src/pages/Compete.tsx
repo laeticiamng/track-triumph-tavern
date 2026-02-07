@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useSubscription } from "@/hooks/use-subscription";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,20 +13,30 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Music, Image, ArrowLeft } from "lucide-react";
+import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Category = Tables<"categories">;
 
+interface ActiveWeek {
+  id: string;
+  title: string | null;
+  submission_open_at: string;
+  submission_close_at: string;
+}
+
 const Compete = () => {
   const { user, loading: authLoading } = useAuth();
+  const { tier, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const [activeWeek, setActiveWeek] = useState<{ id: string; title: string | null } | null>(null);
+  const [activeWeek, setActiveWeek] = useState<ActiveWeek | null>(null);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [weekLoading, setWeekLoading] = useState(true);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -52,13 +63,35 @@ const Compete = () => {
 
     supabase
       .from("weeks")
-      .select("id, title")
+      .select("id, title, submission_open_at, submission_close_at")
       .eq("is_active", true)
       .single()
       .then(({ data }) => {
-        if (data) setActiveWeek(data);
+        setActiveWeek(data as ActiveWeek | null);
+        setWeekLoading(false);
       });
   }, []);
+
+  // Check if user already submitted this week
+  useEffect(() => {
+    if (!user || !activeWeek) return;
+    supabase
+      .from("submissions")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("week_id", activeWeek.id)
+      .limit(1)
+      .then(({ data }) => {
+        setAlreadySubmitted((data?.length ?? 0) > 0);
+      });
+  }, [user, activeWeek]);
+
+  // Derived state
+  const now = new Date();
+  const submissionOpen = activeWeek ? new Date(activeWeek.submission_open_at) : null;
+  const submissionClose = activeWeek ? new Date(activeWeek.submission_close_at) : null;
+  const isInSubmissionPeriod = submissionOpen && submissionClose && now >= submissionOpen && now <= submissionClose;
+  const canSubmit = tier !== "free";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,25 +108,16 @@ const Compete = () => {
 
     setLoading(true);
     try {
-      // Upload audio
       const audioPath = `${user.id}/${Date.now()}-${audioFile.name}`;
-      const { error: audioError } = await supabase.storage
-        .from("audio-excerpts")
-        .upload(audioPath, audioFile);
+      const { error: audioError } = await supabase.storage.from("audio-excerpts").upload(audioPath, audioFile);
       if (audioError) throw audioError;
-
       const { data: audioUrl } = supabase.storage.from("audio-excerpts").getPublicUrl(audioPath);
 
-      // Upload cover
       const coverPath = `${user.id}/${Date.now()}-${coverFile.name}`;
-      const { error: coverError } = await supabase.storage
-        .from("cover-images")
-        .upload(coverPath, coverFile);
+      const { error: coverError } = await supabase.storage.from("cover-images").upload(coverPath, coverFile);
       if (coverError) throw coverError;
-
       const { data: coverUrl } = supabase.storage.from("cover-images").getPublicUrl(coverPath);
 
-      // Insert submission
       const { error: insertError } = await supabase.from("submissions").insert({
         user_id: user.id,
         week_id: activeWeek.id,
@@ -109,7 +133,6 @@ const Compete = () => {
       });
 
       if (insertError) throw insertError;
-
       toast({ title: "Soumission envoyée !", description: "Elle sera examinée par l'équipe de modération." });
       navigate("/explore");
     } catch (err: any) {
@@ -120,7 +143,49 @@ const Compete = () => {
     }
   };
 
-  if (authLoading) return null;
+  if (authLoading || subLoading || weekLoading) return null;
+
+  // Gate: Free users cannot submit
+  if (!canSubmit) {
+    return (
+      <Layout>
+        <div className="container max-w-lg py-16 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+            <Lock className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="font-display text-2xl font-bold">Abonnement requis</h1>
+          <p className="mt-3 text-muted-foreground">
+            La soumission de morceaux est réservée aux abonnés Pro et Elite. Votre participation au concours ne coûte rien de plus que l'abonnement.
+          </p>
+          <Button asChild className="mt-6 bg-gradient-primary" size="lg">
+            <Link to="/pricing">Voir les offres</Link>
+          </Button>
+        </div>
+        <Footer />
+      </Layout>
+    );
+  }
+
+  // Gate: Already submitted this week
+  if (alreadySubmitted) {
+    return (
+      <Layout>
+        <div className="container max-w-lg py-16 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/50">
+            <AlertCircle className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h1 className="font-display text-2xl font-bold">Soumission déjà envoyée</h1>
+          <p className="mt-3 text-muted-foreground">
+            Vous avez déjà soumis un morceau cette semaine. Une seule soumission par semaine est autorisée.
+          </p>
+          <Button asChild variant="outline" className="mt-6" size="lg">
+            <Link to="/explore">Explorer les soumissions</Link>
+          </Button>
+        </div>
+        <Footer />
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -133,17 +198,26 @@ const Compete = () => {
           <CardHeader>
             <CardTitle className="font-display text-2xl">Soumettre votre morceau</CardTitle>
             <CardDescription>
-              {activeWeek
+              {activeWeek && isInSubmissionPeriod
                 ? `${activeWeek.title || "Semaine en cours"} — Votre soumission sera examinée avant publication.`
-                : "Aucune semaine de soumission active pour le moment."}
+                : null}
+              {activeWeek && !isInSubmissionPeriod
+                ? "La période de soumission n'est pas active actuellement."
+                : null}
+              {!activeWeek && "Aucune semaine de soumission active pour le moment."}
             </CardDescription>
           </CardHeader>
 
           <CardContent>
-            {!activeWeek ? (
-              <p className="text-center py-8 text-muted-foreground">
-                Les soumissions ne sont pas ouvertes actuellement. Revenez bientôt !
-              </p>
+            {!activeWeek || !isInSubmissionPeriod ? (
+              <div className="flex flex-col items-center py-8 text-center">
+                <Clock className="h-10 w-10 text-muted-foreground/50 mb-3" />
+                <p className="text-muted-foreground">
+                  {activeWeek && submissionOpen && now < submissionOpen
+                    ? `Les soumissions ouvrent le ${submissionOpen.toLocaleDateString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}.`
+                    : "Les soumissions ne sont pas ouvertes actuellement. Revenez bientôt !"}
+                </p>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -181,7 +255,6 @@ const Compete = () => {
                   <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="rap, français, chill" maxLength={200} />
                 </div>
 
-                {/* Audio upload */}
                 <div className="space-y-2">
                   <Label>Extrait audio (30-60s) *</Label>
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
@@ -198,7 +271,6 @@ const Compete = () => {
                   </label>
                 </div>
 
-                {/* Cover upload */}
                 <div className="space-y-2">
                   <Label>Image de couverture *</Label>
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">

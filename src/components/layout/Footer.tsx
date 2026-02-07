@@ -14,6 +14,8 @@ export function Footer() {
           </div>
 
           <nav className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+            <Link to="/scoring-method" className="hover:text-foreground transition-colors">Classement</Link>
+            <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">Hall of Fame</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">CGU</Link>
             <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
             <Link to="/contest-rules" className="hover:text-foreground transition-colors">Règlement</Link>
