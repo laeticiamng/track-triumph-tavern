@@ -6,6 +6,23 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function checkTier(authHeader: string): Promise<string> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  
+  const resp = await fetch(`${supabaseUrl}/functions/v1/check-subscription`, {
+    headers: {
+      Authorization: authHeader,
+      "Content-Type": "application/json",
+      apikey: supabaseKey,
+    },
+  });
+  
+  if (!resp.ok) return "free";
+  const data = await resp.json();
+  return data.tier || "free";
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -15,28 +32,38 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AI not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Auth check
     const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Non authentifié" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Tier check - Pro or Elite
+    const tier = await checkTier(authHeader);
+    if (tier !== "pro" && tier !== "elite") {
+      return new Response(JSON.stringify({ error: "Le résumé IA est réservé aux abonnés Pro et Elite." }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: { headers: { Authorization: authHeader || "" } },
+      global: { headers: { Authorization: authHeader } },
     });
 
     const { data: { user }, error: authErr } = await supabase.auth.getUser();
     if (authErr || !user) {
       return new Response(JSON.stringify({ error: "Non authentifié" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Fetch user's submissions
     const { data: submissions } = await supabase
       .from("submissions")
       .select("id, title, artist_name, vote_count, category_id")
@@ -57,7 +84,6 @@ Deno.serve(async (req) => {
 
     const subIds = submissions.map((s) => s.id);
 
-    // Fetch votes with comments and scores
     const { data: votes } = await supabase
       .from("votes")
       .select("originality_score, production_score, emotion_score, comment, submission_id")
@@ -75,7 +101,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Build context for AI
     const comments = votes.filter((v) => v.comment).map((v) => v.comment).slice(0, 20);
     const avgScores = {
       originality: votes.filter((v) => v.originality_score).reduce((s, v) => s + (v.originality_score || 0), 0) / (votes.filter((v) => v.originality_score).length || 1),
@@ -143,8 +168,7 @@ Réponds en JSON avec ces 3 champs:
   } catch (err) {
     console.error("ai-vote-summary error:", err);
     return new Response(JSON.stringify({ error: "Erreur interne" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

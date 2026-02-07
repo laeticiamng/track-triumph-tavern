@@ -6,6 +6,23 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function checkTier(authHeader: string): Promise<string> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  
+  const resp = await fetch(`${supabaseUrl}/functions/v1/check-subscription`, {
+    headers: {
+      Authorization: authHeader,
+      "Content-Type": "application/json",
+      apikey: supabaseKey,
+    },
+  });
+  
+  if (!resp.ok) return "free";
+  const data = await resp.json();
+  return data.tier || "free";
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -15,35 +32,46 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AI not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Non authentifié" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Tier check
+    const tier = await checkTier(authHeader);
+    if (tier !== "pro" && tier !== "elite") {
+      return new Response(JSON.stringify({ error: "Les recommandations IA sont réservées aux abonnés Pro et Elite." }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: { headers: { Authorization: authHeader || "" } },
+      global: { headers: { Authorization: authHeader } },
     });
 
     const { data: { user }, error: authErr } = await supabase.auth.getUser();
     if (authErr || !user) {
       return new Response(JSON.stringify({ error: "Non authentifié" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const { week_id } = await req.json();
     if (!week_id) {
       return new Response(JSON.stringify({ error: "week_id required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Get user's voting history (categories and tags they liked)
+    // Get user's voting history
     const { data: userVotes } = await supabase
       .from("votes")
       .select("submission_id, category_id")
@@ -51,7 +79,6 @@ Deno.serve(async (req) => {
       .order("created_at", { ascending: false })
       .limit(50);
 
-    // Get voted submissions details for tag patterns
     const votedSubIds = userVotes?.map((v) => v.submission_id) || [];
     let votedTags: string[] = [];
     let preferredCategories: string[] = [];
@@ -66,7 +93,7 @@ Deno.serve(async (req) => {
       preferredCategories = (votedSubs || []).map((s) => s.category_id);
     }
 
-    // Get current week's submissions the user hasn't voted on
+    // Get current week's submissions
     const { data: available } = await supabase
       .from("submissions")
       .select("id, title, artist_name, tags, category_id")
@@ -80,7 +107,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Filter out already voted
     const votedSet = new Set(votedSubIds);
     const unvoted = available.filter((s) => !votedSet.has(s.id));
 
@@ -90,7 +116,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // If no voting history, return random 3
     if (votedSubIds.length === 0) {
       const shuffled = unvoted.sort(() => Math.random() - 0.5).slice(0, 3);
       return new Response(JSON.stringify({ recommended_ids: shuffled.map((s) => s.id) }), {
@@ -98,7 +123,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Use AI to rank
     const tagFreq = new Map<string, number>();
     votedTags.forEach((t) => tagFreq.set(t, (tagFreq.get(t) || 0) + 1));
     const topTags = [...tagFreq.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10).map(([t]) => t);
@@ -134,7 +158,6 @@ Classe les 3 morceaux les plus susceptibles de plaire à cet utilisateur. Répon
 
     if (!response.ok) {
       if (response.status === 429 || response.status === 402) {
-        // Fallback: simple scoring without AI
         const scored = unvoted.map((s) => {
           let score = 0;
           (s.tags || []).forEach((t) => { if (topTags.includes(t)) score += 2; });
@@ -147,7 +170,6 @@ Classe les 3 morceaux les plus susceptibles de plaire à cet utilisateur. Répon
         });
       }
       console.error("AI gateway error:", response.status);
-      // Fallback random
       const shuffled = unvoted.sort(() => Math.random() - 0.5).slice(0, 3);
       return new Response(JSON.stringify({ recommended_ids: shuffled.map((s) => s.id) }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -175,8 +197,7 @@ Classe les 3 morceaux les plus susceptibles de plaire à cet utilisateur. Répon
   } catch (err) {
     console.error("ai-recommendations error:", err);
     return new Response(JSON.stringify({ error: "Erreur interne" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

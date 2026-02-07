@@ -4,6 +4,23 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function checkTier(authHeader: string): Promise<string> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  
+  const resp = await fetch(`${supabaseUrl}/functions/v1/check-subscription`, {
+    headers: {
+      Authorization: authHeader,
+      "Content-Type": "application/json",
+      apikey: supabaseKey,
+    },
+  });
+  
+  if (!resp.ok) return "free";
+  const data = await resp.json();
+  return data.tier || "free";
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -13,8 +30,22 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AI not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Auth + tier check (Elite only)
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Authentification requise" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const tier = await checkTier(authHeader);
+    if (tier !== "elite") {
+      return new Response(JSON.stringify({ error: "Le feedback IA est réservé aux abonnés Elite." }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -23,8 +54,7 @@ Deno.serve(async (req) => {
 
     if (!title || !artist_name) {
       return new Response(JSON.stringify({ error: "title and artist_name required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -65,18 +95,15 @@ Réponds UNIQUEMENT en JSON valide, sans markdown.`;
       const errText = await response.text();
       console.error("AI gateway error:", errText);
       return new Response(JSON.stringify({ error: "AI service unavailable" }), {
-        status: 502,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const aiResult = await response.json();
     const content = aiResult.choices?.[0]?.message?.content || "";
 
-    // Try to parse JSON from the response
     let feedback;
     try {
-      // Remove potential markdown code blocks
       const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       feedback = JSON.parse(cleaned);
     } catch {
@@ -97,8 +124,7 @@ Réponds UNIQUEMENT en JSON valide, sans markdown.`;
   } catch (err) {
     console.error("ai-feedback error:", err);
     return new Response(JSON.stringify({ error: "Erreur interne" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
