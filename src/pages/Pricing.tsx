@@ -57,7 +57,7 @@ const Pricing = () => {
       if (result.error) {
         toast({ title: "Erreur", description: result.error, variant: "destructive" });
       } else if (result.url) {
-        window.open(result.url, "_blank");
+        window.location.href = result.url;
       }
     } catch (err: any) {
       toast({ title: "Erreur", description: "Impossible de créer la session de paiement.", variant: "destructive" });
@@ -72,7 +72,7 @@ const Pricing = () => {
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
-      if (result.url) window.open(result.url, "_blank");
+      if (result.url) window.location.href = result.url;
     } catch {
       toast({ title: "Erreur", description: "Impossible d'ouvrir le portail.", variant: "destructive" });
     } finally {
@@ -176,7 +176,7 @@ const Pricing = () => {
                               if (!user && !isCurrentPlan) navigate("/auth?tab=signup");
                             }}
                           >
-                            {isCurrentPlan ? "Plan actuel" : "Créer mon compte"}
+                            {isCurrentPlan ? "Plan actuel" : user ? "Plan Free" : "Créer mon compte"}
                           </Button>
                         ) : (
                           <Button
@@ -187,7 +187,7 @@ const Pricing = () => {
                             {loadingTier === key ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : null}
-                            {isCurrentPlan ? "Plan actuel" : "S'abonner"}
+                            {isCurrentPlan ? "Plan actuel" : currentTier !== "free" ? "Upgrader" : "S'abonner"}
                           </Button>
                         )}
                       </CardFooter>
