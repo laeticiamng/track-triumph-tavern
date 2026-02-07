@@ -12,7 +12,7 @@ export function CTASection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-primary p-10 text-center sm:p-16"
+          className="relative overflow-hidden rounded-3xl bg-gradient-hero p-10 text-center sm:p-16"
         >
           <div className="absolute inset-0">
             <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-white/5 blur-[60px]" />
@@ -23,7 +23,7 @@ export function CTASection() {
             <h2 className="font-display text-3xl font-bold text-primary-foreground sm:text-4xl">
               Rejoignez le concours cette semaine
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-primary-foreground/70">
+            <p className="mx-auto mt-4 max-w-md text-primary-foreground/80">
               Créez votre compte en 30 secondes et soumettez votre premier morceau.
               Participation gratuite, sans engagement.
             </p>

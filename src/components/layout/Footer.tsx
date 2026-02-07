@@ -1,10 +1,9 @@
-import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { Music } from "lucide-react";
 
-export const Footer = forwardRef<HTMLElement>(function Footer(_, ref) {
+export function Footer() {
   return (
-    <footer ref={ref} className="border-t border-border py-12">
+    <footer className="border-t border-border py-12">
       <div className="container">
         <div className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
           <div className="flex items-center gap-2">
@@ -28,4 +27,4 @@ export const Footer = forwardRef<HTMLElement>(function Footer(_, ref) {
       </div>
     </footer>
   );
-});
+}

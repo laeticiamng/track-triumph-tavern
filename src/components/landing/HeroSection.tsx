@@ -32,13 +32,13 @@ export function HeroSection() {
         <div className="absolute bottom-1/4 right-1/4 h-48 w-48 rounded-full bg-primary-glow/15 blur-[80px]" />
       </div>
 
-      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center pt-20 pb-12 text-center">
+      <div className="container relative z-10 flex min-h-[80vh] flex-col items-center justify-center px-6 py-24 text-center">
         {weekLabel && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="mb-6"
+            className="mb-5"
           >
             <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm">
               🎵 {weekLabel}
@@ -50,7 +50,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="max-w-3xl font-display text-4xl font-bold leading-tight text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+          className="max-w-3xl font-display text-3xl font-bold leading-tight text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
         >
           Le concours musical{" "}
           <span className="italic">100% gratuit</span>
@@ -60,7 +60,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-6 max-w-xl text-base text-primary-foreground/70 sm:text-lg"
+          className="mt-5 max-w-xl text-sm text-primary-foreground/70 sm:text-lg"
         >
           Soumettez un morceau → La communauté vote → Montez sur le podium chaque semaine.
         </motion.p>
@@ -70,15 +70,15 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.25 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-primary-foreground/80"
+          className="mt-5 flex flex-wrap items-center justify-center gap-3 text-sm text-primary-foreground/80"
         >
           <span className="inline-flex items-center gap-1.5">
             <CheckCircle className="h-4 w-4 text-success" />
-            Participation 100% gratuite
+            Participation gratuite
           </span>
           <span className="inline-flex items-center gap-1.5">
             <CheckCircle className="h-4 w-4 text-success" />
-            Aucun frais d'entrée
+            Aucun frais
           </span>
           <span className="inline-flex items-center gap-1.5">
             <CheckCircle className="h-4 w-4 text-success" />
@@ -90,7 +90,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-10 flex flex-col gap-3 sm:flex-row"
+          className="mt-8 flex flex-col gap-3 sm:flex-row"
         >
           <Button
             size="lg"
@@ -118,7 +118,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-4 text-xs text-primary-foreground/50"
         >
-          Concours artistique basé sur le mérite — aucun paiement n'influence le classement
+          Concours basé sur le mérite — le classement ne dépend d'aucun paiement
         </motion.p>
       </div>
     </section>
