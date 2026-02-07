@@ -31,7 +31,7 @@ export function CategoriesSection() {
   }, []);
 
   return (
-    <section className="border-t border-border py-24 md:py-32 bg-secondary/30">
+    <section id="categories" className="border-t border-border py-24 md:py-32 bg-secondary/30">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

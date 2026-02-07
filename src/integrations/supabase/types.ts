@@ -18,35 +18,44 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          fun_fact: string | null
           history: string | null
           icon: string | null
           id: string
+          mood_tags: string[] | null
           name: string
           notable_artists: string[] | null
           slug: string
           sort_order: number
+          sub_genres: string[] | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          fun_fact?: string | null
           history?: string | null
           icon?: string | null
           id?: string
+          mood_tags?: string[] | null
           name: string
           notable_artists?: string[] | null
           slug: string
           sort_order?: number
+          sub_genres?: string[] | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          fun_fact?: string | null
           history?: string | null
           icon?: string | null
           id?: string
+          mood_tags?: string[] | null
           name?: string
           notable_artists?: string[] | null
           slug?: string
           sort_order?: number
+          sub_genres?: string[] | null
         }
         Relationships: []
       }
