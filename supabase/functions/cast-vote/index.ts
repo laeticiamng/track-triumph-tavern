@@ -233,19 +233,20 @@ Deno.serve(async (req) => {
     }
 
     // ── Build fraud metadata signals ──
-    const metadata: Record<string, any> = {};
-
-    // New account detection (< 1 hour)
-    const accountCreatedAt = user.created_at ? new Date(user.created_at) : null;
-    if (accountCreatedAt && (Date.now() - accountCreatedAt.getTime()) < 3_600_000) {
-      metadata.is_new_account = true;
-      metadata.account_age_minutes = Math.floor((Date.now() - accountCreatedAt.getTime()) / 60_000);
-    }
-
-    // Insert audit event with metadata
     const userAgent = req.headers.get("user-agent") || null;
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || null;
+    const accountCreatedAt = user.created_at ? new Date(user.created_at) : null;
+    const accountAgeMinutes = accountCreatedAt
+      ? Math.floor((Date.now() - accountCreatedAt.getTime()) / 60_000)
+      : null;
 
+    const metadata: Record<string, any> = {};
+    if (accountAgeMinutes !== null && accountAgeMinutes < 60) {
+      metadata.is_new_account = true;
+      metadata.account_age_minutes = accountAgeMinutes;
+    }
+
+    // Insert audit event
     await supabaseAdmin.from("vote_events").insert({
       vote_id: vote.id,
       user_id: user.id,
@@ -254,6 +255,92 @@ Deno.serve(async (req) => {
       ip_address: ip,
       metadata,
     });
+
+    // ── AI fraud scoring (non-blocking) ──
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (apiKey) {
+      (async () => {
+        try {
+          // Gather additional signals
+          const { count: totalUserVotes } = await supabaseAdmin
+            .from("votes")
+            .select("id", { count: "exact", head: true })
+            .eq("user_id", user.id);
+
+          const twoMinAgo = new Date(Date.now() - 120_000).toISOString();
+          const { count: burstVotes } = await supabaseAdmin
+            .from("votes")
+            .select("id", { count: "exact", head: true })
+            .eq("user_id", user.id)
+            .gte("created_at", twoMinAgo);
+
+          const signals = {
+            account_age_minutes: accountAgeMinutes,
+            user_agent: userAgent,
+            ip_address: ip,
+            burst_votes_2min: burstVotes || 0,
+            total_votes: totalUserVotes || 0,
+            tier,
+            email_domain: user.email?.split("@")[1] || "unknown",
+          };
+
+          const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-3-flash-preview",
+              messages: [
+                {
+                  role: "system",
+                  content: `Tu es un système anti-fraude pour une plateforme de vote musical. Analyse les signaux et retourne UNIQUEMENT un JSON: {"risk_score": 0-100, "flags": ["flag1"], "action": "allow"|"flag"|"block"}. Règles: compte <30min = suspect, >3 votes en 2min = suspect, user-agent vide/bot = suspect. Score >70 = block, 40-70 = flag, <40 = allow.`,
+                },
+                {
+                  role: "user",
+                  content: JSON.stringify(signals),
+                },
+              ],
+              temperature: 0.1,
+              max_tokens: 200,
+            }),
+          });
+
+          if (aiResp.ok) {
+            const aiResult = await aiResp.json();
+            const content = aiResult.choices?.[0]?.message?.content || "";
+            const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+
+            let parsed;
+            try {
+              parsed = JSON.parse(cleaned);
+            } catch {
+              console.error("AI fraud parse error:", cleaned);
+              return;
+            }
+
+            console.log(`AI fraud score: ${parsed.risk_score}, action: ${parsed.action}, user=${user.id}`);
+
+            // Update vote_events with AI result
+            await supabaseAdmin.from("vote_events").update({
+              metadata: { ...metadata, ai_fraud: parsed },
+            }).eq("vote_id", vote.id);
+
+            // If AI says block, invalidate the vote
+            if (parsed.action === "block" && parsed.risk_score >= 70) {
+              await supabaseAdmin
+                .from("votes")
+                .update({ is_valid: false })
+                .eq("id", vote.id);
+              console.log(`Vote ${vote.id} invalidated by AI fraud detection (score=${parsed.risk_score})`);
+            }
+          }
+        } catch (err) {
+          console.error("AI fraud check error:", err);
+        }
+      })();
+    }
 
     // Increment vote_count on submission
     await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(() => {
