@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useSubscription } from "@/hooks/use-subscription";
+import { useVoteState } from "@/hooks/use-vote-state";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
@@ -18,11 +20,14 @@ type Submission = Tables<"submissions">;
 const SubmissionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const { tier } = useSubscription();
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [category, setCategory] = useState<{ name: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasVoted, setHasVoted] = useState(false);
+
+  const voteState = useVoteState(submission?.week_id ?? null);
 
   useEffect(() => {
     if (!id) return;
@@ -38,7 +43,6 @@ const SubmissionDetail = () => {
         setProfile(prof);
         setCategory(cat);
 
-        // Check if user already voted in this category/week
         if (user) {
           const { data: existingVote } = await supabase
             .from("votes")
@@ -177,6 +181,9 @@ const SubmissionDetail = () => {
                     submissionId={submission.id}
                     hasVoted={hasVoted}
                     onVoted={handleVoted}
+                    tier={voteState.tier}
+                    commentsUsed={voteState.commentsUsed}
+                    commentsMax={voteState.commentsMax}
                   />
                   <p className="text-center text-sm text-muted-foreground">
                     {submission.vote_count} vote{submission.vote_count !== 1 ? "s" : ""}

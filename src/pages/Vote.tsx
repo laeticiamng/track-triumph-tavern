@@ -153,8 +153,8 @@ const Vote = () => {
             </button>
           ))}
         </div>
-        {/* AI Recommendations loader */}
-        {user && (
+        {/* AI Recommendations loader (Pro/Elite only) */}
+        {user && (voteState.tier === "pro" || voteState.tier === "elite") && (
           <div className="pointer-events-auto">
             <AIRecommendations weekId={activeWeekId} onRecommendations={setRecommendedIds} />
           </div>
