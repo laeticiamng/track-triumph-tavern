@@ -29,7 +29,7 @@ export function CTASection() {
             </p>
             <Button
               size="lg"
-              className="mt-8 bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-semibold px-8"
+              className="mt-8 bg-primary-foreground text-background hover:bg-primary-foreground/90 font-semibold px-8"
               asChild
             >
               <Link to="/auth?tab=signup">
