@@ -8,6 +8,9 @@ export const SUBSCRIPTION_TIERS = {
     features: [
       "Écouter toutes les soumissions",
       "5 votes par semaine",
+      "Accès au classement en direct",
+      "Découvrir tous les artistes",
+      "Notifications hebdomadaires",
       "Profil basique",
     ],
     limits: {
@@ -24,12 +27,12 @@ export const SUBSCRIPTION_TIERS = {
     price_id: "price_1SxwC0DFa5Y9NR1IzyElGuxb",
     product_id: "prod_TvnnCLdThflvd5",
     features: [
-      "Tout Free +",
-      "Soumettre 1 morceau / semaine",
+      "Soumettre 1 morceau par semaine",
       "Votes illimités",
       "Analytics de base",
       "Profil artiste personnalisé",
-      "5 commentaires / semaine",
+      "5 commentaires par semaine",
+      "Écoute, classement et découverte inclus",
     ],
     limits: {
       votes_per_week: Infinity,
@@ -45,12 +48,12 @@ export const SUBSCRIPTION_TIERS = {
     price_id: "price_1SxwC1DFa5Y9NR1I0VRck1kX",
     product_id: "prod_Tvnn1RBP7qVms7",
     features: [
-      "Tout Pro +",
+      "Soumettre 1 morceau par semaine",
+      "Votes et commentaires illimités",
       "Analytics avancés (évolution jour par jour)",
-      "Feedback IA structuré (analyse détaillée de votre morceau)",
-      "Kit marketing automatique (visuels promo générés)",
+      "Feedback IA structuré (analyse détaillée)",
+      "Kit marketing automatique (visuels promo)",
       "Badge Elite sur le profil",
-      "Commentaires illimités",
       "Page artiste premium",
     ],
     limits: {

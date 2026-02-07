@@ -40,9 +40,10 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/profile");
+      const redirect = searchParams.get("redirect");
+      navigate(redirect || "/profile");
     }
-  }, [user, navigate]);
+  }, [user, navigate, searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +116,7 @@ const Auth = () => {
             <CardDescription>
               {isLogin
                 ? "Connectez-vous à votre compte"
-                : "Inscription gratuite — participez au concours chaque semaine"}
+                : "Inscription gratuite — écoutez, votez et découvrez des artistes"}
             </CardDescription>
           </CardHeader>
 
