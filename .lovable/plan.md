@@ -1,77 +1,48 @@
 
 
-# Ajout de la catégorie DJ et personnalisation de chaque genre musical
+# Ajout des categories Reggae, Country, Jazz et mise a jour de Open
 
 ## Ce qui change
 
-Chaque catégorie musicale aura sa propre page avec :
-- Une breve histoire du genre
-- Les grandes figures / artistes emblematiques
-- Un lien depuis la landing page et la page Explore
-
-Une nouvelle categorie "DJ" sera ajoutee.
+3 nouvelles categories musicales seront ajoutees avec leur histoire et grandes figures. La categorie "Open" sera mise a jour pour retirer les references aux genres desormais couverts (reggae, jazz).
 
 ---
 
-## Modifications
+## 1. Base de donnees (INSERT + UPDATE)
 
-### 1. Base de donnees
+Inserer 3 nouvelles categories :
 
-Ajouter 3 colonnes a la table `categories` :
-- `description` (text) : courte presentation du genre
-- `history` (text) : histoire du genre musical (quelques paragraphes)
-- `notable_artists` (text[]) : liste des grandes figures
+| Slug | Nom | sort_order | Description | Grandes figures |
+|------|-----|-----------|-------------|-----------------|
+| `reggae` | Reggae | 10 | Musique nee en Jamaique, portee par des rythmes offbeat et des messages de paix | Bob Marley, Peter Tosh, Jimmy Cliff, Burning Spear, Damian Marley, Alpha Blondy, Lee "Scratch" Perry |
+| `country` | Country | 11 | Musique americaine aux racines folk, portee par la guitare et le storytelling | Johnny Cash, Dolly Parton, Willie Nelson, Patsy Cline, Hank Williams, Taylor Swift, Chris Stapleton |
+| `jazz` | Jazz | 12 | Genre ne a La Nouvelle-Orleans, berceau de l'improvisation et du swing | Miles Davis, John Coltrane, Louis Armstrong, Duke Ellington, Ella Fitzgerald, Thelonious Monk, Herbie Hancock |
 
-Inserer la categorie "DJ" (slug: `dj`, sort_order: 9).
+Chaque categorie aura un texte d'histoire complet (origines, evolution, moments cles).
 
-Remplir les donnees pour toutes les categories (Rap/Trap, Pop, Afro, Electronic, R&B, Lofi, Rock/Indie, Open, DJ) avec :
-- Une description courte
-- Un texte d'histoire du genre (origines, evolution, moments cles)
-- 5-8 artistes emblematiques par genre
-
-### 2. Page de detail par categorie
-
-Creer `src/pages/CategoryDetail.tsx` accessible sur `/categories/:slug` :
-- Banniere avec icone et nom du genre
-- Section "A propos" avec la description
-- Section "Histoire" avec le texte historique
-- Section "Grandes figures" avec la liste des artistes emblematiques
-- Bouton "Voir les soumissions" qui redirige vers `/explore?category={id}`
-
-Ajouter la route dans `App.tsx`.
-
-### 3. Mise a jour du frontend
-
-**`src/components/landing/CategoriesSection.tsx`** :
-- Mettre a jour le titre "10 categories musicales" (8 existantes + DJ + Open = 10, ou adapter dynamiquement)
-- Ajouter l'entree `dj` dans `categoryMeta` avec une icone `Disc3` et un gradient
-- Les liens pointent vers `/categories/{slug}` au lieu de `/explore?category={id}`
-
-**`src/pages/Explore.tsx`** :
-- Ajouter un lien "En savoir plus" a cote de chaque filtre de categorie qui pointe vers `/categories/{slug}`
+Mettre a jour **Open** :
+- Retirer Bob Marley et Miles Davis des `notable_artists` (ils seront dans Reggae et Jazz)
+- Mettre a jour la description et l'histoire pour ne plus mentionner reggae/jazz comme exemples
 
 ---
 
-## Contenu prevu par categorie
+## 2. Frontend -- icones et couleurs
 
-| Genre | Grandes figures (exemples) |
-|-------|---------------------------|
-| Rap / Trap | Tupac, Notorious B.I.G., Eminem, Kendrick Lamar, Travis Scott, Future |
-| Pop | Michael Jackson, Madonna, Beyonce, Taylor Swift, The Weeknd |
-| Afro | Fela Kuti, Burna Boy, Wizkid, Tiwa Savage, Angelique Kidjo |
-| Electronic | Daft Punk, Kraftwerk, Aphex Twin, Deadmau5, Skrillex |
-| R&B | Stevie Wonder, Whitney Houston, Usher, Frank Ocean, SZA |
-| Lofi | Nujabes, J Dilla, ChilledCow, Tomppabeats |
-| Rock / Indie | The Beatles, Nirvana, Radiohead, Arctic Monkeys, Tame Impala |
-| DJ | David Guetta, Carl Cox, Nina Kraviz, Tiesto, Black Coffee, DJ Snake |
-| Open | Categorie libre -- tous les styles non couverts |
+Ajouter dans `CategoriesSection.tsx` et `CategoryDetail.tsx` les entrees pour les 3 nouveaux slugs :
+
+| Slug | Icone Lucide | Gradient |
+|------|-------------|----------|
+| `reggae` | `Palmtree` | from-green-500/20 to-yellow-500/20 |
+| `country` | `Wheat` | from-yellow-500/20 to-amber-500/20 |
+| `jazz` | `Music2` | from-blue-500/20 to-indigo-500/20 |
+
+Le titre dynamique s'adaptera automatiquement (passera a "12 categories musicales").
 
 ---
 
 ## Fichiers concernes
 
-1. **Migration SQL** : ajout colonnes + insertion DJ + remplissage donnees
-2. **`src/pages/CategoryDetail.tsx`** (nouveau) : page de detail du genre
-3. **`src/App.tsx`** : ajout route `/categories/:slug`
-4. **`src/components/landing/CategoriesSection.tsx`** : icone DJ, liens vers detail, titre dynamique
-5. **`src/pages/Explore.tsx`** : lien optionnel vers la page categorie
+1. **Donnees SQL** (via outil d'insertion) : INSERT des 3 categories + UPDATE de Open
+2. **`src/components/landing/CategoriesSection.tsx`** : ajout des 3 entrees dans `categoryMeta` + import des icones
+3. **`src/pages/CategoryDetail.tsx`** : ajout des 3 entrees dans `iconMap` et `gradientMap` + import des icones
+
