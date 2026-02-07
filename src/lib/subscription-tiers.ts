@@ -46,9 +46,9 @@ export const SUBSCRIPTION_TIERS = {
     product_id: "prod_Tvnn1RBP7qVms7",
     features: [
       "Tout Pro +",
-      "Analytics avancés (jour par jour)",
-      "Feedback IA structuré",
-      "Kit marketing automatique",
+      "Analytics avancés (évolution jour par jour)",
+      "Feedback IA structuré (analyse détaillée de votre morceau)",
+      "Kit marketing automatique (visuels promo générés)",
       "Badge Elite sur le profil",
       "Commentaires illimités",
       "Page artiste premium",
