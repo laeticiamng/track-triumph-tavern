@@ -1,65 +1,77 @@
 
-# Audit Premium des outils IA et pages -- Corrections
 
-## Etat actuel par feature IA
+# Ajout de la catégorie DJ et personnalisation de chaque genre musical
 
-| Outil IA | Accessible a | Gate Frontend | Gate Backend | Probleme |
-|----------|-------------|---------------|--------------|----------|
-| Chatbot (AIChatbot) | TOUS | Aucun gate | Aucun auth, aucun tier check | Ouvert a tous, meme non connectes. Pas de restriction par tier |
-| Suggestions de tags (AITagSuggest) | Tous les soumetteurs | Aucun gate (dans Compete.tsx) | Aucun auth, aucun tier check | Accessible a tous ceux qui soumettent, mais la soumission est gate Pro/Elite. OK par transitivite, mais le backend est ouvert |
-| Recommandations IA (AIRecommendations) | TOUS connectes | `if (user)` seulement | Auth OK, aucun tier check | Accessible a tous les utilisateurs connectes, meme Free |
-| Resume IA des votes (AIVoteSummary) | Pro + Elite | `tier === "pro" \|\| tier === "elite"` | Auth OK, aucun tier check backend | Gate frontend OK mais le backend n'a aucune verification de tier. Un utilisateur Free peut appeler directement l'edge function |
-| Feedback IA (AIFeedback) | Elite | `tier === "elite"` | Auth OK, aucun tier check backend | Gate frontend OK mais le backend n'a aucune verification de tier |
-| Stats graphiques (VoteStatsChart) | Pro + Elite | `tier !== "free"` | N/A (requete directe) | OK |
-| Banner upload | Elite | `tier === "elite"` | N/A (storage direct) | OK |
+## Ce qui change
 
-## 5 problemes a corriger
+Chaque catégorie musicale aura sa propre page avec :
+- Une breve histoire du genre
+- Les grandes figures / artistes emblematiques
+- Un lien depuis la landing page et la page Explore
 
-### 1. Chatbot IA accessible a TOUS sans restriction
-`AIChatbot` est rendu dans `Layout.tsx` pour TOUT le monde. L'edge function `ai-chat` n'a ni authentification ni verification de tier. N'importe qui peut l'utiliser.
-
-**Correction :** 
-- Dans `Layout.tsx`, conditionner l'affichage du chatbot aux utilisateurs Pro/Elite
-- Ajouter l'auth + tier check dans `ai-chat/index.ts`
-
-### 2. Recommandations IA accessibles aux Free
-`AIRecommendations` dans `Vote.tsx` est affiche pour tout utilisateur connecte (`if (user)`). L'edge function `ai-recommendations` ne verifie pas le tier.
-
-**Correction :**
-- Dans `Vote.tsx`, conditionner aux Pro/Elite
-- Ajouter un tier check dans `ai-recommendations/index.ts`
-
-### 3. Backend des edge functions IA sans verification de tier
-Les edge functions `ai-vote-summary`, `ai-feedback`, `ai-chat`, `ai-recommendations` et `ai-suggest-tags` ne verifient pas le tier de l'utilisateur. Un utilisateur Free peut contourner le frontend et appeler directement les endpoints.
-
-**Correction :** Ajouter dans chaque edge function IA (sauf `ai-suggest-tags` qui est gate par la soumission) un appel a `check-subscription` pour verifier le tier avant de traiter la requete.
-
-### 4. VoteButton sur SubmissionDetail sans infos de tier/commentaires
-Dans `SubmissionDetail.tsx`, le `VoteButton` est rendu sans passer `tier`, `commentsUsed`, `commentsMax`. Il utilise les valeurs par defaut (`tier="free"`, `commentsMax=0`) ce qui empeche tout commentaire meme pour les Pro/Elite.
-
-**Correction :** Ajouter `useSubscription` et `useVoteState` dans `SubmissionDetail.tsx` et passer les props au `VoteButton`.
-
-### 5. Features IA non listees dans les plans /pricing
-Les outils IA (chatbot, recommandations, resume IA) ne sont pas mentionnes dans `subscription-tiers.ts`. Les utilisateurs ne savent pas qu'ils y ont droit.
-
-**Correction :** Ajouter les features IA dans les listes de chaque plan :
-- Pro : "Resume IA des votes recus", "Recommandations IA personnalisees", "Chatbot assistant musical"
-- Elite : idem + "Feedback IA structure" (deja present)
+Une nouvelle categorie "DJ" sera ajoutee.
 
 ---
 
-## Fichiers a modifier
+## Modifications
 
-1. **`src/lib/subscription-tiers.ts`** -- Ajouter les features IA dans les listes Pro et Elite
-2. **`src/components/layout/Layout.tsx`** -- Conditionner le chatbot au tier Pro/Elite
-3. **`src/pages/Vote.tsx`** -- Conditionner les recommandations au tier Pro/Elite
-4. **`src/pages/SubmissionDetail.tsx`** -- Passer tier/commentsUsed/commentsMax au VoteButton
-5. **`supabase/functions/ai-chat/index.ts`** -- Ajouter auth + tier check (Pro/Elite)
-6. **`supabase/functions/ai-recommendations/index.ts`** -- Ajouter tier check (Pro/Elite)
-7. **`supabase/functions/ai-vote-summary/index.ts`** -- Ajouter tier check (Pro/Elite)
-8. **`supabase/functions/ai-feedback/index.ts`** -- Ajouter tier check (Elite uniquement)
+### 1. Base de donnees
 
-### Methode de verification du tier dans les edge functions
+Ajouter 3 colonnes a la table `categories` :
+- `description` (text) : courte presentation du genre
+- `history` (text) : histoire du genre musical (quelques paragraphes)
+- `notable_artists` (text[]) : liste des grandes figures
 
-Chaque edge function IA appelera `check-subscription` en interne via le Supabase client pour recuperer le tier de l'utilisateur, puis refusera l'acces si le tier ne correspond pas au minimum requis.
+Inserer la categorie "DJ" (slug: `dj`, sort_order: 9).
 
+Remplir les donnees pour toutes les categories (Rap/Trap, Pop, Afro, Electronic, R&B, Lofi, Rock/Indie, Open, DJ) avec :
+- Une description courte
+- Un texte d'histoire du genre (origines, evolution, moments cles)
+- 5-8 artistes emblematiques par genre
+
+### 2. Page de detail par categorie
+
+Creer `src/pages/CategoryDetail.tsx` accessible sur `/categories/:slug` :
+- Banniere avec icone et nom du genre
+- Section "A propos" avec la description
+- Section "Histoire" avec le texte historique
+- Section "Grandes figures" avec la liste des artistes emblematiques
+- Bouton "Voir les soumissions" qui redirige vers `/explore?category={id}`
+
+Ajouter la route dans `App.tsx`.
+
+### 3. Mise a jour du frontend
+
+**`src/components/landing/CategoriesSection.tsx`** :
+- Mettre a jour le titre "10 categories musicales" (8 existantes + DJ + Open = 10, ou adapter dynamiquement)
+- Ajouter l'entree `dj` dans `categoryMeta` avec une icone `Disc3` et un gradient
+- Les liens pointent vers `/categories/{slug}` au lieu de `/explore?category={id}`
+
+**`src/pages/Explore.tsx`** :
+- Ajouter un lien "En savoir plus" a cote de chaque filtre de categorie qui pointe vers `/categories/{slug}`
+
+---
+
+## Contenu prevu par categorie
+
+| Genre | Grandes figures (exemples) |
+|-------|---------------------------|
+| Rap / Trap | Tupac, Notorious B.I.G., Eminem, Kendrick Lamar, Travis Scott, Future |
+| Pop | Michael Jackson, Madonna, Beyonce, Taylor Swift, The Weeknd |
+| Afro | Fela Kuti, Burna Boy, Wizkid, Tiwa Savage, Angelique Kidjo |
+| Electronic | Daft Punk, Kraftwerk, Aphex Twin, Deadmau5, Skrillex |
+| R&B | Stevie Wonder, Whitney Houston, Usher, Frank Ocean, SZA |
+| Lofi | Nujabes, J Dilla, ChilledCow, Tomppabeats |
+| Rock / Indie | The Beatles, Nirvana, Radiohead, Arctic Monkeys, Tame Impala |
+| DJ | David Guetta, Carl Cox, Nina Kraviz, Tiesto, Black Coffee, DJ Snake |
+| Open | Categorie libre -- tous les styles non couverts |
+
+---
+
+## Fichiers concernes
+
+1. **Migration SQL** : ajout colonnes + insertion DJ + remplissage donnees
+2. **`src/pages/CategoryDetail.tsx`** (nouveau) : page de detail du genre
+3. **`src/App.tsx`** : ajout route `/categories/:slug`
+4. **`src/components/landing/CategoriesSection.tsx`** : icone DJ, liens vers detail, titre dynamique
+5. **`src/pages/Explore.tsx`** : lien optionnel vers la page categorie
