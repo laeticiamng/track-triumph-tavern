@@ -13,7 +13,7 @@ export function BottomNav() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border glass md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border glass md:hidden pb-[env(safe-area-inset-bottom)]">
       <div className="flex h-16 items-center justify-around px-2">
         {items.map((item) => {
           const active = location.pathname === item.href;

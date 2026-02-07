@@ -113,6 +113,12 @@ const Explore = () => {
               <p className="mt-1 text-sm text-muted-foreground">
                 {activeCategory !== "all" ? "Aucune soumission dans cette catégorie." : "Les soumissions apparaîtront ici une fois approuvées."}
               </p>
+              <Link
+                to="/compete"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Soumettre un morceau
+              </Link>
             </div>
           ) : (
             <motion.div
