@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
   Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3,
-  ArrowLeft, BookOpen, Users, ExternalLink,
+  Palmtree, Wheat, Music2, ArrowLeft, BookOpen, Users, ExternalLink,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -22,6 +22,9 @@ const iconMap: Record<string, React.ElementType> = {
   "rock-indie": Guitar,
   open: Waves,
   dj: Disc3,
+  reggae: Palmtree,
+  country: Wheat,
+  jazz: Music2,
 };
 
 const gradientMap: Record<string, string> = {
@@ -34,6 +37,9 @@ const gradientMap: Record<string, string> = {
   "rock-indie": "from-orange-500/30 to-red-500/30",
   open: "from-indigo-500/30 to-violet-500/30",
   dj: "from-fuchsia-500/30 to-pink-500/30",
+  reggae: "from-green-500/30 to-yellow-500/30",
+  country: "from-yellow-500/30 to-amber-500/30",
+  jazz: "from-blue-500/30 to-indigo-500/30",
 };
 
 type CategoryRow = {
