@@ -23,6 +23,7 @@ import HallOfFame from "./pages/HallOfFame";
 import Vote from "./pages/Vote";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
+import CategoryDetail from "./pages/CategoryDetail";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/scoring-method" element={<ScoringMethod />} />
           <Route path="/hall-of-fame" element={<HallOfFame />} />
           <Route path="/about" element={<About />} />
+          <Route path="/categories/:slug" element={<CategoryDetail />} />
           <Route path="/vote" element={<Vote />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

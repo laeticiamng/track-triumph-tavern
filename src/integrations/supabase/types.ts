@@ -17,25 +17,34 @@ export type Database = {
       categories: {
         Row: {
           created_at: string
+          description: string | null
+          history: string | null
           icon: string | null
           id: string
           name: string
+          notable_artists: string[] | null
           slug: string
           sort_order: number
         }
         Insert: {
           created_at?: string
+          description?: string | null
+          history?: string | null
           icon?: string | null
           id?: string
           name: string
+          notable_artists?: string[] | null
           slug: string
           sort_order?: number
         }
         Update: {
           created_at?: string
+          description?: string | null
+          history?: string | null
           icon?: string | null
           id?: string
           name?: string
+          notable_artists?: string[] | null
           slug?: string
           sort_order?: number
         }

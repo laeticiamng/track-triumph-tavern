@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music } from "lucide-react";
+import { Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +13,7 @@ const categoryMeta: Record<string, { icon: React.ElementType; color: string }> =
   "lofi": { icon: Headphones, color: "from-emerald-500/20 to-teal-500/20" },
   "rock-indie": { icon: Guitar, color: "from-orange-500/20 to-red-500/20" },
   "open": { icon: Waves, color: "from-indigo-500/20 to-violet-500/20" },
+  "dj": { icon: Disc3, color: "from-fuchsia-500/20 to-pink-500/20" },
 };
 
 const defaultColor = "from-primary/10 to-primary/5";
@@ -37,7 +38,7 @@ export function CategoriesSection() {
           className="text-center"
         >
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            8 catégories musicales
+            {categories.length} catégories musicales
           </h2>
           <p className="mt-4 text-muted-foreground">
             Chaque semaine, participez dans votre style.
@@ -57,7 +58,7 @@ export function CategoriesSection() {
             return (
               <Link
                 key={cat.id}
-                to={`/explore?category=${cat.id}`}
+                to={`/categories/${cat.slug}`}
                 className={`group flex flex-col items-center gap-3 rounded-2xl border border-border bg-gradient-to-br ${meta.color} p-6 transition-all hover:scale-[1.02] hover:shadow-soft cursor-pointer`}
               >
                 <Icon className="h-7 w-7 text-foreground/70 group-hover:text-primary transition-colors" />
