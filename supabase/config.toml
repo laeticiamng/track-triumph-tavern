@@ -29,3 +29,15 @@ verify_jwt = false
 
 [functions.check-subscription-public]
 verify_jwt = false
+
+[functions.ai-suggest-tags]
+verify_jwt = false
+
+[functions.ai-vote-summary]
+verify_jwt = false
+
+[functions.ai-chat]
+verify_jwt = false
+
+[functions.ai-recommendations]
+verify_jwt = false

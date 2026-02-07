@@ -1,0 +1,94 @@
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const SYSTEM_PROMPT = `Tu es l'assistant musical de SoundClash, une plateforme de compétition musicale hebdomadaire. Tu aides les artistes émergents avec :
+
+- Le fonctionnement du concours (soumission, votes, résultats, classement)
+- Des conseils de production musicale (mix, mastering, arrangement)
+- Des tips de promotion et marketing musical
+- Des retours sur leur stratégie artistique
+
+Règles du concours:
+- Soumission: 1 morceau par semaine (Pro/Elite uniquement)
+- Votes: 5/semaine (Free), illimités (Pro/Elite)
+- Commentaires: 0 (Free), 5/semaine (Pro), illimités (Elite)
+- Feedback IA: Elite uniquement
+- Les résultats sont publiés chaque semaine avec un classement par catégorie
+
+Sois bienveillant, concis et encourage la créativité. Réponds en français. Limite tes réponses à 3-4 phrases maximum sauf si on te demande un détail.`;
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
+  try {
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: "AI not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { messages } = await req.json();
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "messages required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages.slice(-20), // Keep last 20 messages for context
+        ],
+        stream: true,
+      }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Trop de requêtes, réessayez dans un moment." }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: "Crédits IA épuisés." }), {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const t = await response.text();
+      console.error("AI gateway error:", response.status, t);
+      return new Response(JSON.stringify({ error: "AI service unavailable" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Stream the response directly
+    return new Response(response.body, {
+      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    });
+  } catch (err) {
+    console.error("ai-chat error:", err);
+    return new Response(JSON.stringify({ error: "Erreur interne" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});

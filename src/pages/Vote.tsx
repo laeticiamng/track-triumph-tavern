@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVoteState } from "@/hooks/use-vote-state";
 import { VoteFeed } from "@/components/vote/VoteFeed";
 import { VoteQuotaBar } from "@/components/vote/VoteQuotaBar";
+import { AIRecommendations } from "@/components/ai/AIRecommendations";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Music } from "lucide-react";
+import { Music, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -33,6 +34,8 @@ const Vote = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [recommendedIds, setRecommendedIds] = useState<string[]>([]);
+  const [showRecsOnly, setShowRecsOnly] = useState(false);
 
   const voteState = useVoteState(activeWeekId);
 
@@ -94,7 +97,9 @@ const Vote = () => {
     });
   }, [activeWeekId, activeFilter, categories]);
 
-  const filtered = submissions;
+  const filtered = showRecsOnly && recommendedIds.length > 0
+    ? submissions.filter((s) => recommendedIds.includes(s.id))
+    : submissions;
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background">
@@ -110,22 +115,34 @@ const Vote = () => {
           />
         </div>
 
-        {/* Category filter pills */}
+        {/* Category filter pills + AI recommendations */}
         <div className="pointer-events-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">
           <button
-            onClick={() => setActiveFilter("all")}
+            onClick={() => { setActiveFilter("all"); setShowRecsOnly(false); }}
             className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors ${
-              activeFilter === "all"
+              activeFilter === "all" && !showRecsOnly
                 ? "bg-primary text-primary-foreground"
                 : "bg-white/15 text-white/80 hover:bg-white/25"
             }`}
           >
             Tout
           </button>
+          {recommendedIds.length > 0 && (
+            <button
+              onClick={() => { setShowRecsOnly(!showRecsOnly); setActiveFilter("all"); }}
+              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors flex items-center gap-1 ${
+                showRecsOnly
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-white/15 text-white/80 hover:bg-white/25"
+              }`}
+            >
+              <Sparkles className="h-3 w-3" /> Pour vous
+            </button>
+          )}
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setActiveFilter(cat.id)}
+              onClick={() => { setActiveFilter(cat.id); setShowRecsOnly(false); }}
               className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors ${
                 activeFilter === cat.id
                   ? "bg-primary text-primary-foreground"
@@ -136,6 +153,12 @@ const Vote = () => {
             </button>
           ))}
         </div>
+        {/* AI Recommendations loader */}
+        {user && (
+          <div className="pointer-events-auto">
+            <AIRecommendations weekId={activeWeekId} onRecommendations={setRecommendedIds} />
+          </div>
+        )}
       </div>
 
       {/* Feed area */}
