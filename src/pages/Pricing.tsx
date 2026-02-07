@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
@@ -8,7 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Crown, Star, Zap, Loader2 } from "lucide-react";
+import { Check, Crown, Star, Zap, Loader2, Settings } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { SUBSCRIPTION_TIERS, type SubscriptionTier } from "@/lib/subscription-tiers";
@@ -24,7 +24,19 @@ const Pricing = () => {
   const { tier: currentTier, loading: subLoading } = useSubscription();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  // Handle checkout cancelled return
+  useEffect(() => {
+    if (searchParams.get("checkout") === "cancelled") {
+      toast({
+        title: "Paiement annulé",
+        description: "Vous pouvez reprendre votre abonnement à tout moment.",
+      });
+    }
+  }, [searchParams, toast]);
 
   const handleSubscribe = async (tier: SubscriptionTier) => {
     if (!user) {
@@ -54,13 +66,29 @@ const Pricing = () => {
     }
   };
 
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("customer-portal");
+      if (error) throw error;
+      const result = typeof data === "string" ? JSON.parse(data) : data;
+      if (result.url) window.open(result.url, "_blank");
+    } catch {
+      toast({ title: "Erreur", description: "Impossible d'ouvrir le portail.", variant: "destructive" });
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
+  const isSubscribed = currentTier && currentTier !== "free";
+
   return (
     <Layout>
       <section className="py-12 md:py-20">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center mb-12">
             <h1 className="font-display text-4xl font-bold sm:text-5xl">
-              Choisis ton plan
+              Choisissez votre plan
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Écoutez et votez gratuitement. Débloquez la soumission et des outils pro avec un abonnement.
@@ -68,6 +96,17 @@ const Pricing = () => {
             <p className="mt-2 text-sm text-muted-foreground/70">
               Les abonnements n'influencent pas le classement — seuls les votes comptent.
             </p>
+            {user && isSubscribed && (
+              <Button
+                variant="outline"
+                className="mt-4"
+                disabled={portalLoading}
+                onClick={handleManageSubscription}
+              >
+                {portalLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings className="mr-2 h-4 w-4" />}
+                Gérer mon abonnement
+              </Button>
+            )}
           </div>
 
           <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
