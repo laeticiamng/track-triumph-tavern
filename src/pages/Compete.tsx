@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { AITagSuggest } from "@/components/ai/AITagSuggest";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Category = Tables<"categories">;
@@ -253,6 +254,13 @@ const Compete = () => {
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags (séparés par des virgules)</Label>
                   <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="rap, français, chill" maxLength={200} />
+                  <AITagSuggest
+                    title={title}
+                    description={description}
+                    category={categories.find((c) => c.id === categoryId)?.name || ""}
+                    currentTags={tags}
+                    onAcceptTags={setTags}
+                  />
                 </div>
 
                 <div className="space-y-2">

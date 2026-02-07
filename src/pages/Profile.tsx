@@ -16,6 +16,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus } from "lucide-react";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
+import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
 
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
@@ -265,6 +266,9 @@ const Profile = () => {
         {tier !== "free" && (
           <VoteStatsChart userId={user.id} tier={tier} />
         )}
+
+        {/* AI Vote Summary (Pro/Elite) */}
+        {tier !== "free" && <AIVoteSummary tier={tier} />}
 
         {/* Banner Upload (Elite only) */}
         {tier === "elite" && (
