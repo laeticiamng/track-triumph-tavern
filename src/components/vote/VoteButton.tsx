@@ -11,12 +11,15 @@ import { Link } from "react-router-dom";
 
 interface VoteButtonProps {
   submissionId: string;
-  onVoted?: () => void;
+  onVoted?: (hadComment?: boolean) => void;
   hasVoted?: boolean;
   compact?: boolean;
+  tier?: string;
+  commentsUsed?: number;
+  commentsMax?: number | "unlimited";
 }
 
-export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = false }: VoteButtonProps) {
+export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = false, tier = "free", commentsUsed = 0, commentsMax = 0 }: VoteButtonProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -45,8 +48,11 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
     );
   }
 
+  const canComment = tier === "free" ? false : commentsMax === "unlimited" ? true : commentsUsed < commentsMax;
+
   const handleVote = async () => {
     setLoading(true);
+    const hadComment = showDetails && comment.trim().length > 0 && canComment;
     try {
       const { data, error } = await supabase.functions.invoke("cast-vote", {
         body: {
@@ -54,7 +60,7 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
           originality_score: showDetails ? originality : undefined,
           production_score: showDetails ? production : undefined,
           emotion_score: showDetails ? emotion : undefined,
-          comment: showDetails && comment.trim() ? comment.trim() : undefined,
+          comment: hadComment ? comment.trim() : undefined,
         },
       });
 
@@ -67,7 +73,7 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
       } else {
         setVoted(true);
         toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
-        onVoted?.();
+        onVoted?.(hadComment);
       }
     } catch (err: any) {
       console.error("Vote error:", err);
@@ -132,17 +138,38 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
               onChange={setEmotion}
             />
 
-            <div>
-              <label className="text-xs font-medium text-muted-foreground">Commentaire (optionnel)</label>
-              <Textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Un mot sur ce titre..."
-                className="mt-1 resize-none"
-                rows={2}
-                maxLength={500}
-              />
-            </div>
+            {/* Comment section with tier-based gating */}
+            {tier === "free" ? (
+              <p className="text-xs text-muted-foreground italic">
+                <Link to="/pricing" className="text-primary hover:underline">Passez à Pro</Link> pour laisser un commentaire
+              </p>
+            ) : (
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-medium text-muted-foreground">Commentaire (optionnel)</label>
+                  <span className="text-xs text-muted-foreground">
+                    {commentsMax === "unlimited"
+                      ? "Commentaires illimités"
+                      : `${commentsUsed}/${commentsMax} cette semaine`}
+                  </span>
+                </div>
+                {canComment ? (
+                  <Textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Un mot sur ce titre..."
+                    className="mt-1 resize-none"
+                    rows={2}
+                    maxLength={500}
+                  />
+                ) : (
+                  <p className="text-xs text-muted-foreground italic">
+                    Quota de commentaires atteint cette semaine.{" "}
+                    {tier === "pro" && <Link to="/pricing" className="text-primary hover:underline">Passez à Elite pour des commentaires illimités</Link>}
+                  </p>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

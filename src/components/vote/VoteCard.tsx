@@ -27,8 +27,11 @@ interface VoteCardProps {
   canVote: boolean;
   hasVotedCategory: boolean;
   categoryName: string;
-  onVoted: (categoryId: string) => void;
+  onVoted: (categoryId: string, hadComment?: boolean) => void;
   isAuthenticated: boolean;
+  tier: string;
+  commentsUsed: number;
+  commentsMax: number | "unlimited";
 }
 
 export function VoteCard({
@@ -39,6 +42,9 @@ export function VoteCard({
   categoryName,
   onVoted,
   isAuthenticated,
+  tier,
+  commentsUsed,
+  commentsMax,
 }: VoteCardProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
