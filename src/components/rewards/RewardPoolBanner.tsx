@@ -21,7 +21,7 @@ export function RewardPoolBanner() {
 
   if (!pool) return null;
 
-  const isActive = pool.status === "active" || pool.status === "threshold_met";
+  const isActive = pool.status === "active" || pool.status === "threshold_met" || pool.status === "locked";
   const totalPrize = (pool.top1_amount_cents + pool.top2_amount_cents + pool.top3_amount_cents) / 100;
 
   return (
