@@ -1,66 +1,65 @@
 
+# Audit Premium des outils IA et pages -- Corrections
 
-# Audit des fonctionnalites Pro et Elite -- Corrections
+## Etat actuel par feature IA
 
-## Resultat de l'audit
+| Outil IA | Accessible a | Gate Frontend | Gate Backend | Probleme |
+|----------|-------------|---------------|--------------|----------|
+| Chatbot (AIChatbot) | TOUS | Aucun gate | Aucun auth, aucun tier check | Ouvert a tous, meme non connectes. Pas de restriction par tier |
+| Suggestions de tags (AITagSuggest) | Tous les soumetteurs | Aucun gate (dans Compete.tsx) | Aucun auth, aucun tier check | Accessible a tous ceux qui soumettent, mais la soumission est gate Pro/Elite. OK par transitivite, mais le backend est ouvert |
+| Recommandations IA (AIRecommendations) | TOUS connectes | `if (user)` seulement | Auth OK, aucun tier check | Accessible a tous les utilisateurs connectes, meme Free |
+| Resume IA des votes (AIVoteSummary) | Pro + Elite | `tier === "pro" \|\| tier === "elite"` | Auth OK, aucun tier check backend | Gate frontend OK mais le backend n'a aucune verification de tier. Un utilisateur Free peut appeler directement l'edge function |
+| Feedback IA (AIFeedback) | Elite | `tier === "elite"` | Auth OK, aucun tier check backend | Gate frontend OK mais le backend n'a aucune verification de tier |
+| Stats graphiques (VoteStatsChart) | Pro + Elite | `tier !== "free"` | N/A (requete directe) | OK |
+| Banner upload | Elite | `tier === "elite"` | N/A (storage direct) | OK |
 
-### PRO -- 6 features annoncees
+## 5 problemes a corriger
 
-| Feature | Statut | Detail |
-|---------|--------|--------|
-| Soumettre 1 morceau/semaine | OK | Gate `tier !== "free"` dans Compete.tsx + verification `alreadySubmitted` |
-| Votes illimites | OK | `votes_per_week: Infinity` + cast-vote sans limite |
-| 5 commentaires/semaine | Backend OK, UX manquante | cast-vote strip les commentaires au-dela de 5, mais le formulaire ne montre aucun compteur ni message. L'utilisateur ne sait pas que son commentaire a ete ignore |
-| Profil personnalise (avatar, liens sociaux) | OK | Avatar upload + liens sociaux dans Profile.tsx pour `tier !== "free"` |
-| Statistiques de votes sur profil | Partiel | 3 chiffres simples (soumissions, votes donnes, votes recus). Pas de graphique ni d'evolution temporelle |
-| Ecoute, classement inclus | OK | Acces identique a Free |
+### 1. Chatbot IA accessible a TOUS sans restriction
+`AIChatbot` est rendu dans `Layout.tsx` pour TOUT le monde. L'edge function `ai-chat` n'a ni authentification ni verification de tier. N'importe qui peut l'utiliser.
 
-### ELITE -- 6 features annoncees
+**Correction :** 
+- Dans `Layout.tsx`, conditionner l'affichage du chatbot aux utilisateurs Pro/Elite
+- Ajouter l'auth + tier check dans `ai-chat/index.ts`
 
-| Feature | Statut | Detail |
-|---------|--------|--------|
-| Soumettre 1 morceau/semaine | OK | Meme logique que Pro |
-| Votes et commentaires illimites | OK | Backend gere correctement (`comments_per_week: Infinity`) |
-| Feedback IA structure | OK | AIFeedback.tsx appelle `ai-feedback`, gate par `tier === "elite"`, affiche 4 sections |
-| Profil premium (avatar, banner, liens sociaux) | Avatar OK, Banner ABSENT | Aucun upload de banner dans Profile.tsx. Le champ `banner_url` existe en base et s'affiche sur ArtistProfile.tsx mais ne peut pas etre rempli |
-| Badge Elite sur profil | OK | Badge dore sur Profile.tsx + badge sur ArtistProfile.tsx via check-subscription-public |
-| Statistiques de votes detaillees | ABSENT | Aucune difference avec les stats Pro. Pas de graphique d'evolution |
-
----
-
-## 3 problemes a corriger
-
-### 1. Upload de banner manquant (Elite)
-La feature annonce "avatar, banner, liens sociaux" mais seul l'avatar est editable. Le champ `banner_url` existe en base et s'affiche sur la page artiste, mais il n'y a aucun moyen de l'uploader.
-
-**Correction :** Ajouter un bouton d'upload de banner sur Profile.tsx, visible uniquement pour les Elite (`tier === "elite"`). Upload vers le bucket `cover-images` sous le path `{user_id}/banner.{ext}`.
-
-### 2. Retour UX sur le quota de commentaires (Pro)
-Le backend strip silencieusement les commentaires quand le quota est atteint (Pro: 5/semaine). Le formulaire de vote (VoteButton.tsx) ne montre aucune indication. L'utilisateur pense avoir laisse un commentaire alors qu'il a ete ignore.
+### 2. Recommandations IA accessibles aux Free
+`AIRecommendations` dans `Vote.tsx` est affiche pour tout utilisateur connecte (`if (user)`). L'edge function `ai-recommendations` ne verifie pas le tier.
 
 **Correction :**
-- Passer le `tier` et un compteur de commentaires restants au VoteButton
-- Afficher un message sous le champ commentaire : "X/5 commentaires cette semaine" pour Pro
-- Desactiver le champ commentaire quand le quota est atteint avec message explicatif
-- Pour Free : masquer le champ commentaire avec un message "Passez a Pro pour commenter"
-- Pour Elite : afficher "Commentaires illimites"
+- Dans `Vote.tsx`, conditionner aux Pro/Elite
+- Ajouter un tier check dans `ai-recommendations/index.ts`
 
-### 3. Section statistiques enrichie (Pro/Elite)
-Les "Statistiques de votes" annoncees se limitent a 3 chiffres. Pour justifier la promesse, ajouter une section avec un graphique recharts montrant les votes recus par jour sur les 7 derniers jours.
+### 3. Backend des edge functions IA sans verification de tier
+Les edge functions `ai-vote-summary`, `ai-feedback`, `ai-chat`, `ai-recommendations` et `ai-suggest-tags` ne verifient pas le tier de l'utilisateur. Un utilisateur Free peut contourner le frontend et appeler directement les endpoints.
 
-**Correction :**
-- Ajouter une section "Statistiques" sur Profile.tsx, visible pour Pro et Elite
-- Requete : grouper les votes recus par date sur les 7 derniers jours pour les soumissions de l'utilisateur
-- Afficher un graphique recharts (AreaChart) avec les votes par jour
-- Pour Elite, ajouter aussi la repartition par categorie (PieChart)
+**Correction :** Ajouter dans chaque edge function IA (sauf `ai-suggest-tags` qui est gate par la soumission) un appel a `check-subscription` pour verifier le tier avant de traiter la requete.
+
+### 4. VoteButton sur SubmissionDetail sans infos de tier/commentaires
+Dans `SubmissionDetail.tsx`, le `VoteButton` est rendu sans passer `tier`, `commentsUsed`, `commentsMax`. Il utilise les valeurs par defaut (`tier="free"`, `commentsMax=0`) ce qui empeche tout commentaire meme pour les Pro/Elite.
+
+**Correction :** Ajouter `useSubscription` et `useVoteState` dans `SubmissionDetail.tsx` et passer les props au `VoteButton`.
+
+### 5. Features IA non listees dans les plans /pricing
+Les outils IA (chatbot, recommandations, resume IA) ne sont pas mentionnes dans `subscription-tiers.ts`. Les utilisateurs ne savent pas qu'ils y ont droit.
+
+**Correction :** Ajouter les features IA dans les listes de chaque plan :
+- Pro : "Resume IA des votes recus", "Recommandations IA personnalisees", "Chatbot assistant musical"
+- Elite : idem + "Feedback IA structure" (deja present)
 
 ---
 
 ## Fichiers a modifier
 
-1. **`src/pages/Profile.tsx`** -- Upload banner (Elite), section statistiques (Pro/Elite)
-2. **`src/components/vote/VoteButton.tsx`** -- Afficher le quota de commentaires, gater le champ selon le tier
-3. **`src/pages/Vote.tsx`** -- Passer les infos de tier/commentaires au VoteButton
-4. **`src/hooks/use-vote-state.ts`** -- Ajouter le compteur de commentaires utilises cette semaine
-5. **`src/components/vote/VoteFeed.tsx`** -- Propager le tier au VoteButton
+1. **`src/lib/subscription-tiers.ts`** -- Ajouter les features IA dans les listes Pro et Elite
+2. **`src/components/layout/Layout.tsx`** -- Conditionner le chatbot au tier Pro/Elite
+3. **`src/pages/Vote.tsx`** -- Conditionner les recommandations au tier Pro/Elite
+4. **`src/pages/SubmissionDetail.tsx`** -- Passer tier/commentsUsed/commentsMax au VoteButton
+5. **`supabase/functions/ai-chat/index.ts`** -- Ajouter auth + tier check (Pro/Elite)
+6. **`supabase/functions/ai-recommendations/index.ts`** -- Ajouter tier check (Pro/Elite)
+7. **`supabase/functions/ai-vote-summary/index.ts`** -- Ajouter tier check (Pro/Elite)
+8. **`supabase/functions/ai-feedback/index.ts`** -- Ajouter tier check (Elite uniquement)
+
+### Methode de verification du tier dans les edge functions
+
+Chaque edge function IA appelera `check-subscription` en interne via le Supabase client pour recuperer le tier de l'utilisateur, puis refusera l'acces si le tier ne correspond pas au minimum requis.
 
