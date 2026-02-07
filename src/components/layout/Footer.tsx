@@ -18,6 +18,7 @@ export function Footer() {
             <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
             <Link to="/contest-rules" className="hover:text-foreground transition-colors">Règlement</Link>
             <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+            <a href="mailto:contact@weeklymusicawards.com" className="hover:text-foreground transition-colors">Contact</a>
           </nav>
 
           <p className="text-xs text-muted-foreground">
