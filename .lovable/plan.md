@@ -1,154 +1,159 @@
 
-# Reward Pool Sponsorise Complet + Tables Winners/Rewards
 
-## Analyse de l'existant
+# Page Vote - Experience Feed Mobile-First Premium
 
-**Ce qui existe deja :**
-- Table `reward_pools` avec colonnes week_id, minimum_cents, current_cents, top1/2/3_amount_cents, sponsors, fallback_label, status
-- Enum `reward_pool_status` : `active | inactive | threshold_met`
-- Edge function `update-reward-pool` (admin)
-- Edge function `compute-results` (calcule vote_count + publie results_published_at)
-- Composant `RewardPoolBanner` sur la page Results
-- Admin dashboard avec onglet Rewards (formulaire basique)
+## Contexte
 
-**Ce qui manque :**
-1. Tables `winners` et `rewards` absentes
-2. L'enum status ne correspond pas au spec (`pending/active/locked` demande vs `active/inactive/threshold_met` actuel)
-3. `compute-results` ne verifie pas le reward_pool_status avant publication
-4. Pas d'edge function separee `publish-results`
-5. L'admin ne peut pas gerer les sponsors (nom + lien) - le formulaire envoie un tableau vide
-6. Pas de persistance des gagnants apres calcul des resultats
+Actuellement, la decouverte et le vote se font via la page Explore (grille de cards) et la page SubmissionDetail (detail individuel). L'experience n'est pas optimisee pour un usage mobile rapide type "feed". Ce plan cree une page `/vote` dediee avec un flow vertical immersif.
 
----
+## Architecture
 
-## Plan d'implementation
+### Nouvelle page : `src/pages/Vote.tsx`
 
-### 1. Migration base de donnees
+Page principale avec feed vertical plein ecran. Chaque "carte" occupe la hauteur visible (100vh - header - bottom nav). L'utilisateur scroll verticalement pour passer d'un son a l'autre.
 
-**Modifier l'enum `reward_pool_status`** : ajouter `locked` et `pending`, supprimer `threshold_met` si possible. Alternativement, ajouter les valeurs manquantes a l'enum existant.
+**Donnees chargees :**
+- Semaine active (`weeks` ou `is_active = true`)
+- Soumissions approuvees de la semaine avec join sur `categories` et `profiles`
+- Votes existants de l'utilisateur pour la semaine (pour savoir quelles categories sont deja votees)
+- Tier de l'utilisateur via `useSubscription` (pour afficher quota Free)
 
-**Creer table `winners`** :
-```text
-winners (
-  id uuid PK default gen_random_uuid(),
-  week_id uuid FK -> weeks(id) NOT NULL,
-  category_id uuid FK -> categories(id) NOT NULL,
-  submission_id uuid FK -> submissions(id) NOT NULL,
-  user_id uuid NOT NULL,
-  rank integer NOT NULL (1, 2, 3),
-  vote_count integer NOT NULL default 0,
-  created_at timestamptz default now()
-)
-- Unique constraint: (week_id, category_id, rank)
-- RLS: SELECT public, ALL admin only
-```
+### Nouveau composant : `src/components/vote/VoteFeed.tsx`
 
-**Creer table `rewards`** :
-```text
-rewards (
-  id uuid PK default gen_random_uuid(),
-  winner_id uuid FK -> winners(id) NOT NULL,
-  week_id uuid FK -> weeks(id) NOT NULL,
-  reward_type text NOT NULL ('cash' | 'fallback'),
-  amount_cents bigint default 0,
-  label text,
-  status text default 'pending' ('pending' | 'claimed' | 'paid'),
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
-)
-- RLS: SELECT pour user_id du winner, ALL admin only
-```
+Le conteneur scroll snap vertical. Utilise CSS `scroll-snap-type: y mandatory` et `scroll-snap-align: start` sur chaque carte pour un defilement "page par page" natif, performant, sans librairie externe.
 
-### 2. Edge Function `publish-results`
+### Nouveau composant : `src/components/vote/VoteCard.tsx`
 
-Nouvelle edge function qui remplace l'appel direct a `compute-results` depuis l'admin :
+Une carte plein ecran par soumission :
+- Cover image en fond (plein ecran, gradient overlay)
+- Mini profil artiste (avatar + nom, lien vers `/artist/:id`)
+- Titre + tags + badge categorie
+- Player audio sticky en bas de la carte (play/pause + progress bar)
+- Barre d'actions : Vote / Commenter / Partager
+- Indicateur "Deja vote dans cette categorie" si applicable
+- Message "Merci, ton vote compte." apres vote (animation fade)
 
-```text
-1. Verifier admin
-2. Recevoir week_id
-3. Charger reward_pool pour ce week_id
-4. Si reward_pool.status === 'active' ou 'locked' : mode cash rewards
-5. Si reward_pool.status === 'pending' ou 'inactive' : mode fallback rewards
-6. Calculer vote_count par submission (votes valides)
-7. Mettre a jour submissions.vote_count
-8. Pour chaque categorie : determiner top 3 par vote_count
-9. Inserer dans winners (week_id, category_id, submission_id, user_id, rank, vote_count)
-10. Inserer dans rewards :
-    - Si cash : amount_cents = top1/2/3_amount_cents, type = 'cash'
-    - Si fallback : amount_cents = 0, label = fallback_label, type = 'fallback'
-11. Mettre a jour weeks.results_published_at
-12. Si cash mode : mettre reward_pool.status = 'locked'
-13. Retourner resume (winners count, reward mode)
-```
+### Nouveau composant : `src/components/vote/VoteQuotaBar.tsx`
 
-### 3. Admin Dashboard - Gestion sponsors
+Barre affichee en haut du feed pour les utilisateurs Free :
+- "3/5 votes utilises cette semaine"
+- Progress bar visuelle
+- CTA discret "Passer a Pro pour des votes illimites"
+- Masquee pour Pro/Elite (ou affiche "Votes illimites")
 
-Modifier l'onglet Rewards dans `AdminDashboard.tsx` :
+### Nouveau composant : `src/components/vote/ShareSheet.tsx`
 
-- Ajouter un champ dynamique pour les sponsors : nom + URL (ajouter/supprimer)
-- Afficher les sponsors existants du pool selectionne
-- Pre-remplir le formulaire quand un pool existant est selectionne
-- Ajouter un bouton "Verrouiller" pour passer le status a `locked` (confirmation des cash rewards)
+Bottom sheet (via Vaul drawer) pour le partage :
+- Copier le lien
+- Partager sur Twitter/X, Instagram, WhatsApp
+- Utilise `navigator.share` sur mobile si disponible
 
-### 4. Modifier `compute-results` ou le remplacer
+### Hook : `src/hooks/use-vote-state.ts`
 
-Deux options :
-- **Option A** : Renommer/supprimer `compute-results`, tout mettre dans `publish-results`
-- **Option B** : Garder `compute-results` pour le calcul seul, `publish-results` ajoute les winners + rewards
+Hook centralise pour gerer :
+- Les votes de l'utilisateur pour la semaine active
+- Le compteur de votes utilises (Free)
+- La verification "deja vote dans cette categorie"
+- Le rafraichissement apres vote
 
-Option retenue : **Option A** - une seule edge function `publish-results` qui fait tout. Garder `compute-results` mais le rendre interne (l'admin appellera `publish-results`).
+### Sticky Audio Player
 
-### 5. Mettre a jour la page Results
+Le player audio est integre dans chaque VoteCard. Quand l'utilisateur scroll vers une nouvelle carte, le son precedent s'arrete automatiquement. Pas de player global : chaque carte gere son propre audio pour eviter les conflits.
 
-- Charger les winners depuis la table `winners` au lieu de calculer le top 3 a la volee
-- Afficher les rewards associes (cash ou fallback) a cote de chaque gagnant
-- Le `RewardPoolBanner` reste inchange (fonctionne deja)
-
-### 6. Mettre a jour le config.toml
-
-Ajouter la config pour `publish-results`.
+**Auto-play** : quand une carte entre en viewport (via IntersectionObserver), le son demarre automatiquement. Quand elle sort, il s'arrete.
 
 ---
 
-## Fichiers a creer/modifier
+## Modifications des fichiers existants
 
-| Fichier | Action |
+| Fichier | Modification |
 |---|---|
-| Migration SQL | Creer tables `winners` et `rewards`, ajouter valeurs enum |
-| `supabase/functions/publish-results/index.ts` | Creer : edge function complete |
-| `supabase/config.toml` | Ajouter `[functions.publish-results]` |
-| `src/pages/AdminDashboard.tsx` | Modifier : sponsors dynamiques, bouton verrouiller, appeler publish-results |
-| `src/pages/Results.tsx` | Modifier : charger winners + rewards depuis les nouvelles tables |
+| `src/App.tsx` | Ajouter route `/vote` |
+| `src/components/layout/BottomNav.tsx` | Remplacer "Explorer" par "Vote" (ou ajouter "Vote" entre Explorer et Concours) |
 
 ---
 
-## Detail technique - Edge Function publish-results
+## Fichiers a creer
+
+| Fichier | Role |
+|---|---|
+| `src/pages/Vote.tsx` | Page principale : charge donnees, gere le state global |
+| `src/components/vote/VoteFeed.tsx` | Conteneur scroll-snap vertical |
+| `src/components/vote/VoteCard.tsx` | Carte immersive plein ecran par soumission |
+| `src/components/vote/VoteQuotaBar.tsx` | Indicateur quota Free |
+| `src/components/vote/ShareSheet.tsx` | Bottom sheet partage |
+| `src/hooks/use-vote-state.ts` | Hook centralise vote state + quota |
+
+---
+
+## Detail technique
+
+### VoteCard - Structure visuelle
 
 ```text
-Flux :
-1. Auth + admin check (identique a compute-results)
-2. Input: { week_id }
-3. Charger reward_pool pour week_id
-4. Charger toutes les categories
-5. Charger votes valides pour week_id -> compter par submission_id
-6. Mettre a jour submissions.vote_count
-7. Pour chaque categorie :
-   a. Trier submissions par vote_count desc
-   b. Prendre top 3
-   c. Inserer dans winners (rank 1, 2, 3)
-   d. Inserer dans rewards :
-      - Si pool.status in ('active','locked','threshold_met') :
-        rank 1 -> pool.top1_amount_cents, type='cash'
-        rank 2 -> pool.top2_amount_cents, type='cash'
-        rank 3 -> pool.top3_amount_cents, type='cash'
-      - Sinon :
-        type='fallback', label=pool.fallback_label
-8. weeks.results_published_at = now()
-9. Retourner { success, winners_count, reward_mode }
++----------------------------------+
+| [Quota Bar - Free only]          |
++----------------------------------+
+|                                  |
+|     COVER IMAGE (full bleed)     |
+|     gradient overlay bottom      |
+|                                  |
+|  [Badge Categorie]  [Tags]       |
+|                                  |
+|  TITRE DU MORCEAU               |
+|  par Artiste  [avatar]           |
+|                                  |
+|  [Player: Play/Pause + Bar]      |
+|                                  |
+|  +-----+ +--------+ +--------+  |
+|  | Vote | |Commenter| |Partager| |
+|  +-----+ +--------+ +--------+  |
+|                                  |
+|  "Deja vote dans Pop cette sem." |
+|  ou                              |
+|  "Merci, ton vote compte."       |
++----------------------------------+
 ```
 
-## Securite
+### Scroll-snap CSS
 
-- Tables `winners` et `rewards` : RLS SELECT public pour les winners, admin ALL
-- Rewards : les users ne voient que leurs propres rewards via un policy filtre sur user_id du winner associe
-- Edge function `publish-results` : admin-only via verification user_roles
+```text
+Conteneur : overflow-y: auto, scroll-snap-type: y mandatory, h-[calc(100dvh-4rem-4rem)]
+Carte : scroll-snap-align: start, min-h-full, position relative
+```
+
+### IntersectionObserver pour auto-play
+
+Chaque VoteCard utilise un `useEffect` + `IntersectionObserver` avec `threshold: 0.7`. Quand la carte est visible a 70%, l'audio demarre. Quand elle sort, pause automatique.
+
+### Vote State (use-vote-state.ts)
+
+```text
+Input : user, activeWeekId
+Output :
+  - votedCategories: Set<string> (categories deja votees)
+  - voteCount: number (nombre de votes cette semaine)
+  - tier: SubscriptionTier
+  - canVote(categoryId): boolean
+  - remainingVotes: number | "unlimited"
+  - recordVote(categoryId): void
+```
+
+### Partage
+
+ShareSheet utilise le composant Drawer de Vaul (deja installe). Sur mobile, tente `navigator.share()` en natif d'abord. Fallback vers le bottom sheet avec liens manuels.
+
+### Filtre par categorie
+
+En haut du feed (sous la quota bar), barre horizontale scrollable de filtres par categorie (pilules). Meme pattern que Explore.tsx mais en overlay transparent sur le feed.
+
+---
+
+## Conformite
+
+- Aucun mot interdit (loto, jackpot, mise, etc.)
+- Message post-vote : "Merci, ton vote compte." (sobre, premium)
+- Quota Free clairement affiche sans urgence artificielle
+- CTA Pro discret, jamais agressif
+- 1 vote par categorie par semaine respecte cote client + serveur
+
