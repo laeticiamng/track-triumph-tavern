@@ -1,10 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Heart, Music, Trophy, User } from "lucide-react";
+import { Home, Search, Music, Trophy, User } from "lucide-react";
 
 const items = [
   { label: "Accueil", href: "/", icon: Home },
-  { label: "Vote", href: "/vote", icon: Heart },
-  { label: "Concours", href: "/compete", icon: Music },
+  { label: "Explorer", href: "/explore", icon: Search },
+  { label: "Soumettre", href: "/compete", icon: Music },
   { label: "Résultats", href: "/results", icon: Trophy },
   { label: "Profil", href: "/profile", icon: User },
 ];

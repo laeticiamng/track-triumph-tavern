@@ -20,7 +20,7 @@ const values = [
     icon: Gift,
     title: "Récompenses",
     description:
-      "Chaque semaine, un reward pool est constitué et redistribué aux artistes du podium. Les montants varient selon la participation et les sponsors.",
+      "Chaque semaine, une cagnotte est constituée et redistribuée aux artistes du podium. Les montants varient selon la participation et les sponsors.",
   },
   {
     icon: Music,

@@ -44,6 +44,13 @@ export function Footer() {
               <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
               <a href="mailto:contact@weeklymusicawards.com" className="hover:text-foreground transition-colors">Contact</a>
             </nav>
+
+            <h4 className="font-display text-sm font-semibold mb-3 mt-6">Suivez-nous</h4>
+            <nav className="flex gap-4 text-sm text-muted-foreground">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Instagram</a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">X</a>
+              <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Discord</a>
+            </nav>
           </div>
         </div>
 
