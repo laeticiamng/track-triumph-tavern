@@ -1,64 +1,85 @@
 
 
-# Corrections restantes
+# Audit complet du flux de creation de compte
 
-## Problemes identifies
+## Resultats de l'audit
 
-### 1. HallOfFame ne utilise pas la table `winners`
-La page `HallOfFame.tsx` recupere le top 3 depuis la table `submissions` triee par `vote_count` au lieu d'utiliser la table `winners` qui contient le vrai classement pondere. Le Hall of Fame affiche donc potentiellement les mauvais gagnants.
+J'ai teste le signup de bout en bout et inspecte la base de donnees, les logs, le code et le comportement reel de l'application.
 
-**Correction** : Utiliser la table `winners` avec `weighted_score` et joindre `submissions` pour les metadonnees.
+### Ce qui FONCTIONNE correctement
 
-### 2. Grand gagnant dans Results.tsx trie par `vote_count`
-A la ligne 66, le grand gagnant est determine par `vote_count` au lieu de `weighted_score`. Incoherent avec la methode de classement ponderee.
-
-**Correction** : Trier par `weighted_score` au lieu de `vote_count`.
-
-### 3. Interface `ScoringCriterion` obsolete dans les edge functions
-Dans `compute-results` et `publish-results`, l'interface `ScoringCriterion` declare `name: string` alors que la DB utilise `criterion`. Le code runtime fonctionne grace au fallback `(c as any).criterion`, mais le type est trompeur.
-
-**Correction** : Renommer `name` en `criterion` dans l'interface.
-
-### 4. Reglement du concours (ContestRules.tsx) obsolete
-L'article 5 mentionne encore "somme des votes valides + bonus jury (max 15%)" au lieu du score moyen pondere par criteres.
-
-**Correction** : Mettre a jour l'article 5 pour decrire la vraie methode de classement.
-
-### 5. La page Vote (TikTok feed) ne passe pas le `categoryId` au VoteCard
-Le `VoteCard` appelle `cast-vote` sans passer de scores detailles. C'est acceptable pour un vote rapide, mais le `categoryId` est deja present dans `submission.category_id` et pourrait etre utilise pour des ameliorations futures. Pas de changement requis ici car le composant fonctionne correctement.
+1. **Le formulaire d'inscription** s'affiche bien avec les 3 champs (Nom d'artiste, Email, Mot de passe)
+2. **L'appel Supabase Auth `signUp`** cree bien l'utilisateur en base (verifie : l'utilisateur `testbeta@example.com` a ete cree avec succes)
+3. **Le trigger `handle_new_user`** fonctionne : un profil et un role `user` sont automatiquement crees a l'inscription
+4. **Le `display_name`** est bien transmis via les metadata et correctement enregistre dans le profil
+5. **Les validations client** (email requis, mot de passe min 6 caracteres) fonctionnent
+6. **Les messages d'erreur** pour les cas speciaux (compte existant, etc.) sont en place
 
 ---
 
-## Plan technique
+### PROBLEME PRINCIPAL : la confirmation email bloque les utilisateurs
 
-### Etape 1 : Corriger les interfaces dans les edge functions
+**Constat** : Apres l'inscription, le champ `email_confirmed_at` reste `null`. L'utilisateur ne peut donc PAS se connecter tant qu'il n'a pas clique sur le lien de confirmation email.
 
-**`compute-results/index.ts`** et **`publish-results/index.ts`** :
-- Remplacer `name: string` par `criterion: string` dans l'interface `ScoringCriterion`
-- Simplifier le `getWeights()` pour lire directement `c.criterion` au lieu du fallback double
+Le toast affiche "Verifiez votre email pour confirmer votre compte" -- mais en phase de beta, les utilisateurs s'attendent a pouvoir se connecter immediatement.
 
-### Etape 2 : Corriger `Results.tsx` — grand gagnant
+**Impact** : C'est tres probablement la raison pour laquelle les beta testeurs rapportent que "la creation de compte ne fonctionne pas". L'inscription reussit techniquement, mais ils ne peuvent pas se connecter ensuite car l'email de confirmation n'est peut-etre jamais recu (pas de service d'email configure type Resend, ou les emails tombent en spam).
 
-- Ligne 66 : remplacer le tri par `vote_count` par un tri par `weighted_score` pour determiner le grand gagnant
+### PROBLEMES SECONDAIRES identifies
 
-### Etape 3 : Refactorer `HallOfFame.tsx`
-
-- Remplacer la requete `submissions` par une requete sur `winners` avec jointure `submissions(title, artist_name, cover_image_url)`
-- Afficher `weighted_score` et `rank` au lieu du simple `vote_count`
-- Grouper les gagnants par semaine comme actuellement
-
-### Etape 4 : Mettre a jour `ContestRules.tsx`
-
-- Article 5 : remplacer la formule obsolete par la description du score moyen pondere avec les 3 criteres (Emotion, Originalite, Production)
-- Mentionner que les poids varient par categorie
+1. **Pas de feedback clair apres inscription** : Le toast "Verifiez votre email" apparait brievement mais l'utilisateur reste sur la meme page sans savoir quoi faire. Il n'y a pas d'ecran de confirmation dedié.
+2. **Tentative de connexion apres inscription sans confirmation** : Si un utilisateur essaie de se connecter avant d'avoir confirme son email, il recoit "Email ou mot de passe incorrect" -- un message trompeur alors que le vrai probleme est l'email non confirme.
+3. **Pas d'option "Renvoyer l'email de confirmation"** : En cas de non-reception de l'email, l'utilisateur est bloque sans recours.
+4. **Pas de "Mot de passe oublie"** : Aucun lien de recuperation de mot de passe n'est propose.
 
 ---
 
-## Fichiers concernes
+## Plan de correction
 
-1. **`supabase/functions/compute-results/index.ts`** : interface `ScoringCriterion` corrigee
-2. **`supabase/functions/publish-results/index.ts`** : interface `ScoringCriterion` corrigee
-3. **`src/pages/Results.tsx`** : tri du grand gagnant par `weighted_score`
-4. **`src/pages/HallOfFame.tsx`** : utiliser la table `winners` au lieu de `submissions`
-5. **`src/pages/ContestRules.tsx`** : article 5 mis a jour
+### Etape 1 : Activer l'auto-confirmation des emails (pour la beta)
+
+Utiliser l'outil `configure-auth` pour desactiver la confirmation par email. C'est la solution la plus rapide pour debloquer les beta testeurs. Les utilisateurs pourront se connecter immediatement apres l'inscription.
+
+> Note : A reactiver en production avec un vrai service d'envoi d'emails.
+
+### Etape 2 : Ameliorer le message d'erreur pour les emails non confirmes
+
+Dans `Auth.tsx`, ajouter une detection specifique du message "Email not confirmed" retourne par Supabase lors du `signInWithPassword`, et afficher un message explicite : "Votre email n'est pas encore confirme. Verifiez votre boite de reception." au lieu du generique "Email ou mot de passe incorrect".
+
+### Etape 3 : Ajouter un ecran de confirmation post-inscription
+
+Au lieu de juste un toast, afficher un message visible et persistant : "Un email de confirmation vous a ete envoye. Verifiez votre boite de reception (et vos spams)." avec un bouton "Renvoyer l'email" qui appelle `supabase.auth.resend()`.
+
+### Etape 4 : Ajouter "Mot de passe oublie"
+
+Ajouter un lien "Mot de passe oublie ?" sous le champ mot de passe en mode connexion, qui affiche un formulaire simplifie appelant `supabase.auth.resetPasswordForEmail()`.
+
+### Etape 5 : Ameliorer la validation des entrees
+
+Ajouter une validation avec `zod` pour l'email et le mot de passe, avec des messages d'erreur inline (pas seulement des toasts).
+
+---
+
+## Details techniques
+
+### Fichiers a modifier
+
+1. **Configuration auth** : activer auto-confirm via l'outil configure-auth
+2. **`src/pages/Auth.tsx`** : 
+   - Ajouter detection "Email not confirmed" dans le handler d'erreur login
+   - Ajouter ecran post-inscription avec bouton "Renvoyer"
+   - Ajouter lien "Mot de passe oublie"
+   - Ajouter un formulaire de reset password (toggle dans le meme composant)
+   - Ajouter validation zod pour email/password
+3. **Aucune migration SQL necessaire** : le schema fonctionne correctement
+
+### Priorite
+
+```text
+[CRITIQUE] Auto-confirm email (debloque la beta)
+[HAUTE]    Message d'erreur "email non confirme"
+[HAUTE]    Ecran confirmation + renvoyer email
+[MOYENNE]  Mot de passe oublie
+[BASSE]    Validation zod avancee
+```
 
