@@ -26,6 +26,7 @@ export type Database = {
           name: string
           notable_artists: string[] | null
           production_tips: Json | null
+          scoring_criteria: Json | null
           slug: string
           sort_order: number
           sub_genres: string[] | null
@@ -41,6 +42,7 @@ export type Database = {
           name: string
           notable_artists?: string[] | null
           production_tips?: Json | null
+          scoring_criteria?: Json | null
           slug: string
           sort_order?: number
           sub_genres?: string[] | null
@@ -56,6 +58,7 @@ export type Database = {
           name?: string
           notable_artists?: string[] | null
           production_tips?: Json | null
+          scoring_criteria?: Json | null
           slug?: string
           sort_order?: number
           sub_genres?: string[] | null
