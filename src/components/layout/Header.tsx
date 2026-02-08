@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
-  { label: "Concours", href: "/compete", icon: Music },
+  { label: "Soumettre", href: "/compete", icon: Music },
   { label: "Résultats", href: "/results", icon: Trophy },
   { label: "Tarifs", href: "/pricing", icon: CreditCard },
+  { label: "À propos", href: "/about", icon: Info },
 ];
 
 export function Header() {
