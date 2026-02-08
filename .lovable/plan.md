@@ -1,36 +1,64 @@
 
+# Corrections suite au retour bêta-testeur
 
-# Corrections qualite - Toutes les pages
+## Probleme 1 : La plus-value artiste n'est pas claire
 
-## 1. Privacy.tsx - Bug texte duplique + nettoyage
+**Constat** : Un visiteur ne comprend pas en 3 secondes ce qu'il gagne a poster sa musique.
 
-**Ligne 24** : Le paragraphe de la section 5 contient un doublon (texte imbrique dans lui-meme avec un `<p>` dans un `<p>`).
+### Actions :
 
-- Remplacer par un texte unique et propre : "Conformement au RGPD, vous disposez d'un droit d'acces, de rectification, de suppression, de portabilite et d'opposition. Contactez-nous a contact@emotionscare.com."
-- **Supprimer** le paragraphe "modele MVP" (ligne 32)
-- Ajouter la mention editeur en bas : "Editeur : EMOTIONSCARE SASU -- SIREN 944 505 445 -- contact@emotionscare.com"
+**A. Nouvelle section "Ce que vous gagnez" sur la landing page** (`src/pages/Index.tsx` + nouveau composant `src/components/landing/ArtistBenefits.tsx`)
 
-## 2. Terms.tsx - Retirer mention "modele MVP"
+Ajout d'une section entre "WhyUs" et "CategoriesSection" qui liste clairement les benefices concrets pour l'artiste :
 
-- **Supprimer** le paragraphe ligne 34 ("Ce document est un modele MVP...")
+- Visibilite : "Les gagnants sont mis en avant chaque semaine sur la page d'accueil"
+- Cash : "Jusqu'a 200 EUR de recompenses chaque semaine"
+- Feedback : "Recevez des votes detailles sur 3 criteres (emotion, originalite, production)"
+- Communaute : "Faites-vous connaitre aupres d'une communaute de passionnes"
+- Credibilite : "Affichez vos badges et classements sur votre profil artiste"
 
-## 3. ContestRules.tsx - Preciser les recompenses + retirer "modele MVP"
+**B. Sous-titre Hero plus explicite** (`src/components/landing/HeroSection.tsx`)
 
-- **Article 6** (ligne 27) : Ajouter les montants exacts "Le podium de chaque semaine recoit : 1er 200 EUR, 2e 100 EUR, 3e 50 EUR."
-- **Supprimer** le paragraphe "modele MVP" (ligne 35)
-- Ajouter la mention editeur en bas
-
-## 4. Cookies.tsx - Enrichir + retirer "modele MVP"
-
-- **Supprimer** le paragraphe "modele MVP" (ligne 26)
-- Ajouter un lien vers la Politique de Confidentialite dans la section cookies
-- Ajouter la mention editeur en bas
-
-## 5. Auth.tsx - Ajouter reassurance
-
-- Ajouter sous le formulaire d'inscription une ligne de micro-reassurance : "Gratuit -- Sans carte bancaire -- Inscription en 30s"
+Remplacer le sous-titre actuel par un message plus oriente benefice artiste :
+"Soumettez votre musique, recevez des votes de la communaute, et gagnez jusqu'a 200 EUR chaque semaine."
 
 ---
 
-**Resume** : 5 fichiers modifies, 0 fichier cree. Corrections purement textuelles et UX, aucun changement fonctionnel.
+## Probleme 2 : Les gagnants de la semaine ne sont pas visibles
 
+**Constat** : Les gagnants sont uniquement sur /results et /hall-of-fame. Un visiteur qui arrive sur la page d'accueil ou sur /explore ne les voit jamais.
+
+### Actions :
+
+**C. Nouveau composant "Podium de la semaine"** (`src/components/landing/WeeklyPodium.tsx`)
+
+Un bandeau/section qui affiche les 3 derniers gagnants (de la semaine precedente dont les resultats sont publies) avec :
+- Photo de couverture du morceau
+- Nom de l'artiste + titre
+- Medaille (or, argent, bronze)
+- Lien vers la soumission
+- Message "Aucun podium encore" si pas de resultats publies
+
+Donnees : requete sur `winners` + `submissions` pour la derniere semaine avec `results_published_at` non null.
+
+**D. Afficher le podium sur la page d'accueil** (`src/pages/Index.tsx`)
+
+Inserer le composant `WeeklyPodium` entre HowItWorks et WhyUs pour que les visiteurs voient immediatement les gagnants.
+
+**E. Afficher le podium sur la page Explore** (`src/pages/Explore.tsx`)
+
+Ajouter un bandeau compact en haut de la page Explore montrant les 3 gagnants de la semaine precedente, avec un lien vers /results.
+
+---
+
+## Resume technique
+
+| Fichier | Action |
+|---|---|
+| `src/components/landing/ArtistBenefits.tsx` | Creer — nouvelle section "Ce que vous gagnez" |
+| `src/components/landing/WeeklyPodium.tsx` | Creer — composant podium gagnants de la semaine |
+| `src/components/landing/HeroSection.tsx` | Modifier — sous-titre plus explicite |
+| `src/pages/Index.tsx` | Modifier — inserer ArtistBenefits + WeeklyPodium |
+| `src/pages/Explore.tsx` | Modifier — ajouter bandeau podium en haut |
+
+5 fichiers touches (2 crees, 3 modifies). Aucun changement de base de donnees necessaire, les tables `winners` et `submissions` existent deja.
