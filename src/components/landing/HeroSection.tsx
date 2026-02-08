@@ -80,7 +80,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-5 max-w-xl text-sm text-primary-foreground/70 sm:text-lg"
         >
-          Montez sur le podium chaque semaine. Votez gratuitement, soumettez avec un abonnement Pro.
+          Soumettez votre musique, recevez des votes de la communauté, et gagnez jusqu'à 200 € chaque semaine.
         </motion.p>
 
         {/* Trust badges */}
