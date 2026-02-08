@@ -52,10 +52,10 @@ export function Footer() {
               Une question, un partenariat ou un retour ? On adore échanger.
             </p>
             <a
-              href="mailto:contact@weeklymusicawards.com"
+              href="mailto:contact@emotionscare.com"
               className="mt-2 inline-block text-sm text-primary hover:underline"
             >
-              contact@weeklymusicawards.com
+              contact@emotionscare.com
             </a>
 
             {/* TODO: Remettre la section "Suivez-nous" une fois les vrais comptes créés */}
