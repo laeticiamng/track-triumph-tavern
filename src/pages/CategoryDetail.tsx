@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import {
   Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3,
   Palmtree, Wheat, Music2, ArrowLeft, ArrowRight, BookOpen, Users, ExternalLink,
-  Quote, Tag, Palette, ChevronLeft, ChevronRight, SlidersHorizontal,
+  Quote, Tag, Palette, ChevronLeft, ChevronRight, SlidersHorizontal, Target,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -35,6 +35,7 @@ const gradientMap: Record<string, string> = {
 };
 
 type ProductionTip = { label: string; value: string };
+type ScoringCriterion = { criterion: string; weight: number; description: string };
 
 type CategoryRow = {
   id: string;
@@ -47,6 +48,7 @@ type CategoryRow = {
   mood_tags: string[] | null;
   fun_fact: string | null;
   production_tips: ProductionTip[] | null;
+  scoring_criteria: ScoringCriterion[] | null;
   sort_order: number;
 };
 
@@ -62,7 +64,7 @@ const CategoryDetail = () => {
     Promise.all([
       supabase
         .from("categories")
-        .select("id, name, slug, description, history, notable_artists, sub_genres, mood_tags, fun_fact, production_tips, sort_order")
+        .select("id, name, slug, description, history, notable_artists, sub_genres, mood_tags, fun_fact, production_tips, scoring_criteria, sort_order")
         .eq("slug", slug)
         .single(),
       supabase
@@ -241,6 +243,42 @@ const CategoryDetail = () => {
                     {tip.label}
                   </p>
                   <p className="text-foreground leading-relaxed">{tip.value}</p>
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Critères de notation */}
+        {category.scoring_criteria && (category.scoring_criteria as ScoringCriterion[]).length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.22 }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <Target className="h-5 w-5 text-primary" />
+              <h2 className="font-display text-2xl font-bold">Critères de notation</h2>
+            </div>
+            <p className="text-muted-foreground mb-5">
+              Voici comment les votants évaluent les morceaux dans cette catégorie (sur 5 étoiles chacun).
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {(category.scoring_criteria as ScoringCriterion[]).map((sc) => (
+                <div key={sc.criterion} className="rounded-xl border border-border bg-card p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="font-display font-bold text-lg">{sc.criterion}</p>
+                    <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
+                      {sc.weight}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div
+                      className="bg-primary h-2 rounded-full transition-all"
+                      style={{ width: `${sc.weight}%` }}
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{sc.description}</p>
                 </div>
               ))}
             </div>
