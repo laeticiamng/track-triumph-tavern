@@ -16,13 +16,13 @@ const values = [
     icon: Shield,
     title: "Intégrité",
     description:
-      "Notre système anti-fraude par IA garantit que chaque vote compte. Le classement ne peut être influencé par aucun paiement.",
+      "Notre système anti-fraude par IA analyse chaque vote en temps réel. Le classement ne peut être influencé par aucun paiement ni manipulation.",
   },
   {
     icon: Gift,
     title: "Cagnotte hebdomadaire",
     description:
-      "Chaque semaine, une cagnotte est constituée et redistribuée aux artistes du podium. Les montants varient selon la participation et les sponsors.",
+      "Chaque semaine, une cagnotte sponsorisée est redistribuée au podium : 🥇 200 € · 🥈 100 € · 🥉 50 €. 100 % financée par nos sponsors, jamais par les participants.",
   },
   {
     icon: Users,
@@ -33,9 +33,10 @@ const values = [
 ];
 
 const timeline = [
-  { label: "Bêta ouverte", description: "Testez la plateforme, soumettez vos morceaux et votez.", active: true },
-  { label: "Première saison", description: "Lancement officiel avec cagnotte et classement complet.", active: false },
-  { label: "Croissance", description: "Sponsors, nouveaux genres, événements live.", active: false },
+  { label: "Bêta ouverte", description: "Testez la plateforme, soumettez vos morceaux et donnez-nous vos retours.", active: true },
+  { label: "Saison 1 — Lancement officiel", description: "Cagnotte active chaque semaine, classement complet et premiers sponsors.", active: false },
+  { label: "Croissance", description: "Nouveaux genres, événements live, partenariats labels et coaching artistes.", active: false },
+  { label: "Internationalisation", description: "Ouverture à de nouveaux pays et catégories musicales.", active: false },
 ];
 
 const About = () => {
@@ -55,11 +56,12 @@ const About = () => {
               Équipe de passionnés
             </span>
             <h1 className="font-display text-3xl font-bold sm:text-5xl">
-              À propos
+              À propos de Weekly Music Awards
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              Weekly Music Awards est un concours musical hebdomadaire où la communauté
-              écoute, vote et récompense les meilleurs artistes indépendants.
+              Le concours musical hebdomadaire où la communauté écoute, vote et récompense
+              les meilleurs artistes indépendants. Un projet édité par{" "}
+              <strong className="text-foreground">EMOTIONSCARE SASU</strong>.
             </p>
           </motion.div>
 
@@ -82,7 +84,10 @@ const About = () => {
                 Weekly Music Awards est né de cette frustration. L'idée ? Créer un concours <strong>100 % méritocratique</strong>, où seul le talent compte. Pas de jury opaque, pas de passe-droits : c'est la communauté qui écoute, qui vote, et qui décide du podium.
               </p>
               <p>
-                Nous sommes actuellement en <strong>bêta</strong> — chaque retour de votre part nous aide à construire la meilleure plateforme possible pour les artistes émergents.
+                La plateforme est éditée par <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445), une entreprise française dédiée à la valorisation des talents musicaux émergents.
+              </p>
+              <p>
+                Nous sommes actuellement en <strong>bêta ouverte</strong> — chaque retour de votre part nous aide à construire la meilleure plateforme possible. Rejoignez-nous et participez à cette aventure dès le début.
               </p>
             </div>
           </motion.div>
