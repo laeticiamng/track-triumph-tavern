@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import {
   Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3,
   Palmtree, Wheat, Music2, ArrowLeft, ArrowRight, BookOpen, Users, ExternalLink,
-  Quote, Tag, Palette, ChevronLeft, ChevronRight,
+  Quote, Tag, Palette, ChevronLeft, ChevronRight, SlidersHorizontal,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -34,6 +34,8 @@ const gradientMap: Record<string, string> = {
   jazz: "from-blue-500/30 to-indigo-500/30",
 };
 
+type ProductionTip = { label: string; value: string };
+
 type CategoryRow = {
   id: string;
   name: string;
@@ -44,6 +46,7 @@ type CategoryRow = {
   sub_genres: string[] | null;
   mood_tags: string[] | null;
   fun_fact: string | null;
+  production_tips: ProductionTip[] | null;
   sort_order: number;
 };
 
@@ -59,7 +62,7 @@ const CategoryDetail = () => {
     Promise.all([
       supabase
         .from("categories")
-        .select("id, name, slug, description, history, notable_artists, sub_genres, mood_tags, fun_fact, sort_order")
+        .select("id, name, slug, description, history, notable_artists, sub_genres, mood_tags, fun_fact, production_tips, sort_order")
         .eq("slug", slug)
         .single(),
       supabase
@@ -207,6 +210,38 @@ const CategoryDetail = () => {
                 >
                   {mood}
                 </span>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Conseils de production */}
+        {category.production_tips && (category.production_tips as ProductionTip[]).length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <SlidersHorizontal className="h-5 w-5 text-primary" />
+              <h2 className="font-display text-2xl font-bold">Conseils de production</h2>
+            </div>
+            <p className="text-muted-foreground mb-5">
+              Repères techniques pour bien préparer ta soumission dans cette catégorie.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(category.production_tips as ProductionTip[]).map((tip) => (
+                <div
+                  key={tip.label}
+                  className={`rounded-xl border border-border p-5 ${
+                    tip.label === "Conseil" ? "sm:col-span-2 bg-primary/5" : "bg-card"
+                  }`}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1">
+                    {tip.label}
+                  </p>
+                  <p className="text-foreground leading-relaxed">{tip.value}</p>
+                </div>
               ))}
             </div>
           </motion.section>
