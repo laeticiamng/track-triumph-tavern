@@ -15,7 +15,7 @@ const pillars = [
   {
     icon: Trophy,
     title: "Récompenses réelles",
-    description: "Un reward pool alimenté chaque semaine. Les artistes du podium repartent avec des récompenses concrètes.",
+    description: "Une cagnotte alimentée chaque semaine. Les artistes du podium repartent avec des récompenses concrètes.",
   },
   {
     icon: Users,

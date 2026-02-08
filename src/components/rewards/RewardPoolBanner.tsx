@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, Gift, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
@@ -36,9 +36,9 @@ export function RewardPoolBanner() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <p className="font-display font-semibold">Cash Rewards</p>
+              <p className="font-display font-semibold">Cagnotte de la semaine</p>
               <Badge className={isActive ? "bg-green-600 text-white" : "bg-muted text-muted-foreground"}>
-                {isActive ? "ACTIVE" : "INACTIVE"}
+                {isActive ? "ACTIVE" : "EN ATTENTE"}
               </Badge>
             </div>
             {isActive ? (
