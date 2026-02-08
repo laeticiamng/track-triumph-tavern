@@ -101,7 +101,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const comments = votes.filter((v) => v.comment).map((v) => v.comment).slice(0, 20);
+    const comments = votes.filter((v) => v.comment).map((v) => String(v.comment).slice(0, 300).replace(/[\r\n|]/g, " ")).slice(0, 20);
     const avgScores = {
       originality: votes.filter((v) => v.originality_score).reduce((s, v) => s + (v.originality_score || 0), 0) / (votes.filter((v) => v.originality_score).length || 1),
       production: votes.filter((v) => v.production_score).reduce((s, v) => s + (v.production_score || 0), 0) / (votes.filter((v) => v.production_score).length || 1),

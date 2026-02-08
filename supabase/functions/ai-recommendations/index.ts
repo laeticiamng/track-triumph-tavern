@@ -130,12 +130,21 @@ Deno.serve(async (req) => {
     const catFreq = new Map<string, number>();
     preferredCategories.forEach((c) => catFreq.set(c, (catFreq.get(c) || 0) + 1));
 
+    // Sanitize data before prompt inclusion
+    const sanitize = (s: string) => s.slice(0, 200).replace(/[\r\n|]/g, " ");
+    const sanitizedTags = topTags.map((t) => sanitize(t));
+    const sanitizedUnvoted = unvoted.map((s) => ({
+      ...s,
+      title: sanitize(s.title),
+      tags: (s.tags || []).map((t) => sanitize(t)),
+    }));
+
     const prompt = `Tu es un système de recommandation musicale. L'utilisateur a ces préférences:
-Tags préférés: ${topTags.join(", ") || "aucun"}
+Tags préférés: ${sanitizedTags.join(", ") || "aucun"}
 Nombre de votes passés: ${votedSubIds.length}
 
 Voici les morceaux disponibles (ID | Titre | Tags):
-${unvoted.map((s) => `${s.id} | ${s.title} | ${(s.tags || []).join(", ")}`).join("\n")}
+${sanitizedUnvoted.map((s) => `${s.id} | ${s.title} | ${s.tags.join(", ")}`).join("\n")}
 
 Classe les 3 morceaux les plus susceptibles de plaire à cet utilisateur. Réponds UNIQUEMENT en JSON: {"ids": ["id1", "id2", "id3"]}`;
 

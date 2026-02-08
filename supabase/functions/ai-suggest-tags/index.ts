@@ -18,9 +18,12 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { title, description, category } = await req.json();
+    const body = await req.json();
+    const title = String(body.title || "").slice(0, 200).replace(/[\r\n]/g, " ");
+    const description = String(body.description || "").slice(0, 500).replace(/[\r\n]/g, " ");
+    const category = String(body.category || "").slice(0, 100).replace(/[\r\n]/g, " ");
 
-    if (!title) {
+    if (!title.trim()) {
       return new Response(JSON.stringify({ error: "title required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

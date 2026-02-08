@@ -34,7 +34,15 @@ export function AIChatbot() {
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      if (!session?.access_token) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "Vous devez être connecté pour utiliser le chatbot IA." },
+        ]);
+        setLoading(false);
+        return;
+      }
+      const token = session.access_token;
 
       const resp = await fetch(CHAT_URL, {
         method: "POST",
