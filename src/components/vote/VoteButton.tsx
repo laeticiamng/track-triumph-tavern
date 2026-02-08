@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, Star, Sparkles, Music2, ChevronDown, ChevronUp, Check, Loader2 } from "lucide-react";
+import { Heart, Star, Sparkles, Music2, ChevronDown, ChevronUp, Check, Loader2, Lightbulb } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
+type ScoringCriterion = { criterion: string; weight: number; description: string };
+
 interface VoteButtonProps {
   submissionId: string;
+  categoryId?: string;
   onVoted?: (hadComment?: boolean) => void;
   hasVoted?: boolean;
   compact?: boolean;
@@ -19,7 +22,7 @@ interface VoteButtonProps {
   commentsMax?: number | "unlimited";
 }
 
-export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = false, tier = "free", commentsUsed = 0, commentsMax = 0 }: VoteButtonProps) {
+export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false, compact = false, tier = "free", commentsUsed = 0, commentsMax = 0 }: VoteButtonProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -29,6 +32,21 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
   const [production, setProduction] = useState<number>(3);
   const [emotion, setEmotion] = useState<number>(3);
   const [comment, setComment] = useState("");
+  const [scoringCriteria, setScoringCriteria] = useState<ScoringCriterion[]>([]);
+
+  useEffect(() => {
+    if (!categoryId) return;
+    supabase
+      .from("categories")
+      .select("scoring_criteria")
+      .eq("id", categoryId)
+      .single()
+      .then(({ data }) => {
+        if (data?.scoring_criteria) {
+          setScoringCriteria(data.scoring_criteria as unknown as ScoringCriterion[]);
+        }
+      });
+  }, [categoryId]);
 
   if (!user) {
     return (
@@ -119,23 +137,46 @@ export function VoteButton({ submissionId, onVoted, hasVoted = false, compact = 
           >
             <p className="text-xs text-muted-foreground">Notes optionnelles (1-5)</p>
 
+            {/* Contextual scoring tips */}
+            {scoringCriteria.length > 0 && (
+              <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                  <Lightbulb className="h-3.5 w-3.5" />
+                  Conseils pour cette catégorie
+                </div>
+                {scoringCriteria.map((sc) => {
+                  const criterionKey = sc.criterion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                  const icon = criterionKey.includes("original") ? "💡" : criterionKey.includes("emotion") ? "❤️" : "🎛️";
+                  return (
+                    <p key={sc.criterion} className="text-xs text-muted-foreground leading-relaxed">
+                      <span className="mr-1">{icon}</span>
+                      <span className="font-medium text-foreground">{sc.criterion} ({sc.weight}%)</span> — {sc.description}
+                    </p>
+                  );
+                })}
+              </div>
+            )}
+
             <ScoreSlider
               icon={<Sparkles className="h-4 w-4 text-yellow-500" />}
               label="Originalité"
               value={originality}
               onChange={setOriginality}
+              tip={scoringCriteria.find((s) => s.criterion === "Originalité")?.description}
             />
             <ScoreSlider
               icon={<Music2 className="h-4 w-4 text-blue-500" />}
               label="Production"
               value={production}
               onChange={setProduction}
+              tip={scoringCriteria.find((s) => s.criterion === "Production")?.description}
             />
             <ScoreSlider
               icon={<Star className="h-4 w-4 text-rose-500" />}
               label="Émotion"
               value={emotion}
               onChange={setEmotion}
+              tip={scoringCriteria.find((s) => s.criterion === "Émotion")?.description}
             />
 
             {/* Comment section with tier-based gating */}
@@ -182,25 +223,29 @@ function ScoreSlider({
   label,
   value,
   onChange,
+  tip,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   onChange: (v: number) => void;
+  tip?: string;
 }) {
   return (
-    <div className="flex items-center gap-3">
-      {icon}
-      <span className="w-20 text-sm">{label}</span>
-      <Slider
-        min={1}
-        max={5}
-        step={1}
-        value={[value]}
-        onValueChange={([v]) => onChange(v)}
-        className="flex-1"
-      />
-      <span className="w-6 text-center text-sm font-medium">{value}</span>
+    <div className="space-y-1">
+      <div className="flex items-center gap-3">
+        {icon}
+        <span className="w-20 text-sm">{label}</span>
+        <Slider
+          min={1}
+          max={5}
+          step={1}
+          value={[value]}
+          onValueChange={([v]) => onChange(v)}
+          className="flex-1"
+        />
+        <span className="w-6 text-center text-sm font-medium">{value}</span>
+      </div>
     </div>
   );
 }

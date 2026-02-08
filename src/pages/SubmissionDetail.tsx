@@ -179,6 +179,7 @@ const SubmissionDetail = () => {
                 <div className="space-y-3">
                   <VoteButton
                     submissionId={submission.id}
+                    categoryId={submission.category_id}
                     hasVoted={hasVoted}
                     onVoted={handleVoted}
                     tier={voteState.tier}
