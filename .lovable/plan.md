@@ -1,107 +1,79 @@
 
 
-# Audit "Musicien & Participant" -- Ameliorations recommandees
+# Completion des elements manquants
 
-## Ce que voit un musicien aujourd'hui
+## Problemes identifies
 
-En tant qu'artiste qui decouvre la plateforme, les pages de categories sont informatives mais manquent d'elements qui parlent vraiment a un musicien. Voici les constats et les ameliorations proposees.
+### 1. Bug critique : les edge functions ne lisent pas les poids correctement
+Les fonctions `compute-results` et `publish-results` cherchent `c.name` dans les criteres, mais la base de donnees utilise `c.criterion`. Les poids ne sont donc **jamais appliques** -- le systeme retombe toujours sur les valeurs par defaut (33/34/33).
 
----
+**Correction** : Modifier `getWeights()` dans les deux edge functions pour chercher `c.criterion` au lieu de `c.name`.
 
-## Constats depuis l'oeil d'un musicien
+### 2. Page "Methode de classement" obsolete
+La page `ScoringMethod.tsx` affiche encore l'ancienne formule "Score = Votes valides + Bonus jury (max 15%)" alors que le systeme utilise maintenant un score moyen pondere par criteres. Le contenu ne mentionne ni les poids par categorie, ni les criteres (Emotion, Originalite, Production).
 
-### 1. Le texte historique est un pave
-L'histoire est un long bloc de texte continu (`whitespace-pre-line` dans un seul `<p>`). C'est decourageant a lire, surtout sur mobile. Un musicien veut des infos rapides et visuelles, pas un cours d'histoire de la musique.
+**Correction** : Mettre a jour la page pour expliquer la formule de score moyen pondere, mentionner les 3 criteres, et indiquer que chaque categorie a ses propres poids.
 
-### 2. Pas de conseil pour participer
-Un musicien qui arrive sur la page Reggae se dit : "OK cool, mais moi, concretement, je soumets quoi ?". Il n'y a aucun conseil de production, aucune indication sur ce que les votants attendent, aucune astuce.
+### 3. Score pondere non affiche sur la page Resultats
+La page `Results.tsx` affiche uniquement le nombre de votes (`vote_count`). Le score moyen pondere, qui est le vrai critere de classement, n'est pas visible. C'est un manque de transparence.
 
-### 3. Les artistes sont juste des badges plats
-Les grandes figures sont de simples badges texte. Pas d'epoque, pas de contexte. Pas de "pourquoi cet artiste est important pour ce genre".
+**Correction** : Stocker le score moyen pondere dans la table `winners` (nouvelle colonne `weighted_score`) et l'afficher sur la page Resultats a cote du nombre de votes.
 
-### 4. Pas de sous-genres visibles
-Un musicien qui fait du dancehall ne sait pas s'il doit soumettre en Reggae. Quelqu'un qui fait du boom-bap ne sait pas si c'est Rap/Trap ou Lofi. Il manque les sous-genres acceptes.
+### 4. VoteButton sur Explore passe sans categoryId
+Dans `Explore.tsx`, le `VoteButton` est utilise en mode compact sans passer `categoryId`. Les tips contextuels ne peuvent donc pas se charger si l'utilisateur deplie les details (meme si c'est compact, c'est une donnee manquante pour la coherence).
 
-### 5. Pas de citation ou de phrase inspirante
-Les pages manquent de "soul". Une citation d'un artiste legendaire du genre donnerait du caractere et de l'emotion.
+**Correction** : Passer `categoryId={sub.category_id}` au `VoteButton` dans Explore.
 
-### 6. L'experience est statique
-Pas de navigation entre categories. Un musicien qui hesite entre deux genres doit revenir a l'accueil pour voir l'autre.
+### 5. Page Compete n'affiche pas les conseils de production
+Quand un musicien selectionne une categorie dans le formulaire de soumission, il ne voit aucun des conseils de production (BPM, instruments, duree) qu'on a soigneusement remplis. C'est une occasion manquee de guider l'artiste.
 
-### 7. Le bouton "Retour" ramene a l'accueil
-Il devrait ramener a la page precedente ou au moins proposer d'explorer d'autres categories.
+**Correction** : Afficher les `production_tips` de la categorie selectionnee sous le selecteur de categorie dans le formulaire.
 
 ---
 
-## Plan d'ameliorations
+## Plan technique
 
-### A. Enrichissement des donnees (base de donnees)
+### Etape 1 : Migration SQL -- ajouter `weighted_score` a `winners`
 
-Ajouter 3 nouvelles colonnes a la table `categories` :
+```sql
+ALTER TABLE winners ADD COLUMN weighted_score numeric DEFAULT 0;
+```
 
-| Colonne | Type | Description |
-|---------|------|-------------|
-| `sub_genres` | text[] | Liste des sous-genres acceptes (ex: dancehall, dub, roots pour Reggae) |
-| `mood_tags` | text[] | Ambiances typiques du genre (ex: chill, melancolique, energique) |
-| `fun_fact` | text | Citation celebre ou anecdote marquante du genre |
+### Etape 2 : Corriger les edge functions
 
-Remplir ces colonnes pour les 12 categories avec du contenu pertinent.
+**`compute-results/index.ts`** et **`publish-results/index.ts`** :
+- Remplacer `c.name` par `c.criterion` dans `getWeights()`
+- Dans `publish-results`, ecrire `weighted_score` dans la table `winners` lors de l'insertion
 
-Exemples :
+### Etape 3 : Mettre a jour `Results.tsx`
 
-**Reggae** :
-- Sub-genres : Roots, Dancehall, Dub, Ska, Rocksteady, Lovers Rock
-- Moods : Spirituel, Chill, Festif, Conscient
-- Fun fact : "One good thing about music, when it hits you, you feel no pain." -- Bob Marley
+- Fetcher `weighted_score` depuis la table `winners`
+- Afficher le score pondere (ex: "4.2/5") a cote du nombre de votes pour chaque gagnant
 
-**Jazz** :
-- Sub-genres : Bebop, Cool Jazz, Jazz Fusion, Free Jazz, Smooth Jazz, Jazz Manouche
-- Moods : Sophistique, Intimiste, Experimental, Groovy
-- Fun fact : "Do not fear mistakes. There are none." -- Miles Davis
+### Etape 4 : Mettre a jour `ScoringMethod.tsx`
 
-**Rap / Trap** :
-- Sub-genres : Boom-bap, Trap, Drill, Cloud Rap, Rap Conscient, Freestyle
-- Moods : Brut, Melodique, Sombre, Energique
-- Fun fact : "I'm not a businessman, I'm a business, man." -- Jay-Z
+- Remplacer la formule obsolete par la vraie formule de score pondere
+- Expliquer les 3 criteres (Emotion, Originalite, Production) et leurs poids variables par categorie
+- Ajouter une mention que les poids sont visibles sur chaque page de categorie
 
-**Lofi** :
-- Sub-genres : Lofi Hip-Hop, Chillhop, Jazz Hop, Lofi House, Ambient Lofi
-- Moods : Chill, Nocturne, Nostalgique, Studieux
-- Fun fact : Nujabes, le parrain du lofi, signifie "Jun Seba" a l'envers -- son vrai nom.
+### Etape 5 : Corriger `Explore.tsx`
 
-*(Les 8 autres categories suivront le meme modele)*
+- Passer `categoryId={sub.category_id}` au `VoteButton`
 
-### B. Refonte de la page CategoryDetail
+### Etape 6 : Enrichir `Compete.tsx`
 
-Transformer la page en une experience riche et engageante :
-
-**1. Section Citation / Fun Fact**
-- Afficher la citation ou anecdote dans un encadre stylise avec une grande typographie et un fond colore, juste sous la banniere hero. Ca donne immediatement du caractere.
-
-**2. Section "Sous-genres acceptes"**
-- Afficher les sous-genres sous forme de badges colores avec une petite description : "Tu fais du dancehall ? Du dub ? Du ska ? Tout rentre ici."
-- Ca repond directement a la question "Est-ce que mon style rentre dans cette categorie ?"
-
-**3. Section "Ambiances typiques" (Mood Tags)**
-- Afficher les moods sous forme de petites pastilles colorees (ex: Chill, Energique, Melancolique)
-- Ca aide le votant a comprendre ce qu'il va entendre et le musicien a positionner son morceau
-
-**4. Histoire reformatee en paragraphes distincts**
-- Separer les paragraphes visuellement avec des espacements clairs au lieu d'un bloc continu
-- Chaque paragraphe dans son propre element `<p>` pour un meilleur rendu typographique
-
-**5. Navigation entre categories**
-- Ajouter des boutons "Categorie precedente" / "Categorie suivante" en bas de page
-- Permettre de naviguer sans revenir a l'accueil
-
-**6. Bouton "Retour" ameliore**
-- Remplacer le lien vers "/" par un lien vers la section categories de la landing page (ancre `/#categories`)
+- Quand une categorie est selectionnee, afficher les `production_tips` correspondants sous le selecteur
+- Utiliser les donnees deja chargees dans le state `categories`
 
 ---
 
 ## Fichiers concernes
 
-1. **Migration SQL** : Ajout des colonnes `sub_genres` (text[]), `mood_tags` (text[]), `fun_fact` (text) + UPDATE des 12 categories
-2. **`src/pages/CategoryDetail.tsx`** : Refonte avec les nouvelles sections (citation, sous-genres, moods, navigation inter-categories, histoire reformatee)
-3. **`src/components/landing/CategoriesSection.tsx`** : Ajout d'un `id="categories"` sur la section pour l'ancre de retour
+1. **Migration SQL** : ajout colonne `weighted_score` sur `winners`
+2. **`supabase/functions/compute-results/index.ts`** : fix `c.name` -> `c.criterion`
+3. **`supabase/functions/publish-results/index.ts`** : fix `c.name` -> `c.criterion` + ecriture `weighted_score`
+4. **`src/pages/Results.tsx`** : affichage du score pondere
+5. **`src/pages/ScoringMethod.tsx`** : mise a jour complete du contenu
+6. **`src/pages/Explore.tsx`** : passer `categoryId` au `VoteButton`
+7. **`src/pages/Compete.tsx`** : afficher les conseils de production selon la categorie choisie
 
