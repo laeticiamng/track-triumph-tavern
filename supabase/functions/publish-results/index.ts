@@ -6,6 +6,36 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+interface ScoringCriterion {
+  name: string;
+  weight: number;
+}
+
+function getWeights(criteria: ScoringCriterion[] | null): { emotion: number; originality: number; production: number } {
+  const defaults = { emotion: 33, originality: 34, production: 33 };
+  if (!criteria || !Array.isArray(criteria)) return defaults;
+  const weights = { ...defaults };
+  for (const c of criteria) {
+    const key = c.name?.toLowerCase() || "";
+    if (key.includes("émotion") || key.includes("emotion")) weights.emotion = c.weight;
+    else if (key.includes("originalité") || key.includes("originality")) weights.originality = c.weight;
+    else if (key.includes("production")) weights.production = c.weight;
+  }
+  return weights;
+}
+
+function computeWeightedScore(
+  vote: { emotion_score: number | null; originality_score: number | null; production_score: number | null },
+  weights: { emotion: number; originality: number; production: number }
+): number {
+  const e = vote.emotion_score ?? 3;
+  const o = vote.originality_score ?? 3;
+  const p = vote.production_score ?? 3;
+  const total = weights.emotion + weights.originality + weights.production;
+  if (total === 0) return (e + o + p) / 3;
+  return (e * weights.emotion + o * weights.originality + p * weights.production) / total;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -31,7 +61,6 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    // Check admin
     const { data: { user } } = await supabaseUser.auth.getUser();
     if (!user) {
       return new Response(JSON.stringify({ error: "Non authentifié" }), {
@@ -72,16 +101,21 @@ Deno.serve(async (req) => {
     const isCashMode = pool && (pool.status === "active" || pool.status === "locked" || pool.status === "threshold_met");
     console.log(`[publish-results] Pool status: ${pool?.status || "none"}, cash mode: ${isCashMode}`);
 
-    // Load categories
+    // Load categories with scoring criteria
     const { data: categories } = await supabaseAdmin
       .from("categories")
-      .select("id")
+      .select("id, scoring_criteria")
       .order("sort_order");
 
-    // Get valid votes for the week
+    const criteriaMap: Record<string, any> = {};
+    for (const cat of categories || []) {
+      criteriaMap[cat.id] = getWeights(cat.scoring_criteria as ScoringCriterion[] | null);
+    }
+
+    // Get valid votes with scores
     const { data: votes, error: votesErr } = await supabaseAdmin
       .from("votes")
-      .select("submission_id")
+      .select("submission_id, category_id, emotion_score, originality_score, production_score")
       .eq("week_id", week_id)
       .eq("is_valid", true);
 
@@ -93,43 +127,56 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Count votes per submission
-    const voteCounts: Record<string, number> = {};
+    // Compute weighted average score per submission
+    const scoreAcc: Record<string, { totalScore: number; count: number; categoryId: string }> = {};
     for (const v of votes || []) {
-      voteCounts[v.submission_id] = (voteCounts[v.submission_id] || 0) + 1;
+      const weights = criteriaMap[v.category_id] || { emotion: 33, originality: 34, production: 33 };
+      const score = computeWeightedScore(v, weights);
+      if (!scoreAcc[v.submission_id]) {
+        scoreAcc[v.submission_id] = { totalScore: 0, count: 0, categoryId: v.category_id };
+      }
+      scoreAcc[v.submission_id].totalScore += score;
+      scoreAcc[v.submission_id].count += 1;
     }
 
-    // Update each submission's vote_count
-    const updates = Object.entries(voteCounts).map(([subId, count]) =>
+    // Update vote_count on submissions
+    const updates = Object.entries(scoreAcc).map(([subId, { count }]) =>
       supabaseAdmin.from("submissions").update({ vote_count: count }).eq("id", subId)
     );
     await Promise.all(updates);
 
-    // Delete existing winners for this week (idempotent re-publish)
+    // Delete existing winners (idempotent re-publish)
     await supabaseAdmin.from("winners").delete().eq("week_id", week_id);
 
-    // Get approved submissions for this week
+    // Get approved submissions
     const { data: allSubs } = await supabaseAdmin
       .from("submissions")
       .select("id, user_id, category_id, vote_count")
       .eq("week_id", week_id)
-      .eq("status", "approved")
-      .order("vote_count", { ascending: false });
+      .eq("status", "approved");
 
+    // Rank submissions per category by weighted average score
     let winnersCount = 0;
     const amountsByRank = pool
       ? { 1: pool.top1_amount_cents, 2: pool.top2_amount_cents, 3: pool.top3_amount_cents }
       : { 1: 0, 2: 0, 3: 0 };
 
     for (const cat of categories || []) {
-      const catSubs = (allSubs || []).filter((s: any) => s.category_id === cat.id);
+      const catSubs = (allSubs || [])
+        .filter((s: any) => s.category_id === cat.id)
+        .map((s: any) => {
+          const acc = scoreAcc[s.id];
+          const avgScore = acc ? acc.totalScore / acc.count : 0;
+          return { ...s, avgScore };
+        })
+        .sort((a: any, b: any) => b.avgScore - a.avgScore);
+
       const top3 = catSubs.slice(0, 3);
 
       for (let i = 0; i < top3.length; i++) {
         const sub = top3[i];
         const rank = i + 1;
 
-        // Insert winner
         const { data: winner, error: winErr } = await supabaseAdmin
           .from("winners")
           .insert({
@@ -148,7 +195,6 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        // Insert reward
         const rewardData: any = {
           winner_id: winner.id,
           week_id,
@@ -159,21 +205,18 @@ Deno.serve(async (req) => {
         };
 
         const { error: rewErr } = await supabaseAdmin.from("rewards").insert(rewardData);
-        if (rewErr) {
-          console.error(`[publish-results] Error inserting reward:`, rewErr);
-        }
+        if (rewErr) console.error(`[publish-results] Error inserting reward:`, rewErr);
 
         winnersCount++;
       }
     }
 
-    // Publish results
+    // Publish
     await supabaseAdmin
       .from("weeks")
       .update({ results_published_at: new Date().toISOString() })
       .eq("id", week_id);
 
-    // Lock pool if cash mode
     if (isCashMode && pool) {
       await supabaseAdmin
         .from("reward_pools")
@@ -181,7 +224,7 @@ Deno.serve(async (req) => {
         .eq("id", pool.id);
     }
 
-    console.log(`[publish-results] Done: ${winnersCount} winners, mode: ${isCashMode ? "cash" : "fallback"}`);
+    console.log(`[publish-results] Done: ${winnersCount} winners ranked by weighted score, mode: ${isCashMode ? "cash" : "fallback"}`);
 
     return new Response(
       JSON.stringify({
