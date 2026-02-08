@@ -128,8 +128,9 @@ const Auth = () => {
             {view === "signup" && (
               <>
                 <AuthSignupForm onSubmit={handleSignup} loading={loading} />
-                <div className="mt-6 text-center text-sm">
-                  <span className="text-muted-foreground">Déjà un compte ?</span>{" "}
+                <p className="mt-3 text-center text-xs text-muted-foreground">Gratuit · Sans carte bancaire · Inscription en 30s</p>
+                 <div className="mt-4 text-center text-sm">
+                   <span className="text-muted-foreground">Déjà un compte ?</span>{" "}
                   <button onClick={() => setView("login")} className="font-medium text-primary hover:underline">Se connecter</button>
                 </div>
               </>

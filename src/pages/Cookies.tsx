@@ -18,12 +18,12 @@ const Cookies = () => (
         </ul>
 
         <h2 className="text-foreground font-display">3. Gestion des cookies</h2>
-        <p>Vous pouvez configurer votre navigateur pour refuser les cookies. Notez que certaines fonctionnalités du site pourraient ne plus fonctionner correctement.</p>
+        <p>Vous pouvez configurer votre navigateur pour refuser les cookies. Notez que certaines fonctionnalités du site pourraient ne plus fonctionner correctement. Pour en savoir plus sur vos données, consultez notre <a href="/privacy" className="text-primary hover:underline">Politique de Confidentialité</a>.</p>
 
         <h2 className="text-foreground font-display">4. Durée</h2>
         <p>Les cookies de session sont supprimés à la fermeture du navigateur. Les cookies persistants ont une durée maximale de 13 mois.</p>
 
-        <p className="text-xs italic">Ce document est un modèle MVP. Adaptez-le en fonction des cookies réellement utilisés.</p>
+        <p className="text-sm font-medium text-foreground">Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com</p>
       </div>
     </div>
     <Footer />

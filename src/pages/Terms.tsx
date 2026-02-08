@@ -31,7 +31,7 @@ const Terms = () => (
 
         <p className="text-sm font-medium text-foreground">Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com</p>
 
-        <p className="text-xs italic">Ce document est un modèle MVP. Il est recommandé de faire relire les CGU par un professionnel du droit avant mise en production.</p>
+        
       </div>
     </div>
     <Footer />

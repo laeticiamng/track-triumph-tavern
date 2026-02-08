@@ -21,7 +21,7 @@ const Privacy = () => (
         <p>Vos données sont conservées pendant la durée de votre compte actif, plus 3 ans après suppression pour les obligations légales.</p>
 
         <h2 className="text-foreground font-display">5. Vos droits</h2>
-        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à contact@emotionscare.com.</p>.</p>
+        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à contact@emotionscare.com.</p>
 
         <h2 className="text-foreground font-display">6. Cookies</h2>
         <p>Nous utilisons des cookies essentiels pour le fonctionnement du site. Voir notre Politique Cookies pour plus de détails.</p>
@@ -29,7 +29,7 @@ const Privacy = () => (
         <h2 className="text-foreground font-display">7. Sécurité</h2>
         <p>Vos données sont protégées par chiffrement en transit et au repos. L'accès est restreint au personnel autorisé.</p>
 
-        <p className="text-xs italic">Ce document est un modèle MVP conforme RGPD. Il est recommandé de le faire relire par un DPO ou juriste avant mise en production.</p>
+        <p className="text-sm font-medium text-foreground">Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com</p>
       </div>
     </div>
     <Footer />
