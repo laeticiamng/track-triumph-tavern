@@ -21,7 +21,7 @@ const Privacy = () => (
         <p>Vos données sont conservées pendant la durée de votre compte actif, plus 3 ans après suppression pour les obligations légales.</p>
 
         <h2 className="text-foreground font-display">5. Vos droits</h2>
-        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à privacy@weeklymusicawards.com.</p>
+        <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité et d'opposition. Contactez-nous à contact@emotionscare.com.</p>.</p>
 
         <h2 className="text-foreground font-display">6. Cookies</h2>
         <p>Nous utilisons des cookies essentiels pour le fonctionnement du site. Voir notre Politique Cookies pour plus de détails.</p>

@@ -29,6 +29,8 @@ const Terms = () => (
         <h2 className="text-foreground font-display">7. Modification</h2>
         <p>Les présentes CGU peuvent être modifiées à tout moment. Les utilisateurs seront informés de toute modification substantielle.</p>
 
+        <p className="text-sm font-medium text-foreground">Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com</p>
+
         <p className="text-xs italic">Ce document est un modèle MVP. Il est recommandé de faire relire les CGU par un professionnel du droit avant mise en production.</p>
       </div>
     </div>
