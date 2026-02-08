@@ -1,78 +1,48 @@
 
 
-# Vitrine Marketing Parfaite -- Plan de corrections finales
+# Corrections finales avant publication
 
-## Audit multi-perspective : resume des problemes restants
+## Audit rapide -- Etat actuel
 
-### Marketing (CMO)
-- Le titre About contient encore "reward pool" en anglais
-- La page About manque de personnalite et d'equipe (normal en beta, mais le texte peut etre ameliore)
-- Pas de lien vers les reseaux sociaux dans le footer
-- Le header desktop n'a pas de lien "Explorer" en tant que premier lien visible pour les visiteurs
+Apres verification approfondie, la majorite des corrections des audits precedents sont en place :
+- Hero dynamique avec countdown et CTA adaptatif
+- SocialProof masque les compteurs a zero
+- Empty states engageants sur Explore et Vote
+- Traductions "cagnotte" effectuees partout (About, Admin, FAQ, WhyUs, RewardPool, Results)
+- BottomNav reorganise (Accueil, Explorer, Soumettre, Resultats, Profil)
+- Footer avec section "Suivez-nous"
 
-### UX / Beta-testeur
-- La page Vote a des pills de filtre avec `bg-white/15 text-white/80` qui sont illisibles sur fond clair (hors contexte hero)
-- Le bottom nav n'a pas "Explorer" alors que c'est une action cle
-- Le label "Concours" dans le bottom nav est ambigu -- mieux : "Soumettre"
+## Problemes restants a corriger
 
-### Branding / Design
-- Le hero est deja bien. Les sections HowItWorks, WhyUs, Categories, FAQ sont propres
-- Le CTA "S'inscrire" dans le header pourrait etre plus visible (gradient deja present, OK)
-- La SocialProof gere deja le cas 0 correctement (affiche "Lancement imminent")
+### 1. Header desktop : renommer "Concours" en "Soumettre" (P0 -- coherence)
+Le BottomNav dit "Soumettre" mais le Header desktop dit encore "Concours". Un visiteur qui navigue sur desktop et mobile verra deux labels differents pour la meme page. Correction : aligner sur "Soumettre".
 
-### RGPD / DPO
-- Cookie consent present
-- CGU, Privacy, Cookies, Contest Rules presents -- OK
-- Le mailto contact est acceptable en beta
+### 2. Header desktop : ajouter "A propos" (P1 -- confiance)
+Le lien /about existe dans le footer mais pas dans la navigation principale desktop. Ajouter un lien discret pour renforcer la credibilite (un visiteur presse veut savoir "qui etes-vous ?" sans scroller jusqu'au footer).
 
-### Securite / CISO
-- Deja audite et corrige dans les messages precedents
-- RLS en place, edge functions securisees
+### 3. Footer : liens reseaux sociaux placeholders (P1 -- credibilite)
+Les liens pointent vers instagram.com, x.com et discord.gg (pages d'accueil generiques). Deux options :
+- Soit les retirer temporairement pour eviter de paraitre amateur
+- Soit les garder en ajoutant un commentaire code pour remplacement futur
 
----
-
-## Corrections a implementer
-
-### 1. Traduire "reward pool" dans About.tsx (P0)
-- Ligne 23 : remplacer "un reward pool est constitue" par "une cagnotte est constituee"
-
-### 2. Traduire "Reward Pool" dans AdminDashboard.tsx (P1)
-- Lignes 148, 315, 358 : remplacer "Reward Pool" par "Cagnotte"
-- Note : c'est l'admin dashboard, moins critique, mais coherent
-
-### 3. Ameliorer la lisibilite des pills de filtre sur la page Vote (P0)
-- Les pills `bg-white/15 text-white/80` sont pensees pour un fond sombre mais la page Vote n'a pas de fond sombre permanent
-- Changer vers des styles coherents avec le theme : `bg-secondary text-secondary-foreground` pour inactif, `bg-primary text-primary-foreground` pour actif
-
-### 4. Ajouter "Explorer" au bottom nav et renommer "Concours" (P1)
-- Remplacer les items du BottomNav pour inclure "Explorer" (/explore) avec l'icone Search
-- Renommer "Concours" en "Soumettre" pour plus de clarte
-- Garder 5 onglets max : Accueil, Explorer, Soumettre, Resultats, Profil
-- Note : "Vote" est accessible depuis Explorer, donc on peut le retirer du bottom nav pour simplifier
-
-### 5. Ajouter des liens reseaux sociaux dans le Footer (P2)
-- Ajouter une section "Suivez-nous" avec des placeholders pour Instagram, Twitter/X, Discord
-- Utiliser des icones lucide (pas de logos de marques, juste des liens texte)
-
-### 6. Ameliorer la page About (P1)
-- Traduire "reward pool" (deja mentionne)
-- Ajouter une phrase sur la beta et la date de lancement previsionnelle
-- Rendre le contact plus engageant
-
-### 7. Ajouter un lien "A propos" dans le header desktop (P2)
-- Integrer dans les navItems du Header un lien vers /about
-
----
+Je recommande de les retirer pour la publication et de les remettre une fois les comptes crees.
 
 ## Fichiers a modifier
 
 | Fichier | Modification |
 |---------|-------------|
-| `src/pages/About.tsx` | Traduire "reward pool" en "cagnotte" |
-| `src/pages/AdminDashboard.tsx` | Traduire "Reward Pool" en "Cagnotte" (3 occurrences) |
-| `src/pages/Vote.tsx` | Corriger les styles des pills de filtre pour lisibilite |
-| `src/components/layout/BottomNav.tsx` | Reorganiser : Accueil, Explorer, Soumettre, Resultats, Profil |
-| `src/components/layout/Footer.tsx` | Ajouter section reseaux sociaux |
+| `src/components/layout/Header.tsx` | Renommer "Concours" en "Soumettre" dans navItems + ajouter lien "A propos" |
+| `src/components/layout/Footer.tsx` | Retirer la section "Suivez-nous" avec les liens placeholders |
 
-Total : 5 fichiers modifies, 0 fichier cree.
+Total : 2 fichiers modifies, 0 fichier cree.
+
+## Detail technique
+
+**Header.tsx** (ligne 11) :
+- Changer `{ label: "Concours", href: "/compete", icon: Music }` en `{ label: "Soumettre", href: "/compete", icon: Music }`
+- Ajouter `{ label: "A propos", href: "/about", icon: Info }` apres "Tarifs"
+
+**Footer.tsx** (lignes 48-53) :
+- Supprimer le bloc "Suivez-nous" avec les 3 liens placeholders (Instagram, X, Discord)
+- Le remettre une fois les vrais comptes reseaux sociaux crees
 
