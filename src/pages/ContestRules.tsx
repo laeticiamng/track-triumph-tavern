@@ -21,7 +21,7 @@ const ContestRules = () => (
         <p>Chaque utilisateur inscrit dispose d'un vote par catégorie par semaine. Les votes ne sont possibles que pendant la période de vote définie. Des mesures anti-fraude sont en place : vérification email, détection de comportements suspects, audit trail. Les votes individuels ne sont jamais rendus publics.</p>
 
         <h2 className="text-foreground font-display">Article 5 — Classement</h2>
-        <p>Le score final est calculé comme suit : somme des votes validés + bonus jury optionnel (plafonné à 15% du score votes). Le bonus jury est utilisé uniquement pour corriger d'éventuelles fraudes ou valoriser la qualité artistique. La méthode de classement est publique et transparente.</p>
+        <p>Le score final est calculé selon une moyenne pondérée de trois critères : Émotion, Originalité et Production. Chaque votant attribue une note de 1 à 5 pour chacun de ces critères. Les poids appliqués varient selon la catégorie musicale afin de refléter les valeurs artistiques propres à chaque genre (par exemple, l'Émotion est davantage pondérée en Lofi, l'Originalité en Rap/Trap). Le classement est déterminé par la moyenne pondérée obtenue. La méthode de classement et les poids par catégorie sont publics et transparents.</p>
 
         <h2 className="text-foreground font-display">Article 6 — Récompenses</h2>
         <p>Les récompenses sont sponsorisées par des partenaires et le budget marketing de la plateforme. Elles ne proviennent jamais des paiements des participants. Les récompenses financières ne sont activées que lorsque le budget sponsorisé minimum est confirmé. En cas de budget insuffisant, des récompenses alternatives sont offertes (visibilité, badges, coaching).</p>
