@@ -3,25 +3,44 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { WeekCountdown } from "@/components/shared/WeekCountdown";
 import { supabase } from "@/integrations/supabase/client";
 
 export function HeroSection() {
   const [weekLabel, setWeekLabel] = useState<string | null>(null);
+  const [votingCloseAt, setVotingCloseAt] = useState<string | null>(null);
+  const [hasContent, setHasContent] = useState<boolean | null>(null);
 
   useEffect(() => {
     supabase
       .from("weeks")
-      .select("title, week_number, season_id, seasons(name)")
+      .select("title, week_number, season_id, voting_close_at, id, seasons(name)")
       .eq("is_active", true)
       .single()
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (data) {
           const season = (data as any).seasons?.name || "Saison 1";
           const title = data.title || `Semaine ${data.week_number}`;
           setWeekLabel(`${season} — ${title} ouverte`);
+          setVotingCloseAt(data.voting_close_at);
+
+          // Check if there are approved submissions
+          const { count } = await supabase
+            .from("submissions")
+            .select("id", { count: "exact", head: true })
+            .eq("status", "approved")
+            .eq("week_id", data.id);
+
+          setHasContent((count || 0) > 0);
+        } else {
+          setHasContent(false);
         }
       });
   }, []);
+
+  const primaryCTA = hasContent
+    ? { label: "Découvrir le concours", href: "/explore" }
+    : { label: "Rejoindre le concours", href: "/auth?tab=signup" };
 
   return (
     <section className="relative overflow-hidden">
@@ -51,8 +70,8 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="max-w-3xl font-display text-3xl font-bold leading-tight text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Soumettez votre musique.{" "}
-          <span className="italic">La communauté vote.</span>
+          Le concours musical où{" "}
+          <span className="italic">la communauté décide du podium.</span>
         </motion.h1>
 
         <motion.p
@@ -85,6 +104,22 @@ export function HeroSection() {
           </span>
         </motion.div>
 
+        {/* Countdown */}
+        {votingCloseAt && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.28 }}
+            className="mt-4"
+          >
+            <WeekCountdown
+              targetDate={votingCloseAt}
+              label="Fin du vote dans"
+              className="text-primary-foreground/60"
+            />
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,8 +131,8 @@ export function HeroSection() {
             className="bg-primary-foreground text-background hover:bg-primary-foreground/90 font-semibold px-8 text-base"
             asChild
           >
-            <Link to="/explore">
-              Découvrir le concours
+            <Link to={primaryCTA.href}>
+              {primaryCTA.label}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -107,7 +142,9 @@ export function HeroSection() {
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
             asChild
           >
-            <Link to="/auth?tab=signup">Créer mon compte</Link>
+            <Link to={hasContent ? "/auth?tab=signup" : "/about"}>
+              {hasContent ? "Créer mon compte" : "En savoir plus"}
+            </Link>
           </Button>
         </motion.div>
 

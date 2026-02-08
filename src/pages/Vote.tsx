@@ -172,16 +172,24 @@ const Vote = () => {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
               <Music className="h-10 w-10 text-accent-foreground" />
             </div>
-            <h3 className="font-display text-xl font-semibold">Pas encore de morceaux</h3>
+            <h3 className="font-display text-xl font-semibold">Le concours démarre bientôt</h3>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Les morceaux de cette semaine apparaîtront ici une fois approuvés. Revenez bientôt !
+              Les morceaux de la semaine apparaîtront ici dès qu'ils seront approuvés. Inscrivez-vous pour être notifié !
             </p>
-            <Link
-              to="/explore"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Explorer le concours
-            </Link>
+            <div className="mt-6 flex flex-col gap-3">
+              <Link
+                to="/auth?tab=signup"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Rejoindre le concours
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+              >
+                Comment ça marche ?
+              </Link>
+            </div>
           </div>
         ) : (
           <VoteFeed

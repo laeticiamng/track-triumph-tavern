@@ -90,7 +90,11 @@ const Results = () => {
             <Clock className="h-16 w-16 text-muted-foreground/30 mb-4" />
             <h2 className="font-display text-2xl font-bold">Résultats à venir</h2>
             <p className="mt-2 max-w-md text-muted-foreground">
-              Les résultats seront publiés à la fin de la période de vote. Revenez bientôt pour découvrir le podium !
+              Les résultats de la semaine seront publiés à la fin de la période de vote
+              {activeWeek?.voting_close_at && (
+                <> (clôture le {new Date(activeWeek.voting_close_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })})</>
+              )}.
+              Revenez bientôt pour découvrir le podium et la cagnotte !
             </p>
           </motion.div>
         ) : (
@@ -198,7 +202,7 @@ const Results = () => {
                                 )}
                                 {reward && reward.reward_type === "fallback" && (
                                   <Badge variant="outline" className="text-xs">
-                                    <Gift className="mr-1 h-3 w-3" /> Reward
+                                    <Gift className="mr-1 h-3 w-3" /> Récompense
                                   </Badge>
                                 )}
                                 {w.weighted_score > 0 && (

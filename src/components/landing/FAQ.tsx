@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Quelles sont les récompenses ?",
-    a: "Un reward pool est alimenté chaque semaine. Les montants varient selon les sponsors et la participation. Les 3 premiers du podium se partagent les récompenses.",
+    a: "Une cagnotte est alimentée chaque semaine. Les montants varient selon les sponsors et la participation. Les 3 premiers du podium se partagent les récompenses.",
   },
   {
     q: "Comment fonctionne l'anti-fraude ?",

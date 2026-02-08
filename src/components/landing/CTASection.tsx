@@ -33,7 +33,7 @@ export function CTASection() {
                 asChild
               >
                 <Link to="/auth?tab=signup">
-                  Créer mon compte
+                  Rejoindre le concours
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
