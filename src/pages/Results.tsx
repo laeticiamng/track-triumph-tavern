@@ -63,7 +63,7 @@ const Results = () => {
 
   // Grand winner: rank 1 with highest vote_count across all categories
   const grandWinner = isResultsPublished && winners.length > 0
-    ? winners.filter((w) => w.rank === 1).sort((a: any, b: any) => b.vote_count - a.vote_count)[0]
+    ? winners.filter((w) => w.rank === 1).sort((a: any, b: any) => (b.weighted_score || 0) - (a.weighted_score || 0))[0]
     : null;
 
   return (

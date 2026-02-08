@@ -5,14 +5,26 @@ import { Footer } from "@/components/layout/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Medal, ArrowLeft, Music } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Week = Tables<"weeks">;
-type Submission = Tables<"submissions">;
+
+interface WinnerWithSubmission {
+  id: string;
+  rank: number;
+  vote_count: number;
+  weighted_score: number | null;
+  submissions: {
+    title: string;
+    artist_name: string;
+    cover_image_url: string;
+  } | null;
+}
 
 interface WeekResult {
   week: Week;
-  topSubmissions: Submission[];
+  winners: WinnerWithSubmission[];
 }
 
 const medals = [
@@ -27,7 +39,6 @@ const HallOfFame = () => {
 
   useEffect(() => {
     const fetchResults = async () => {
-      // Get published weeks
       const { data: weeks } = await supabase
         .from("weeks")
         .select("*")
@@ -39,18 +50,16 @@ const HallOfFame = () => {
         return;
       }
 
-      // For each week, get top 3 submissions
       const weekResults: WeekResult[] = [];
       for (const week of weeks) {
-        const { data: subs } = await supabase
-          .from("submissions")
-          .select("*")
+        const { data: winners } = await supabase
+          .from("winners")
+          .select("id, rank, vote_count, weighted_score, submissions(title, artist_name, cover_image_url)")
           .eq("week_id", week.id)
-          .eq("status", "approved")
-          .order("vote_count", { ascending: false })
+          .order("rank")
           .limit(3);
 
-        weekResults.push({ week, topSubmissions: subs || [] });
+        weekResults.push({ week, winners: (winners as any) || [] });
       }
 
       setResults(weekResults);
@@ -85,7 +94,7 @@ const HallOfFame = () => {
             </div>
           ) : (
             <div className="mt-8 space-y-8">
-              {results.map(({ week, topSubmissions }) => (
+              {results.map(({ week, winners }) => (
                 <div key={week.id} className="rounded-2xl border border-border bg-card p-5">
                   <div className="mb-4">
                     <h2 className="font-display text-lg font-semibold">
@@ -101,34 +110,41 @@ const HallOfFame = () => {
                     </p>
                   </div>
 
-                  {topSubmissions.length === 0 ? (
+                  {winners.length === 0 ? (
                     <p className="text-sm text-muted-foreground">Aucune soumission cette semaine.</p>
                   ) : (
                     <div className="space-y-3">
-                      {topSubmissions.map((sub, idx) => {
+                      {winners.map((w, idx) => {
                         const medal = medals[idx];
                         const Icon = medal?.icon || Medal;
                         return (
                           <Link
-                            key={sub.id}
-                            to={`/submissions/${sub.id}`}
+                            key={w.id}
+                            to={`/submissions/${w.submissions ? w.id : ""}`}
                             className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/50"
                           >
                             <div className="flex h-10 w-10 items-center justify-center">
                               <Icon className={`h-6 w-6 ${medal?.color || "text-muted-foreground"}`} />
                             </div>
                             <img
-                              src={sub.cover_image_url}
-                              alt={sub.title}
+                              src={w.submissions?.cover_image_url}
+                              alt={w.submissions?.title}
                               className="h-12 w-12 rounded-lg object-cover"
                             />
                             <div className="flex-1 min-w-0">
-                              <p className="truncate font-medium">{sub.title}</p>
-                              <p className="truncate text-sm text-muted-foreground">{sub.artist_name}</p>
+                              <p className="truncate font-medium">{w.submissions?.title}</p>
+                              <p className="truncate text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
                             </div>
-                            <span className="text-sm font-semibold tabular-nums">
-                              {sub.vote_count} vote{sub.vote_count !== 1 ? "s" : ""}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {w.weighted_score != null && w.weighted_score > 0 && (
+                                <Badge className="bg-primary/10 text-primary text-xs font-display">
+                                  {Number(w.weighted_score).toFixed(1)}/5
+                                </Badge>
+                              )}
+                              <span className="text-sm font-semibold tabular-nums">
+                                {w.vote_count} vote{w.vote_count !== 1 ? "s" : ""}
+                              </span>
+                            </div>
                           </Link>
                         );
                       })}
