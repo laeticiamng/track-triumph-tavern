@@ -79,7 +79,14 @@ const HallOfFame = () => {
           </Link>
 
           <h1 className="font-display text-3xl font-bold sm:text-4xl">Hall of Fame</h1>
-          <p className="mt-2 text-muted-foreground">Archives des gagnants de chaque semaine.</p>
+          <p className="mt-2 text-muted-foreground">Chaque semaine écrit une nouvelle page de l'histoire musicale.</p>
+          <Link
+            to="/results"
+            className="mt-2 inline-flex items-center gap-1 text-sm text-primary hover:underline transition-colors"
+          >
+            Voir les résultats de la semaine en cours
+            <ArrowLeft className="h-3 w-3 rotate-180" />
+          </Link>
 
           {loading ? (
             <div className="mt-8 space-y-6">

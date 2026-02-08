@@ -75,6 +75,11 @@ const Results = () => {
           <p className="mt-2 text-muted-foreground">
             {activeWeek?.title || "Semaine en cours"} — {isResultsPublished ? "Résultats publiés" : "En attente de publication"}
           </p>
+          {isResultsPublished && (
+            <Link to="/scoring-method" className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:underline">
+              Comment sont calculés les scores ?
+            </Link>
+          )}
         </div>
 
         <div className="mb-6">
@@ -116,7 +121,17 @@ const Results = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
+              <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
+                  {/* Celebration particles */}
+                  {[...Array(6)].map((_, i) => (
+                    <motion.span
+                      key={i}
+                      className="absolute h-2 w-2 rounded-full bg-yellow-400/60"
+                      style={{ top: `${15 + Math.random() * 30}%`, left: `${5 + Math.random() * 90}%` }}
+                      animate={{ y: [0, -12, 0], opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
+                      transition={{ duration: 2 + Math.random() * 1.5, repeat: Infinity, delay: Math.random() * 2 }}
+                    />
+                  ))}
                   <CardHeader>
                     <CardTitle className="font-display flex items-center gap-2 text-xl">
                       <Crown className="h-6 w-6 text-yellow-500" />
@@ -234,6 +249,14 @@ const Results = () => {
                 </motion.div>
               );
             })}
+
+            {/* Link to Hall of Fame */}
+            <div className="mt-10 flex flex-col items-center text-center">
+              <p className="text-sm text-muted-foreground">Envie de revoir les palmarès précédents ?</p>
+              <Link to="/hall-of-fame" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+                Voir le Hall of Fame →
+              </Link>
+            </div>
           </div>
         )}
       </div>
