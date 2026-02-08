@@ -61,7 +61,7 @@ const Auth = () => {
   const handleSignup = async (values: SignupValues) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
         options: {
@@ -75,7 +75,7 @@ const Auth = () => {
         } else {
           toast({ title: "Erreur", description: error.message, variant: "destructive" });
         }
-      } else {
+      } else if (!data.session) {
         setConfirmEmail(values.email);
         setView("confirmation");
       }
