@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Upload, Headphones, Trophy } from "lucide-react";
+import { Upload, Headphones, Trophy, ChevronRight } from "lucide-react";
 
 const steps = [
   {
@@ -66,6 +66,12 @@ export function HowItWorks() {
               variants={itemVariants}
               className="relative flex flex-col items-center text-center"
             >
+              {/* Connecting arrow between steps (desktop only) */}
+              {i < steps.length - 1 && (
+                <div className="absolute -right-4 top-7 hidden md:flex items-center justify-center w-8 text-muted-foreground/40" style={{ transform: "translateX(100%)" }}>
+                  <ChevronRight className="h-6 w-6" />
+                </div>
+              )}
               {/* Step number */}
               <span className="absolute -top-3 right-4 font-display text-6xl font-bold text-muted/80 md:right-8">
                 {i + 1}

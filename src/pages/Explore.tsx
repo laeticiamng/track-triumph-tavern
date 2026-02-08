@@ -134,6 +134,21 @@ const Explore = () => {
             ))}
           </div>
 
+          {/* Vote CTA banner when content exists */}
+          {!loading && filtered.length > 0 && (
+            <div className="mb-6 flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
+              <p className="text-sm text-muted-foreground">
+                Prêt à voter ? <span className="font-medium text-foreground">Passez en mode vote</span> pour noter vos favoris.
+              </p>
+              <Link
+                to="/vote"
+                className="shrink-0 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Voter
+              </Link>
+            </div>
+          )}
+
           {/* Grid */}
           {loading ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

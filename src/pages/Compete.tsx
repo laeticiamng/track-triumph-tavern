@@ -209,6 +209,7 @@ const Compete = () => {
           <CardHeader>
             <CardTitle className="font-display text-2xl">Soumettre votre morceau</CardTitle>
             <CardDescription>
+              <span className="block font-medium text-foreground">Votre musique mérite d'être entendue. 🎶</span>
               {activeWeek && isInSubmissionPeriod
                 ? `${activeWeek.title || "Semaine en cours"} — Votre soumission sera examinée avant publication.`
                 : null}
