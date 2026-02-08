@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: "Quelles sont les récompenses ?",
-    a: "Une cagnotte est alimentée chaque semaine. Les montants varient selon les sponsors et la participation. Les 3 premiers du podium se partagent les récompenses.",
+    a: "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont financées par nos sponsors, jamais par les participants.",
   },
   {
     q: "Comment fonctionne l'anti-fraude ?",

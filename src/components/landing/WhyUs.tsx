@@ -15,7 +15,7 @@ const pillars = [
   {
     icon: Trophy,
     title: "Récompenses réelles",
-    description: "Une cagnotte alimentée chaque semaine. Les artistes du podium repartent avec des récompenses concrètes.",
+    description: "200 € pour le 1er, 100 € pour le 2e, 50 € pour le 3e — chaque semaine, financé par nos sponsors.",
   },
   {
     icon: Users,

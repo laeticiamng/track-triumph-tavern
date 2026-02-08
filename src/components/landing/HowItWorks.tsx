@@ -17,7 +17,7 @@ const steps = [
   {
     icon: Trophy,
     title: "Soumettez & Montez sur le podium",
-    description: "Avec un abonnement Pro, soumettez vos morceaux et visez le podium chaque semaine. Récompenses à la clé.",
+    description: "Avec un abonnement Pro, soumettez vos morceaux et visez le podium chaque semaine. Jusqu'à 200 € à gagner.",
     badge: "Pro",
   },
 ];
