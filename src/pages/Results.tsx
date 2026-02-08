@@ -87,15 +87,25 @@ const Results = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-20 text-center"
           >
-            <Clock className="h-16 w-16 text-muted-foreground/30 mb-4" />
-            <h2 className="font-display text-2xl font-bold">Résultats à venir</h2>
-            <p className="mt-2 max-w-md text-muted-foreground">
-              Les résultats de la semaine seront publiés à la fin de la période de vote
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10 mb-6">
+              <Trophy className="h-10 w-10 text-primary" />
+            </div>
+            <h2 className="font-display text-2xl font-bold">Le podium se prépare…</h2>
+            <p className="mt-3 max-w-md text-muted-foreground leading-relaxed">
+              Soyez parmi les premiers à découvrir le podium ! Les résultats seront publiés à la fin de la période de vote
               {activeWeek?.voting_close_at && (
                 <> (clôture le {new Date(activeWeek.voting_close_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })})</>
               )}.
-              Revenez bientôt pour découvrir le podium et la cagnotte !
+              Une cagnotte attend les gagnants. 🎉
             </p>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <Link to="/explore" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+                Découvrir les morceaux
+              </Link>
+              <Link to="/compete" className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-6 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                Soumettre un morceau
+              </Link>
+            </div>
           </motion.div>
         ) : (
           <div className="space-y-10">

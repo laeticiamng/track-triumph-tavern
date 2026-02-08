@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-12">
       <div className="container">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2">
@@ -42,8 +42,21 @@ export function Footer() {
               <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
               <Link to="/contest-rules" className="hover:text-foreground transition-colors">Règlement</Link>
               <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
-              <a href="mailto:contact@weeklymusicawards.com" className="hover:text-foreground transition-colors">Contact</a>
             </nav>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-display text-sm font-semibold mb-3">Contact</h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Une question, un partenariat ou un retour ? On adore échanger.
+            </p>
+            <a
+              href="mailto:contact@weeklymusicawards.com"
+              className="mt-2 inline-block text-sm text-primary hover:underline"
+            >
+              contact@weeklymusicawards.com
+            </a>
 
             {/* TODO: Remettre la section "Suivez-nous" une fois les vrais comptes créés */}
           </div>

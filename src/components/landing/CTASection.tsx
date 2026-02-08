@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -24,7 +24,7 @@ export function CTASection() {
               Prêt à rejoindre le concours ?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-primary-foreground/80">
-              Créez votre compte en 30 secondes. Écoutez, votez gratuitement et soumettez vos morceaux avec un abonnement Pro.
+              Rejoignez les premiers membres de la bêta. Les premières semaines sont décisives — faites-vous un nom dès le début.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button
@@ -45,6 +45,20 @@ export function CTASection() {
               >
                 <Link to="/pricing">Voir les abonnements</Link>
               </Button>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-primary-foreground/70">
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle className="h-3.5 w-3.5" />
+                Inscription en 30s
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle className="h-3.5 w-3.5" />
+                Sans engagement
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle className="h-3.5 w-3.5" />
+                Vote gratuit
+              </span>
             </div>
           </div>
         </motion.div>

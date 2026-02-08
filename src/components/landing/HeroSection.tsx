@@ -60,7 +60,7 @@ export function HeroSection() {
           className="mb-5"
         >
           <span className="inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm">
-            🚀 Lancement Bêta {weekLabel ? `— ${weekLabel}` : ""}
+            🚀 Bêta ouverte — Places de la première saison limitées {weekLabel ? `· ${weekLabel}` : ""}
           </span>
         </motion.div>
 
