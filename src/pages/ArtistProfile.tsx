@@ -35,14 +35,16 @@ const ArtistProfile = () => {
           .order("created_at", { ascending: false });
         setSubmissions(subs || []);
 
-        // Check artist tier via check-subscription-public (or infer from badge)
-        // We check if the user has an elite badge by calling a lightweight query
+        // Check artist tier (authenticated endpoint)
         try {
-          const { data: tierData } = await supabase.functions.invoke("check-subscription-public", {
-            body: { user_id: id },
-          });
-          const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
-          if (result?.tier) setTier(result.tier);
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.access_token) {
+            const { data: tierData } = await supabase.functions.invoke("check-subscription-public", {
+              body: { user_id: id },
+            });
+            const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
+            if (result?.tier) setTier(result.tier);
+          }
         } catch {
           // Silently fail - default to "free"
         }

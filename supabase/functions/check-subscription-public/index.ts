@@ -18,9 +18,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { user_id } = await req.json();
-    if (!user_id) {
-      return new Response(JSON.stringify({ tier: "free" }), {
+    // Require authentication
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -30,8 +32,41 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Validate the JWT to get the calling user
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabaseAdmin.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const callerUserId = claimsData.claims.sub as string;
+
+    const { user_id } = await req.json();
+    const targetUserId = user_id || callerUserId;
+
+    // Only allow querying your own tier or if caller is admin
+    if (targetUserId !== callerUserId) {
+      // Check if caller is admin
+      const { data: roleData } = await supabaseAdmin
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", callerUserId)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      if (!roleData) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Get user email from auth
-    const { data: { user }, error } = await supabaseAdmin.auth.admin.getUserById(user_id);
+    const { data: { user }, error } = await supabaseAdmin.auth.admin.getUserById(targetUserId);
     if (error || !user?.email) {
       return new Response(JSON.stringify({ tier: "free" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
