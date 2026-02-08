@@ -1,27 +1,29 @@
 
-# Correction du flux post-inscription
+# Mise a jour du README
 
-## Probleme
-Apres inscription, l'utilisateur voit l'ecran "Verifiez votre email" alors qu'il est deja connecte (auto-confirm actif). Il devrait etre redirige automatiquement vers son profil.
+## Objectif
 
-## Correction
+Remplacer le README generique de Lovable par un README qui decrit reellement le projet : une plateforme de competition musicale communautaire avec systeme de votes, soumissions, abonnements et IA.
 
-**Fichier** : `src/pages/Auth.tsx`
+## Contenu du nouveau README
 
-Modifier `handleSignup` (lignes 64-81) :
-- Recuperer `data` en plus de `error` depuis `signUp()`
-- Si `data.session` existe (auto-confirm actif) : ne rien faire, le `useEffect` existant detectera la session et redirigera l'utilisateur
-- Si `data.session` est null (confirmation email requise) : afficher l'ecran de confirmation comme avant
+### Structure prevue
 
-```text
-Avant :
-  const { error } = await supabase.auth.signUp(...)
-  if (!error) -> setView("confirmation") toujours
+1. **Titre et description** : Nom du projet, pitch en une phrase (plateforme de competition musicale communautaire)
+2. **Fonctionnalites principales** :
+   - Soumission de morceaux par les artistes (Pro/Elite)
+   - Systeme de votes communautaire avec feed style TikTok
+   - 3 plans d'abonnement (Free, Pro a 9.99EUR, Elite a 19.99EUR)
+   - Classements et resultats par categorie
+   - Hall of Fame des gagnants
+   - Profils artistes personnalisables
+   - Fonctionnalites IA (feedback, recommandations, chatbot, resume des votes)
+   - Tableau d'administration et detection de fraude
+3. **Pages de l'application** : Liste des routes principales (Accueil, Explorer, Voter, Concourir, Resultats, Profil, Tarifs, Hall of Fame, Admin)
+4. **Stack technique** : React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion, Recharts, Lovable Cloud (backend), Stripe (paiements)
+5. **Developpement local** : Conserver les instructions npm existantes
+6. **Deploiement** : Conserver la mention Lovable + domaine custom
 
-Apres :
-  const { data, error } = await supabase.auth.signUp(...)
-  if (!error && !data.session) -> setView("confirmation")
-  if (!error && data.session)  -> ne rien faire, redirection automatique
-```
+### Fichier modifie
 
-Un seul fichier modifie, une seule ligne de logique changee.
+- **`README.md`** : Remplace integralement par le nouveau contenu
