@@ -15,6 +15,7 @@ interface WinnerWithSubmission {
   rank: number;
   vote_count: number;
   weighted_score: number | null;
+  submission_id: string;
   submissions: {
     title: string;
     artist_name: string;
@@ -54,7 +55,7 @@ const HallOfFame = () => {
       for (const week of weeks) {
         const { data: winners } = await supabase
           .from("winners")
-          .select("id, rank, vote_count, weighted_score, submissions(title, artist_name, cover_image_url)")
+          .select("id, rank, vote_count, weighted_score, submission_id, submissions(title, artist_name, cover_image_url)")
           .eq("week_id", week.id)
           .order("rank")
           .limit(3);
@@ -120,7 +121,7 @@ const HallOfFame = () => {
                         return (
                           <Link
                             key={w.id}
-                            to={`/submissions/${w.submissions ? w.id : ""}`}
+                            to={`/submissions/${w.submission_id}`}
                             className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/50"
                           >
                             <div className="flex h-10 w-10 items-center justify-center">

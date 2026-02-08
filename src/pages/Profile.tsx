@@ -51,7 +51,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/auth");
+      navigate("/auth?redirect=/profile");
     }
   }, [user, authLoading, navigate]);
 

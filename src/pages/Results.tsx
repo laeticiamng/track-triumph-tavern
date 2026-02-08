@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Clock, Crown, Medal, DollarSign, Gift } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
 const Results = () => {
@@ -109,7 +110,7 @@ const Results = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center gap-4">
+                    <Link to={`/submissions/${grandWinner.submission_id}`} className="flex items-center gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-accent/30">
                       <img
                         src={grandWinner.submissions?.cover_image_url}
                         alt=""
@@ -142,7 +143,7 @@ const Results = () => {
                           {grandWinner.vote_count} votes
                         </Badge>
                       </div>
-                    </div>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -172,12 +173,12 @@ const Results = () => {
                         {catWinners.map((w: any, i: number) => {
                           const reward = getRewardForWinner(w.id);
                           return (
+                            <Link key={w.id} to={`/submissions/${w.submission_id}`}>
                             <motion.div
-                              key={w.id}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: catIndex * 0.1 + i * 0.15 }}
-                              className={`flex items-center gap-4 rounded-xl p-3 ${
+                              className={`flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/30 ${
                                 i === 0
                                   ? "bg-primary/10 border border-primary/20"
                                   : "bg-secondary/50"
@@ -210,6 +211,7 @@ const Results = () => {
                                 </Badge>
                               </div>
                             </motion.div>
+                            </Link>
                           );
                         })}
                       </div>
