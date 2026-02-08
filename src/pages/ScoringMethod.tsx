@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowLeft, BarChart3, Shield, Scale, Users } from "lucide-react";
+import { ArrowLeft, BarChart3, Shield, Scale, Users, Heart, Lightbulb, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ScoringMethod = () => (
@@ -16,7 +16,7 @@ const ScoringMethod = () => (
       </p>
 
       <div className="mt-10 space-y-10">
-        {/* Score formula */}
+        {/* Weighted score formula */}
         <section className="space-y-3">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
@@ -26,14 +26,46 @@ const ScoringMethod = () => (
           </div>
           <div className="rounded-xl border border-border bg-card p-5">
             <code className="text-lg font-mono font-semibold text-primary">
-              Score = Votes validés + Bonus jury (max 15&nbsp;%)
+              Score = Moyenne pondérée (Émotion × P₁ + Originalité × P₂ + Production × P₃)
             </code>
           </div>
           <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-            <li>Chaque vote validé vaut 1 point.</li>
-            <li>Le bonus jury est optionnel, configurable par l'admin et plafonné à 15 % du total des votes.</li>
-            <li>Le classement est établi par catégorie, du score le plus élevé au plus bas.</li>
+            <li>Chaque vote attribue une note de 1 à 5 sur trois critères : Émotion, Originalité et Production.</li>
+            <li>Les notes sont pondérées selon les poids de la catégorie (ex : 40 % Originalité pour le Rap).</li>
+            <li>Le score final est la moyenne pondérée de tous les votes valides reçus.</li>
+            <li>Le classement est établi par catégorie, du score moyen le plus élevé au plus bas.</li>
           </ul>
+        </section>
+
+        {/* Three criteria */}
+        <section className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+              <SlidersHorizontal className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="font-display text-xl font-semibold">Les 3 critères</h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-border bg-card p-4 text-center">
+              <Heart className="mx-auto h-6 w-6 text-red-500 mb-2" />
+              <p className="font-semibold">Émotion</p>
+              <p className="text-sm text-muted-foreground">Capacité du morceau à toucher l'auditeur.</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4 text-center">
+              <Lightbulb className="mx-auto h-6 w-6 text-yellow-500 mb-2" />
+              <p className="font-semibold">Originalité</p>
+              <p className="text-sm text-muted-foreground">Créativité, innovation et singularité.</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4 text-center">
+              <SlidersHorizontal className="mx-auto h-6 w-6 text-blue-500 mb-2" />
+              <p className="font-semibold">Production</p>
+              <p className="text-sm text-muted-foreground">Qualité du mixage, mastering et arrangement.</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Les pondérations varient selon la catégorie musicale. Consultez la page de chaque{" "}
+            <Link to="/explore" className="text-primary hover:underline">catégorie</Link> pour voir ses poids spécifiques.
+          </p>
         </section>
 
         {/* No randomness */}

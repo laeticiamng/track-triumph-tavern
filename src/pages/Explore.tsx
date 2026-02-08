@@ -193,7 +193,7 @@ const Explore = () => {
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Heart className="h-3 w-3" /> {sub.vote_count}
                       </span>
-                      <VoteButton submissionId={sub.id} compact />
+                      <VoteButton submissionId={sub.id} categoryId={sub.category_id} compact />
                     </div>
                   </div>
                 </Link>

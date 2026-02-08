@@ -244,6 +244,25 @@ const Compete = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  {categoryId && (() => {
+                    const cat = categories.find((c) => c.id === categoryId);
+                    const tips = cat?.production_tips as Array<{ label: string; value: string }> | null;
+                    if (!tips || tips.length === 0) return null;
+                    return (
+                      <div className="mt-2 rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-1">
+                        <p className="text-xs font-medium text-primary flex items-center gap-1">
+                          <Music className="h-3 w-3" /> Conseils de production — {cat?.name}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {tips.map((tip, i) => (
+                            <span key={i} className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
+                              <span className="font-medium">{tip.label}</span> {tip.value}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div className="space-y-2">
