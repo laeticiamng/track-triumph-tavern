@@ -1,85 +1,78 @@
 
+# Corrections finales
 
-# Audit complet du flux de creation de compte
+## Problemes identifies
 
-## Resultats de l'audit
+### 1. Liens casses dans HallOfFame.tsx
+Les liens vers les soumissions des gagnants utilisent `w.id` (l'ID du winner) au lieu de l'ID de la soumission. Resultat : cliquer sur un gagnant mene a une page "Soumission introuvable".
 
-J'ai teste le signup de bout en bout et inspecte la base de donnees, les logs, le code et le comportement reel de l'application.
+**Ligne 122** : `to={/submissions/${w.submissions ? w.id : ""}}` devrait utiliser l'ID de la soumission, pas celui du winner.
 
-### Ce qui FONCTIONNE correctement
+**Correction** : Ajouter `submission_id` dans la requete select des winners et l'utiliser pour le lien.
 
-1. **Le formulaire d'inscription** s'affiche bien avec les 3 champs (Nom d'artiste, Email, Mot de passe)
-2. **L'appel Supabase Auth `signUp`** cree bien l'utilisateur en base (verifie : l'utilisateur `testbeta@example.com` a ete cree avec succes)
-3. **Le trigger `handle_new_user`** fonctionne : un profil et un role `user` sont automatiquement crees a l'inscription
-4. **Le `display_name`** est bien transmis via les metadata et correctement enregistre dans le profil
-5. **Les validations client** (email requis, mot de passe min 6 caracteres) fonctionnent
-6. **Les messages d'erreur** pour les cas speciaux (compte existant, etc.) sont en place
+### 2. Meme bug dans Results.tsx
+Les liens vers les soumissions des gagnants ne sont pas presents du tout. Quand on clique sur un gagnant (grand gagnant ou podium par categorie), il n'y a aucun lien pour naviguer vers la page de detail. L'utilisateur ne peut pas ecouter le morceau gagnant depuis la page des resultats.
 
----
+**Correction** : Envelopper les elements du podium dans des `Link` vers `/submissions/{submission_id}`.
 
-### PROBLEME PRINCIPAL : la confirmation email bloque les utilisateurs
+### 3. Page Profile ne protege pas les routes correctement
+La page Profile redirige vers `/auth` mais sans parametre `redirect=/profile`. Apres connexion, l'utilisateur n'est pas redirige vers le profil.
 
-**Constat** : Apres l'inscription, le champ `email_confirmed_at` reste `null`. L'utilisateur ne peut donc PAS se connecter tant qu'il n'a pas clique sur le lien de confirmation email.
+**Correction** : Ajouter `?redirect=/profile` au lien de redirection.
 
-Le toast affiche "Verifiez votre email pour confirmer votre compte" -- mais en phase de beta, les utilisateurs s'attendent a pouvoir se connecter immediatement.
+### 4. Page Compete n'auto-remplit pas le nom d'artiste
+Le champ "Nom d'artiste" est vide alors que l'utilisateur a deja un `display_name` dans son profil. C'est une friction inutile pour le musicien qui doit le retaper a chaque soumission.
 
-**Impact** : C'est tres probablement la raison pour laquelle les beta testeurs rapportent que "la creation de compte ne fonctionne pas". L'inscription reussit techniquement, mais ils ne peuvent pas se connecter ensuite car l'email de confirmation n'est peut-etre jamais recu (pas de service d'email configure type Resend, ou les emails tombent en spam).
+**Correction** : Pre-remplir `artistName` avec le `display_name` du profil.
 
-### PROBLEMES SECONDAIRES identifies
+### 5. VoteCard n'est pas cliquable pour aller au detail
+Dans le feed TikTok, le bouton "Detail" (icone MessageCircle) est le seul moyen d'acceder a la page de detail. L'ensemble de la zone titre/artiste devrait etre cliquable aussi, comme c'est le cas sur Explore.
 
-1. **Pas de feedback clair apres inscription** : Le toast "Verifiez votre email" apparait brievement mais l'utilisateur reste sur la meme page sans savoir quoi faire. Il n'y a pas d'ecran de confirmation dedié.
-2. **Tentative de connexion apres inscription sans confirmation** : Si un utilisateur essaie de se connecter avant d'avoir confirme son email, il recoit "Email ou mot de passe incorrect" -- un message trompeur alors que le vrai probleme est l'email non confirme.
-3. **Pas d'option "Renvoyer l'email de confirmation"** : En cas de non-reception de l'email, l'utilisateur est bloque sans recours.
-4. **Pas de "Mot de passe oublie"** : Aucun lien de recuperation de mot de passe n'est propose.
+**Correction** : Rendre le titre cliquable avec un `Link` vers `/submissions/{id}`.
 
----
+### 6. Pas de trigger `handle_new_user` detecte en base
+La section `<db-triggers>` indique "There are no triggers in the database", mais le code depend du trigger `handle_new_user` pour creer le profil et le role. Si ce trigger n'existe pas, les nouveaux inscrits n'auront ni profil ni role.
 
-## Plan de correction
-
-### Etape 1 : Activer l'auto-confirmation des emails (pour la beta)
-
-Utiliser l'outil `configure-auth` pour desactiver la confirmation par email. C'est la solution la plus rapide pour debloquer les beta testeurs. Les utilisateurs pourront se connecter immediatement apres l'inscription.
-
-> Note : A reactiver en production avec un vrai service d'envoi d'emails.
-
-### Etape 2 : Ameliorer le message d'erreur pour les emails non confirmes
-
-Dans `Auth.tsx`, ajouter une detection specifique du message "Email not confirmed" retourne par Supabase lors du `signInWithPassword`, et afficher un message explicite : "Votre email n'est pas encore confirme. Verifiez votre boite de reception." au lieu du generique "Email ou mot de passe incorrect".
-
-### Etape 3 : Ajouter un ecran de confirmation post-inscription
-
-Au lieu de juste un toast, afficher un message visible et persistant : "Un email de confirmation vous a ete envoye. Verifiez votre boite de reception (et vos spams)." avec un bouton "Renvoyer l'email" qui appelle `supabase.auth.resend()`.
-
-### Etape 4 : Ajouter "Mot de passe oublie"
-
-Ajouter un lien "Mot de passe oublie ?" sous le champ mot de passe en mode connexion, qui affiche un formulaire simplifie appelant `supabase.auth.resetPasswordForEmail()`.
-
-### Etape 5 : Ameliorer la validation des entrees
-
-Ajouter une validation avec `zod` pour l'email et le mot de passe, avec des messages d'erreur inline (pas seulement des toasts).
+**Correction** : Ajouter une migration SQL pour creer le trigger s'il n'existe pas.
 
 ---
 
-## Details techniques
+## Plan technique
 
-### Fichiers a modifier
+### Etape 1 : Migration SQL -- s'assurer que le trigger `handle_new_user` existe
 
-1. **Configuration auth** : activer auto-confirm via l'outil configure-auth
-2. **`src/pages/Auth.tsx`** : 
-   - Ajouter detection "Email not confirmed" dans le handler d'erreur login
-   - Ajouter ecran post-inscription avec bouton "Renvoyer"
-   - Ajouter lien "Mot de passe oublie"
-   - Ajouter un formulaire de reset password (toggle dans le meme composant)
-   - Ajouter validation zod pour email/password
-3. **Aucune migration SQL necessaire** : le schema fonctionne correctement
+Creer une migration idempotente qui cree le trigger `on_auth_user_created` si absent.
 
-### Priorite
+### Etape 2 : Corriger HallOfFame.tsx -- liens des gagnants
 
-```text
-[CRITIQUE] Auto-confirm email (debloque la beta)
-[HAUTE]    Message d'erreur "email non confirme"
-[HAUTE]    Ecran confirmation + renvoyer email
-[MOYENNE]  Mot de passe oublie
-[BASSE]    Validation zod avancee
-```
+- Ajouter `submission_id` dans la requete select des winners
+- Remplacer `w.id` par `w.submission_id` dans le `Link`
 
+### Etape 3 : Rendre Results.tsx navigable
+
+- Envelopper le grand gagnant et chaque element du podium dans des `Link` vers `/submissions/{submission_id}`
+- Ajouter `submission_id` dans la requete si pas deja present
+
+### Etape 4 : Corriger la redirection dans Profile.tsx
+
+- Changer `navigate("/auth")` en `navigate("/auth?redirect=/profile")`
+
+### Etape 5 : Pre-remplir le nom d'artiste dans Compete.tsx
+
+- Charger le profil de l'utilisateur au chargement
+- Pre-remplir `artistName` avec `profile.display_name`
+
+### Etape 6 : Rendre le titre cliquable dans VoteCard.tsx
+
+- Envelopper le titre dans un `Link` vers `/submissions/{submission.id}`
+
+---
+
+## Fichiers concernes
+
+1. **Migration SQL** : creer le trigger `on_auth_user_created` si absent
+2. **`src/pages/HallOfFame.tsx`** : corriger les liens des gagnants
+3. **`src/pages/Results.tsx`** : ajouter navigation vers les soumissions gagnantes
+4. **`src/pages/Profile.tsx`** : ajouter `?redirect=/profile` a la redirection auth
+5. **`src/pages/Compete.tsx`** : pre-remplir le nom d'artiste depuis le profil
+6. **`src/components/vote/VoteCard.tsx`** : rendre le titre cliquable
