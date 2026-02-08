@@ -163,9 +163,11 @@ export function VoteCard({
         </div>
 
         {/* Title + artist */}
-        <h2 className="font-display text-2xl font-bold text-white leading-tight mb-1">
-          {submission.title}
-        </h2>
+        <Link to={`/submissions/${submission.id}`} className="hover:underline">
+          <h2 className="font-display text-2xl font-bold text-white leading-tight mb-1">
+            {submission.title}
+          </h2>
+        </Link>
         <Link
           to={`/artist/${submission.user_id}`}
           className="flex items-center gap-2 mb-5 group"

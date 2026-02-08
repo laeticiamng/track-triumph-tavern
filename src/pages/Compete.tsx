@@ -57,6 +57,16 @@ const Compete = () => {
     }
   }, [user, authLoading, navigate]);
 
+  // Pre-fill artist name from profile
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("display_name").eq("id", user.id).single().then(({ data }) => {
+      if (data?.display_name && !artistName) {
+        setArtistName(data.display_name);
+      }
+    });
+  }, [user]);
+
   useEffect(() => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
