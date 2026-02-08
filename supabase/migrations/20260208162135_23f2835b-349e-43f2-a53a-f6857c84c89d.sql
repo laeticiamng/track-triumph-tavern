@@ -1,0 +1,1 @@
+ALTER TABLE public.winners ADD COLUMN weighted_score numeric DEFAULT 0;

@@ -132,9 +132,16 @@ const Results = () => {
                           );
                         })()}
                       </div>
-                      <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
-                        {grandWinner.vote_count} votes
-                      </Badge>
+                      <div className="flex flex-col items-end gap-1">
+                        {grandWinner.weighted_score > 0 && (
+                          <Badge className="bg-primary/10 text-primary font-display text-sm">
+                            {Number(grandWinner.weighted_score).toFixed(1)}/5
+                          </Badge>
+                        )}
+                        <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
+                          {grandWinner.vote_count} votes
+                        </Badge>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -191,6 +198,11 @@ const Results = () => {
                                 {reward && reward.reward_type === "fallback" && (
                                   <Badge variant="outline" className="text-xs">
                                     <Gift className="mr-1 h-3 w-3" /> Reward
+                                  </Badge>
+                                )}
+                                {w.weighted_score > 0 && (
+                                  <Badge className="bg-primary/10 text-primary text-xs font-display">
+                                    {Number(w.weighted_score).toFixed(1)}/5
                                   </Badge>
                                 )}
                                 <Badge variant="secondary" className="font-display">

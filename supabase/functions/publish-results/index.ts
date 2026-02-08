@@ -16,7 +16,7 @@ function getWeights(criteria: ScoringCriterion[] | null): { emotion: number; ori
   if (!criteria || !Array.isArray(criteria)) return defaults;
   const weights = { ...defaults };
   for (const c of criteria) {
-    const key = c.name?.toLowerCase() || "";
+    const key = (c as any).criterion?.toLowerCase() || (c as any).name?.toLowerCase() || "";
     if (key.includes("émotion") || key.includes("emotion")) weights.emotion = c.weight;
     else if (key.includes("originalité") || key.includes("originality")) weights.originality = c.weight;
     else if (key.includes("production")) weights.production = c.weight;
@@ -186,6 +186,7 @@ Deno.serve(async (req) => {
             user_id: sub.user_id,
             rank,
             vote_count: sub.vote_count || 0,
+            weighted_score: Math.round(sub.avgScore * 100) / 100,
           })
           .select("id")
           .single();

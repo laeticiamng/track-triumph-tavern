@@ -16,7 +16,7 @@ function getWeights(criteria: ScoringCriterion[] | null): { emotion: number; ori
   if (!criteria || !Array.isArray(criteria)) return defaults;
   const weights = { ...defaults };
   for (const c of criteria) {
-    const key = c.name?.toLowerCase() || "";
+    const key = (c as any).criterion?.toLowerCase() || (c as any).name?.toLowerCase() || "";
     if (key.includes("émotion") || key.includes("emotion")) weights.emotion = c.weight;
     else if (key.includes("originalité") || key.includes("originality")) weights.originality = c.weight;
     else if (key.includes("production")) weights.production = c.weight;

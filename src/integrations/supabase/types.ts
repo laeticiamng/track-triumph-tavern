@@ -490,6 +490,7 @@ export type Database = {
           user_id: string
           vote_count: number
           week_id: string
+          weighted_score: number | null
         }
         Insert: {
           category_id: string
@@ -500,6 +501,7 @@ export type Database = {
           user_id: string
           vote_count?: number
           week_id: string
+          weighted_score?: number | null
         }
         Update: {
           category_id?: string
@@ -510,6 +512,7 @@ export type Database = {
           user_id?: string
           vote_count?: number
           week_id?: string
+          weighted_score?: number | null
         }
         Relationships: [
           {
