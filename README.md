@@ -1,73 +1,55 @@
-# Welcome to your Lovable project
+# 🎵 Track Triumph
 
-## Project info
+Plateforme de compétition musicale communautaire — soumettez vos morceaux, votez pour vos favoris, grimpez dans le classement.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Fonctionnalités
 
-## How can I edit this code?
+- **Soumissions** : Les artistes Pro et Elite soumettent un morceau par semaine dans une catégorie musicale
+- **Votes communautaires** : Feed immersif style TikTok avec notation multi-critères (émotion, originalité, production)
+- **Abonnements** : 3 plans — Free (5 votes/semaine), Pro (9,99 €/mois), Elite (19,99 €/mois)
+- **Classements** : Résultats hebdomadaires par catégorie avec score pondéré
+- **Hall of Fame** : Historique des gagnants par saison
+- **Profils artistes** : Avatar, bannière, liens sociaux, statistiques de votes
+- **IA intégrée** : Feedback structuré, recommandations personnalisées, chatbot musical, résumé des votes
+- **Administration** : Dashboard admin, modération des soumissions, détection de fraude
+- **Reward Pool** : Cagnotte hebdomadaire pour les top 3
 
-There are several ways of editing your application.
+## Pages principales
 
-**Use Lovable**
+| Route | Description |
+|-------|-------------|
+| `/` | Accueil (landing page) |
+| `/explore` | Explorer les catégories et soumissions |
+| `/vote` | Feed de vote immersif |
+| `/compete` | Soumettre un morceau |
+| `/results` | Classements de la semaine |
+| `/pricing` | Plans et abonnements |
+| `/hall-of-fame` | Palmarès des gagnants |
+| `/profile` | Profil utilisateur |
+| `/admin` | Tableau de bord admin |
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Stack technique
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend** : React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion, Recharts
+- **Backend** : Lovable Cloud (authentification, base de données, stockage, fonctions serveur)
+- **Paiements** : Stripe (checkout, portail client, webhooks)
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Développement local
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Cloner le dépôt
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
+# Installer les dépendances
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Lancer le serveur de développement
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Déploiement
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Ouvrez [Lovable](https://lovable.dev) → **Share** → **Publish**.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Pour connecter un domaine custom : **Project** → **Settings** → **Domains** → **Connect Domain**.
