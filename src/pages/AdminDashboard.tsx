@@ -145,7 +145,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: "Erreur lors de la sauvegarde.", variant: "destructive" });
     } else {
-      toast({ title: "Reward Pool mis à jour ✓" });
+      toast({ title: "Cagnotte mise à jour ✓" });
       loadData();
     }
     setRpSaving(false);
@@ -312,7 +312,7 @@ const AdminDashboard = () => {
 
           {/* Rewards Tab */}
           <TabsContent value="rewards" className="space-y-4">
-            <h2 className="font-display text-xl font-semibold">Reward Pool</h2>
+            <h2 className="font-display text-xl font-semibold">Cagnotte</h2>
 
             {/* Current pools */}
             {rewardPools.map((rp) => (
@@ -355,7 +355,7 @@ const AdminDashboard = () => {
             {/* Add/Edit pool */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Configurer Reward Pool</CardTitle>
+                <CardTitle className="text-lg">Configurer la cagnotte</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">

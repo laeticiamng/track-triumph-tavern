@@ -119,10 +119,10 @@ const Vote = () => {
         <div className="pointer-events-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">
           <button
             onClick={() => { setActiveFilter("all"); setShowRecsOnly(false); }}
-            className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors ${
+            className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
               activeFilter === "all" && !showRecsOnly
                 ? "bg-primary text-primary-foreground"
-                : "bg-white/15 text-white/80 hover:bg-white/25"
+                : "bg-secondary text-secondary-foreground hover:bg-accent"
             }`}
           >
             Tout
@@ -130,10 +130,10 @@ const Vote = () => {
           {recommendedIds.length > 0 && (
             <button
               onClick={() => { setShowRecsOnly(!showRecsOnly); setActiveFilter("all"); }}
-              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors flex items-center gap-1 ${
+              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors flex items-center gap-1 ${
                 showRecsOnly
                   ? "bg-primary text-primary-foreground"
-                  : "bg-white/15 text-white/80 hover:bg-white/25"
+                  : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
               <Sparkles className="h-3 w-3" /> Pour vous
@@ -143,10 +143,10 @@ const Vote = () => {
             <button
               key={cat.id}
               onClick={() => { setActiveFilter(cat.id); setShowRecsOnly(false); }}
-              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm transition-colors ${
+              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                 activeFilter === cat.id
                   ? "bg-primary text-primary-foreground"
-                  : "bg-white/15 text-white/80 hover:bg-white/25"
+                  : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
               {cat.name}
