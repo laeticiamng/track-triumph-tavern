@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 const ScoringMethod = () => (
   <Layout>
     <div className="container max-w-3xl py-8 md:py-12">
-      <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-        <ArrowLeft className="h-4 w-4" /> Retour
+      <Link to="/results" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <ArrowLeft className="h-4 w-4" /> Retour aux résultats
       </Link>
 
       <h1 className="font-display text-3xl font-bold sm:text-4xl">Méthode de classement</h1>

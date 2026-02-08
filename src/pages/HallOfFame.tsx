@@ -89,9 +89,19 @@ const HallOfFame = () => {
             </div>
           ) : results.length === 0 ? (
             <div className="mt-16 flex flex-col items-center text-center">
-              <Music className="h-12 w-12 text-muted-foreground/50 mb-4" />
-              <h3 className="font-display text-lg font-semibold">Aucun résultat publié</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Les résultats apparaîtront ici une fois publiés.</p>
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-5">
+                <Trophy className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="font-display text-xl font-bold">L'histoire commence ici</h3>
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
+                La première semaine de Weekly Music Awards sera historique. Les gagnants apparaîtront ici — et vous pourriez en faire partie.
+              </p>
+              <Link
+                to="/explore"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Découvrir les morceaux
+              </Link>
             </div>
           ) : (
             <div className="mt-8 space-y-8">
