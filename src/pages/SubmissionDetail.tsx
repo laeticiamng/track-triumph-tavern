@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SEOHead } from "@/components/seo/SEOHead";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -94,6 +95,22 @@ const SubmissionDetail = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={`${submission.title} — ${submission.artist_name}`}
+        description={submission.description || `Ecoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
+        url={`/submissions/${submission.id}`}
+        image={submission.cover_image_url}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "MusicRecording",
+          name: submission.title,
+          byArtist: { "@type": "MusicGroup", name: submission.artist_name },
+          url: `https://weeklymusicawards.com/submissions/${submission.id}`,
+          image: submission.cover_image_url,
+          ...(category ? { genre: category.name } : {}),
+          description: submission.description || undefined,
+        }}
+      />
       <div className="container py-8">
         <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="h-4 w-4" /> Retour

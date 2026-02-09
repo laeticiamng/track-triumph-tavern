@@ -7,6 +7,7 @@ const staticRoutes = [
   { path: "/", priority: 1.0, changefreq: "daily" },
   { path: "/explore", priority: 0.9, changefreq: "daily" },
   { path: "/vote", priority: 0.9, changefreq: "daily" },
+  { path: "/compete", priority: 0.8, changefreq: "weekly" },
   { path: "/results", priority: 0.8, changefreq: "weekly" },
   { path: "/stats", priority: 0.7, changefreq: "daily" },
   { path: "/pricing", priority: 0.7, changefreq: "monthly" },
@@ -39,10 +40,12 @@ const Sitemap = () => {
           .limit(100),
       ]);
 
+      const today = new Date().toISOString().split("T")[0];
       let urls = staticRoutes.map(
         (r) =>
           `  <url>
     <loc>${BASE_URL}${r.path}</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>${r.changefreq}</changefreq>
     <priority>${r.priority}</priority>
   </url>`
