@@ -136,7 +136,7 @@ export function VoteCard({
 
   return (
     <div className="relative h-full w-full snap-start flex flex-col">
-      <audio ref={audioRef} src={submission.audio_excerpt_url} preload="metadata" />
+      <audio ref={audioRef} src={submission.audio_excerpt_url} preload="metadata" controlsList="nodownload" onContextMenu={(e) => e.preventDefault()} />
 
       {/* Cover background */}
       <div className="absolute inset-0">

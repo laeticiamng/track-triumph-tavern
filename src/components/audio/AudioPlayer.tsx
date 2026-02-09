@@ -61,7 +61,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false }: A
   if (compact) {
     return (
       <div className="flex items-center gap-3">
-        <audio ref={audioRef} src={src} preload="metadata" />
+        <audio ref={audioRef} src={src} preload="metadata" controlsList="nodownload" onContextMenu={(e) => e.preventDefault()} />
         <button
           onClick={toggle}
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95"
@@ -86,7 +86,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false }: A
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
-      <audio ref={audioRef} src={src} preload="metadata" />
+      <audio ref={audioRef} src={src} preload="metadata" controlsList="nodownload" onContextMenu={(e) => e.preventDefault()} />
 
       <div className="flex items-center gap-4">
         {coverUrl && (

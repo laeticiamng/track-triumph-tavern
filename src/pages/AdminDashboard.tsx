@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Shield, Check, X, Calendar, Trophy, DollarSign,
   Download, Clock, Plus, Trash2, Lock
@@ -28,11 +28,20 @@ interface Sponsor {
   url: string;
 }
 
+const pathTabMap: Record<string, string> = {
+  "/admin/fraud": "fraud",
+  "/admin/weeks": "weeks",
+  "/admin/rewards": "rewards",
+  "/admin/moderation": "moderation",
+};
+
 const AdminDashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
+  const defaultTab = pathTabMap[location.pathname] || "moderation";
 
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -51,6 +60,15 @@ const AdminDashboard = () => {
   const [rpFallback, setRpFallback] = useState("");
   const [rpSponsors, setRpSponsors] = useState<Sponsor[]>([]);
   const [rpSaving, setRpSaving] = useState(false);
+
+  // Week creation form
+  const [newWeekTitle, setNewWeekTitle] = useState("");
+  const [newWeekNumber, setNewWeekNumber] = useState("");
+  const [newWeekSubOpen, setNewWeekSubOpen] = useState("");
+  const [newWeekSubClose, setNewWeekSubClose] = useState("");
+  const [newWeekVoteOpen, setNewWeekVoteOpen] = useState("");
+  const [newWeekVoteClose, setNewWeekVoteClose] = useState("");
+  const [creatingWeek, setCreatingWeek] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/auth"); return; }
@@ -109,7 +127,11 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: status === "approved" ? "Approuvée ✓" : "Rejetée" });
+      toast({ title: status === "approved" ? "Approuvee" : "Rejetee" });
+      // Send notification email to artist (non-blocking)
+      supabase.functions.invoke("notify-status-change", {
+        body: { submission_id: id, new_status: status, reason },
+      }).catch((err) => console.error("Notification error:", err));
       loadData();
     }
   };
@@ -149,6 +171,48 @@ const AdminDashboard = () => {
       loadData();
     }
     setRpSaving(false);
+  };
+
+  const createWeek = async () => {
+    setCreatingWeek(true);
+    // Get active season
+    const { data: season } = await supabase.from("seasons").select("id").eq("is_active", true).single();
+    if (!season) {
+      toast({ title: "Erreur", description: "Aucune saison active trouvée.", variant: "destructive" });
+      setCreatingWeek(false);
+      return;
+    }
+    const { error } = await supabase.from("weeks").insert({
+      season_id: season.id,
+      week_number: parseInt(newWeekNumber),
+      title: newWeekTitle || null,
+      submission_open_at: new Date(newWeekSubOpen).toISOString(),
+      submission_close_at: new Date(newWeekSubClose).toISOString(),
+      voting_open_at: new Date(newWeekVoteOpen).toISOString(),
+      voting_close_at: new Date(newWeekVoteClose).toISOString(),
+      is_active: false,
+    });
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Semaine creee" });
+      setNewWeekTitle(""); setNewWeekNumber(""); setNewWeekSubOpen(""); setNewWeekSubClose("");
+      setNewWeekVoteOpen(""); setNewWeekVoteClose("");
+      loadData();
+    }
+    setCreatingWeek(false);
+  };
+
+  const activateWeek = async (weekId: string) => {
+    // Deactivate all weeks first, then activate the selected one
+    await supabase.from("weeks").update({ is_active: false }).neq("id", "00000000-0000-0000-0000-000000000000");
+    const { error } = await supabase.from("weeks").update({ is_active: true }).eq("id", weekId);
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Semaine activee" });
+      loadData();
+    }
   };
 
   const lockPool = async (poolId: string) => {
@@ -221,7 +285,7 @@ const AdminDashboard = () => {
           </CardContent></Card>
         </div>
 
-        <Tabs defaultValue="moderation" className="space-y-6">
+        <Tabs defaultValue={defaultTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="moderation">Modération</TabsTrigger>
             <TabsTrigger value="weeks">Semaines</TabsTrigger>
@@ -280,6 +344,49 @@ const AdminDashboard = () => {
           {/* Weeks Tab */}
           <TabsContent value="weeks" className="space-y-4">
             <h2 className="font-display text-xl font-semibold">Gestion des semaines</h2>
+
+            {/* Create new week form */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Creer une nouvelle semaine</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Titre</Label>
+                    <Input value={newWeekTitle} onChange={(e) => setNewWeekTitle(e.target.value)} placeholder="Saison 1 — Semaine 2" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Numero de semaine</Label>
+                    <Input type="number" value={newWeekNumber} onChange={(e) => setNewWeekNumber(e.target.value)} placeholder="2" min="1" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Ouverture soumissions</Label>
+                    <Input type="datetime-local" value={newWeekSubOpen} onChange={(e) => setNewWeekSubOpen(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Fermeture soumissions</Label>
+                    <Input type="datetime-local" value={newWeekSubClose} onChange={(e) => setNewWeekSubClose(e.target.value)} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Ouverture votes</Label>
+                    <Input type="datetime-local" value={newWeekVoteOpen} onChange={(e) => setNewWeekVoteOpen(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Fermeture votes</Label>
+                    <Input type="datetime-local" value={newWeekVoteClose} onChange={(e) => setNewWeekVoteClose(e.target.value)} />
+                  </div>
+                </div>
+                <Button onClick={createWeek} disabled={creatingWeek || !newWeekNumber || !newWeekSubOpen || !newWeekSubClose || !newWeekVoteOpen || !newWeekVoteClose}>
+                  {creatingWeek ? "Creation..." : <><Plus className="mr-1 h-3.5 w-3.5" /> Creer la semaine</>}
+                </Button>
+              </CardContent>
+            </Card>
+
             <div className="space-y-3">
               {weeks.map((w) => (
                 <Card key={w.id}>
@@ -297,6 +404,11 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
+                        {!w.is_active && (
+                          <Button size="sm" variant="outline" onClick={() => activateWeek(w.id)}>
+                            Activer
+                          </Button>
+                        )}
                         {w.is_active && !w.results_published_at && (
                           <Button size="sm" onClick={() => publishResults(w.id)}>
                             <Trophy className="mr-1 h-3.5 w-3.5" /> Publier résultats

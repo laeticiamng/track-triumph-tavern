@@ -54,6 +54,9 @@ const App = () => (
             <Route path="/artist/:id" element={<ArtistProfile />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/moderation" element={<AdminDashboard />} />
+            <Route path="/admin/fraud" element={<AdminDashboard />} />
+            <Route path="/admin/weeks" element={<AdminDashboard />} />
+            <Route path="/admin/rewards" element={<AdminDashboard />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contest-rules" element={<ContestRules />} />

@@ -123,6 +123,15 @@ const CategoryDetail = () => {
         title={category.name}
         description={category.description || `Decouvrez la categorie ${category.name} sur Weekly Music Awards.`}
         url={`/categories/${slug}`}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "MusicGroup",
+          name: category.name,
+          description: category.description || `Categorie ${category.name} sur Weekly Music Awards`,
+          url: `https://weeklymusicawards.com/categories/${slug}`,
+          genre: category.name,
+          ...(category.sub_genres ? { additionalType: category.sub_genres.join(", ") } : {}),
+        }}
       />
       {/* Hero banner */}
       <motion.section

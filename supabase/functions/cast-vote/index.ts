@@ -172,15 +172,30 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Rate limiting: max 5 votes per minute per user
+    // Rate limiting: max 50 votes per hour per user
+    const oneHourAgo = new Date(Date.now() - 3_600_000).toISOString();
+    const { count: hourlyVotes } = await supabaseAdmin
+      .from("votes")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .gte("created_at", oneHourAgo);
+
+    if ((hourlyVotes || 0) >= 50) {
+      return new Response(JSON.stringify({ error: "Limite de 50 votes par heure atteinte. Réessayez plus tard." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Burst protection: max 5 votes per minute
     const oneMinuteAgo = new Date(Date.now() - 60_000).toISOString();
-    const { count: recentVotes } = await supabaseAdmin
+    const { count: burstCount } = await supabaseAdmin
       .from("votes")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .gte("created_at", oneMinuteAgo);
 
-    if ((recentVotes || 0) >= 5) {
+    if ((burstCount || 0) >= 5) {
       return new Response(JSON.stringify({ error: "Trop de votes en peu de temps. Réessayez dans un instant." }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
