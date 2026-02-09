@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -118,6 +119,11 @@ const CategoryDetail = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={category.name}
+        description={category.description || `Decouvrez la categorie ${category.name} sur Weekly Music Awards.`}
+        url={`/categories/${slug}`}
+      />
       {/* Hero banner */}
       <motion.section
         initial={{ opacity: 0 }}

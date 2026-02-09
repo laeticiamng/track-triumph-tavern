@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -112,6 +113,10 @@ const Compete = () => {
       toast({ title: "Champs requis", description: "Remplissez tous les champs obligatoires.", variant: "destructive" });
       return;
     }
+    if (audioFile.size > 10 * 1024 * 1024) {
+      toast({ title: "Fichier trop volumineux", description: "L'extrait audio ne doit pas depasser 10 MB.", variant: "destructive" });
+      return;
+    }
     if (!rightsDeclaration || !acceptRules) {
       toast({ title: "Déclarations requises", description: "Vous devez accepter les conditions.", variant: "destructive" });
       return;
@@ -160,6 +165,11 @@ const Compete = () => {
   if (!canSubmit) {
     return (
       <Layout>
+        <SEOHead
+          title="Soumettre"
+          description="Soumettez votre morceau au concours musical Weekly Music Awards."
+          url="/compete"
+        />
         <div className="container max-w-lg py-16 text-center">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
             <Lock className="h-8 w-8 text-primary" />
@@ -189,9 +199,14 @@ const Compete = () => {
           <p className="mt-3 text-muted-foreground">
             Vous avez déjà soumis un morceau cette semaine. Une seule soumission par semaine est autorisée.
           </p>
-          <Button asChild variant="outline" className="mt-6" size="lg">
-            <Link to="/explore">Explorer les soumissions</Link>
-          </Button>
+          <div className="mt-6 flex flex-col gap-3">
+            <Button asChild className="bg-gradient-primary" size="lg">
+              <Link to="/submit/review">Suivre mes soumissions</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/explore">Explorer les soumissions</Link>
+            </Button>
+          </div>
         </div>
         <Footer />
       </Layout>
@@ -200,6 +215,11 @@ const Compete = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Soumettre"
+        description="Soumettez votre morceau au concours musical Weekly Music Awards."
+        url="/compete"
+      />
       <div className="container max-w-2xl py-8">
         <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="h-4 w-4" /> Retour

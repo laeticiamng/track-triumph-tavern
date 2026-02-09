@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { VoteButton } from "@/components/vote/VoteButton";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -73,6 +74,11 @@ const Explore = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Explorer"
+        description="Decouvrez les morceaux en competition cette semaine. Ecoutez, votez et soutenez vos artistes preferes."
+        url="/explore"
+      />
       <section className="py-8 md:py-12">
         <div className="container">
           <div className="mb-8">

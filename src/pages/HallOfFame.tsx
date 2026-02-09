@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Medal, ArrowLeft, Music } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -72,6 +73,11 @@ const HallOfFame = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Hall of Fame"
+        description="Decouvrez tous les gagnants des editions precedentes du concours Weekly Music Awards."
+        url="/hall-of-fame"
+      />
       <section className="py-8 md:py-12">
         <div className="container max-w-3xl">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">

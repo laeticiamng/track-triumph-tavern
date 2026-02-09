@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { RewardPoolBanner } from "@/components/rewards/RewardPoolBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +70,11 @@ const Results = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Resultats"
+        description="Decouvrez les gagnants du concours musical Weekly Music Awards de cette semaine."
+        url="/results"
+      />
       <div className="container py-8">
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold sm:text-4xl">Résultats</h1>
