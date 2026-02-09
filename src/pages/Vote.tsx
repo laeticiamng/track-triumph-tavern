@@ -4,7 +4,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { useVoteState } from "@/hooks/use-vote-state";
 import { VoteFeed } from "@/components/vote/VoteFeed";
 import { VoteQuotaBar } from "@/components/vote/VoteQuotaBar";
+import { CategoryProgressBar } from "@/components/vote/CategoryProgressBar";
 import { AIRecommendations } from "@/components/ai/AIRecommendations";
+import { SEOHead, eventJsonLd } from "@/components/seo/SEOHead";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -30,6 +32,7 @@ interface FeedSubmission {
 const Vote = () => {
   const { user } = useAuth();
   const [activeWeekId, setActiveWeekId] = useState<string | null>(null);
+  const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [submissions, setSubmissions] = useState<FeedSubmission[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -42,10 +45,13 @@ const Vote = () => {
   // Load active week + categories
   useEffect(() => {
     Promise.all([
-      supabase.from("weeks").select("id").eq("is_active", true).single(),
+      supabase.from("weeks").select("*").eq("is_active", true).single(),
       supabase.from("categories").select("*").order("sort_order"),
     ]).then(([weekRes, catRes]) => {
-      if (weekRes.data) setActiveWeekId(weekRes.data.id);
+      if (weekRes.data) {
+        setActiveWeekId(weekRes.data.id);
+        setActiveWeek(weekRes.data);
+      }
       if (catRes.data) setCategories(catRes.data);
       if (!weekRes.data) setLoading(false);
     });
@@ -103,6 +109,12 @@ const Vote = () => {
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background">
+      <SEOHead
+        title="Voter"
+        description="Ecoutez et votez pour vos morceaux preferes dans 12 categories musicales."
+        url="/vote"
+        jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
+      />
       <Header />
 
       {/* Overlay controls */}
@@ -114,6 +126,16 @@ const Vote = () => {
             tier={voteState.tier}
           />
         </div>
+
+        {/* Category vote progress */}
+        {user && categories.length > 0 && voteState.votedCategories.size > 0 && (
+          <div className="pointer-events-auto">
+            <CategoryProgressBar
+              categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+              votedCategories={voteState.votedCategories}
+            />
+          </div>
+        )}
 
         {/* Category filter pills + AI recommendations */}
         <div className="pointer-events-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">

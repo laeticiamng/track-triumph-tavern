@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import {
   AlertTriangle, Download, Search, ShieldAlert, Users, Globe, Music, Loader2,
+  Shield, Clock, Zap,
 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -128,6 +129,47 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
           <AlertTriangle className="h-5 w-5 text-destructive" /> Monitoring Anti-Fraude
         </h2>
       </div>
+
+      {/* Fraud Detection Rules Reference */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Shield className="h-4 w-4 text-primary" /> Regles de detection actives
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
+              <Zap className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Rate limiting</p>
+                <p className="text-xs text-muted-foreground">Max 50 votes/heure par utilisateur. 1 vote par track par semaine.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
+              <Globe className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Detection IP</p>
+                <p className="text-xs text-muted-foreground">Alerte si &gt;3 comptes distincts votent depuis la meme IP.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
+              <Clock className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Pattern temporel</p>
+                <p className="text-xs text-muted-foreground">Detection de rafales : &gt;10 votes en 5 min = flag automatique.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
+              <Users className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Comptes recents</p>
+                <p className="text-xs text-muted-foreground">Comptes crees &lt;24h avant le vote sont signales pour review.</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Section 1: Launch scan */}
       <Card>
