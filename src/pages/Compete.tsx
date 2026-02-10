@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle } from "lucide-react";
+import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle, Play, Pause, Scissors } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AITagSuggest } from "@/components/ai/AITagSuggest";
 import type { Tables } from "@/integrations/supabase/types";
@@ -51,6 +52,67 @@ const Compete = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [rightsDeclaration, setRightsDeclaration] = useState(false);
   const [acceptRules, setAcceptRules] = useState(false);
+
+  // Audio preview trimmer state
+  const previewAudioRef = useRef<HTMLAudioElement>(null);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const [previewStart, setPreviewStart] = useState(0);
+  const [previewPlaying, setPreviewPlaying] = useState(false);
+  const [previewTime, setPreviewTime] = useState(0);
+  const PREVIEW_LENGTH = 30; // 30 seconds preview
+
+  const handleAudioFileChange = useCallback((file: File | null) => {
+    setAudioFile(file);
+    setPreviewStart(0);
+    setPreviewPlaying(false);
+    setPreviewTime(0);
+    setAudioDuration(0);
+  }, []);
+
+  // Load audio metadata for preview
+  useEffect(() => {
+    if (!audioFile) return;
+    const url = URL.createObjectURL(audioFile);
+    const audio = previewAudioRef.current;
+    if (audio) {
+      audio.src = url;
+      audio.load();
+    }
+    return () => URL.revokeObjectURL(url);
+  }, [audioFile]);
+
+  // Stop preview at end of 30s window
+  useEffect(() => {
+    const audio = previewAudioRef.current;
+    if (!audio || !previewPlaying) return;
+    const endTime = previewStart + PREVIEW_LENGTH;
+    const interval = setInterval(() => {
+      if (audio.currentTime >= endTime || audio.currentTime >= audioDuration) {
+        audio.pause();
+        setPreviewPlaying(false);
+      }
+      setPreviewTime(audio.currentTime);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [previewPlaying, previewStart, audioDuration]);
+
+  const togglePreview = () => {
+    const audio = previewAudioRef.current;
+    if (!audio) return;
+    if (previewPlaying) {
+      audio.pause();
+      setPreviewPlaying(false);
+    } else {
+      audio.currentTime = previewStart;
+      audio.play().then(() => setPreviewPlaying(true)).catch(() => {});
+    }
+  };
+
+  const fmtTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -314,19 +376,88 @@ const Compete = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Extrait audio (30-60s) *</Label>
+                  <Label>Extrait audio (30s) *</Label>
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
                     <Music className="h-8 w-8 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {audioFile ? audioFile.name : "Cliquez pour uploader un fichier audio (MP3, WAV)"}
+                      {audioFile ? audioFile.name : "Cliquez pour uploader un fichier audio (MP3, WAV, max 10 MB)"}
                     </span>
+                    <span className="text-xs text-muted-foreground/70">MP3 ou WAV uniquement</span>
                     <input
                       type="file"
                       accept="audio/mp3,audio/wav,audio/mpeg"
                       className="hidden"
-                      onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                      onChange={(e) => handleAudioFileChange(e.target.files?.[0] || null)}
                     />
                   </label>
+
+                  {/* Audio Preview Trimmer */}
+                  {audioFile && (
+                    <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3">
+                      <audio
+                        ref={previewAudioRef}
+                        preload="metadata"
+                        onLoadedMetadata={() => {
+                          if (previewAudioRef.current) {
+                            setAudioDuration(previewAudioRef.current.duration);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <div className="flex items-center gap-2">
+                        <Scissors className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-medium text-primary">
+                          Sélectionner l'extrait de 30 secondes
+                        </span>
+                      </div>
+                      {audioDuration > 0 && (
+                        <>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                              <span>Début: {fmtTime(previewStart)}</span>
+                              <span>Fin: {fmtTime(Math.min(previewStart + PREVIEW_LENGTH, audioDuration))}</span>
+                              <span>Durée totale: {fmtTime(audioDuration)}</span>
+                            </div>
+                            <Slider
+                              value={[previewStart]}
+                              max={Math.max(0, audioDuration - PREVIEW_LENGTH)}
+                              step={0.5}
+                              onValueChange={(v) => setPreviewStart(v[0])}
+                              className="cursor-pointer"
+                            />
+                            {/* Visual indicator of selected range */}
+                            <div className="relative h-2 rounded-full bg-secondary overflow-hidden">
+                              <div
+                                className="absolute h-full bg-primary/40 rounded-full"
+                                style={{
+                                  left: `${(previewStart / audioDuration) * 100}%`,
+                                  width: `${(Math.min(PREVIEW_LENGTH, audioDuration - previewStart) / audioDuration) * 100}%`,
+                                }}
+                              />
+                              {previewPlaying && (
+                                <div
+                                  className="absolute h-full w-0.5 bg-primary"
+                                  style={{
+                                    left: `${(previewTime / audioDuration) * 100}%`,
+                                  }}
+                                />
+                              )}
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={togglePreview}
+                            className="gap-2"
+                          >
+                            {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                            {previewPlaying ? "Pause" : "Ecouter l'extrait"}
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">

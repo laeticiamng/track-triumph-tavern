@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Heart, MessageCircle, Check, Play, Pause, Loader2 } from "lucide-react";
+import { Heart, MessageCircle, Check, Play, Pause, Loader2, Star, Send, ChevronDown } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { ShareSheet } from "./ShareSheet";
@@ -34,6 +34,46 @@ interface VoteCardProps {
   commentsMax: number | "unlimited";
 }
 
+function StarRating({
+  value,
+  onChange,
+  label,
+  icon,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  label: string;
+  icon: string;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-sm w-[90px] flex items-center gap-1.5 text-white/80">
+        <span>{icon}</span>
+        <span className="text-xs font-medium">{label}</span>
+      </span>
+      <div className="flex gap-0.5">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            onClick={() => onChange(star)}
+            className="p-0.5 transition-transform active:scale-90"
+          >
+            <Star
+              className={`h-5 w-5 transition-colors ${
+                star <= value
+                  ? "fill-yellow-400 text-yellow-400"
+                  : "text-white/30"
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+      <span className="text-xs text-white/50 w-5 text-right tabular-nums">{value}/5</span>
+    </div>
+  );
+}
+
 export function VoteCard({
   submission,
   isVisible,
@@ -52,7 +92,16 @@ export function VoteCard({
   const [duration, setDuration] = useState(0);
   const [voting, setVoting] = useState(false);
   const [justVoted, setJustVoted] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
   const { toast } = useToast();
+
+  // Scoring state
+  const [emotionScore, setEmotionScore] = useState(3);
+  const [originalityScore, setOriginalityScore] = useState(3);
+  const [productionScore, setProductionScore] = useState(3);
+  const [comment, setComment] = useState("");
+
+  const canComment = tier !== "free" && (commentsMax === "unlimited" || commentsUsed < commentsMax);
 
   // Auto-play/pause based on visibility
   useEffect(() => {
@@ -114,8 +163,15 @@ export function VoteCard({
     if (!canVote || voting) return;
     setVoting(true);
     try {
+      const trimmedComment = comment.trim();
       const { data, error } = await supabase.functions.invoke("cast-vote", {
-        body: { submission_id: submission.id },
+        body: {
+          submission_id: submission.id,
+          emotion_score: emotionScore,
+          originality_score: originalityScore,
+          production_score: productionScore,
+          ...(trimmedComment && canComment ? { comment: trimmedComment } : {}),
+        },
       });
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
@@ -123,7 +179,8 @@ export function VoteCard({
         toast({ title: "Erreur", description: result.error, variant: "destructive" });
       } else {
         setJustVoted(true);
-        onVoted(submission.category_id);
+        setShowPanel(false);
+        onVoted(submission.category_id, !!(trimmedComment && canComment));
       }
     } catch {
       toast({ title: "Erreur", description: "Impossible de voter.", variant: "destructive" });
@@ -132,6 +189,7 @@ export function VoteCard({
     }
   };
 
+  const avgScore = ((emotionScore + originalityScore + productionScore) / 3).toFixed(1);
   const showAlreadyVoted = hasVotedCategory && !justVoted;
 
   return (
@@ -206,6 +264,69 @@ export function VoteCard({
           </span>
         </div>
 
+        {/* Scoring Panel (expandable) */}
+        <AnimatePresence>
+          {showPanel && canVote && isAuthenticated && !justVoted && !showAlreadyVoted && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden mb-4"
+            >
+              <div className="rounded-2xl bg-black/60 backdrop-blur-md p-4 space-y-3 border border-white/10">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
+                    Tes notes
+                  </span>
+                  <span className="text-xs text-white/50">
+                    Moyenne: <span className="text-white font-medium">{avgScore}/5</span>
+                  </span>
+                </div>
+
+                <StarRating value={emotionScore} onChange={setEmotionScore} label="Emotion" icon="💖" />
+                <StarRating value={originalityScore} onChange={setOriginalityScore} label="Originalité" icon="✨" />
+                <StarRating value={productionScore} onChange={setProductionScore} label="Production" icon="🎛️" />
+
+                {/* Comment (Pro/Elite) */}
+                {canComment && (
+                  <div className="mt-2">
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value.slice(0, 280))}
+                      placeholder="Laisser un commentaire (optionnel)..."
+                      rows={2}
+                      maxLength={280}
+                      className="w-full rounded-xl bg-white/10 border border-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-primary/50 resize-none"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-[10px] text-white/40">
+                        {tier === "pro" ? `${commentsUsed}/${commentsMax} commentaires` : "Illimité"}
+                      </span>
+                      <span className="text-[10px] text-white/40">{comment.length}/280</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Submit vote button */}
+                <button
+                  onClick={handleVote}
+                  disabled={voting}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2.5 text-sm transition-colors active:scale-[0.98]"
+                >
+                  {voting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Valider mon vote ({avgScore}/5)
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Action buttons */}
         <div className="flex items-end justify-between">
           <div className="flex items-center gap-4">
@@ -219,32 +340,43 @@ export function VoteCard({
               </div>
             ) : (
               <button
-                onClick={isAuthenticated ? handleVote : undefined}
-                disabled={!canVote || voting}
+                onClick={() => {
+                  if (!isAuthenticated) return;
+                  if (showPanel) {
+                    setShowPanel(false);
+                  } else if (canVote && !showAlreadyVoted) {
+                    setShowPanel(true);
+                  }
+                }}
+                disabled={!canVote || showAlreadyVoted}
                 className={`flex flex-col items-center gap-1 transition-colors ${
-                  canVote && isAuthenticated
+                  canVote && isAuthenticated && !showAlreadyVoted
                     ? "text-white/80 hover:text-white"
                     : "text-white/30"
                 }`}
               >
                 <div
                   className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm ${
-                    canVote && isAuthenticated ? "bg-white/15 hover:bg-primary/80" : "bg-white/10"
+                    showPanel
+                      ? "bg-primary/80 text-white"
+                      : canVote && isAuthenticated && !showAlreadyVoted
+                      ? "bg-white/15 hover:bg-primary/80"
+                      : "bg-white/10"
                   }`}
                 >
-                  {voting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                  {showPanel ? (
+                    <ChevronDown className="h-5 w-5" />
                   ) : (
                     <Heart className="h-5 w-5" />
                   )}
                 </div>
                 <span className="text-[10px] font-medium">
-                  {!isAuthenticated ? "Connexion" : "Voter"}
+                  {!isAuthenticated ? "Connexion" : showPanel ? "Fermer" : "Voter"}
                 </span>
               </button>
             )}
 
-            {/* Comment */}
+            {/* Detail */}
             <Link
               to={`/submissions/${submission.id}`}
               className="flex flex-col items-center gap-1 text-white/80 hover:text-white transition-colors"
