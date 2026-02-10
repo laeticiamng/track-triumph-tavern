@@ -207,6 +207,8 @@ const Compete = () => {
         audio_excerpt_url: audioUrl.publicUrl,
         cover_image_url: coverUrl.publicUrl,
         external_url: externalUrl.trim() || null,
+        preview_start_sec: previewStart,
+        preview_end_sec: Math.min(previewStart + PREVIEW_LENGTH, audioDuration || previewStart + PREVIEW_LENGTH),
         rights_declaration: true,
       });
 

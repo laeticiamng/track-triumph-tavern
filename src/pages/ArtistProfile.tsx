@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { ArrowLeft, Music, ExternalLink, Crown, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import { SEOHead, musicGroupJsonLd } from "@/components/seo/SEOHead";
 import type { Tables } from "@/integrations/supabase/types";
 
 const ArtistProfile = () => {
@@ -82,6 +83,17 @@ const ArtistProfile = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={profile.display_name || "Artiste"}
+        description={profile.bio || `Decouvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
+        url={`/artist/${id}`}
+        image={profile.avatar_url || undefined}
+        jsonLd={musicGroupJsonLd({
+          name: profile.display_name || "Artiste",
+          id: id || "",
+          image: profile.avatar_url || undefined,
+        })}
+      />
       <div className="container max-w-3xl py-8">
         <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Retour

@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { SEOHead, organizationJsonLd } from "@/components/seo/SEOHead";
+import { SEOHead, homePageJsonLd } from "@/components/seo/SEOHead";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
@@ -16,7 +16,7 @@ const Index = () => {
     <Layout>
       <SEOHead
         url="/"
-        jsonLd={organizationJsonLd}
+        jsonLd={homePageJsonLd}
       />
       <HeroSection />
       <HowItWorks />

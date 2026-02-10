@@ -68,6 +68,25 @@ export const organizationJsonLd = {
   sameAs: [],
 };
 
+export const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Weekly Music Awards",
+  url: BASE_URL,
+  description: DEFAULT_DESCRIPTION,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${BASE_URL}/explore?search={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
+// Combined schemas for the homepage
+export const homePageJsonLd = [
+  organizationJsonLd,
+  webSiteJsonLd,
+];
+
 export function eventJsonLd(week: { title?: string | null; voting_open_at: string; voting_close_at: string }) {
   return {
     "@context": "https://schema.org",
@@ -95,5 +114,20 @@ export function musicGroupJsonLd(artist: { name: string; id: string; image?: str
     name: artist.name,
     url: `${BASE_URL}/artist/${artist.id}`,
     ...(artist.image ? { image: artist.image } : {}),
+  };
+}
+
+export function categoryJsonLd(category: { name: string; slug: string; description?: string | null }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${category.name} — Weekly Music Awards`,
+    url: `${BASE_URL}/categories/${category.slug}`,
+    description: category.description || `Decouvrez les morceaux ${category.name} en competition sur Weekly Music Awards.`,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Weekly Music Awards",
+      url: BASE_URL,
+    },
   };
 }

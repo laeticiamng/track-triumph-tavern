@@ -19,6 +19,8 @@ interface VoteCardSubmission {
   category_id: string;
   category_name: string;
   artist_avatar: string | null;
+  preview_start_sec?: number;
+  preview_end_sec?: number;
 }
 
 interface VoteCardProps {
@@ -95,6 +97,13 @@ export function VoteCard({
   const [showPanel, setShowPanel] = useState(false);
   const { toast } = useToast();
 
+  // Preview window
+  const pStart = submission.preview_start_sec ?? 0;
+  const pEnd = submission.preview_end_sec ?? 0;
+  const hasPreview = pEnd > pStart;
+  const windowDuration = hasPreview ? pEnd - pStart : duration;
+  const displayTime = hasPreview ? Math.max(0, currentTime - pStart) : currentTime;
+
   // Scoring state
   const [emotionScore, setEmotionScore] = useState(3);
   const [originalityScore, setOriginalityScore] = useState(3);
@@ -109,19 +118,26 @@ export function VoteCard({
     if (!audio) return;
 
     if (isVisible) {
+      if (hasPreview) audio.currentTime = pStart;
       audio.play().then(() => setPlaying(true)).catch(() => {});
     } else {
       audio.pause();
       setPlaying(false);
     }
-  }, [isVisible]);
+  }, [isVisible, hasPreview, pStart]);
 
   // Audio event listeners
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onTime = () => setCurrentTime(audio.currentTime);
+    const onTime = () => {
+      setCurrentTime(audio.currentTime);
+      if (hasPreview && audio.currentTime >= pEnd) {
+        audio.pause();
+        setPlaying(false);
+      }
+    };
     const onMeta = () => setDuration(audio.duration);
     const onEnd = () => setPlaying(false);
 
@@ -133,7 +149,7 @@ export function VoteCard({
       audio.removeEventListener("loadedmetadata", onMeta);
       audio.removeEventListener("ended", onEnd);
     };
-  }, []);
+  }, [hasPreview, pEnd]);
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
@@ -142,16 +158,20 @@ export function VoteCard({
       audio.pause();
       setPlaying(false);
     } else {
+      if (hasPreview && (audio.currentTime < pStart || audio.currentTime >= pEnd)) {
+        audio.currentTime = pStart;
+      }
       audio.play().then(() => setPlaying(true)).catch(() => {});
     }
-  }, [playing]);
+  }, [playing, hasPreview, pStart, pEnd]);
 
   const seek = useCallback((value: number[]) => {
     if (audioRef.current) {
-      audioRef.current.currentTime = value[0];
-      setCurrentTime(value[0]);
+      const target = hasPreview ? value[0] + pStart : value[0];
+      audioRef.current.currentTime = target;
+      setCurrentTime(target);
     }
-  }, []);
+  }, [hasPreview, pStart]);
 
   const fmt = (s: number) => {
     const m = Math.floor(s / 60);
@@ -252,15 +272,15 @@ export function VoteCard({
           </button>
           <div className="flex-1 min-w-0">
             <Slider
-              value={[currentTime]}
-              max={duration || 100}
+              value={[Math.max(0, displayTime)]}
+              max={windowDuration || 100}
               step={0.1}
               onValueChange={seek}
               className="cursor-pointer"
             />
           </div>
           <span className="text-xs text-white/60 tabular-nums w-10 text-right">
-            {fmt(currentTime)}
+            {fmt(Math.max(0, displayTime))}
           </span>
         </div>
 

@@ -12,6 +12,8 @@ interface FeedSubmission {
   category_id: string;
   category_name: string;
   artist_avatar: string | null;
+  preview_start_sec?: number;
+  preview_end_sec?: number;
 }
 
 interface VoteFeedProps {
