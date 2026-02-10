@@ -1,22 +1,19 @@
 import { motion } from "framer-motion";
-import { Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3, Palmtree, Wheat, Music2 } from "lucide-react";
+import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 const categoryMeta: Record<string, { icon: React.ElementType; color: string }> = {
-  "rap-trap": { icon: Mic2, color: "from-violet-500/20 to-purple-500/20" },
-  "pop": { icon: Music, color: "from-pink-500/20 to-rose-500/20" },
-  "afro": { icon: Globe, color: "from-amber-500/20 to-orange-500/20" },
-  "electronic": { icon: Zap, color: "from-cyan-500/20 to-blue-500/20" },
-  "rnb": { icon: Heart, color: "from-red-500/20 to-pink-500/20" },
-  "lofi": { icon: Headphones, color: "from-emerald-500/20 to-teal-500/20" },
-  "rock-indie": { icon: Guitar, color: "from-orange-500/20 to-red-500/20" },
-  "open": { icon: Waves, color: "from-indigo-500/20 to-violet-500/20" },
-  "dj": { icon: Disc3, color: "from-fuchsia-500/20 to-pink-500/20" },
-  "reggae": { icon: Palmtree, color: "from-green-500/20 to-yellow-500/20" },
-  "country": { icon: Wheat, color: "from-yellow-500/20 to-amber-500/20" },
-  "jazz": { icon: Music2, color: "from-blue-500/20 to-indigo-500/20" },
+  pop: { icon: Music, color: "from-pink-500/20 to-rose-500/20" },
+  rock: { icon: Guitar, color: "from-orange-500/20 to-red-500/20" },
+  "hip-hop": { icon: Mic2, color: "from-violet-500/20 to-purple-500/20" },
+  electro: { icon: Zap, color: "from-cyan-500/20 to-blue-500/20" },
+  rnb: { icon: Heart, color: "from-red-500/20 to-pink-500/20" },
+  jazz: { icon: Music2, color: "from-blue-500/20 to-indigo-500/20" },
+  classique: { icon: BookOpen, color: "from-amber-500/20 to-yellow-500/20" },
+  world: { icon: Globe, color: "from-emerald-500/20 to-teal-500/20" },
+  autres: { icon: Waves, color: "from-indigo-500/20 to-violet-500/20" },
 };
 
 const defaultColor = "from-primary/10 to-primary/5";

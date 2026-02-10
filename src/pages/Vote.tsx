@@ -111,7 +111,7 @@ const Vote = () => {
     <div className="flex flex-col h-[100dvh] bg-background">
       <SEOHead
         title="Voter"
-        description="Ecoutez et votez pour vos morceaux preferes dans 12 categories musicales."
+        description="Ecoutez et votez pour vos morceaux preferes dans 9 categories musicales."
         url="/vote"
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />
