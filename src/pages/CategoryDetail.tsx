@@ -9,30 +9,42 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
-  Mic2, Waves, Globe, Zap, Heart, Guitar, Headphones, Music, Disc3,
-  Palmtree, Wheat, Music2, ArrowLeft, ArrowRight, BookOpen, Users, ExternalLink,
+  Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, ArrowLeft, ArrowRight, BookOpen, Users, ExternalLink,
   Quote, Tag, Palette, ChevronLeft, ChevronRight, SlidersHorizontal, Target,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
-  "rap-trap": Mic2, pop: Music, afro: Globe, electronic: Zap,
-  rnb: Heart, lofi: Headphones, "rock-indie": Guitar, open: Waves,
-  dj: Disc3, reggae: Palmtree, country: Wheat, jazz: Music2,
+  pop: Music,
+  rock: Guitar,
+  "hip-hop": Mic2,
+  electro: Zap,
+  rnb: Heart,
+  jazz: Music2,
+  classique: BookOpen,
+  world: Globe,
+  autres: Waves,
+  // Legacy slugs kept for backward compatibility
+  "rap-trap": Mic2,
+  electronic: Zap,
+  "rock-indie": Guitar,
+  open: Waves,
 };
 
 const gradientMap: Record<string, string> = {
-  "rap-trap": "from-violet-500/30 to-purple-500/30",
   pop: "from-pink-500/30 to-rose-500/30",
-  afro: "from-amber-500/30 to-orange-500/30",
-  electronic: "from-cyan-500/30 to-blue-500/30",
+  rock: "from-orange-500/30 to-red-500/30",
+  "hip-hop": "from-violet-500/30 to-purple-500/30",
+  electro: "from-cyan-500/30 to-blue-500/30",
   rnb: "from-red-500/30 to-pink-500/30",
-  lofi: "from-emerald-500/30 to-teal-500/30",
+  jazz: "from-blue-500/30 to-indigo-500/30",
+  classique: "from-amber-500/30 to-yellow-500/30",
+  world: "from-emerald-500/30 to-teal-500/30",
+  autres: "from-indigo-500/30 to-violet-500/30",
+  // Legacy slugs kept for backward compatibility
+  "rap-trap": "from-violet-500/30 to-purple-500/30",
+  electronic: "from-cyan-500/30 to-blue-500/30",
   "rock-indie": "from-orange-500/30 to-red-500/30",
   open: "from-indigo-500/30 to-violet-500/30",
-  dj: "from-fuchsia-500/30 to-pink-500/30",
-  reggae: "from-green-500/30 to-yellow-500/30",
-  country: "from-yellow-500/30 to-amber-500/30",
-  jazz: "from-blue-500/30 to-indigo-500/30",
 };
 
 type ProductionTip = { label: string; value: string };
