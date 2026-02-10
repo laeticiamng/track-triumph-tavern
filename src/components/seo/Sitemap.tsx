@@ -41,7 +41,7 @@ const Sitemap = () => {
       ]);
 
       const today = new Date().toISOString().split("T")[0];
-      let urls = staticRoutes.map(
+      const urls = staticRoutes.map(
         (r) =>
           `  <url>
     <loc>${BASE_URL}${r.path}</loc>
