@@ -1,5 +1,23 @@
 import { Link } from "react-router-dom";
-import { Music } from "lucide-react";
+import { Instagram, Music, Youtube } from "lucide-react";
+
+const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com/weeklymusicawards",
+    icon: Instagram,
+  },
+  {
+    name: "TikTok",
+    href: "https://www.tiktok.com/@weeklymusicawards",
+    icon: Music,
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@weeklymusicawards",
+    icon: Youtube,
+  },
+] as const;
 
 export function Footer() {
   return (
@@ -57,8 +75,23 @@ export function Footer() {
             >
               contact@emotionscare.com
             </a>
-
-            {/* TODO: Remettre la section "Suivez-nous" une fois les vrais comptes créés */}
+            <div className="mt-4">
+              <p className="text-xs font-medium text-foreground">Suivez-nous</p>
+              <div className="mt-2 flex items-center gap-2">
+                {socialLinks.map(({ name, href, icon: Icon }) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Suivre Weekly Music Awards sur ${name}`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
