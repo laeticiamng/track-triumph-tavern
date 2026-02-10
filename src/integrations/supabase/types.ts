@@ -239,6 +239,8 @@ export type Database = {
           description: string | null
           external_url: string | null
           id: string
+          preview_start_sec: number
+          preview_end_sec: number
           rejection_reason: string | null
           rights_declaration: boolean
           status: Database["public"]["Enums"]["submission_status"]
@@ -258,6 +260,8 @@ export type Database = {
           description?: string | null
           external_url?: string | null
           id?: string
+          preview_start_sec?: number
+          preview_end_sec?: number
           rejection_reason?: string | null
           rights_declaration?: boolean
           status?: Database["public"]["Enums"]["submission_status"]
@@ -277,6 +281,8 @@ export type Database = {
           description?: string | null
           external_url?: string | null
           id?: string
+          preview_start_sec?: number
+          preview_end_sec?: number
           rejection_reason?: string | null
           rights_declaration?: boolean
           status?: Database["public"]["Enums"]["submission_status"]

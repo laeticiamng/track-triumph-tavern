@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { SEOHead } from "@/components/seo/SEOHead";
+import { SEOHead, categoryJsonLd } from "@/components/seo/SEOHead";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -135,15 +135,7 @@ const CategoryDetail = () => {
         title={category.name}
         description={category.description || `Decouvrez la categorie ${category.name} sur Weekly Music Awards.`}
         url={`/categories/${slug}`}
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "MusicGroup",
-          name: category.name,
-          description: category.description || `Categorie ${category.name} sur Weekly Music Awards`,
-          url: `https://weeklymusicawards.com/categories/${slug}`,
-          genre: category.name,
-          ...(category.sub_genres ? { additionalType: category.sub_genres.join(", ") } : {}),
-        }}
+        jsonLd={categoryJsonLd({ name: category.name, slug: category.slug, description: category.description })}
       />
       {/* Hero banner */}
       <motion.section
