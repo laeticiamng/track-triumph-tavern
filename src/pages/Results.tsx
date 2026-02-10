@@ -51,6 +51,55 @@ const Results = () => {
     load();
   }, []);
 
+  // Realtime: listen for new winners being published
+  useEffect(() => {
+    if (!activeWeek) return;
+
+    const channel = supabase
+      .channel("results-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "winners",
+          filter: `week_id=eq.${activeWeek.id}`,
+        },
+        async () => {
+          // Reload winners when changes occur
+          const { data: w } = await supabase
+            .from("winners")
+            .select("*, submissions(title, artist_name, cover_image_url)")
+            .eq("week_id", activeWeek.id)
+            .order("rank");
+          if (w) setWinners(w);
+
+          const { data: r } = await supabase
+            .from("rewards")
+            .select("*")
+            .eq("week_id", activeWeek.id);
+          if (r) setRewards(r);
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "weeks",
+          filter: `id=eq.${activeWeek.id}`,
+        },
+        (payload) => {
+          setActiveWeek(payload.new as Tables<"weeks">);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [activeWeek?.id]);
+
   const isResultsPublished = activeWeek?.results_published_at
     ? new Date(activeWeek.results_published_at) <= new Date()
     : false;

@@ -20,22 +20,22 @@ const staticRoutes = [
   { path: "/cookies", priority: 0.3, changefreq: "yearly" },
 ];
 
-/**
- * Component that generates sitemap XML and sets it as downloadable.
- * Renders the sitemap as preformatted text for search engines.
- */
 const Sitemap = () => {
   const [xml, setXml] = useState("");
 
   useEffect(() => {
     const generate = async () => {
-      // Fetch dynamic routes
-      const [{ data: categories }, { data: submissions }] = await Promise.all([
+      const [{ data: categories }, { data: submissions }, { data: artists }] = await Promise.all([
         supabase.from("categories").select("slug, created_at"),
         supabase
           .from("submissions")
           .select("id, updated_at")
           .eq("status", "approved")
+          .order("updated_at", { ascending: false })
+          .limit(200),
+        supabase
+          .from("profiles")
+          .select("id, updated_at")
           .order("updated_at", { ascending: false })
           .limit(100),
       ]);
@@ -74,16 +74,44 @@ const Sitemap = () => {
         );
       });
 
+      // Artist profile pages
+      artists?.forEach((artist) => {
+        urls.push(
+          `  <url>
+    <loc>${BASE_URL}/artist/${artist.id}</loc>
+    <lastmod>${new Date(artist.updated_at).toISOString().split("T")[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>`
+        );
+      });
+
       const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join("\n")}
 </urlset>`;
 
       setXml(sitemapXml);
+
+      // Set document content type for crawlers
+      document.title = "Sitemap";
     };
 
     generate();
   }, []);
+
+  // Render as XML-like text for crawlers
+  useEffect(() => {
+    if (!xml) return;
+    // Override the content type meta tag for crawlers
+    const meta = document.createElement("meta");
+    meta.httpEquiv = "Content-Type";
+    meta.content = "application/xml; charset=utf-8";
+    document.head.appendChild(meta);
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, [xml]);
 
   return (
     <pre
