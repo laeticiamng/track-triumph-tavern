@@ -1,8 +1,10 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const ContestRules = () => (
   <Layout>
+    <SEOHead title="Reglement du concours" description="Reglement officiel du concours musical hebdomadaire Weekly Music Awards." url="/contest-rules" />
     <div className="container max-w-3xl py-12">
       <h1 className="font-display text-3xl font-bold mb-8">Règlement du Concours</h1>
       <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">

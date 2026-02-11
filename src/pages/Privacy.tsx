@@ -1,8 +1,10 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const Privacy = () => (
   <Layout>
+    <SEOHead title="Politique de confidentialite" description="Politique de confidentialite et protection des donnees personnelles de Weekly Music Awards." url="/privacy" />
     <div className="container max-w-3xl py-12">
       <h1 className="font-display text-3xl font-bold mb-8">Politique de Confidentialité</h1>
       <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">

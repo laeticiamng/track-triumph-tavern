@@ -2,28 +2,55 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const CONSENT_KEY = "wma-cookie-consent";
 
+interface CookiePreferences {
+  essential: boolean; // always true
+  analytics: boolean;
+  marketing: boolean;
+}
+
+function getStoredPreferences(): CookiePreferences | null {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function CookieConsent() {
   const [show, setShow] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
+  const [marketing, setMarketing] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) {
+    const prefs = getStoredPreferences();
+    if (!prefs) {
       const timer = setTimeout(() => setShow(true), 1500);
       return () => clearTimeout(timer);
     }
   }, []);
 
-  const accept = () => {
-    localStorage.setItem(CONSENT_KEY, "accepted");
+  const savePreferences = (prefs: CookiePreferences) => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify(prefs));
     setShow(false);
   };
 
-  const decline = () => {
-    localStorage.setItem(CONSENT_KEY, "declined");
-    setShow(false);
+  const acceptAll = () => {
+    savePreferences({ essential: true, analytics: true, marketing: true });
+  };
+
+  const acceptSelected = () => {
+    savePreferences({ essential: true, analytics, marketing });
+  };
+
+  const declineAll = () => {
+    savePreferences({ essential: true, analytics: false, marketing: false });
   };
 
   return (
@@ -37,17 +64,78 @@ export function CookieConsent() {
           className="fixed bottom-20 left-4 right-4 z-[60] mx-auto max-w-lg rounded-2xl border border-border bg-card p-5 shadow-lg md:bottom-6"
         >
           <p className="text-sm leading-relaxed text-foreground">
-            Ce site utilise des cookies essentiels pour le fonctionnement de la plateforme et l'authentification.{" "}
+            Ce site utilise des cookies pour le fonctionnement de la plateforme.
+            Vous pouvez personnaliser vos préférences.{" "}
             <Link to="/cookies" className="text-primary hover:underline">
               En savoir plus
             </Link>
           </p>
-          <div className="mt-4 flex gap-2">
-            <Button size="sm" onClick={accept} className="bg-gradient-primary hover:opacity-90">
-              Accepter
+
+          {/* Granular cookie preferences */}
+          <button
+            type="button"
+            onClick={() => setShowDetails(!showDetails)}
+            className="mt-3 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Personnaliser
+            {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+          </button>
+
+          <AnimatePresence>
+            {showDetails && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-3 space-y-2 rounded-lg border border-border p-3">
+                  <label className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">
+                      <strong className="text-foreground">Essentiels</strong> — Authentification, sécurité
+                    </span>
+                    <input type="checkbox" checked disabled className="accent-primary" />
+                  </label>
+
+                  <label className="flex items-center justify-between text-xs cursor-pointer">
+                    <span className="text-muted-foreground">
+                      <strong className="text-foreground">Analytiques</strong> — Statistiques d'utilisation
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={analytics}
+                      onChange={(e) => setAnalytics(e.target.checked)}
+                      className="accent-primary"
+                    />
+                  </label>
+
+                  <label className="flex items-center justify-between text-xs cursor-pointer">
+                    <span className="text-muted-foreground">
+                      <strong className="text-foreground">Marketing</strong> — Publicités personnalisées
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={marketing}
+                      onChange={(e) => setMarketing(e.target.checked)}
+                      className="accent-primary"
+                    />
+                  </label>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button size="sm" onClick={acceptAll} className="bg-gradient-primary hover:opacity-90">
+              Tout accepter
             </Button>
-            <Button size="sm" variant="outline" onClick={decline}>
-              Refuser
+            {showDetails && (
+              <Button size="sm" variant="secondary" onClick={acceptSelected}>
+                Enregistrer mes choix
+              </Button>
+            )}
+            <Button size="sm" variant="outline" onClick={declineAll}>
+              Refuser tout
             </Button>
           </div>
         </motion.div>

@@ -4,6 +4,7 @@ import { useSubscription } from "@/hooks/use-subscription";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,7 +72,7 @@ const Profile = () => {
       }
       setSubmissions(subs || []);
       setVoteCount(count || 0);
-    });
+    }).catch(() => {});
   }, [user]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,6 +194,7 @@ const Profile = () => {
 
   return (
     <Layout>
+      <SEOHead title="Mon profil" description="Gerez votre profil artiste, vos soumissions et votre abonnement sur Weekly Music Awards." url="/profile" />
       <div className="container max-w-2xl py-8">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">

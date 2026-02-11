@@ -1,11 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const PRODUCT_IDS = {
   pro: "prod_TvnnCLdThflvd5",
@@ -42,6 +37,8 @@ async function getUserTier(email: string): Promise<"free" | "pro" | "elite"> {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -244,6 +241,99 @@ Deno.serve(async (req) => {
       comment = undefined;
     }
 
+    // ── Build fraud metadata signals ──
+    const userAgent = req.headers.get("user-agent") || null;
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || null;
+    const accountCreatedAt = user.created_at ? new Date(user.created_at) : null;
+    const accountAgeMinutes = accountCreatedAt
+      ? Math.floor((Date.now() - accountCreatedAt.getTime()) / 60_000)
+      : null;
+
+    const metadata: Record<string, unknown> = {};
+    if (accountAgeMinutes !== null && accountAgeMinutes < 60) {
+      metadata.is_new_account = true;
+      metadata.account_age_minutes = accountAgeMinutes;
+    }
+
+    // ── AI fraud scoring (blocking — checked before vote insertion) ──
+    let aiBlocked = false;
+    let aiFraudResult: Record<string, unknown> | null = null;
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    if (apiKey) {
+      try {
+        const { count: totalUserVotes } = await supabaseAdmin
+          .from("votes")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id);
+
+        const twoMinAgo = new Date(Date.now() - 120_000).toISOString();
+        const { count: burstVotes } = await supabaseAdmin
+          .from("votes")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .gte("created_at", twoMinAgo);
+
+        const signals = {
+          account_age_minutes: accountAgeMinutes,
+          user_agent: userAgent,
+          ip_address: ip,
+          burst_votes_2min: burstVotes || 0,
+          total_votes: totalUserVotes || 0,
+          tier,
+          email_domain: user.email?.split("@")[1] || "unknown",
+        };
+
+        const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: [
+              {
+                role: "system",
+                content: `Tu es un système anti-fraude pour une plateforme de vote musical. Analyse les signaux et retourne UNIQUEMENT un JSON: {"risk_score": 0-100, "flags": ["flag1"], "action": "allow"|"flag"|"block"}. Règles: compte <30min = suspect, >3 votes en 2min = suspect, user-agent vide/bot = suspect. Score >70 = block, 40-70 = flag, <40 = allow.`,
+              },
+              {
+                role: "user",
+                content: JSON.stringify(signals),
+              },
+            ],
+            temperature: 0.1,
+            max_tokens: 200,
+          }),
+        });
+
+        if (aiResp.ok) {
+          const aiResult = await aiResp.json();
+          const content = aiResult.choices?.[0]?.message?.content || "";
+          const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+          try {
+            aiFraudResult = JSON.parse(cleaned);
+          } catch {
+            console.error("AI fraud parse error:", cleaned);
+          }
+
+          if (aiFraudResult && (aiFraudResult as { action?: string; risk_score?: number }).action === "block" && ((aiFraudResult as { risk_score?: number }).risk_score ?? 0) >= 70) {
+            aiBlocked = true;
+          }
+        }
+      } catch (err) {
+        console.error("AI fraud check error:", err);
+        // Fail-open: allow the vote if AI is unreachable
+      }
+    }
+
+    if (aiBlocked) {
+      console.log(`Vote blocked by AI fraud detection for user=${user.id}`);
+      return new Response(JSON.stringify({ error: "Vote refusé par notre système anti-fraude." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Insert vote
     const { data: vote, error: voteError } = await supabaseAdmin
       .from("votes")
@@ -269,21 +359,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ── Build fraud metadata signals ──
-    const userAgent = req.headers.get("user-agent") || null;
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || null;
-    const accountCreatedAt = user.created_at ? new Date(user.created_at) : null;
-    const accountAgeMinutes = accountCreatedAt
-      ? Math.floor((Date.now() - accountCreatedAt.getTime()) / 60_000)
-      : null;
-
-    const metadata: Record<string, any> = {};
-    if (accountAgeMinutes !== null && accountAgeMinutes < 60) {
-      metadata.is_new_account = true;
-      metadata.account_age_minutes = accountAgeMinutes;
+    // Insert audit event with AI result
+    if (aiFraudResult) {
+      metadata.ai_fraud = aiFraudResult;
     }
-
-    // Insert audit event
     await supabaseAdmin.from("vote_events").insert({
       vote_id: vote.id,
       user_id: user.id,
@@ -293,97 +372,11 @@ Deno.serve(async (req) => {
       metadata,
     });
 
-    // ── AI fraud scoring (non-blocking) ──
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (apiKey) {
-      (async () => {
-        try {
-          // Gather additional signals
-          const { count: totalUserVotes } = await supabaseAdmin
-            .from("votes")
-            .select("id", { count: "exact", head: true })
-            .eq("user_id", user.id);
-
-          const twoMinAgo = new Date(Date.now() - 120_000).toISOString();
-          const { count: burstVotes } = await supabaseAdmin
-            .from("votes")
-            .select("id", { count: "exact", head: true })
-            .eq("user_id", user.id)
-            .gte("created_at", twoMinAgo);
-
-          const signals = {
-            account_age_minutes: accountAgeMinutes,
-            user_agent: userAgent,
-            ip_address: ip,
-            burst_votes_2min: burstVotes || 0,
-            total_votes: totalUserVotes || 0,
-            tier,
-            email_domain: user.email?.split("@")[1] || "unknown",
-          };
-
-          const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "google/gemini-3-flash-preview",
-              messages: [
-                {
-                  role: "system",
-                  content: `Tu es un système anti-fraude pour une plateforme de vote musical. Analyse les signaux et retourne UNIQUEMENT un JSON: {"risk_score": 0-100, "flags": ["flag1"], "action": "allow"|"flag"|"block"}. Règles: compte <30min = suspect, >3 votes en 2min = suspect, user-agent vide/bot = suspect. Score >70 = block, 40-70 = flag, <40 = allow.`,
-                },
-                {
-                  role: "user",
-                  content: JSON.stringify(signals),
-                },
-              ],
-              temperature: 0.1,
-              max_tokens: 200,
-            }),
-          });
-
-          if (aiResp.ok) {
-            const aiResult = await aiResp.json();
-            const content = aiResult.choices?.[0]?.message?.content || "";
-            const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-
-            let parsed;
-            try {
-              parsed = JSON.parse(cleaned);
-            } catch {
-              console.error("AI fraud parse error:", cleaned);
-              return;
-            }
-
-            console.log(`AI fraud score: ${parsed.risk_score}, action: ${parsed.action}, user=${user.id}`);
-
-            // Update vote_events with AI result
-            await supabaseAdmin.from("vote_events").update({
-              metadata: { ...metadata, ai_fraud: parsed },
-            }).eq("vote_id", vote.id);
-
-            // If AI says block, invalidate the vote
-            if (parsed.action === "block" && parsed.risk_score >= 70) {
-              await supabaseAdmin
-                .from("votes")
-                .update({ is_valid: false })
-                .eq("id", vote.id);
-              console.log(`Vote ${vote.id} invalidated by AI fraud detection (score=${parsed.risk_score})`);
-            }
-          }
-        } catch (err) {
-          console.error("AI fraud check error:", err);
-        }
-      })();
-    }
-
     // Increment vote_count on submission
     await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(() => {
       return supabaseAdmin
         .from("submissions")
-        .update({ vote_count: (submission as any).vote_count + 1 })
+        .update({ vote_count: supabaseAdmin.rpc ? undefined : undefined })
         .eq("id", submission.id);
     });
 

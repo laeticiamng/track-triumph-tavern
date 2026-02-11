@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
 import { Music, Target, Shield, Gift, Users, Rocket, Star, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -42,6 +43,7 @@ const timeline = [
 const About = () => {
   return (
     <Layout>
+      <SEOHead title="A propos" description="Decouvrez l'histoire, la mission et les valeurs de Weekly Music Awards, le concours musical hebdomadaire." url="/about" />
       <section className="py-16 md:py-24">
         <div className="container max-w-3xl">
           {/* Header */}

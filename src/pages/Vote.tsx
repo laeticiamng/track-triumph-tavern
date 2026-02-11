@@ -56,6 +56,8 @@ const Vote = () => {
       }
       if (catRes.data) setCategories(catRes.data);
       if (!weekRes.data) setLoading(false);
+    }).catch(() => {
+      setLoading(false);
     });
   }, []);
 

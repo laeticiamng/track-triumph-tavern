@@ -127,13 +127,13 @@ const Compete = () => {
       if (data?.display_name && !artistName) {
         setArtistName(data.display_name);
       }
-    });
+    }).catch(() => {});
   }, [user]);
 
   useEffect(() => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
-    });
+    }).catch(() => {});
 
     supabase
       .from("weeks")
@@ -142,6 +142,9 @@ const Compete = () => {
       .single()
       .then(({ data }) => {
         setActiveWeek(data as ActiveWeek | null);
+        setWeekLoading(false);
+      })
+      .catch(() => {
         setWeekLoading(false);
       });
   }, []);
@@ -157,7 +160,8 @@ const Compete = () => {
       .limit(1)
       .then(({ data }) => {
         setAlreadySubmitted((data?.length ?? 0) > 0);
-      });
+      })
+      .catch(() => {});
   }, [user, activeWeek]);
 
   // Derived state

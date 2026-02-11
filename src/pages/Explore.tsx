@@ -31,7 +31,7 @@ const Explore = () => {
   useEffect(() => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
-    });
+    }).catch(() => { /* categories load failed silently */ });
 
     supabase
       .from("weeks")
@@ -45,6 +45,10 @@ const Explore = () => {
           setNoActiveWeek(true);
           setLoading(false);
         }
+      })
+      .catch(() => {
+        setNoActiveWeek(true);
+        setLoading(false);
       });
   }, []);
 
@@ -64,6 +68,9 @@ const Explore = () => {
 
     query.then(({ data }) => {
       setSubmissions(data || []);
+      setLoading(false);
+    }).catch(() => {
+      setSubmissions([]);
       setLoading(false);
     });
   }, [activeCategory, activeWeek]);

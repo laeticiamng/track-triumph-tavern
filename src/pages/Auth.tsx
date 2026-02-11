@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Music, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -29,7 +30,7 @@ const Auth = () => {
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-    });
+    }).catch(() => {});
     return () => subscription.unsubscribe();
   }, []);
 
@@ -100,6 +101,7 @@ const Auth = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SEOHead title="Connexion" description="Connectez-vous ou inscrivez-vous sur Weekly Music Awards pour participer au concours musical." url="/auth" />
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft className="h-4 w-4" /> Retour à l'accueil

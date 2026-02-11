@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -259,6 +260,7 @@ const AdminDashboard = () => {
 
   return (
     <Layout>
+      <SEOHead title="Administration" description="Tableau de bord d'administration de Weekly Music Awards." url="/admin" />
       <div className="container py-8">
         <div className="mb-8 flex items-center gap-3">
           <Shield className="h-6 w-6 text-primary" />

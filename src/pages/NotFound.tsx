@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Music, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,6 +14,7 @@ const NotFound = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
+      <SEOHead title="Page introuvable" description="La page que vous recherchez n'existe pas ou a ete deplacee." url="" />
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-primary mb-6">
         <Music className="h-8 w-8 text-primary-foreground" />
       </div>

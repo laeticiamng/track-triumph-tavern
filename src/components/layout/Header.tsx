@@ -29,7 +29,8 @@ export function Header() {
       .then(({ data }) => {
         const roles = data?.map((r) => r.role) || [];
         setIsAdmin(roles.includes("admin") || roles.includes("moderator"));
-      });
+      })
+      .catch(() => {});
   }, [user]);
 
   return (
