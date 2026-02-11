@@ -19,7 +19,7 @@ export function HeroSection() {
       .single()
       .then(async ({ data }) => {
         if (data) {
-          const season = (data as any).seasons?.name || "Saison 1";
+          const season = (data as { seasons?: { name: string } | null }).seasons?.name || "Saison 1";
           const title = data.title || `Semaine ${data.week_number}`;
           setWeekLabel(`${season} — ${title} ouverte`);
           setVotingCloseAt(data.voting_close_at);
@@ -35,7 +35,7 @@ export function HeroSection() {
         } else {
           setHasContent(false);
         }
-      });
+      }).catch(() => {});
   }, []);
 
   const primaryCTA = hasContent

@@ -68,7 +68,7 @@ export function SocialProof() {
         { icon: Heart, label: "Votes enregistrés", value: votes.count || 0 },
         { icon: Music, label: "Morceaux soumis", value: submissions.count || 0 },
       ]);
-    });
+    }).catch(() => {});
   }, []);
 
   const hasData = stats.some((s) => s.value > 0);

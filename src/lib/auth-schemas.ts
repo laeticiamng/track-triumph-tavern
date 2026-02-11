@@ -2,7 +2,12 @@ import { z } from "zod";
 
 export const loginSchema = z.object({
   email: z.string().trim().email({ message: "Adresse email invalide" }).max(255),
-  password: z.string().min(6, { message: "Min. 6 caractères" }).max(128),
+  password: z.string()
+    .min(8, { message: "Min. 8 caractères" })
+    .max(128)
+    .regex(/[a-z]/, { message: "Au moins une minuscule" })
+    .regex(/[A-Z]/, { message: "Au moins une majuscule" })
+    .regex(/[0-9]/, { message: "Au moins un chiffre" }),
 });
 
 export const signupSchema = loginSchema.extend({

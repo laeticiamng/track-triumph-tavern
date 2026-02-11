@@ -59,6 +59,7 @@ function StarRating({
             key={star}
             type="button"
             onClick={() => onChange(star)}
+            aria-label={`Note ${star} sur 5`}
             className="p-0.5 transition-transform active:scale-90"
           >
             <Star

@@ -45,7 +45,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         return;
       }
 
-      const season = (week as any).seasons?.name || "Saison 1";
+      const season = (week as { seasons?: { name: string } | null }).seasons?.name || "Saison 1";
       setWeekTitle(`${season} — ${week.title || `Semaine ${week.week_number}`}`);
 
       // Get top 3 winners for that week

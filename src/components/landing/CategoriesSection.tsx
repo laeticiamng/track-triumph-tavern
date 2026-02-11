@@ -36,7 +36,7 @@ export function CategoriesSection() {
   useEffect(() => {
     supabase.from("categories").select("id, name, slug").order("sort_order").then(({ data }) => {
       if (data && data.length > 0) setCategories(data);
-    });
+    }).catch(() => {});
   }, []);
 
   return (

@@ -373,11 +373,19 @@ Deno.serve(async (req) => {
     });
 
     // Increment vote_count on submission
-    await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(() => {
-      return supabaseAdmin
+    await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(async () => {
+      // Fallback: read current count and increment
+      const { data: current } = await supabaseAdmin
         .from("submissions")
-        .update({ vote_count: supabaseAdmin.rpc ? undefined : undefined })
-        .eq("id", submission.id);
+        .select("vote_count")
+        .eq("id", submission.id)
+        .single();
+      if (current) {
+        await supabaseAdmin
+          .from("submissions")
+          .update({ vote_count: (current.vote_count || 0) + 1 })
+          .eq("id", submission.id);
+      }
     });
 
     console.log(`Vote cast: user=${user.id}, submission=${submission.id}, tier=${tier}`);

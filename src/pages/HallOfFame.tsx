@@ -61,14 +61,14 @@ const HallOfFame = () => {
           .order("rank")
           .limit(3);
 
-        weekResults.push({ week, winners: (winners as any) || [] });
+        weekResults.push({ week, winners: (winners ?? []) as WinnerWithSubmission[] });
       }
 
       setResults(weekResults);
       setLoading(false);
     };
 
-    fetchResults();
+    fetchResults().catch(() => setLoading(false));
   }, []);
 
   return (

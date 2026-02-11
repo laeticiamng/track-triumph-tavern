@@ -82,7 +82,7 @@ const AdminDashboard = () => {
         } else {
           navigate("/");
         }
-      });
+      }).catch(() => {});
     }
   }, [user, authLoading, navigate]);
 
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
       setRpTop2(String(existing.top2_amount_cents / 100));
       setRpTop3(String(existing.top3_amount_cents / 100));
       setRpFallback(existing.fallback_label || "");
-      setRpSponsors(Array.isArray(existing.sponsors) ? (existing.sponsors as any as Sponsor[]) : []);
+      setRpSponsors(Array.isArray(existing.sponsors) ? (existing.sponsors as unknown as Sponsor[]) : []);
     } else {
       setRpMinimum(""); setRpCurrent(""); setRpTop1(""); setRpTop2(""); setRpTop3("");
       setRpFallback(""); setRpSponsors([]);
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
   }, [rpWeekId, rewardPools]);
 
   const updateSubmissionStatus = async (id: string, status: "approved" | "rejected", reason?: string) => {
-    const update: any = { status };
+    const update: Record<string, string> = { status };
     if (reason) update.rejection_reason = reason;
     const { error } = await supabase.from("submissions").update(update).eq("id", id);
     if (error) {
@@ -217,7 +217,7 @@ const AdminDashboard = () => {
   };
 
   const lockPool = async (poolId: string) => {
-    const { error } = await supabase.from("reward_pools").update({ status: "locked" as any }).eq("id", poolId);
+    const { error } = await supabase.from("reward_pools").update({ status: "locked" }).eq("id", poolId);
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
@@ -448,9 +448,9 @@ const AdminDashboard = () => {
                       <p className="text-xs text-muted-foreground">
                         🥇 {rp.top1_amount_cents / 100}€ · 🥈 {rp.top2_amount_cents / 100}€ · 🥉 {rp.top3_amount_cents / 100}€
                       </p>
-                      {Array.isArray(rp.sponsors) && (rp.sponsors as any[]).length > 0 && (
+                      {Array.isArray(rp.sponsors) && (rp.sponsors as unknown as Sponsor[]).length > 0 && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          Sponsors: {(rp.sponsors as any[]).map((s: any) => s.name).join(", ")}
+                          Sponsors: {(rp.sponsors as unknown as Sponsor[]).map((s) => s.name).join(", ")}
                         </p>
                       )}
                     </div>
