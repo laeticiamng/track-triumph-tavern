@@ -28,6 +28,9 @@ import ArtistStats from "./pages/ArtistStats";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import CategoryDetail from "./pages/CategoryDetail";
+import MentionsLegales from "./pages/MentionsLegales";
+import CGV from "./pages/CGV";
+import Faq from "./pages/Faq";
 import Sitemap from "./components/seo/Sitemap";
 
 const queryClient = new QueryClient();
@@ -64,6 +67,9 @@ const App = () => (
             <Route path="/scoring-method" element={<ScoringMethod />} />
             <Route path="/hall-of-fame" element={<HallOfFame />} />
             <Route path="/about" element={<About />} />
+            <Route path="/legal/mentions" element={<MentionsLegales />} />
+            <Route path="/legal/cgv" element={<CGV />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/categories/:slug" element={<CategoryDetail />} />
             <Route path="/vote" element={<Vote />} />
             <Route path="/stats" element={<Stats />} />

@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -75,6 +77,16 @@ export function FAQ() {
               </AccordionItem>
             ))}
           </Accordion>
+
+          <div className="mt-8 text-center">
+            <Link
+              to="/faq"
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+            >
+              Voir toutes les questions
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>
