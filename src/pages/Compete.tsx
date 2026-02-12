@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle, Play, Pause, Scissors } from "lucide-react";
+import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle, Play, Pause, Scissors, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AITagSuggest } from "@/components/ai/AITagSuggest";
 import type { Tables } from "@/integrations/supabase/types";
@@ -127,13 +127,13 @@ const Compete = () => {
       if (data?.display_name && !artistName) {
         setArtistName(data.display_name);
       }
-    });
+    }).catch(() => {});
   }, [user]);
 
   useEffect(() => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
-    });
+    }).catch(() => {});
 
     supabase
       .from("weeks")
@@ -142,6 +142,9 @@ const Compete = () => {
       .single()
       .then(({ data }) => {
         setActiveWeek(data as ActiveWeek | null);
+        setWeekLoading(false);
+      })
+      .catch(() => {
         setWeekLoading(false);
       });
   }, []);
@@ -157,7 +160,8 @@ const Compete = () => {
       .limit(1)
       .then(({ data }) => {
         setAlreadySubmitted((data?.length ?? 0) > 0);
-      });
+      })
+      .catch(() => {});
   }, [user, activeWeek]);
 
   // Derived state
@@ -176,7 +180,7 @@ const Compete = () => {
       return;
     }
     if (audioFile.size > 10 * 1024 * 1024) {
-      toast({ title: "Fichier trop volumineux", description: "L'extrait audio ne doit pas depasser 10 MB.", variant: "destructive" });
+      toast({ title: "Fichier trop volumineux", description: "L'extrait audio ne doit pas dépasser 10 MB.", variant: "destructive" });
       return;
     }
     if (!rightsDeclaration || !acceptRules) {
@@ -223,7 +227,11 @@ const Compete = () => {
     }
   };
 
-  if (authLoading || subLoading || weekLoading) return null;
+  if (authLoading || subLoading || weekLoading) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 
   // Gate: Free users cannot submit
   if (!canSubmit) {
@@ -454,7 +462,7 @@ const Compete = () => {
                             className="gap-2"
                           >
                             {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                            {previewPlaying ? "Pause" : "Ecouter l'extrait"}
+                            {previewPlaying ? "Pause" : "Écouter l'extrait"}
                           </Button>
                         </>
                       )}
@@ -467,13 +475,20 @@ const Compete = () => {
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
                     <Image className="h-8 w-8 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {coverFile ? coverFile.name : "Cliquez pour uploader une image (JPG, PNG)"}
+                      {coverFile ? coverFile.name : "Cliquez pour uploader une image (JPG, PNG, max 5 MB)"}
                     </span>
                     <input
                       type="file"
                       accept="image/jpeg,image/png,image/webp"
                       className="hidden"
-                      onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        if (file && file.size > 5 * 1024 * 1024) {
+                          toast({ title: "Image trop volumineuse", description: "Max 5 MB.", variant: "destructive" });
+                          return;
+                        }
+                        setCoverFile(file);
+                      }}
                     />
                   </label>
                 </div>

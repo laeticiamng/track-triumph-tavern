@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Info, BarChart3 } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Info, BarChart3, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
+  { label: "Voter", href: "/vote", icon: Heart },
   { label: "Soumettre", href: "/compete", icon: Music },
   { label: "Résultats", href: "/results", icon: Trophy },
-  { label: "Stats", href: "/stats", icon: BarChart3 },
   { label: "Tarifs", href: "/pricing", icon: CreditCard },
 ];
 
@@ -29,7 +29,8 @@ export function Header() {
       .then(({ data }) => {
         const roles = data?.map((r) => r.role) || [];
         setIsAdmin(roles.includes("admin") || roles.includes("moderator"));
-      });
+      })
+      .catch(() => {});
   }, [user]);
 
   return (
@@ -90,6 +91,7 @@ export function Header() {
         <button
           className="flex h-10 w-10 items-center justify-center rounded-lg md:hidden hover:bg-accent transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>

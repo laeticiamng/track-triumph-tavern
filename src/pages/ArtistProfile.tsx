@@ -24,33 +24,38 @@ const ArtistProfile = () => {
     if (!id) return;
 
     const load = async () => {
-      const { data: prof } = await supabase.from("profiles").select("*").eq("id", id).single();
-      if (prof) {
-        setProfile(prof);
+      try {
+        const { data: prof } = await supabase.from("profiles").select("*").eq("id", id).single();
+        if (prof) {
+          setProfile(prof);
 
-        const { data: subs } = await supabase
-          .from("submissions")
-          .select("*")
-          .eq("user_id", id)
-          .eq("status", "approved")
-          .order("created_at", { ascending: false });
-        setSubmissions(subs || []);
+          const { data: subs } = await supabase
+            .from("submissions")
+            .select("*")
+            .eq("user_id", id)
+            .eq("status", "approved")
+            .order("created_at", { ascending: false });
+          setSubmissions(subs || []);
 
-        // Check artist tier (authenticated endpoint)
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.access_token) {
-            const { data: tierData } = await supabase.functions.invoke("check-subscription-public", {
-              body: { user_id: id },
-            });
-            const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
-            if (result?.tier) setTier(result.tier);
+          // Check artist tier (authenticated endpoint)
+          try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.access_token) {
+              const { data: tierData } = await supabase.functions.invoke("check-subscription-public", {
+                body: { user_id: id },
+              });
+              const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
+              if (result?.tier) setTier(result.tier);
+            }
+          } catch {
+            // Silently fail - default to "free"
           }
-        } catch {
-          // Silently fail - default to "free"
         }
+      } catch (err) {
+        console.error("Error loading artist profile:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
   }, [id]);

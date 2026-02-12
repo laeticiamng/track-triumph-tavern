@@ -48,6 +48,7 @@ export function Footer() {
               <Link to="/scoring-method" className="hover:text-foreground transition-colors">Classement</Link>
               <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">Hall of Fame</Link>
               <Link to="/pricing" className="hover:text-foreground transition-colors">Abonnements</Link>
+              <Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">À propos</Link>
             </nav>
           </div>
@@ -56,7 +57,9 @@ export function Footer() {
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">Légal</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/legal/mentions" className="hover:text-foreground transition-colors">Mentions légales</Link>
               <Link to="/terms" className="hover:text-foreground transition-colors">CGU</Link>
+              <Link to="/legal/cgv" className="hover:text-foreground transition-colors">CGV</Link>
               <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
               <Link to="/contest-rules" className="hover:text-foreground transition-colors">Règlement</Link>
               <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>

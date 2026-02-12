@@ -61,21 +61,21 @@ const HallOfFame = () => {
           .order("rank")
           .limit(3);
 
-        weekResults.push({ week, winners: (winners as any) || [] });
+        weekResults.push({ week, winners: (winners ?? []) as WinnerWithSubmission[] });
       }
 
       setResults(weekResults);
       setLoading(false);
     };
 
-    fetchResults();
+    fetchResults().catch(() => setLoading(false));
   }, []);
 
   return (
     <Layout>
       <SEOHead
-        title="Hall of Fame"
-        description="Decouvrez tous les gagnants des editions precedentes du concours Weekly Music Awards."
+        title="Palmarès"
+        description="Découvrez tous les gagnants des éditions précédentes du concours Weekly Music Awards."
         url="/hall-of-fame"
       />
       <section className="py-8 md:py-12">
@@ -84,7 +84,7 @@ const HallOfFame = () => {
             <ArrowLeft className="h-4 w-4" /> Retour
           </Link>
 
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Hall of Fame</h1>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">Palmarès</h1>
           <p className="mt-2 text-muted-foreground">Chaque semaine écrit une nouvelle page de l'histoire musicale.</p>
           <Link
             to="/results"

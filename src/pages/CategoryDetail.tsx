@@ -88,7 +88,7 @@ const CategoryDetail = () => {
       setCategory(cat as CategoryRow | null);
       if (all) setAllCategories(all);
       setLoading(false);
-    });
+    }).catch(() => { setLoading(false); });
   }, [slug]);
 
   const Icon = slug ? iconMap[slug] || Music : Music;

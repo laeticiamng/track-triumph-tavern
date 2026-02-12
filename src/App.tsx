@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,30 +6,46 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
+import { Loader2 } from "lucide-react";
+
+// Eagerly load the landing page for fast first paint
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Explore from "./pages/Explore";
-import Compete from "./pages/Compete";
-import SubmissionDetail from "./pages/SubmissionDetail";
-import SubmissionReview from "./pages/SubmissionReview";
-import Results from "./pages/Results";
-import Pricing from "./pages/Pricing";
-import Profile from "./pages/Profile";
-import ArtistProfile from "./pages/ArtistProfile";
-import AdminDashboard from "./pages/AdminDashboard";
-import Terms from "./pages/Terms";
-import Privacy from "./pages/Privacy";
-import ContestRules from "./pages/ContestRules";
-import Cookies from "./pages/Cookies";
-import ScoringMethod from "./pages/ScoringMethod";
-import HallOfFame from "./pages/HallOfFame";
-import Vote from "./pages/Vote";
-import Stats from "./pages/Stats";
-import ArtistStats from "./pages/ArtistStats";
-import NotFound from "./pages/NotFound";
-import About from "./pages/About";
-import CategoryDetail from "./pages/CategoryDetail";
-import Sitemap from "./components/seo/Sitemap";
+
+// Lazy-load all other pages for code splitting
+const Auth = lazy(() => import("./pages/Auth"));
+const Explore = lazy(() => import("./pages/Explore"));
+const Compete = lazy(() => import("./pages/Compete"));
+const SubmissionDetail = lazy(() => import("./pages/SubmissionDetail"));
+const SubmissionReview = lazy(() => import("./pages/SubmissionReview"));
+const Results = lazy(() => import("./pages/Results"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Profile = lazy(() => import("./pages/Profile"));
+const ArtistProfile = lazy(() => import("./pages/ArtistProfile"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const ContestRules = lazy(() => import("./pages/ContestRules"));
+const Cookies = lazy(() => import("./pages/Cookies"));
+const ScoringMethod = lazy(() => import("./pages/ScoringMethod"));
+const HallOfFame = lazy(() => import("./pages/HallOfFame"));
+const Vote = lazy(() => import("./pages/Vote"));
+const Stats = lazy(() => import("./pages/Stats"));
+const ArtistStats = lazy(() => import("./pages/ArtistStats"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const About = lazy(() => import("./pages/About"));
+const CategoryDetail = lazy(() => import("./pages/CategoryDetail"));
+const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
+const CGV = lazy(() => import("./pages/CGV"));
+const Faq = lazy(() => import("./pages/Faq"));
+const Sitemap = lazy(() => import("./components/seo/Sitemap"));
+
+function PageLoader() {
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
+}
 
 const queryClient = new QueryClient();
 
@@ -40,6 +57,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <CookieConsent />
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
@@ -64,6 +82,9 @@ const App = () => (
             <Route path="/scoring-method" element={<ScoringMethod />} />
             <Route path="/hall-of-fame" element={<HallOfFame />} />
             <Route path="/about" element={<About />} />
+            <Route path="/legal/mentions" element={<MentionsLegales />} />
+            <Route path="/legal/cgv" element={<CGV />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/categories/:slug" element={<CategoryDetail />} />
             <Route path="/vote" element={<Vote />} />
             <Route path="/stats" element={<Stats />} />
@@ -94,6 +115,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

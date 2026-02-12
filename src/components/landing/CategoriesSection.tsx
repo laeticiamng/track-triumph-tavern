@@ -18,13 +18,25 @@ const categoryMeta: Record<string, { icon: React.ElementType; color: string }> =
 
 const defaultColor = "from-primary/10 to-primary/5";
 
+const fallbackCategories: { id: string; name: string; slug: string }[] = [
+  { id: "fb-pop", name: "Pop", slug: "pop" },
+  { id: "fb-rock", name: "Rock", slug: "rock" },
+  { id: "fb-hiphop", name: "Hip-Hop / Rap", slug: "hip-hop" },
+  { id: "fb-electro", name: "Electro", slug: "electro" },
+  { id: "fb-rnb", name: "R&B", slug: "rnb" },
+  { id: "fb-jazz", name: "Jazz", slug: "jazz" },
+  { id: "fb-classique", name: "Classique", slug: "classique" },
+  { id: "fb-world", name: "World / Afro", slug: "world" },
+  { id: "fb-autres", name: "Autres", slug: "autres" },
+];
+
 export function CategoriesSection() {
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>(fallbackCategories);
 
   useEffect(() => {
     supabase.from("categories").select("id, name, slug").order("sort_order").then(({ data }) => {
-      if (data) setCategories(data);
-    });
+      if (data && data.length > 0) setCategories(data);
+    }).catch(() => {});
   }, []);
 
   return (

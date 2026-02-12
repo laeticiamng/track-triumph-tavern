@@ -56,6 +56,8 @@ const Vote = () => {
       }
       if (catRes.data) setCategories(catRes.data);
       if (!weekRes.data) setLoading(false);
+    }).catch(() => {
+      setLoading(false);
     });
   }, []);
 
@@ -113,7 +115,7 @@ const Vote = () => {
     <div className="flex flex-col h-[100dvh] bg-background">
       <SEOHead
         title="Voter"
-        description="Ecoutez et votez pour vos morceaux preferes dans 9 categories musicales."
+        description="Écoutez et votez pour vos morceaux préférés dans 9 catégories musicales."
         url="/vote"
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />

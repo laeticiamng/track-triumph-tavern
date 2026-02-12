@@ -46,6 +46,9 @@ export function useVoteState(activeWeekId: string | null): VoteState {
           setCommentsUsed(data.filter((v) => v.comment && v.comment.trim().length > 0).length);
         }
         setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
   }, [user, activeWeekId]);
 

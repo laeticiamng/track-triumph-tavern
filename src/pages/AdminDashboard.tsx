@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Shield, Check, X, Calendar, Trophy, DollarSign,
-  Download, Clock, Plus, Trash2, Lock
+  Download, Clock, Plus, Trash2, Lock, Loader2
 } from "lucide-react";
 import { FraudMonitoring } from "@/components/admin/FraudMonitoring";
 import type { Tables } from "@/integrations/supabase/types";
@@ -81,25 +82,30 @@ const AdminDashboard = () => {
         } else {
           navigate("/");
         }
-      });
+      }).catch(() => {});
     }
   }, [user, authLoading, navigate]);
 
   const loadData = async () => {
     setLoading(true);
-    const [{ data: w }, { data: s }, { data: rp }, { count: totalV }, { count: suspV }] = await Promise.all([
-      supabase.from("weeks").select("*").order("week_number", { ascending: false }),
-      supabase.from("submissions").select("*").order("created_at", { ascending: false }),
-      supabase.from("reward_pools").select("*"),
-      supabase.from("votes").select("id", { count: "exact", head: true }),
-      supabase.from("votes").select("id", { count: "exact", head: true }).eq("is_valid", false),
-    ]);
+    try {
+      const [{ data: w }, { data: s }, { data: rp }, { count: totalV }, { count: suspV }] = await Promise.all([
+        supabase.from("weeks").select("*").order("week_number", { ascending: false }),
+        supabase.from("submissions").select("*").order("created_at", { ascending: false }),
+        supabase.from("reward_pools").select("*"),
+        supabase.from("votes").select("id", { count: "exact", head: true }),
+        supabase.from("votes").select("id", { count: "exact", head: true }).eq("is_valid", false),
+      ]);
 
-    setWeeks(w || []);
-    setSubmissions(s || []);
-    setRewardPools(rp || []);
-    setVoteStats({ total: totalV || 0, suspicious: suspV || 0 });
-    setLoading(false);
+      setWeeks(w || []);
+      setSubmissions(s || []);
+      setRewardPools(rp || []);
+      setVoteStats({ total: totalV || 0, suspicious: suspV || 0 });
+    } catch (err) {
+      console.error("Error loading admin data:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Pre-fill form when week changes
@@ -113,7 +119,7 @@ const AdminDashboard = () => {
       setRpTop2(String(existing.top2_amount_cents / 100));
       setRpTop3(String(existing.top3_amount_cents / 100));
       setRpFallback(existing.fallback_label || "");
-      setRpSponsors(Array.isArray(existing.sponsors) ? (existing.sponsors as any as Sponsor[]) : []);
+      setRpSponsors(Array.isArray(existing.sponsors) ? (existing.sponsors as unknown as Sponsor[]) : []);
     } else {
       setRpMinimum(""); setRpCurrent(""); setRpTop1(""); setRpTop2(""); setRpTop3("");
       setRpFallback(""); setRpSponsors([]);
@@ -121,13 +127,13 @@ const AdminDashboard = () => {
   }, [rpWeekId, rewardPools]);
 
   const updateSubmissionStatus = async (id: string, status: "approved" | "rejected", reason?: string) => {
-    const update: any = { status };
+    const update: Record<string, string> = { status };
     if (reason) update.rejection_reason = reason;
     const { error } = await supabase.from("submissions").update(update).eq("id", id);
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: status === "approved" ? "Approuvee" : "Rejetee" });
+      toast({ title: status === "approved" ? "Approuvée" : "Rejetée" });
       // Send notification email to artist (non-blocking)
       supabase.functions.invoke("notify-status-change", {
         body: { submission_id: id, new_status: status, reason },
@@ -195,7 +201,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Semaine creee" });
+      toast({ title: "Semaine créée" });
       setNewWeekTitle(""); setNewWeekNumber(""); setNewWeekSubOpen(""); setNewWeekSubClose("");
       setNewWeekVoteOpen(""); setNewWeekVoteClose("");
       loadData();
@@ -216,7 +222,7 @@ const AdminDashboard = () => {
   };
 
   const lockPool = async (poolId: string) => {
-    const { error } = await supabase.from("reward_pools").update({ status: "locked" as any }).eq("id", poolId);
+    const { error } = await supabase.from("reward_pools").update({ status: "locked" }).eq("id", poolId);
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
@@ -244,7 +250,11 @@ const AdminDashboard = () => {
     URL.revokeObjectURL(url);
   };
 
-  if (authLoading || !isAdmin) return null;
+  if (authLoading || !isAdmin) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 
   const pending = submissions.filter((s) => s.status === "pending");
 
@@ -259,10 +269,11 @@ const AdminDashboard = () => {
 
   return (
     <Layout>
+      <SEOHead title="Administration" description="Tableau de bord d'administration de Weekly Music Awards." url="/admin" />
       <div className="container py-8">
         <div className="mb-8 flex items-center gap-3">
           <Shield className="h-6 w-6 text-primary" />
-          <h1 className="font-display text-3xl font-bold">Admin Dashboard</h1>
+          <h1 className="font-display text-3xl font-bold">Tableau de bord</h1>
         </div>
 
         {/* Stats Overview */}
@@ -289,7 +300,7 @@ const AdminDashboard = () => {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="moderation">Modération</TabsTrigger>
             <TabsTrigger value="weeks">Semaines</TabsTrigger>
-            <TabsTrigger value="rewards">Rewards</TabsTrigger>
+            <TabsTrigger value="rewards">Récompenses</TabsTrigger>
             <TabsTrigger value="fraud">Anti-fraude</TabsTrigger>
           </TabsList>
 
@@ -348,7 +359,7 @@ const AdminDashboard = () => {
             {/* Create new week form */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Creer une nouvelle semaine</CardTitle>
+                <CardTitle className="text-lg">Créer une nouvelle semaine</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -357,7 +368,7 @@ const AdminDashboard = () => {
                     <Input value={newWeekTitle} onChange={(e) => setNewWeekTitle(e.target.value)} placeholder="Saison 1 — Semaine 2" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Numero de semaine</Label>
+                    <Label>Numéro de semaine</Label>
                     <Input type="number" value={newWeekNumber} onChange={(e) => setNewWeekNumber(e.target.value)} placeholder="2" min="1" />
                   </div>
                 </div>
@@ -382,7 +393,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <Button onClick={createWeek} disabled={creatingWeek || !newWeekNumber || !newWeekSubOpen || !newWeekSubClose || !newWeekVoteOpen || !newWeekVoteClose}>
-                  {creatingWeek ? "Creation..." : <><Plus className="mr-1 h-3.5 w-3.5" /> Creer la semaine</>}
+                  {creatingWeek ? "Création..." : <><Plus className="mr-1 h-3.5 w-3.5" /> Créer la semaine</>}
                 </Button>
               </CardContent>
             </Card>
@@ -422,7 +433,7 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
-          {/* Rewards Tab */}
+          {/* Récompenses Tab */}
           <TabsContent value="rewards" className="space-y-4">
             <h2 className="font-display text-xl font-semibold">Cagnotte</h2>
 
@@ -446,9 +457,9 @@ const AdminDashboard = () => {
                       <p className="text-xs text-muted-foreground">
                         🥇 {rp.top1_amount_cents / 100}€ · 🥈 {rp.top2_amount_cents / 100}€ · 🥉 {rp.top3_amount_cents / 100}€
                       </p>
-                      {Array.isArray(rp.sponsors) && (rp.sponsors as any[]).length > 0 && (
+                      {Array.isArray(rp.sponsors) && (rp.sponsors as unknown as Sponsor[]).length > 0 && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          Sponsors: {(rp.sponsors as any[]).map((s: any) => s.name).join(", ")}
+                          Sponsors: {(rp.sponsors as unknown as Sponsor[]).map((s) => s.name).join(", ")}
                         </p>
                       )}
                     </div>

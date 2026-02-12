@@ -31,7 +31,7 @@ const Explore = () => {
   useEffect(() => {
     supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
       if (data) setCategories(data);
-    });
+    }).catch(() => { /* categories load failed silently */ });
 
     supabase
       .from("weeks")
@@ -45,6 +45,10 @@ const Explore = () => {
           setNoActiveWeek(true);
           setLoading(false);
         }
+      })
+      .catch(() => {
+        setNoActiveWeek(true);
+        setLoading(false);
       });
   }, []);
 
@@ -65,6 +69,9 @@ const Explore = () => {
     query.then(({ data }) => {
       setSubmissions(data || []);
       setLoading(false);
+    }).catch(() => {
+      setSubmissions([]);
+      setLoading(false);
     });
   }, [activeCategory, activeWeek]);
 
@@ -76,7 +83,7 @@ const Explore = () => {
     <Layout>
       <SEOHead
         title="Explorer"
-        description="Decouvrez les morceaux en competition cette semaine. Ecoutez, votez et soutenez vos artistes preferes."
+        description="Découvrez les morceaux en compétition cette semaine. Écoutez, votez et soutenez vos artistes préférés."
         url="/explore"
       />
       <section className="py-8 md:py-12">

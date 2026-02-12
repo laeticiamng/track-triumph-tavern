@@ -1,10 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, Music, Trophy, User } from "lucide-react";
+import { Home, Search, Heart, Trophy, User } from "lucide-react";
 
 const items = [
   { label: "Accueil", href: "/", icon: Home },
   { label: "Explorer", href: "/explore", icon: Search },
-  { label: "Soumettre", href: "/compete", icon: Music },
+  { label: "Voter", href: "/vote", icon: Heart },
   { label: "Résultats", href: "/results", icon: Trophy },
   { label: "Profil", href: "/profile", icon: User },
 ];
@@ -16,7 +16,7 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border glass md:hidden pb-[env(safe-area-inset-bottom)]">
       <div className="flex h-16 items-center justify-around px-2">
         {items.map((item) => {
-          const active = location.pathname === item.href;
+          const active = item.href === "/" ? location.pathname === "/" : location.pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}

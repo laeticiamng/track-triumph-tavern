@@ -1,10 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const SYSTEM_PROMPT = `Tu es l'assistant musical de SoundClash, une plateforme de compétition musicale hebdomadaire. Tu aides les artistes émergents avec :
 
@@ -43,6 +38,8 @@ async function checkTier(authHeader: string): Promise<{ tier: string; error?: st
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -81,6 +78,14 @@ Deno.serve(async (req) => {
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.content && lastMessage.content.length > 2000) {
+      return new Response(JSON.stringify({ error: "Message trop long (max 2000 caractères)" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

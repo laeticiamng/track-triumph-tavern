@@ -20,33 +20,38 @@ const Results = () => {
 
   useEffect(() => {
     const load = async () => {
-      const [{ data: cats }, { data: week }] = await Promise.all([
-        supabase.from("categories").select("*").order("sort_order"),
-        supabase.from("weeks").select("*").eq("is_active", true).single(),
-      ]);
+      try {
+        const [{ data: cats }, { data: week }] = await Promise.all([
+          supabase.from("categories").select("*").order("sort_order"),
+          supabase.from("weeks").select("*").eq("is_active", true).single(),
+        ]);
 
-      if (cats) setCategories(cats);
-      if (week) {
-        setActiveWeek(week);
+        if (cats) setCategories(cats);
+        if (week) {
+          setActiveWeek(week);
 
-        // Load winners with submission details
-        const { data: w } = await supabase
-          .from("winners")
-          .select("*, submissions(title, artist_name, cover_image_url)")
-          .eq("week_id", week.id)
-          .order("rank");
+          // Load winners with submission details
+          const { data: w } = await supabase
+            .from("winners")
+            .select("*, submissions(title, artist_name, cover_image_url)")
+            .eq("week_id", week.id)
+            .order("rank");
 
-        if (w) setWinners(w);
+          if (w) setWinners(w);
 
-        // Load rewards for these winners
-        const { data: r } = await supabase
-          .from("rewards")
-          .select("*")
-          .eq("week_id", week.id);
+          // Load rewards for these winners
+          const { data: r } = await supabase
+            .from("rewards")
+            .select("*")
+            .eq("week_id", week.id);
 
-        if (r) setRewards(r);
+          if (r) setRewards(r);
+        }
+      } catch (err) {
+        console.error("Error loading results:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
   }, []);
@@ -120,8 +125,8 @@ const Results = () => {
   return (
     <Layout>
       <SEOHead
-        title="Resultats"
-        description="Decouvrez les gagnants du concours musical Weekly Music Awards de cette semaine."
+        title="Résultats"
+        description="Découvrez les gagnants du concours musical Weekly Music Awards de cette semaine."
         url="/results"
       />
       <div className="container py-8">

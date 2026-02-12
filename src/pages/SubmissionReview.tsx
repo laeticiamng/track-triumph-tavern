@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import {
-  Clock, CheckCircle2, XCircle, AlertCircle, Music, ArrowLeft, ExternalLink,
+  Clock, CheckCircle2, XCircle, AlertCircle, Music, ArrowLeft, ExternalLink, Loader2,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -25,21 +25,21 @@ interface EnrichedSubmission extends Submission {
 const statusConfig = {
   pending: {
     icon: Clock,
-    label: "En attente de moderation",
+    label: "En attente de modération",
     color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
-    description: "Votre soumission est en cours d'examen par notre equipe.",
+    description: "Votre soumission est en cours d'examen par notre équipe.",
   },
   approved: {
     icon: CheckCircle2,
-    label: "Approuvee",
+    label: "Approuvée",
     color: "bg-green-500/10 text-green-600 border-green-500/20",
-    description: "Votre morceau est maintenant en competition !",
+    description: "Votre morceau est maintenant en compétition !",
   },
   rejected: {
     icon: XCircle,
-    label: "Rejetee",
+    label: "Rejetée",
     color: "bg-destructive/10 text-destructive border-destructive/20",
-    description: "Votre soumission n'a pas ete retenue.",
+    description: "Votre soumission n'a pas été retenue.",
   },
 };
 
@@ -126,7 +126,11 @@ const SubmissionReview = () => {
     };
   }, [user]);
 
-  if (authLoading || !user) return null;
+  if (authLoading || !user) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 
   return (
     <Layout>
@@ -148,7 +152,7 @@ const SubmissionReview = () => {
             Suivi des soumissions
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Suivez le statut de chaque morceau soumis. Vous recevrez une notification a chaque changement.
+            Suivez le statut de chaque morceau soumis. Vous recevrez une notification à chaque changement.
           </p>
         </div>
 
@@ -169,7 +173,7 @@ const SubmissionReview = () => {
             </div>
             <h2 className="font-display text-xl font-semibold">Aucune soumission</h2>
             <p className="mt-2 text-muted-foreground max-w-sm">
-              Vous n'avez pas encore soumis de morceau. Participez a la competition !
+              Vous n'avez pas encore soumis de morceau. Participez à la compétition !
             </p>
             <Button asChild className="mt-6 bg-gradient-primary">
               <Link to="/compete">Soumettre un morceau</Link>

@@ -45,7 +45,7 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
         if (data?.scoring_criteria) {
           setScoringCriteria(data.scoring_criteria as unknown as ScoringCriterion[]);
         }
-      });
+      }).catch(() => {});
   }, [categoryId]);
 
   if (!user) {

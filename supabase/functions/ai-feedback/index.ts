@@ -1,8 +1,4 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 async function checkTier(authHeader: string): Promise<string> {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -22,6 +18,8 @@ async function checkTier(authHeader: string): Promise<string> {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -54,6 +52,17 @@ Deno.serve(async (req) => {
 
     if (!title || !artist_name) {
       return new Response(JSON.stringify({ error: "title and artist_name required" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (title && title.length > 500) {
+      return new Response(JSON.stringify({ error: "Titre trop long (max 500 caractères)" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (description && description.length > 5000) {
+      return new Response(JSON.stringify({ error: "Description trop longue (max 5000 caractères)" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

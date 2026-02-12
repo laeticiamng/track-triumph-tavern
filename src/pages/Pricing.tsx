@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,6 +85,7 @@ const Pricing = () => {
 
   return (
     <Layout>
+      <SEOHead title="Tarifs" description="Découvrez les abonnements Weekly Music Awards : Free, Pro et Elite. Soumettez votre musique et accédez à des fonctionnalités exclusives." url="/pricing" />
       <section className="py-12 md:py-20">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center mb-12">

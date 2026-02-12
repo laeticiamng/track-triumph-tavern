@@ -1,16 +1,13 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { getCorsHeaders } from "../_shared/cors.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /**
@@ -20,6 +17,15 @@ function jsonResponse(body: unknown, status = 200) {
  * Body: { submission_id: string, new_status: "approved" | "rejected", reason?: string }
  */
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
+  function jsonResponse(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -88,8 +94,9 @@ Deno.serve(async (req) => {
     }
 
     const email = artistUser.user.email;
-    const artistName = submission.artist_name;
-    const trackTitle = submission.title;
+    const safeArtistName = escapeHtml(submission.artist_name);
+    const safeTrackTitle = escapeHtml(submission.title);
+    const safeReason = reason ? escapeHtml(reason) : "";
 
     // Build email content based on status
     let subject: string;
@@ -97,11 +104,11 @@ Deno.serve(async (req) => {
 
     switch (new_status) {
       case "approved":
-        subject = `Votre morceau "${trackTitle}" est approuve !`;
+        subject = `Votre morceau "${submission.title}" est approuve !`;
         htmlBody = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #10b981;">Felicitations ${artistName} !</h2>
-            <p>Votre soumission <strong>"${trackTitle}"</strong> a ete approuvee par notre equipe de moderation.</p>
+            <h2 style="color: #10b981;">Felicitations ${safeArtistName} !</h2>
+            <p>Votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> a ete approuvee par notre equipe de moderation.</p>
             <p>Votre morceau est maintenant visible par la communaute et peut recevoir des votes.</p>
             <a href="https://weeklymusicawards.com/explore"
                style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; margin-top: 16px;">
@@ -115,12 +122,12 @@ Deno.serve(async (req) => {
         break;
 
       case "rejected":
-        subject = `Mise a jour sur "${trackTitle}"`;
+        subject = `Mise a jour sur "${submission.title}"`;
         htmlBody = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Bonjour ${artistName},</h2>
-            <p>Apres examen par notre equipe, votre soumission <strong>"${trackTitle}"</strong> n'a pas pu etre approuvee cette fois-ci.</p>
-            ${reason ? `<p><strong>Motif :</strong> ${reason}</p>` : ""}
+            <h2>Bonjour ${safeArtistName},</h2>
+            <p>Apres examen par notre equipe, votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> n'a pas pu etre approuvee cette fois-ci.</p>
+            ${safeReason ? `<p><strong>Motif :</strong> ${safeReason}</p>` : ""}
             <p>Vous pouvez soumettre un nouveau morceau la semaine prochaine. N'hesitez pas a consulter nos regles de soumission.</p>
             <a href="https://weeklymusicawards.com/contest-rules"
                style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; margin-top: 16px;">
@@ -134,11 +141,11 @@ Deno.serve(async (req) => {
         break;
 
       default:
-        subject = `Votre soumission "${trackTitle}" est en attente de moderation`;
+        subject = `Votre soumission "${submission.title}" est en attente de moderation`;
         htmlBody = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Bonjour ${artistName},</h2>
-            <p>Votre soumission <strong>"${trackTitle}"</strong> est en cours de moderation. Nous vous tiendrons informe de la suite.</p>
+            <h2>Bonjour ${safeArtistName},</h2>
+            <p>Votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> est en cours de moderation. Nous vous tiendrons informe de la suite.</p>
             <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">
               L'equipe Weekly Music Awards
             </p>
@@ -146,22 +153,18 @@ Deno.serve(async (req) => {
         break;
     }
 
-    // Send email via Supabase Auth admin API (or custom SMTP)
-    // Using Supabase's built-in email: auth.admin.inviteUserByEmail won't work here
-    // Instead, we use a simple fetch to a transactional email service
-    // For now, log the notification and store it in a notifications concept
-    console.log(`[NOTIFY] ${new_status} — to: ${email}, track: ${trackTitle}`);
+    // TODO: integrate a transactional email service (Resend, SendGrid, etc.)
+    console.log(`[NOTIFY] ${new_status} — to: ${email}, track: ${submission.title}`);
 
     // Store notification record for the user (can be displayed in-app)
-    // We'll log it to vote_events as a general audit trail
     await supabaseAdmin.from("vote_events").insert({
-      vote_id: null as any, // no vote associated
+      vote_id: null,
       user_id: submission.user_id,
       event_type: `submission_${new_status}`,
       metadata: {
         submission_id,
-        track_title: trackTitle,
-        artist_name: artistName,
+        track_title: submission.title,
+        artist_name: submission.artist_name,
         reason: reason || null,
         notified_email: email,
         subject,

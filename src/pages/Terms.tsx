@@ -1,8 +1,10 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const Terms = () => (
   <Layout>
+    <SEOHead title="Conditions d'utilisation" description="Conditions Generales d'Utilisation de la plateforme Weekly Music Awards." url="/terms" />
     <div className="container max-w-3xl py-12">
       <h1 className="font-display text-3xl font-bold mb-8">Conditions Générales d'Utilisation</h1>
       <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">
