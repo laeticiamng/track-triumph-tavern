@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -79,7 +80,7 @@ const CGV = () => (
 
         <h2 className="text-foreground font-display">8. Protection des données</h2>
         <p>
-          Les données collectées dans le cadre de la souscription et de l'utilisation des services sont traitées conformément à notre <a href="/privacy" className="text-primary hover:underline">Politique de confidentialité</a> et au Règlement Général sur la Protection des Données (RGPD).
+          Les données collectées dans le cadre de la souscription et de l'utilisation des services sont traitées conformément à notre <Link to="/privacy" className="text-primary hover:underline">Politique de confidentialité</Link> et au Règlement Général sur la Protection des Données (RGPD).
         </p>
 
         <h2 className="text-foreground font-display">9. Service client</h2>

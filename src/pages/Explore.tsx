@@ -83,7 +83,7 @@ const Explore = () => {
     <Layout>
       <SEOHead
         title="Explorer"
-        description="Decouvrez les morceaux en competition cette semaine. Ecoutez, votez et soutenez vos artistes preferes."
+        description="Découvrez les morceaux en compétition cette semaine. Écoutez, votez et soutenez vos artistes préférés."
         url="/explore"
       />
       <section className="py-8 md:py-12">

@@ -56,6 +56,17 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (title && title.length > 500) {
+      return new Response(JSON.stringify({ error: "Titre trop long (max 500 caractères)" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (description && description.length > 5000) {
+      return new Response(JSON.stringify({ error: "Description trop longue (max 5000 caractères)" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const prompt = `Tu es un expert en musique et en feedback constructif pour artistes émergents. Analyse cette soumission musicale et donne un feedback structuré en français.
 
 Titre: ${title}

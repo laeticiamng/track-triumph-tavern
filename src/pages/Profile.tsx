@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2 } from "lucide-react";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
@@ -182,7 +182,11 @@ const Profile = () => {
     });
   };
 
-  if (authLoading || !user) return null;
+  if (authLoading || !user) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 
   const currentPlan = SUBSCRIPTION_TIERS[tier];
   const canEditProfile = tier !== "free";

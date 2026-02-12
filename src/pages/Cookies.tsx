@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -20,7 +21,7 @@ const Cookies = () => (
         </ul>
 
         <h2 className="text-foreground font-display">3. Gestion des cookies</h2>
-        <p>Vous pouvez configurer votre navigateur pour refuser les cookies. Notez que certaines fonctionnalités du site pourraient ne plus fonctionner correctement. Pour en savoir plus sur vos données, consultez notre <a href="/privacy" className="text-primary hover:underline">Politique de Confidentialité</a>.</p>
+        <p>Vous pouvez configurer votre navigateur pour refuser les cookies. Notez que certaines fonctionnalités du site pourraient ne plus fonctionner correctement. Pour en savoir plus sur vos données, consultez notre <Link to="/privacy" className="text-primary hover:underline">Politique de Confidentialité</Link>.</p>
 
         <h2 className="text-foreground font-display">4. Durée</h2>
         <p>Les cookies de session sont supprimés à la fermeture du navigateur. Les cookies persistants ont une durée maximale de 13 mois.</p>

@@ -359,10 +359,19 @@ export function VoteCard({
                 </div>
                 <span className="text-[10px] font-medium text-green-400">Voté</span>
               </div>
+            ) : !isAuthenticated ? (
+              <Link
+                to="/auth?redirect=/vote"
+                className="flex flex-col items-center gap-1 transition-colors text-white/80 hover:text-white"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm bg-white/15 hover:bg-primary/80">
+                  <Heart className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-medium">Connexion</span>
+              </Link>
             ) : (
               <button
                 onClick={() => {
-                  if (!isAuthenticated) return;
                   if (showPanel) {
                     setShowPanel(false);
                   } else if (canVote && !showAlreadyVoted) {
@@ -371,7 +380,7 @@ export function VoteCard({
                 }}
                 disabled={!canVote || showAlreadyVoted}
                 className={`flex flex-col items-center gap-1 transition-colors ${
-                  canVote && isAuthenticated && !showAlreadyVoted
+                  canVote && !showAlreadyVoted
                     ? "text-white/80 hover:text-white"
                     : "text-white/30"
                 }`}
@@ -380,7 +389,7 @@ export function VoteCard({
                   className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm ${
                     showPanel
                       ? "bg-primary/80 text-white"
-                      : canVote && isAuthenticated && !showAlreadyVoted
+                      : canVote && !showAlreadyVoted
                       ? "bg-white/15 hover:bg-primary/80"
                       : "bg-white/10"
                   }`}
@@ -392,7 +401,7 @@ export function VoteCard({
                   )}
                 </div>
                 <span className="text-[10px] font-medium">
-                  {!isAuthenticated ? "Connexion" : showPanel ? "Fermer" : "Voter"}
+                  {showPanel ? "Fermer" : "Voter"}
                 </span>
               </button>
             )}

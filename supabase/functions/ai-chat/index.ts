@@ -83,6 +83,14 @@ Deno.serve(async (req) => {
       });
     }
 
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.content && lastMessage.content.length > 2000) {
+      return new Response(JSON.stringify({ error: "Message trop long (max 2000 caractères)" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {

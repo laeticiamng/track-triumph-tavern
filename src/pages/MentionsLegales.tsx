@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 
 const MentionsLegales = () => (
   <Layout>
-    <SEOHead title="Mentions legales" description="Mentions legales de la plateforme Weekly Music Awards, editee par EMOTIONSCARE SASU." url="/legal/mentions" />
+    <SEOHead title="Mentions légales" description="Mentions légales de la plateforme Weekly Music Awards, éditée par EMOTIONSCARE SASU." url="/legal/mentions" />
     <div className="container max-w-3xl py-12">
       <h1 className="font-display text-3xl font-bold mb-8">Mentions Légales</h1>
       <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">
@@ -18,8 +19,8 @@ const MentionsLegales = () => (
           <li><strong>Raison sociale :</strong> EMOTIONSCARE SASU</li>
           <li><strong>Forme juridique :</strong> Société par actions simplifiée unipersonnelle</li>
           <li><strong>SIREN :</strong> 944 505 445</li>
-          <li><strong>RCS :</strong> Registre du Commerce et des Sociétés (immatriculation en cours ou à vérifier sur infogreffe.fr)</li>
-          <li><strong>Siège social :</strong> [Adresse complète à renseigner], France</li>
+          <li><strong>RCS :</strong> En cours d'immatriculation</li>
+          <li><strong>Siège social :</strong> France (adresse complète disponible sur demande à contact@emotionscare.com)</li>
           <li><strong>E-mail :</strong> <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></li>
           <li><strong>Directeur de la publication :</strong> Le représentant légal d'EMOTIONSCARE SASU</li>
           <li><strong>Délégué à la Protection des Données (DPO) :</strong> <a href="mailto:dpo@emotionscare.com" className="text-primary hover:underline">dpo@emotionscare.com</a></li>
@@ -54,12 +55,12 @@ const MentionsLegales = () => (
           Pour exercer ces droits, contactez-nous à : <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a>
         </p>
         <p>
-          Pour en savoir plus, consultez notre <a href="/privacy" className="text-primary hover:underline">Politique de confidentialité</a>.
+          Pour en savoir plus, consultez notre <Link to="/privacy" className="text-primary hover:underline">Politique de confidentialité</Link>.
         </p>
 
         <h2 className="text-foreground font-display">5. Cookies</h2>
         <p>
-          La Plateforme utilise des cookies pour assurer son bon fonctionnement et améliorer l'expérience utilisateur. Pour en savoir plus, consultez notre <a href="/cookies" className="text-primary hover:underline">Politique de cookies</a>.
+          La Plateforme utilise des cookies pour assurer son bon fonctionnement et améliorer l'expérience utilisateur. Pour en savoir plus, consultez notre <Link to="/cookies" className="text-primary hover:underline">Politique de cookies</Link>.
         </p>
 
         <h2 className="text-foreground font-display">6. Limitation de responsabilité</h2>

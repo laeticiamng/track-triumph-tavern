@@ -43,7 +43,7 @@ const timeline = [
 const About = () => {
   return (
     <Layout>
-      <SEOHead title="A propos" description="Decouvrez l'histoire, la mission et les valeurs de Weekly Music Awards, le concours musical hebdomadaire." url="/about" />
+      <SEOHead title="À propos" description="Découvrez l'histoire, la mission et les valeurs de Weekly Music Awards, le concours musical hebdomadaire." url="/about" />
       <section className="py-16 md:py-24">
         <div className="container max-w-3xl">
           {/* Header */}

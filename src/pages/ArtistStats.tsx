@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
-  BarChart3, Trophy, Music, Heart, ArrowLeft, TrendingUp,
+  BarChart3, Trophy, Music, Heart, ArrowLeft, TrendingUp, Loader2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
@@ -44,78 +44,85 @@ const ArtistStats = () => {
     if (!id) return;
 
     const load = async () => {
-      // Get profile
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("display_name, avatar_url, bio")
-        .eq("id", id)
-        .single();
+      try {
+        // Get profile
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("display_name, avatar_url, bio")
+          .eq("id", id)
+          .single();
 
-      if (!profile) {
-        setLoading(false);
-        return;
-      }
-
-      // Get submissions with week & category info
-      const { data: submissions } = await supabase
-        .from("submissions")
-        .select("id, title, cover_image_url, vote_count, status, week_id, category_id")
-        .eq("user_id", id)
-        .order("created_at", { ascending: false });
-
-      // Get weeks and categories for lookup
-      const [{ data: weeks }, { data: categories }, { data: wins }] = await Promise.all([
-        supabase.from("weeks").select("id, title, week_number").order("week_number"),
-        supabase.from("categories").select("id, name"),
-        supabase.from("winners").select("rank").eq("user_id", id).order("rank", { ascending: true }).limit(1),
-      ]);
-
-      const weekMap = new Map(weeks?.map((w) => [w.id, w]) ?? []);
-      const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
-
-      const enrichedSubmissions = (submissions ?? []).map((s) => {
-        const week = weekMap.get(s.week_id);
-        return {
-          ...s,
-          week_title: week?.title || `Semaine ${week?.week_number || "?"}`,
-          week_number: week?.week_number || 0,
-          category_name: catMap.get(s.category_id) || "",
-        };
-      });
-
-      const totalVotesReceived = enrichedSubmissions.reduce((sum, s) => sum + s.vote_count, 0);
-
-      // Build weekly progress
-      const weeklyMap = new Map<number, number>();
-      enrichedSubmissions.forEach((s) => {
-        if (s.week_number > 0) {
-          const current = weeklyMap.get(s.week_number) || 0;
-          weeklyMap.set(s.week_number, current + s.vote_count);
+        if (!profile) {
+          return;
         }
-      });
 
-      const weeklyProgress = Array.from(weeklyMap.entries())
-        .sort(([a], [b]) => a - b)
-        .map(([wk, votes]) => ({ week: `S${wk}`, votes }));
+        // Get submissions with week & category info
+        const { data: submissions } = await supabase
+          .from("submissions")
+          .select("id, title, cover_image_url, vote_count, status, week_id, category_id")
+          .eq("user_id", id)
+          .order("created_at", { ascending: false });
 
-      setData({
-        displayName: profile.display_name || "Artiste",
-        avatarUrl: profile.avatar_url,
-        bio: profile.bio,
-        submissions: enrichedSubmissions,
-        weeklyProgress,
-        totalVotesReceived,
-        bestRank: wins && wins.length > 0 ? wins[0].rank : null,
-        totalSubmissions: enrichedSubmissions.length,
-      });
+        // Get weeks and categories for lookup
+        const [{ data: weeks }, { data: categories }, { data: wins }] = await Promise.all([
+          supabase.from("weeks").select("id, title, week_number").order("week_number"),
+          supabase.from("categories").select("id, name"),
+          supabase.from("winners").select("rank").eq("user_id", id).order("rank", { ascending: true }).limit(1),
+        ]);
 
-      setLoading(false);
+        const weekMap = new Map(weeks?.map((w) => [w.id, w]) ?? []);
+        const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
+
+        const enrichedSubmissions = (submissions ?? []).map((s) => {
+          const week = weekMap.get(s.week_id);
+          return {
+            ...s,
+            week_title: week?.title || `Semaine ${week?.week_number || "?"}`,
+            week_number: week?.week_number || 0,
+            category_name: catMap.get(s.category_id) || "",
+          };
+        });
+
+        const totalVotesReceived = enrichedSubmissions.reduce((sum, s) => sum + s.vote_count, 0);
+
+        // Build weekly progress
+        const weeklyMap = new Map<number, number>();
+        enrichedSubmissions.forEach((s) => {
+          if (s.week_number > 0) {
+            const current = weeklyMap.get(s.week_number) || 0;
+            weeklyMap.set(s.week_number, current + s.vote_count);
+          }
+        });
+
+        const weeklyProgress = Array.from(weeklyMap.entries())
+          .sort(([a], [b]) => a - b)
+          .map(([wk, votes]) => ({ week: `S${wk}`, votes }));
+
+        setData({
+          displayName: profile.display_name || "Artiste",
+          avatarUrl: profile.avatar_url,
+          bio: profile.bio,
+          submissions: enrichedSubmissions,
+          weeklyProgress,
+          totalVotesReceived,
+          bestRank: wins && wins.length > 0 ? wins[0].rank : null,
+          totalSubmissions: enrichedSubmissions.length,
+        });
+      } catch (err) {
+        console.error("Error loading artist stats:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     load();
   }, [id]);
 
-  if (loading) return null;
+  if (loading) return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
   if (!data) {
     return (
       <Layout>
@@ -164,7 +171,7 @@ const ArtistStats = () => {
           </Avatar>
           <div>
             <h1 className="font-display text-2xl font-bold">{data.displayName}</h1>
-            <p className="text-sm text-muted-foreground">Statistiques detaillees</p>
+            <p className="text-sm text-muted-foreground">Statistiques détaillées</p>
           </div>
         </div>
 
@@ -178,7 +185,7 @@ const ArtistStats = () => {
           <Card className="text-center p-4">
             <Heart className="h-4 w-4 mx-auto mb-1 text-primary" />
             <p className="font-display text-2xl font-bold">{data.totalVotesReceived}</p>
-            <p className="text-xs text-muted-foreground">Votes recus</p>
+            <p className="text-xs text-muted-foreground">Votes reçus</p>
           </Card>
           <Card className="text-center p-4">
             <Trophy className="h-4 w-4 mx-auto mb-1 text-primary" />
@@ -263,8 +270,8 @@ const ArtistStats = () => {
                         {sub.status === "pending"
                           ? "En attente"
                           : sub.status === "approved"
-                          ? "Approuve"
-                          : "Rejete"}
+                          ? "Approuvé"
+                          : "Rejeté"}
                       </Badge>
                       <Badge className="bg-primary/10 text-primary font-display text-xs">
                         {sub.vote_count} votes

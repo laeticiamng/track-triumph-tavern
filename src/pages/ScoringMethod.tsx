@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const ScoringMethod = () => (
   <Layout>
-    <SEOHead title="Methode de notation" description="Decouvrez comment le classement est calcule sur Weekly Music Awards : criteres, ponderation et anti-fraude." url="/scoring-method" />
+    <SEOHead title="Méthode de notation" description="Découvrez comment le classement est calculé sur Weekly Music Awards : critères, pondération et anti-fraude." url="/scoring-method" />
     <div className="container max-w-3xl py-8 md:py-12">
       <Link to="/results" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <ArrowLeft className="h-4 w-4" /> Retour aux résultats
