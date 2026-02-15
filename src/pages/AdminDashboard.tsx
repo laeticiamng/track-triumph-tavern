@@ -239,7 +239,7 @@ const AdminDashboard = () => {
     setRpSponsors(copy);
   };
 
-  const exportCSV = (data: any[], filename: string) => {
+  const exportCSV = (data: Record<string, unknown>[], filename: string) => {
     if (data.length === 0) return;
     const headers = Object.keys(data[0]).join(",");
     const rows = data.map((r) => Object.values(r).map((v) => `"${v}"`).join(",")).join("\n");
@@ -320,7 +320,7 @@ const AdminDashboard = () => {
                   <Card key={sub.id}>
                     <CardContent className="p-4">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                        <img src={sub.cover_image_url} alt="" className="h-16 w-16 rounded-xl object-cover flex-shrink-0" />
+                        <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-16 w-16 rounded-xl object-cover flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{sub.title}</h3>
                           <p className="text-sm text-muted-foreground">{sub.artist_name}</p>

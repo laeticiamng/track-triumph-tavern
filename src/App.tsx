@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Loader2 } from "lucide-react";
 
 // Eagerly load the landing page for fast first paint
@@ -57,6 +58,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <CookieConsent />
+          <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -116,6 +118,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
+          </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id);
-    const isAdmin = roles?.some((r: any) => r.role === "admin");
+    const isAdmin = roles?.some((r: { role: string }) => r.role === "admin");
     if (!isAdmin) {
       return new Response(JSON.stringify({ error: "Accès refusé" }), {
         status: 403,
@@ -56,11 +56,10 @@ Deno.serve(async (req) => {
 
       // Determine status
       let status = "inactive";
-      if (current_cents >= minimum_cents && minimum_cents > 0) {
-        status = "threshold_met";
-      }
-      if (current_cents >= minimum_cents && minimum_cents > 0) {
+      if (minimum_cents > 0 && current_cents >= minimum_cents) {
         status = "active";
+      } else if (minimum_cents > 0 && current_cents >= minimum_cents * 0.5) {
+        status = "threshold_met";
       }
 
       const { data, error } = await supabaseAdmin

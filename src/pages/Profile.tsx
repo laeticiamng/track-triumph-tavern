@@ -94,8 +94,8 @@ const Profile = () => {
       if (updateErr) throw updateErr;
       setProfile((prev) => prev ? { ...prev, avatar_url: avatarUrl } : prev);
       toast({ title: "Avatar mis à jour ✓" });
-    } catch (err: any) {
-      toast({ title: "Erreur", description: err.message, variant: "destructive" });
+    } catch (err) {
+      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'upload", variant: "destructive" });
     } finally {
       setAvatarUploading(false);
     }
@@ -120,8 +120,8 @@ const Profile = () => {
       if (updateErr) throw updateErr;
       setProfile((prev) => prev ? { ...prev, banner_url: bannerUrl } : prev);
       toast({ title: "Bannière mise à jour ✓" });
-    } catch (err: any) {
-      toast({ title: "Erreur", description: err.message, variant: "destructive" });
+    } catch (err) {
+      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'upload", variant: "destructive" });
     } finally {
       setBannerUploading(false);
     }
@@ -456,7 +456,7 @@ const Profile = () => {
                     to={`/submissions/${sub.id}`}
                     className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-accent/50 transition-colors"
                   >
-                    <img src={sub.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                    <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-12 w-12 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{sub.title}</p>
                       <p className="text-xs text-muted-foreground">{sub.artist_name} · {sub.vote_count} votes</p>

@@ -256,7 +256,7 @@ const ArtistStats = () => {
                   >
                     <img
                       src={sub.cover_image_url}
-                      alt=""
+                      alt={`Couverture de ${sub.title}`}
                       className="h-12 w-12 rounded-lg object-cover"
                     />
                     <div className="flex-1 min-w-0">

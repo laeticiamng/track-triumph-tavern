@@ -253,7 +253,7 @@ export function VoteCard({
         >
           <div className="h-7 w-7 rounded-full bg-white/20 overflow-hidden flex-shrink-0">
             {submission.artist_avatar ? (
-              <img src={submission.artist_avatar} alt="" className="h-full w-full object-cover" />
+              <img src={submission.artist_avatar} alt={`Avatar de ${submission.artist_name}`} className="h-full w-full object-cover" />
             ) : (
               <div className="h-full w-full bg-primary/40" />
             )}

@@ -62,8 +62,8 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
       });
       if (fnError) throw fnError;
       setResults(data as ScanResults);
-    } catch (err: any) {
-      setError(err.message || "Erreur lors du scan");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur lors du scan");
     } finally {
       setScanning(false);
       setInvalidating(false);
@@ -99,7 +99,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
 
     if (!events || events.length === 0) return;
 
-    const masked = events.map((e: any) => ({
+    const masked = events.map((e: { ip_address?: string; user_id: string; [key: string]: unknown }) => ({
       ...e,
       ip_address: e.ip_address ? maskIp(String(e.ip_address)) : "",
       user_id: maskUserId(e.user_id),
@@ -107,7 +107,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
     downloadCSV(masked, "vote-events");
   };
 
-  const downloadCSV = (data: any[], filename: string) => {
+  const downloadCSV = (data: Record<string, unknown>[], filename: string) => {
     if (data.length === 0) return;
     const headers = Object.keys(data[0]).join(",");
     const rows = data.map((r) => Object.values(r).map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");

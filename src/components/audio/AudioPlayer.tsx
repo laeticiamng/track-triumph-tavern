@@ -84,6 +84,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
         <audio ref={audioRef} src={src} preload="metadata" controlsList="nodownload" onContextMenu={(e) => e.preventDefault()} />
         <button
           onClick={toggle}
+          aria-label={playing ? "Mettre en pause" : "Lire l'extrait"}
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95"
         >
           {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
@@ -95,6 +96,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
             step={0.1}
             onValueChange={seek}
             className="cursor-pointer"
+            aria-label="Progression audio"
           />
         </div>
         <span className="text-xs text-muted-foreground tabular-nums w-10 text-right">
@@ -124,6 +126,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
           <div className="mt-2 flex items-center gap-3">
             <button
               onClick={toggle}
+              aria-label={playing ? "Mettre en pause" : "Lire l'extrait"}
               className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95"
             >
               {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
@@ -134,6 +137,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
               step={0.1}
               onValueChange={seek}
               className="flex-1 cursor-pointer"
+              aria-label="Progression audio"
             />
             <span className="text-xs text-muted-foreground tabular-nums">
               {fmt(Math.max(0, displayTime))} / {fmt(windowDuration)}

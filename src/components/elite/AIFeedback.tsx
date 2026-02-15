@@ -50,7 +50,7 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.error) throw new Error(result.error);
       setFeedback(result.feedback);
-    } catch (err: any) {
+    } catch (err) {
       setError("Impossible de générer le feedback. Réessayez.");
       console.error("AI feedback error:", err);
     } finally {

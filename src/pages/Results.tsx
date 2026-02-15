@@ -12,8 +12,8 @@ import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
 const Results = () => {
-  const [winners, setWinners] = useState<any[]>([]);
-  const [rewards, setRewards] = useState<any[]>([]);
+  const [winners, setWinners] = useState<Array<Tables<"winners"> & { submissions: { title: string; artist_name: string; cover_image_url: string } | null }>>([]);
+  const [rewards, setRewards] = useState<Tables<"rewards">[]>([]);
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ const Results = () => {
     : false;
 
   const getWinnersByCategory = (catId: string) =>
-    winners.filter((w) => w.category_id === catId).sort((a: any, b: any) => a.rank - b.rank);
+    winners.filter((w) => w.category_id === catId).sort((a, b) => a.rank - b.rank);
 
   const getRewardForWinner = (winnerId: string) =>
     rewards.find((r) => r.winner_id === winnerId);
@@ -119,7 +119,7 @@ const Results = () => {
 
   // Grand winner: rank 1 with highest vote_count across all categories
   const grandWinner = isResultsPublished && winners.length > 0
-    ? winners.filter((w) => w.rank === 1).sort((a: any, b: any) => (b.weighted_score || 0) - (a.weighted_score || 0))[0]
+    ? winners.filter((w) => w.rank === 1).sort((a, b) => (b.weighted_score || 0) - (a.weighted_score || 0))[0]
     : null;
 
   return (
@@ -202,7 +202,7 @@ const Results = () => {
                     <Link to={`/submissions/${grandWinner.submission_id}`} className="flex items-center gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-accent/30">
                       <img
                         src={grandWinner.submissions?.cover_image_url}
-                        alt=""
+                        alt={`Couverture de ${grandWinner.submissions?.title || "gagnant"}`}
                         className="h-20 w-20 rounded-xl object-cover"
                       />
                       <div className="flex-1 min-w-0">
@@ -259,7 +259,7 @@ const Results = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {catWinners.map((w: any, i: number) => {
+                        {catWinners.map((w, i) => {
                           const reward = getRewardForWinner(w.id);
                           return (
                             <Link key={w.id} to={`/submissions/${w.submission_id}`}>
@@ -274,7 +274,7 @@ const Results = () => {
                               }`}
                             >
                               <span className="text-2xl">{podiumLabels[i]}</span>
-                              <img src={w.submissions?.cover_image_url} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                              <img src={w.submissions?.cover_image_url} alt={`Couverture de ${w.submissions?.title || "morceau"}`} className="h-12 w-12 rounded-lg object-cover" />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium truncate">{w.submissions?.title}</p>
                                 <p className="text-sm text-muted-foreground">{w.submissions?.artist_name}</p>

@@ -1,43 +1,43 @@
 project_id = "byxymivlhkzpyltiwjfz"
 
 [functions.cast-vote]
-verify_jwt = false
+verify_jwt = true
 
 [functions.compute-results]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-checkout]
-verify_jwt = false
+verify_jwt = true
 
 [functions.check-subscription]
-verify_jwt = false
+verify_jwt = true
 
 [functions.customer-portal]
-verify_jwt = false
+verify_jwt = true
 
 [functions.update-reward-pool]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-feedback]
-verify_jwt = false
+verify_jwt = true
 
 [functions.publish-results]
-verify_jwt = false
+verify_jwt = true
 
 [functions.fraud-scan]
-verify_jwt = false
+verify_jwt = true
 
 [functions.check-subscription-public]
 verify_jwt = false
 
 [functions.ai-suggest-tags]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-vote-summary]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-recommendations]
-verify_jwt = false
+verify_jwt = true

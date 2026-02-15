@@ -24,24 +24,27 @@ export function WeekCountdown({ targetDate, label = "Fin du vote dans", classNam
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
       if (days > 0) {
         setTimeLeft(`${days}j ${hours}h ${minutes}min`);
       } else if (hours > 0) {
-        setTimeLeft(`${hours}h ${minutes}min`);
+        setTimeLeft(`${hours}h ${minutes}min ${seconds}s`);
+      } else if (minutes > 0) {
+        setTimeLeft(`${minutes}min ${seconds}s`);
       } else {
-        setTimeLeft(`${minutes}min`);
+        setTimeLeft(`${seconds}s`);
       }
     };
 
     calc();
-    const interval = setInterval(calc, 60_000);
+    const interval = setInterval(calc, 1_000);
     return () => clearInterval(interval);
   }, [targetDate]);
 
   return (
-    <div className={`inline-flex items-center gap-1.5 text-sm ${className}`}>
-      <Clock className="h-3.5 w-3.5" />
+    <div className={`inline-flex items-center gap-1.5 text-sm ${className}`} role="timer" aria-live="polite" aria-label={`${label} ${timeLeft}`}>
+      <Clock className="h-3.5 w-3.5" aria-hidden="true" />
       <span>{label} <strong>{timeLeft}</strong></span>
     </div>
   );

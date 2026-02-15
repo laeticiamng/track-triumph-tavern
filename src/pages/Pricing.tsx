@@ -60,7 +60,7 @@ const Pricing = () => {
       } else if (result.url) {
         window.location.href = result.url;
       }
-    } catch (err: any) {
+    } catch {
       toast({ title: "Erreur", description: "Impossible de créer la session de paiement.", variant: "destructive" });
     } finally {
       setLoadingTier(null);
