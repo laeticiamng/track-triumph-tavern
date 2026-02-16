@@ -123,7 +123,7 @@ export function categoryJsonLd(category: { name: string; slug: string; descripti
     "@type": "CollectionPage",
     name: `${category.name} — Weekly Music Awards`,
     url: `${BASE_URL}/categories/${category.slug}`,
-    description: category.description || `Decouvrez les morceaux ${category.name} en competition sur Weekly Music Awards.`,
+    description: category.description || `Découvrez les morceaux ${category.name} en compétition sur Weekly Music Awards.`,
     isPartOf: {
       "@type": "WebSite",
       name: "Weekly Music Awards",
