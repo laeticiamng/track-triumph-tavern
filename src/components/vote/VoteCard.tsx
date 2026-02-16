@@ -304,7 +304,7 @@ export function VoteCard({
                   </span>
                 </div>
 
-                <StarRating value={emotionScore} onChange={setEmotionScore} label="Emotion" icon="💖" />
+                <StarRating value={emotionScore} onChange={setEmotionScore} label="Émotion" icon="💖" />
                 <StarRating value={originalityScore} onChange={setOriginalityScore} label="Originalité" icon="✨" />
                 <StarRating value={productionScore} onChange={setProductionScore} label="Production" icon="🎛️" />
 

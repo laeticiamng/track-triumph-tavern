@@ -90,7 +90,7 @@ const ArtistProfile = () => {
     <Layout>
       <SEOHead
         title={profile.display_name || "Artiste"}
-        description={profile.bio || `Decouvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
+        description={profile.bio || `Découvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
         url={`/artist/${id}`}
         image={profile.avatar_url || undefined}
         jsonLd={musicGroupJsonLd({

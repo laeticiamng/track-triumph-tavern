@@ -97,7 +97,7 @@ const SubmissionDetail = () => {
     <Layout>
       <SEOHead
         title={`${submission.title} — ${submission.artist_name}`}
-        description={submission.description || `Ecoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
+        description={submission.description || `Écoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
         url={`/submissions/${submission.id}`}
         image={submission.cover_image_url}
         jsonLd={{

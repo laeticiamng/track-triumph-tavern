@@ -146,7 +146,7 @@ const ArtistStats = () => {
   return (
     <Layout>
       <SEOHead
-        title={`Stats de ${data.displayName}`}
+        title={`Statistiques de ${data.displayName}`}
         description={`Statistiques et historique de ${data.displayName} sur Weekly Music Awards.`}
         url={`/stats/artist/${id}`}
         jsonLd={musicGroupJsonLd({

@@ -216,7 +216,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Semaine activee" });
+      toast({ title: "Semaine activée" });
       loadData();
     }
   };
@@ -226,7 +226,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Pool verrouillé ✓" });
+      toast({ title: "Cagnotte verrouillée ✓" });
       loadData();
     }
   };
@@ -288,7 +288,7 @@ const AdminDashboard = () => {
           </CardContent></Card>
           <Card><CardContent className="py-4 text-center">
             <p className="text-2xl font-bold font-display">{voteStats.total}</p>
-            <p className="text-xs text-muted-foreground">Total votes</p>
+            <p className="text-xs text-muted-foreground">Total des votes</p>
           </CardContent></Card>
           <Card><CardContent className="py-4 text-center">
             <p className="text-2xl font-bold font-display text-destructive">{voteStats.suspicious}</p>

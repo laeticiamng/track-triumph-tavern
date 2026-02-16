@@ -5,7 +5,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 
 const CGV = () => (
   <Layout>
-    <SEOHead title="Conditions generales de vente" description="Conditions Generales de Vente des abonnements et services de Weekly Music Awards." url="/legal/cgv" />
+    <SEOHead title="Conditions générales de vente" description="Conditions Générales de Vente des abonnements et services de Weekly Music Awards." url="/legal/cgv" />
     <div className="container max-w-3xl py-12">
       <h1 className="font-display text-3xl font-bold mb-8">Conditions Générales de Vente</h1>
       <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">

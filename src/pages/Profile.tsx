@@ -198,7 +198,7 @@ const Profile = () => {
 
   return (
     <Layout>
-      <SEOHead title="Mon profil" description="Gerez votre profil artiste, vos soumissions et votre abonnement sur Weekly Music Awards." url="/profile" />
+      <SEOHead title="Mon profil" description="Gérez votre profil artiste, vos soumissions et votre abonnement sur Weekly Music Awards." url="/profile" />
       <div className="container max-w-2xl py-8">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
