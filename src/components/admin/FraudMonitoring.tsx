@@ -53,7 +53,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
 
   const runScan = async (invalidate = false) => {
     if (!selectedWeekId) return;
-    invalidate ? setInvalidating(true) : setScanning(true);
+    if (invalidate) { setInvalidating(true); } else { setScanning(true); }
     setError(null);
 
     try {
