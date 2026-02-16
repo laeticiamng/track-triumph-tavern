@@ -133,7 +133,7 @@ const CategoryDetail = () => {
     <Layout>
       <SEOHead
         title={category.name}
-        description={category.description || `Decouvrez la categorie ${category.name} sur Weekly Music Awards.`}
+        description={category.description || `Découvrez la catégorie ${category.name} sur Weekly Music Awards.`}
         url={`/categories/${slug}`}
         jsonLd={categoryJsonLd({ name: category.name, slug: category.slug, description: category.description })}
       />

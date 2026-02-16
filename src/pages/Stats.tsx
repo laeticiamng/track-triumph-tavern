@@ -231,7 +231,7 @@ const Stats = () => {
                           </span>
                           <img
                             src={track.cover_image_url}
-                            alt=""
+                            alt={`Couverture de ${track.title}`}
                             className="h-12 w-12 rounded-lg object-cover"
                           />
                           <div className="flex-1 min-w-0">

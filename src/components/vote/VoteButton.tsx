@@ -93,7 +93,7 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
         toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
         onVoted?.(hadComment);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Vote error:", err);
       toast({ title: "Erreur", description: "Impossible de voter. Réessayez.", variant: "destructive" });
     } finally {
@@ -243,8 +243,9 @@ function ScoreSlider({
           value={[value]}
           onValueChange={([v]) => onChange(v)}
           className="flex-1"
+          aria-label={`Note ${label}`}
         />
-        <span className="w-6 text-center text-sm font-medium">{value}</span>
+        <span className="w-6 text-center text-sm font-medium" aria-live="polite">{value}</span>
       </div>
     </div>
   );

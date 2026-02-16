@@ -63,6 +63,13 @@ export function Footer() {
               <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
               <Link to="/contest-rules" className="hover:text-foreground transition-colors">Règlement</Link>
               <Link to="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+              <button
+                type="button"
+                onClick={() => (window as Window & { __reopenCookieBanner?: () => void }).__reopenCookieBanner?.()}
+                className="text-left hover:text-foreground transition-colors"
+              >
+                Gérer mes cookies
+              </button>
             </nav>
           </div>
 

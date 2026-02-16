@@ -216,7 +216,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Semaine activee" });
+      toast({ title: "Semaine activée" });
       loadData();
     }
   };
@@ -226,7 +226,7 @@ const AdminDashboard = () => {
     if (error) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Pool verrouillé ✓" });
+      toast({ title: "Cagnotte verrouillée ✓" });
       loadData();
     }
   };
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
     setRpSponsors(copy);
   };
 
-  const exportCSV = (data: any[], filename: string) => {
+  const exportCSV = (data: Record<string, unknown>[], filename: string) => {
     if (data.length === 0) return;
     const headers = Object.keys(data[0]).join(",");
     const rows = data.map((r) => Object.values(r).map((v) => `"${v}"`).join(",")).join("\n");
@@ -288,7 +288,7 @@ const AdminDashboard = () => {
           </CardContent></Card>
           <Card><CardContent className="py-4 text-center">
             <p className="text-2xl font-bold font-display">{voteStats.total}</p>
-            <p className="text-xs text-muted-foreground">Total votes</p>
+            <p className="text-xs text-muted-foreground">Total des votes</p>
           </CardContent></Card>
           <Card><CardContent className="py-4 text-center">
             <p className="text-2xl font-bold font-display text-destructive">{voteStats.suspicious}</p>
@@ -320,7 +320,7 @@ const AdminDashboard = () => {
                   <Card key={sub.id}>
                     <CardContent className="p-4">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                        <img src={sub.cover_image_url} alt="" className="h-16 w-16 rounded-xl object-cover flex-shrink-0" />
+                        <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-16 w-16 rounded-xl object-cover flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{sub.title}</h3>
                           <p className="text-sm text-muted-foreground">{sub.artist_name}</p>

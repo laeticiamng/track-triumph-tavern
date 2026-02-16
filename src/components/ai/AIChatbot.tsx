@@ -99,11 +99,11 @@ export function AIChatbot() {
           }
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Chat error:", err);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: err.message || "Désolé, une erreur est survenue." },
+        { role: "assistant", content: err instanceof Error ? err.message : "Désolé, une erreur est survenue." },
       ]);
     } finally {
       setLoading(false);
@@ -141,7 +141,7 @@ export function AIChatbot() {
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card">
               <div className="flex items-center gap-2">
                 <Bot className="h-5 w-5 text-primary" />
-                <span className="font-display font-semibold text-sm">Assistant SoundClash</span>
+                <span className="font-display font-semibold text-sm">Assistant WMA</span>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="h-7 w-7">
                 <X className="h-4 w-4" />
@@ -154,7 +154,7 @@ export function AIChatbot() {
                 <div className="text-center py-8">
                   <Bot className="h-10 w-10 text-muted-foreground/40 mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">
-                    Salut ! Je suis l'assistant SoundClash. Pose-moi une question sur le concours, la production, ou la promotion musicale.
+                    Salut ! Je suis l'assistant Weekly Music Awards. Pose-moi une question sur le concours, la production, ou la promotion musicale.
                   </p>
                 </div>
               )}

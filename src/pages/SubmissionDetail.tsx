@@ -97,7 +97,7 @@ const SubmissionDetail = () => {
     <Layout>
       <SEOHead
         title={`${submission.title} — ${submission.artist_name}`}
-        description={submission.description || `Ecoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
+        description={submission.description || `Écoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
         url={`/submissions/${submission.id}`}
         image={submission.cover_image_url}
         jsonLd={{
@@ -144,7 +144,7 @@ const SubmissionDetail = () => {
 
             <Link to={`/artist/${submission.user_id}`} className="mt-3 flex items-center gap-3 group">
               {profile?.avatar_url && (
-                <img src={profile.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
+                <img src={profile.avatar_url} alt={`Avatar de ${profile.display_name || "l'artiste"}`} className="h-8 w-8 rounded-full object-cover" />
               )}
               <span className="text-lg text-muted-foreground group-hover:text-foreground transition-colors">
                 {submission.artist_name}

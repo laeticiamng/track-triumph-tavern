@@ -37,9 +37,24 @@ export function CookieConsent() {
   }, []);
 
   const savePreferences = (prefs: CookiePreferences) => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify(prefs));
+    localStorage.setItem(CONSENT_KEY, JSON.stringify({ ...prefs, consentedAt: new Date().toISOString() }));
     setShow(false);
   };
+
+  const reopenBanner = () => {
+    const prefs = getStoredPreferences();
+    if (prefs) {
+      setAnalytics(prefs.analytics);
+      setMarketing(prefs.marketing);
+    }
+    setShow(true);
+  };
+
+  // Expose reopenBanner globally so Footer can call it
+  useEffect(() => {
+    (window as Window & { __reopenCookieBanner?: () => void }).__reopenCookieBanner = reopenBanner;
+    return () => { delete (window as Window & { __reopenCookieBanner?: () => void }).__reopenCookieBanner; };
+  });
 
   const acceptAll = () => {
     savePreferences({ essential: true, analytics: true, marketing: true });
@@ -126,7 +141,7 @@ export function CookieConsent() {
           </AnimatePresence>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button size="sm" onClick={acceptAll} className="bg-gradient-primary hover:opacity-90">
+            <Button size="sm" onClick={acceptAll}>
               Tout accepter
             </Button>
             {showDetails && (
@@ -134,8 +149,8 @@ export function CookieConsent() {
                 Enregistrer mes choix
               </Button>
             )}
-            <Button size="sm" variant="outline" onClick={declineAll}>
-              Refuser tout
+            <Button size="sm" onClick={declineAll}>
+              Tout refuser
             </Button>
           </div>
         </motion.div>

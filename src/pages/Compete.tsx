@@ -219,9 +219,9 @@ const Compete = () => {
       if (insertError) throw insertError;
       toast({ title: "Soumission envoyée !", description: "Elle sera examinée par l'équipe de modération." });
       navigate("/explore");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Submission error:", err);
-      toast({ title: "Erreur", description: err.message || "Erreur lors de l'envoi.", variant: "destructive" });
+      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'envoi.", variant: "destructive" });
     } finally {
       setLoading(false);
     }

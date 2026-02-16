@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
     }
 
     // TODO: integrate a transactional email service (Resend, SendGrid, etc.)
-    console.log(`[NOTIFY] ${new_status} — to: ${email}, track: ${submission.title}`);
+    console.log(`[NOTIFY] ${new_status} — user: ${submission.user_id}, track: ${submission.title}`);
 
     // Store notification record for the user (can be displayed in-app)
     await supabaseAdmin.from("vote_events").insert({
@@ -173,7 +173,7 @@ Deno.serve(async (req) => {
 
     return jsonResponse({
       success: true,
-      notified: email,
+      notified: submission.user_id,
       status: new_status,
       subject,
     });

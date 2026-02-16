@@ -90,7 +90,7 @@ const ArtistProfile = () => {
     <Layout>
       <SEOHead
         title={profile.display_name || "Artiste"}
-        description={profile.bio || `Decouvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
+        description={profile.bio || `Découvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
         url={`/artist/${id}`}
         image={profile.avatar_url || undefined}
         jsonLd={musicGroupJsonLd({
@@ -107,13 +107,13 @@ const ArtistProfile = () => {
         {/* Banner & Avatar */}
         <div className="relative mb-8">
           {profile.banner_url ? (
-            <img src={profile.banner_url} alt="" className="h-48 w-full rounded-2xl object-cover" />
+            <img src={profile.banner_url} alt={`Bannière de ${profile.display_name || "l'artiste"}`} className="h-48 w-full rounded-2xl object-cover" />
           ) : (
             <div className="h-48 w-full rounded-2xl bg-gradient-to-r from-primary/20 to-primary/5" />
           )}
           <div className="absolute -bottom-10 left-6 flex items-end gap-4">
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt="" className="h-20 w-20 rounded-full border-4 border-background object-cover" />
+              <img src={profile.avatar_url} alt={`Photo de ${profile.display_name || "l'artiste"}`} className="h-20 w-20 rounded-full border-4 border-background object-cover" />
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-background bg-secondary text-2xl font-bold">
                 {(profile.display_name || "?")[0]}
@@ -181,7 +181,7 @@ const ArtistProfile = () => {
                     to={`/submissions/${sub.id}`}
                     className="flex items-center gap-3 rounded-xl border border-border p-3 hover:bg-accent/50 transition-colors"
                   >
-                    <img src={sub.cover_image_url} alt="" className="h-14 w-14 rounded-lg object-cover" />
+                    <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-14 w-14 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{sub.title}</p>
                       <p className="text-xs text-muted-foreground">{sub.vote_count} votes</p>

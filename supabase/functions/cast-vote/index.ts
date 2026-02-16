@@ -201,7 +201,7 @@ Deno.serve(async (req) => {
 
     // FREE TIER: weekly vote quota (5 votes/week)
     const tier = await getUserTier(user.email!);
-    console.log(`User tier: ${tier} (${user.email})`);
+    console.log(`User tier: ${tier} (user=${user.id})`);
 
     if (tier === "free") {
       const { count: weeklyVotes } = await supabaseAdmin

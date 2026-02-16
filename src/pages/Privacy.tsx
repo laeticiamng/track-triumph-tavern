@@ -31,6 +31,21 @@ const Privacy = () => (
         <h2 className="text-foreground font-display">7. Sécurité</h2>
         <p>Vos données sont protégées par chiffrement en transit et au repos. L'accès est restreint au personnel autorisé.</p>
 
+        <h2 className="text-foreground font-display">8. Sous-traitants</h2>
+        <p>Dans le cadre de nos services, nous faisons appel aux sous-traitants suivants :</p>
+        <ul>
+          <li><strong>Supabase</strong> — hébergement et base de données. Les données sont stockées sur des serveurs sécurisés conformes au RGPD.</li>
+          <li><strong>Stripe</strong> — traitement des paiements. Stripe agit en tant que sous-traitant pour la gestion sécurisée des transactions financières. Aucune donnée bancaire n'est stockée sur nos serveurs.</li>
+          <li><strong>Vercel</strong> — hébergement front-end. Vercel assure la diffusion et l'hébergement de l'interface utilisateur du site.</li>
+        </ul>
+        <p>Chaque sous-traitant est lié par un accord de traitement des données (DPA) garantissant un niveau de protection conforme au RGPD.</p>
+
+        <h2 className="text-foreground font-display">9. Notification de violation</h2>
+        <p>Conformément à l'article 33 du RGPD, en cas de violation de données à caractère personnel susceptible d'engendrer un risque pour vos droits et libertés, nous nous engageons à notifier l'autorité de contrôle compétente (CNIL) dans un délai de 72 heures après en avoir pris connaissance. Si la violation est susceptible d'engendrer un risque élevé pour vos droits et libertés, vous en serez également informé(e) dans les meilleurs délais, conformément à l'article 34 du RGPD.</p>
+
+        <h2 className="text-foreground font-display">10. Horodatage du consentement cookies</h2>
+        <p>Lorsque vous acceptez ou refusez les cookies via notre bandeau de consentement, nous enregistrons un horodatage (date et heure) de votre choix. Cet horodatage constitue la preuve de votre consentement conformément aux exigences de la CNIL et du RGPD. Il est conservé pendant une durée de 13 mois, au terme de laquelle votre consentement vous sera de nouveau demandé. Vous pouvez modifier vos préférences à tout moment via le lien « Gérer mes cookies » disponible en pied de page.</p>
+
         <p className="text-sm font-medium text-foreground">Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com</p>
       </div>
     </div>

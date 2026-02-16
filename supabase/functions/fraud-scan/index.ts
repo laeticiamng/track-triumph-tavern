@@ -4,7 +4,7 @@ import { getCorsHeaders } from "../_shared/cors.ts";
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
 
-  function jsonResponse(body: any, status = 200) {
+  function jsonResponse(body: unknown, status = 200) {
     return new Response(JSON.stringify(body), {
       status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -76,8 +76,8 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Erreur lors du chargement des votes" }, 500);
     }
 
-    const weekVoteIds = new Set((weekVotes || []).map((v: any) => v.id));
-    const weekEvents = (events || []).filter((e: any) => weekVoteIds.has(e.vote_id));
+    const weekVoteIds = new Set((weekVotes || []).map((v: { id: string }) => v.id));
+    const weekEvents = (events || []).filter((e: { vote_id: string }) => weekVoteIds.has(e.vote_id));
 
     // Load submissions for context
     const { data: submissions } = await supabaseAdmin
@@ -85,17 +85,17 @@ Deno.serve(async (req) => {
       .select("id, title, artist_name")
       .eq("week_id", week_id);
 
-    const submissionMap = new Map((submissions || []).map((s: any) => [s.id, s]));
+    const submissionMap = new Map((submissions || []).map((s: { id: string; title: string; artist_name: string }) => [s.id, s]));
 
     // Load profiles for account age check
     const { data: profiles } = await supabaseAdmin
       .from("profiles")
       .select("id, display_name, created_at");
 
-    const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]));
+    const profileMap = new Map((profiles || []).map((p: { id: string; display_name: string; created_at: string }) => [p.id, p]));
 
     // ── Analysis 1: Burst detection (3+ votes in 2 minutes per user) ──
-    const userEvents = new Map<string, any[]>();
+    const userEvents = new Map<string, Array<{ user_id: string; created_at: string; vote_id: string; ip_address: string }>>();
     for (const evt of weekEvents) {
       const list = userEvents.get(evt.user_id) || [];
       list.push(evt);
@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
 
     const burstUsers = new Set<string>();
     for (const [userId, evts] of userEvents) {
-      const sorted = evts.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      const sorted = evts.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
       for (let i = 0; i <= sorted.length - 3; i++) {
         const t0 = new Date(sorted[i].created_at).getTime();
         const t2 = new Date(sorted[i + 2].created_at).getTime();
@@ -127,7 +127,7 @@ Deno.serve(async (req) => {
       ipVoteCounts.set(ip, (ipVoteCounts.get(ip) || 0) + 1);
     }
 
-    const suspiciousIps: any[] = [];
+    const suspiciousIps: Array<{ ip: string; distinct_users: number; vote_count: number }> = [];
     for (const [ip, users] of ipUsers) {
       if (users.size >= 3) {
         suspiciousIps.push({
@@ -155,7 +155,7 @@ Deno.serve(async (req) => {
     }
 
     // ── Analysis 4: IP concentration per submission (>50% from same IP) ──
-    const votesBySubmission = new Map<string, any[]>();
+    const votesBySubmission = new Map<string, Array<{ id: string; submission_id: string }>>();
     for (const v of (weekVotes || [])) {
       const list = votesBySubmission.get(v.submission_id) || [];
       list.push(v);
@@ -171,7 +171,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const suspiciousSubmissions: any[] = [];
+    const suspiciousSubmissions: Array<{ submission_id: string; title: string; artist_name: string; dominant_ip: string; ip_vote_ratio: number; flags: string[] }> = [];
     for (const [subId, votes] of votesBySubmission) {
       if (votes.length < 3) continue;
       const ipCounts = new Map<string, number>();
@@ -203,7 +203,7 @@ Deno.serve(async (req) => {
       if (users) for (const uid of users) allSuspectUserIds.add(uid);
     }
 
-    const suspiciousUsers: any[] = [];
+    const suspiciousUsers: Array<{ user_id: string; display_name: string; vote_count: number; flags: string[] }> = [];
     for (const userId of allSuspectUserIds) {
       const flags: string[] = [];
       if (burstUsers.has(userId)) flags.push("burst");
