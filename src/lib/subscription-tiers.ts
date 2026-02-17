@@ -2,6 +2,7 @@
 export const SUBSCRIPTION_TIERS = {
   free: {
     name: "Free",
+    tagline: "Écoutez, votez, découvrez",
     price: 0,
     price_id: null,
     product_id: null,
@@ -11,6 +12,14 @@ export const SUBSCRIPTION_TIERS = {
       "Accès au classement en direct",
       "Découvrir tous les artistes",
       "Profil basique",
+    ],
+    highlights: [
+      { label: "Votes", value: "5 / semaine" },
+      { label: "Soumission", value: "Non" },
+      { label: "Commentaires", value: "Non" },
+      { label: "Profil artiste", value: "Basique" },
+      { label: "Statistiques", value: "Non" },
+      { label: "Outils IA", value: "Non" },
     ],
     limits: {
       votes_per_week: 5,
@@ -23,6 +32,7 @@ export const SUBSCRIPTION_TIERS = {
   },
   pro: {
     name: "Pro",
+    tagline: "Soumettez, progressez, brillez",
     price: 9.99,
     price_id: "price_1SxwC0DFa5Y9NR1IzyElGuxb",
     product_id: "prod_TvnnCLdThflvd5",
@@ -37,6 +47,14 @@ export const SUBSCRIPTION_TIERS = {
       "Chatbot assistant musical IA",
       "Écoute, classement et découverte inclus",
     ],
+    highlights: [
+      { label: "Votes", value: "Illimités" },
+      { label: "Soumission", value: "1 / semaine" },
+      { label: "Commentaires", value: "5 / semaine" },
+      { label: "Profil artiste", value: "Personnalisé" },
+      { label: "Statistiques", value: "Oui" },
+      { label: "Outils IA", value: "3 outils" },
+    ],
     limits: {
       votes_per_week: Infinity,
       can_submit: true,
@@ -48,6 +66,7 @@ export const SUBSCRIPTION_TIERS = {
   },
   elite: {
     name: "Elite",
+    tagline: "L'expérience complète, sans limites",
     price: 19.99,
     price_id: "price_1SxwC1DFa5Y9NR1I0VRck1kX",
     product_id: "prod_Tvnn1RBP7qVms7",
@@ -61,6 +80,14 @@ export const SUBSCRIPTION_TIERS = {
       "Profil artiste premium (avatar, banner, liens sociaux)",
       "Badge Elite sur le profil",
       "Statistiques de votes détaillées",
+    ],
+    highlights: [
+      { label: "Votes", value: "Illimités" },
+      { label: "Soumission", value: "1 / semaine" },
+      { label: "Commentaires", value: "Illimités" },
+      { label: "Profil artiste", value: "Premium + badge" },
+      { label: "Statistiques", value: "Détaillées" },
+      { label: "Outils IA", value: "4 outils (+ feedback)" },
     ],
     limits: {
       votes_per_week: Infinity,
