@@ -17,6 +17,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2 } from "lucide-react";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -267,6 +268,9 @@ const Profile = () => {
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><BarChart3 className="h-3 w-3" /> Votes reçus</p>
           </Card>
         </div>
+
+        {/* Vote Streak */}
+        <StreakBadge showRecord />
 
         {/* Stats Chart (Pro/Elite) */}
         {tier !== "free" && (

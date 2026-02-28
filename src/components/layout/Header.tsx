@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
 
 const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
@@ -71,11 +72,14 @@ export function Header() {
 
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/profile" className="flex items-center gap-2">
-                <User className="h-4 w-4" /> Profil
-              </Link>
-            </Button>
+            <>
+              <StreakBadge compact showRecord />
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/profile" className="flex items-center gap-2">
+                  <User className="h-4 w-4" /> Profil
+                </Link>
+              </Button>
+            </>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>

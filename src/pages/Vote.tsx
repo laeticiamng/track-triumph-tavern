@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVoteState } from "@/hooks/use-vote-state";
@@ -129,6 +130,10 @@ const Vote = () => {
             remainingVotes={voteState.remainingVotes}
             tier={voteState.tier}
           />
+        </div>
+
+        <div className="pointer-events-auto">
+          <StreakBadge showRecord />
         </div>
 
         {/* Category vote progress */}
