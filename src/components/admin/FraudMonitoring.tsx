@@ -99,7 +99,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
 
     if (!events || events.length === 0) return;
 
-    const masked = events.map((e: { ip_address?: string; user_id: string; [key: string]: unknown }) => ({
+    const masked = events.map((e) => ({
       ...e,
       ip_address: e.ip_address ? maskIp(String(e.ip_address)) : "",
       user_id: maskUserId(e.user_id),

@@ -29,24 +29,23 @@ const Explore = () => {
   const activeCategory = searchParams.get("category") || "all";
 
   useEffect(() => {
-    supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
+    Promise.resolve(supabase.from("categories").select("*").order("sort_order")).then(({ data }) => {
       if (data) setCategories(data);
-    }).catch(() => { /* categories load failed silently */ });
+    }).catch(() => {});
 
-    supabase
+    Promise.resolve(supabase
       .from("weeks")
       .select("*")
       .eq("is_active", true)
       .single()
-      .then(({ data }) => {
+    ).then(({ data }) => {
         if (data) {
           setActiveWeek(data);
         } else {
           setNoActiveWeek(true);
           setLoading(false);
         }
-      })
-      .catch(() => {
+      }).catch(() => {
         setNoActiveWeek(true);
         setLoading(false);
       });
@@ -66,7 +65,7 @@ const Explore = () => {
       query = query.eq("category_id", activeCategory);
     }
 
-    query.then(({ data }) => {
+    Promise.resolve(query).then(({ data }) => {
       setSubmissions(data || []);
       setLoading(false);
     }).catch(() => {

@@ -36,12 +36,12 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
 
   useEffect(() => {
     if (!categoryId) return;
-    supabase
+    Promise.resolve(supabase
       .from("categories")
       .select("scoring_criteria")
       .eq("id", categoryId)
       .single()
-      .then(({ data }) => {
+    ).then(({ data }) => {
         if (data?.scoring_criteria) {
           setScoringCriteria(data.scoring_criteria as unknown as ScoringCriterion[]);
         }

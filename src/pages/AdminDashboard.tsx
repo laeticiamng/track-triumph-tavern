@@ -74,7 +74,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (!authLoading && !user) { navigate("/auth"); return; }
     if (user) {
-      supabase.from("user_roles").select("role").eq("user_id", user.id).then(({ data }) => {
+      Promise.resolve(supabase.from("user_roles").select("role").eq("user_id", user.id)).then(({ data }) => {
         const roles = data?.map((r) => r.role) || [];
         if (roles.includes("admin")) {
           setIsAdmin(true);

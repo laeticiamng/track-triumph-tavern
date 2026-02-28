@@ -20,12 +20,12 @@ export function HeroSection() {
   const [hasContent, setHasContent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    supabase
+    Promise.resolve(supabase
       .from("weeks")
       .select("title, week_number, season_id, voting_close_at, id, seasons(name)")
       .eq("is_active", true)
       .single()
-      .then(async ({ data }) => {
+    ).then(async ({ data }) => {
         if (data) {
           const season = (data as { seasons?: { name: string } | null }).seasons?.name || "Saison 1";
           const title = data.title || `Semaine ${data.week_number}`;

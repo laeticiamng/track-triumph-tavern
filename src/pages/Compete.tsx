@@ -123,7 +123,7 @@ const Compete = () => {
   // Pre-fill artist name from profile
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("display_name").eq("id", user.id).single().then(({ data }) => {
+    Promise.resolve(supabase.from("profiles").select("display_name").eq("id", user.id).single()).then(({ data }) => {
       if (data?.display_name && !artistName) {
         setArtistName(data.display_name);
       }
@@ -131,20 +131,19 @@ const Compete = () => {
   }, [user]);
 
   useEffect(() => {
-    supabase.from("categories").select("*").order("sort_order").then(({ data }) => {
+    Promise.resolve(supabase.from("categories").select("*").order("sort_order")).then(({ data }) => {
       if (data) setCategories(data);
     }).catch(() => {});
 
-    supabase
+    Promise.resolve(supabase
       .from("weeks")
       .select("id, title, submission_open_at, submission_close_at")
       .eq("is_active", true)
       .single()
-      .then(({ data }) => {
+    ).then(({ data }) => {
         setActiveWeek(data as ActiveWeek | null);
         setWeekLoading(false);
-      })
-      .catch(() => {
+      }).catch(() => {
         setWeekLoading(false);
       });
   }, []);
@@ -152,16 +151,15 @@ const Compete = () => {
   // Check if user already submitted this week
   useEffect(() => {
     if (!user || !activeWeek) return;
-    supabase
+    Promise.resolve(supabase
       .from("submissions")
       .select("id")
       .eq("user_id", user.id)
       .eq("week_id", activeWeek.id)
       .limit(1)
-      .then(({ data }) => {
+    ).then(({ data }) => {
         setAlreadySubmitted((data?.length ?? 0) > 0);
-      })
-      .catch(() => {});
+      }).catch(() => {});
   }, [user, activeWeek]);
 
   // Derived state

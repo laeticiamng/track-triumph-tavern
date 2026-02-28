@@ -34,7 +34,7 @@ export function CategoriesSection() {
   const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>(fallbackCategories);
 
   useEffect(() => {
-    supabase.from("categories").select("id, name, slug").order("sort_order").then(({ data }) => {
+    Promise.resolve(supabase.from("categories").select("id, name, slug").order("sort_order")).then(({ data }) => {
       if (data && data.length > 0) setCategories(data);
     }).catch(() => {});
   }, []);
