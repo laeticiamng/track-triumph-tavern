@@ -27,8 +27,8 @@ interface FeedSubmission {
   category_id: string;
   category_name: string;
   artist_avatar: string | null;
-  preview_start_sec: number;
-  preview_end_sec: number;
+  preview_start_sec?: number;
+  preview_end_sec?: number;
 }
 
 const Vote = () => {
@@ -68,7 +68,7 @@ const Vote = () => {
 
     let query = supabase
       .from("submissions")
-      .select("id, title, artist_name, cover_image_url, audio_excerpt_url, tags, user_id, category_id, preview_start_sec, preview_end_sec")
+      .select("id, title, artist_name, cover_image_url, audio_excerpt_url, tags, user_id, category_id")
       .eq("status", "approved")
       .eq("week_id", activeWeekId)
       .order("created_at", { ascending: false });

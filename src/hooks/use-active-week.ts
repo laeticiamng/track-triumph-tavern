@@ -8,11 +8,11 @@ export function useActiveWeek() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase
+    Promise.resolve(supabase
       .from("weeks")
       .select("*")
       .eq("is_active", true)
-      .single()
+      .single())
       .then(({ data, error: err }) => {
         if (err && err.code !== "PGRST116") {
           setError("Impossible de charger la semaine active");

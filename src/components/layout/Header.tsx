@@ -22,10 +22,10 @@ export function Header() {
 
   useEffect(() => {
     if (!user) { setIsAdmin(false); return; }
-    supabase
+    Promise.resolve(supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", user.id)
+      .eq("user_id", user.id))
       .then(({ data }) => {
         const roles = data?.map((r) => r.role) || [];
         setIsAdmin(roles.includes("admin") || roles.includes("moderator"));

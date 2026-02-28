@@ -33,11 +33,11 @@ export function useVoteState(activeWeekId: string | null): VoteState {
     }
 
     setLoading(true);
-    supabase
+    Promise.resolve(supabase
       .from("votes")
       .select("category_id, comment")
       .eq("user_id", user.id)
-      .eq("week_id", activeWeekId)
+      .eq("week_id", activeWeekId))
       .then(({ data }) => {
         if (data) {
           const cats = new Set(data.map((v) => v.category_id));
