@@ -1,64 +1,40 @@
 
-# Corrections suite au retour bêta-testeur
 
-## Probleme 1 : La plus-value artiste n'est pas claire
+# Fix Build Errors
 
-**Constat** : Un visiteur ne comprend pas en 3 secondes ce qu'il gagne a poster sa musique.
+## Error 1: Edge Functions - Invalid npm import
 
-### Actions :
+3 edge functions use `npm:@supabase/supabase-js@2.57.2` which is not supported. Replace with `https://esm.sh/@supabase/supabase-js@2` (the pattern used by all other edge functions).
 
-**A. Nouvelle section "Ce que vous gagnez" sur la landing page** (`src/pages/Index.tsx` + nouveau composant `src/components/landing/ArtistBenefits.tsx`)
+**Files:**
+- `supabase/functions/check-subscription/index.ts` (line 3)
+- `supabase/functions/create-checkout/index.ts` (line 3)
+- `supabase/functions/customer-portal/index.ts` (line 3)
 
-Ajout d'une section entre "WhyUs" et "CategoriesSection" qui liste clairement les benefices concrets pour l'artiste :
+## Error 2: FraudMonitoring - Type mismatch
 
-- Visibilite : "Les gagnants sont mis en avant chaque semaine sur la page d'accueil"
-- Cash : "Jusqu'a 200 EUR de recompenses chaque semaine"
-- Feedback : "Recevez des votes detailles sur 3 criteres (emotion, originalite, production)"
-- Communaute : "Faites-vous connaitre aupres d'une communaute de passionnes"
-- Credibilite : "Affichez vos badges et classements sur votre profil artiste"
+In `src/components/admin/FraudMonitoring.tsx` line 102, the `ip_address` field from the database is typed as `unknown` (it's an `inet` column), but the code expects `string`. Fix by casting properly.
 
-**B. Sous-titre Hero plus explicite** (`src/components/landing/HeroSection.tsx`)
+**Change:** Replace the map callback type annotation to match the actual Supabase return type, casting `ip_address` to `string` explicitly.
 
-Remplacer le sous-titre actuel par un message plus oriente benefice artiste :
-"Soumettez votre musique, recevez des votes de la communaute, et gagnez jusqu'a 200 EUR chaque semaine."
+## Error 3: `.catch()` on PromiseLike
 
----
+The Supabase client's `.then()` returns `PromiseLike<void>` which does not have a `.catch()` method. The fix is to wrap each call in `Promise.resolve()` before chaining `.catch()`.
 
-## Probleme 2 : Les gagnants de la semaine ne sont pas visibles
+**12 occurrences across 8 files:**
+- `src/components/landing/CategoriesSection.tsx` (line 39)
+- `src/components/landing/HeroSection.tsx` (line 45)
+- `src/components/layout/Header.tsx` (line 33)
+- `src/components/vote/VoteButton.tsx` (line 48)
+- `src/hooks/use-active-week.ts` (line 23)
+- `src/hooks/use-vote-state.ts` (line 50)
+- `src/pages/AdminDashboard.tsx` (line 85)
+- `src/pages/Compete.tsx` (lines 130, 136, 147, 164)
+- `src/pages/Explore.tsx` (lines 34, 49, 72)
 
-**Constat** : Les gagnants sont uniquement sur /results et /hall-of-fame. Un visiteur qui arrive sur la page d'accueil ou sur /explore ne les voit jamais.
-
-### Actions :
-
-**C. Nouveau composant "Podium de la semaine"** (`src/components/landing/WeeklyPodium.tsx`)
-
-Un bandeau/section qui affiche les 3 derniers gagnants (de la semaine precedente dont les resultats sont publies) avec :
-- Photo de couverture du morceau
-- Nom de l'artiste + titre
-- Medaille (or, argent, bronze)
-- Lien vers la soumission
-- Message "Aucun podium encore" si pas de resultats publies
-
-Donnees : requete sur `winners` + `submissions` pour la derniere semaine avec `results_published_at` non null.
-
-**D. Afficher le podium sur la page d'accueil** (`src/pages/Index.tsx`)
-
-Inserer le composant `WeeklyPodium` entre HowItWorks et WhyUs pour que les visiteurs voient immediatement les gagnants.
-
-**E. Afficher le podium sur la page Explore** (`src/pages/Explore.tsx`)
-
-Ajouter un bandeau compact en haut de la page Explore montrant les 3 gagnants de la semaine precedente, avec un lien vers /results.
+**Pattern:** Change `supabase.from(...).select(...).then(...).catch(...)` to `Promise.resolve(supabase.from(...).select(...)).then(...).catch(...)` -- or restructure to use `async/await` with try/catch inside the useEffect.
 
 ---
 
-## Resume technique
+**Summary:** 11 files modified, 0 files created. All fixes are mechanical (import paths, type casts, Promise wrapping). No functional changes.
 
-| Fichier | Action |
-|---|---|
-| `src/components/landing/ArtistBenefits.tsx` | Creer — nouvelle section "Ce que vous gagnez" |
-| `src/components/landing/WeeklyPodium.tsx` | Creer — composant podium gagnants de la semaine |
-| `src/components/landing/HeroSection.tsx` | Modifier — sous-titre plus explicite |
-| `src/pages/Index.tsx` | Modifier — inserer ArtistBenefits + WeeklyPodium |
-| `src/pages/Explore.tsx` | Modifier — ajouter bandeau podium en haut |
-
-5 fichiers touches (2 crees, 3 modifies). Aucun changement de base de donnees necessaire, les tables `winners` et `submissions` existent deja.
