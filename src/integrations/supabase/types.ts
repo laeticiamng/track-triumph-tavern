@@ -366,6 +366,44 @@ export type Database = {
           },
         ]
       }
+      vote_streaks: {
+        Row: {
+          current_streak: number
+          id: string
+          last_vote_week_id: string | null
+          last_vote_week_number: number | null
+          longest_streak: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number
+          id?: string
+          last_vote_week_id?: string | null
+          last_vote_week_number?: number | null
+          longest_streak?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_streak?: number
+          id?: string
+          last_vote_week_id?: string | null
+          last_vote_week_number?: number | null
+          longest_streak?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_streaks_last_vote_week_id_fkey"
+            columns: ["last_vote_week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       votes: {
         Row: {
           category_id: string
