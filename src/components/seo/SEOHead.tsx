@@ -47,11 +47,7 @@ export function SEOHead({
       {/* JSON-LD */}
       {jsonLd && (
         <script type="application/ld+json">
-          {JSON.stringify(
-            Array.isArray(jsonLd) ? jsonLd : jsonLd,
-            null,
-            0
-          )}
+          {JSON.stringify(jsonLd, null, 0)}
         </script>
       )}
     </Helmet>
