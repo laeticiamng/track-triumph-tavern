@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { SEOHead, categoryJsonLd } from "@/components/seo/SEOHead";
+import { SEOHead, categoryJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -132,10 +132,19 @@ const CategoryDetail = () => {
   return (
     <Layout>
       <SEOHead
-        title={category.name}
-        description={category.description || `Découvrez la catégorie ${category.name} sur Weekly Music Awards.`}
+        title={`${category.name} — Concours musical`}
+        description={category.description
+          ? `${category.description} Découvrez les morceaux ${category.name} en compétition sur Weekly Music Awards : sous-genres, conseils de production, critères de notation et histoire du genre.`
+          : `Découvrez la catégorie ${category.name} sur Weekly Music Awards : sous-genres acceptés, critères de notation, conseils de production et figures emblématiques.`}
         url={`/categories/${slug}`}
-        jsonLd={categoryJsonLd({ name: category.name, slug: category.slug, description: category.description })}
+        jsonLd={[
+          categoryJsonLd({ name: category.name, slug: category.slug, description: category.description }),
+          breadcrumbJsonLd([
+            { name: "Accueil", url: "/" },
+            { name: "Catégories", url: "/#categories" },
+            { name: category.name, url: `/categories/${slug}` },
+          ]),
+        ]}
       />
       {/* Hero banner */}
       <motion.section

@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { SEOHead } from "@/components/seo/SEOHead";
+import { SEOHead, organizationJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
 import { Music, Target, Shield, Gift, Users, Rocket, Star, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -43,7 +43,18 @@ const timeline = [
 const About = () => {
   return (
     <Layout>
-      <SEOHead title="À propos" description="Découvrez l'histoire, la mission et les valeurs de Weekly Music Awards, le concours musical hebdomadaire." url="/about" />
+      <SEOHead
+        title="À propos"
+        description="Weekly Music Awards est le seul concours musical hebdomadaire 100% communautaire et méritocratique. Découvrez notre mission : offrir à chaque artiste indépendant une scène équitable basée uniquement sur le talent et le vote de la communauté."
+        url="/about"
+        jsonLd={[
+          organizationJsonLd,
+          breadcrumbJsonLd([
+            { name: "Accueil", url: "/" },
+            { name: "À propos", url: "/about" },
+          ]),
+        ]}
+      />
       <section className="py-16 md:py-24">
         <div className="container max-w-3xl">
           {/* Header */}
@@ -61,9 +72,10 @@ const About = () => {
               À propos de Weekly Music Awards
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              Le concours musical hebdomadaire où la communauté écoute, vote et récompense
-              les meilleurs artistes indépendants. Un projet édité par{" "}
-              <strong className="text-foreground">EMOTIONSCARE SASU</strong>.
+              <strong>Le seul concours musical hebdomadaire où c'est la communauté qui décide du podium.</strong>{" "}
+              Pas de jury opaque, pas de passe-droits : les artistes soumettent, la communauté écoute et vote sur 3 critères
+              (originalité, production, émotion), et les gagnants remportent jusqu'à 200 € chaque semaine.
+              Édité par <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445).
             </p>
           </motion.div>
 

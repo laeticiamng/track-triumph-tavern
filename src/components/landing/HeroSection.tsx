@@ -119,11 +119,11 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="max-w-4xl font-display text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Le concours musical{" "}
+          Le seul concours musical{" "}
           <span className="bg-gradient-to-r from-amber-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
-            hebdomadaire
+            100% communautaire
           </span>{" "}
-          où la communauté décide.
+          et méritocratique.
         </motion.h1>
 
         <motion.p
@@ -132,7 +132,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 max-w-xl text-base text-white/70 sm:text-lg"
         >
-          Soumettez votre musique, recevez des votes de la communauté, et gagnez jusqu'à 200 € chaque semaine.
+          Soumettez votre musique dans 12 catégories, recevez des votes sur 3 critères (originalité, production, émotion), et gagnez jusqu'à 200 € chaque semaine. Pas de jury, pas de passe-droits.
         </motion.p>
 
         {/* Trust badges - colored */}
@@ -143,9 +143,9 @@ export function HeroSection() {
           className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm"
         >
           {[
-            { label: "Vote gratuit", color: "text-green-300" },
-            { label: "Basé sur le mérite", color: "text-amber-300" },
-            { label: "200 € par semaine", color: "text-pink-300" },
+            { label: "Vote 100% gratuit", color: "text-green-300" },
+            { label: "Anti-fraude IA", color: "text-amber-300" },
+            { label: "200 € / semaine", color: "text-pink-300" },
           ].map((badge) => (
             <span key={badge.label} className="inline-flex items-center gap-1.5 text-white/80">
               <CheckCircle className={`h-4 w-4 ${badge.color}`} />
