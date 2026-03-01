@@ -10,9 +10,9 @@ interface SEOHeadProps {
 }
 
 const BASE_URL = "https://weeklymusicawards.com";
-const DEFAULT_TITLE = "Weekly Music Awards — Concours Musical Hebdomadaire";
+const DEFAULT_TITLE = "Weekly Music Awards — Le seul concours musical 100% communautaire et méritocratique";
 const DEFAULT_DESCRIPTION =
-  "Soumettez votre musique, recevez des votes de la communaute et montez sur le podium. Participation 100% gratuite chaque semaine.";
+  "Weekly Music Awards est le concours musical hebdomadaire où la communauté écoute, vote et récompense les artistes indépendants. Soumettez votre musique, recevez des votes sur 3 critères (originalité, production, émotion) et gagnez jusqu'à 200 € chaque semaine. 100% gratuit pour voter, anti-fraude IA, 12 catégories musicales.";
 
 export function SEOHead({
   title,
@@ -58,13 +58,29 @@ export function SEOHead({
   );
 }
 
-// Reusable JSON-LD schemas
+// ─── Reusable JSON-LD schemas ───────────────────────────────
+
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Weekly Music Awards",
+  alternateName: "WMA",
   url: BASE_URL,
-  description: DEFAULT_DESCRIPTION,
+  description: "Le seul concours musical hebdomadaire 100% communautaire et méritocratique. Les artistes indépendants soumettent leur musique, la communauté vote sur 3 critères, et les gagnants remportent jusqu'à 200€ par semaine.",
+  foundingDate: "2025",
+  founder: {
+    "@type": "Organization",
+    name: "EMOTIONSCARE SASU",
+    taxID: "944505445",
+  },
+  areaServed: { "@type": "Country", name: "France" },
+  knowsAbout: [
+    "Concours musical en ligne",
+    "Découverte d'artistes indépendants",
+    "Vote communautaire musical",
+    "Gamification musicale",
+    "Anti-fraude IA pour vote en ligne",
+  ],
   sameAs: [],
 };
 
@@ -73,7 +89,7 @@ export const webSiteJsonLd = {
   "@type": "WebSite",
   name: "Weekly Music Awards",
   url: BASE_URL,
-  description: DEFAULT_DESCRIPTION,
+  description: "Concours musical hebdomadaire communautaire avec 12 catégories, votes sur 3 critères et récompenses chaque semaine.",
   potentialAction: {
     "@type": "SearchAction",
     target: `${BASE_URL}/explore?search={search_term_string}`,
@@ -81,20 +97,98 @@ export const webSiteJsonLd = {
   },
 };
 
+// ─── FAQ JSON-LD builder ──────────────────────────────────
+
+export function faqJsonLd(faqs: Array<{ q: string; a: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  };
+}
+
+// ─── HowTo JSON-LD ──────────────────────────────────────
+
+export const howItWorksJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Comment participer à Weekly Music Awards",
+  description: "Guide étape par étape pour participer au concours musical hebdomadaire Weekly Music Awards : inscription, soumission, vote et récompenses.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Créez votre compte gratuit",
+      text: "Inscrivez-vous gratuitement sur Weekly Music Awards en 30 secondes. Aucune carte bancaire requise pour voter.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Soumettez votre musique",
+      text: "Uploadez un extrait audio (30-60 secondes) avec une image de couverture dans l'une des 12 catégories musicales. Abonnement Pro requis pour soumettre.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "La communauté écoute et vote",
+      text: "Les membres écoutent les morceaux et votent sur 3 critères : originalité, production et émotion. Chaque critère est noté de 1 à 5 étoiles.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 4,
+      name: "Montez sur le podium",
+      text: "À la fin de chaque semaine, les 3 premiers de chaque catégorie montent sur le podium et se partagent la cagnotte : 🥇 200€, 🥈 100€, 🥉 50€.",
+    },
+  ],
+};
+
+// ─── BreadcrumbList builder ──────────────────────────────
+
+export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${BASE_URL}${item.url}`,
+    })),
+  };
+}
+
 // Combined schemas for the homepage
 export const homePageJsonLd = [
   organizationJsonLd,
   webSiteJsonLd,
+  howItWorksJsonLd,
+  faqJsonLd([
+    { q: "C'est vraiment gratuit ?", a: "Le vote et l'écoute sont 100% gratuits pour tous les membres. Pour soumettre un morceau au concours, un abonnement Pro (à partir de 9,99 €/mois) est nécessaire. Aucun paiement n'influence le classement." },
+    { q: "Qui peut participer ?", a: "Tout artiste ou groupe musical peut s'inscrire. Il suffit de posséder les droits sur le morceau soumis et de respecter le règlement du concours." },
+    { q: "Comment les notes sont-elles calculées ?", a: "Chaque vote évalue trois critères : originalité, production et émotion. La moyenne pondérée des trois donne le score final. Un système anti-fraude IA garantit l'intégrité de chaque vote." },
+    { q: "Quelles sont les récompenses ?", a: "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 200€ pour le 1er, 100€ pour le 2e et 50€ pour le 3e. Les récompenses sont financées par les sponsors, jamais par les participants." },
+    { q: "Comment fonctionne l'anti-fraude ?", a: "Une intelligence artificielle analyse chaque vote en temps réel : détection de comptes suspects, rafales de votes, comportements anormaux. Les votes frauduleux sont automatiquement invalidés." },
+    { q: "Puis-je soumettre plusieurs morceaux ?", a: "Vous pouvez soumettre un morceau par semaine et par catégorie, garantissant une compétition équitable pour tous les artistes." },
+  ]),
 ];
 
 export function eventJsonLd(week: { title?: string | null; voting_open_at: string; voting_close_at: string }) {
   return {
     "@context": "https://schema.org",
     "@type": "Event",
-    name: week.title || "Weekly Music Awards — Competition Hebdomadaire",
+    name: week.title || "Weekly Music Awards — Compétition Hebdomadaire",
+    description: "Concours musical hebdomadaire communautaire. Écoutez les morceaux soumis par des artistes indépendants et votez sur 3 critères : originalité, production, émotion.",
     startDate: week.voting_open_at,
     endDate: week.voting_close_at,
     eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
     organizer: {
       "@type": "Organization",
       name: "Weekly Music Awards",
@@ -103,6 +197,13 @@ export function eventJsonLd(week: { title?: string | null; voting_open_at: strin
     location: {
       "@type": "VirtualLocation",
       url: `${BASE_URL}/vote`,
+    },
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+      description: "Vote gratuit pour tous les membres",
     },
   };
 }

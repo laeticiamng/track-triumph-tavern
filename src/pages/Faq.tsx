@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
-import { SEOHead } from "@/components/seo/SEOHead";
+import { SEOHead, faqJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -15,12 +15,20 @@ const faqSections = [
     title: "Général",
     items: [
       {
+        q: "Qu'est-ce que Weekly Music Awards ?",
+        a: "Weekly Music Awards est le seul concours musical hebdomadaire 100% communautaire et méritocratique. Chaque semaine, des artistes indépendants soumettent leur musique dans 12 catégories. La communauté écoute et vote sur 3 critères (originalité, production, émotion), et les 3 meilleurs de chaque catégorie montent sur le podium.",
+      },
+      {
         q: "C'est vraiment gratuit ?",
-        a: "Le vote et l'écoute sont 100 % gratuits pour tous les membres. Pour soumettre un morceau au concours, un abonnement Pro (à partir de 9,99 €/mois) est nécessaire. Aucun paiement n'influence le classement.",
+        a: "Le vote et l'écoute sont 100 % gratuits pour tous les membres. Pour soumettre un morceau au concours, un abonnement Pro (à partir de 9,99 €/mois) est nécessaire. Aucun paiement n'influence le classement — le classement est 100% méritocratique.",
       },
       {
         q: "Qui peut participer ?",
-        a: "Tout artiste ou groupe musical majeur peut s'inscrire. Il suffit de posséder les droits sur le morceau soumis et de respecter le règlement du concours.",
+        a: "Tout artiste ou groupe musical majeur peut s'inscrire. Il suffit de posséder les droits sur le morceau soumis et de respecter le règlement du concours. Amateurs comme professionnels sont les bienvenus.",
+      },
+      {
+        q: "En quoi Weekly Music Awards est différent des autres concours musicaux ?",
+        a: "Contrairement aux concours traditionnels avec jury opaque, Weekly Music Awards est 100% communautaire : c'est le public qui décide. Notre système anti-fraude IA garantit l'intégrité des votes. Les récompenses sont hebdomadaires (pas annuelles), et le classement ne peut jamais être influencé par un paiement.",
       },
       {
         q: "Faut-il être professionnel pour participer ?",
@@ -32,16 +40,20 @@ const faqSections = [
     title: "Votes et notation",
     items: [
       {
-        q: "Comment les notes sont-elles calculées ?",
-        a: "Chaque vote évalue trois critères : émotion, originalité et production. La moyenne pondérée des trois donne le score final. Notre système anti-fraude IA garantit l'intégrité de chaque vote.",
+        q: "Comment fonctionne le système de vote ?",
+        a: "Chaque vote évalue trois critères : originalité, production et émotion, chacun noté de 1 à 5 étoiles. La moyenne pondérée des trois donne le score final. Les poids de chaque critère peuvent varier selon la catégorie musicale.",
       },
       {
         q: "Combien de votes puis-je donner ?",
-        a: "Avec un compte gratuit, vous disposez de 5 votes par semaine. Les abonnés Pro et Elite bénéficient de votes illimités.",
+        a: "Avec un compte gratuit, vous disposez de 5 votes par semaine. Les abonnés Pro et Elite bénéficient de votes illimités. Chaque vote est unique par artiste et par semaine.",
       },
       {
         q: "Comment fonctionne l'anti-fraude ?",
-        a: "Notre intelligence artificielle analyse chaque vote en temps réel : détection de comptes suspects, rafales de votes, comportements anormaux. Les votes frauduleux sont automatiquement invalidés.",
+        a: "Weekly Music Awards utilise une intelligence artificielle qui analyse chaque vote en temps réel. Le système détecte les comptes suspects, les rafales de votes anormales, les adresses IP suspectes et les comportements frauduleux. Les votes frauduleux sont automatiquement invalidés pour garantir un classement 100% méritocratique.",
+      },
+      {
+        q: "Puis-je laisser un commentaire sur un morceau ?",
+        a: "Les abonnés Pro et Elite peuvent laisser des commentaires constructifs sur les morceaux. Les commentaires enrichissent le feedback pour les artistes et contribuent au badge 'Critique étoilé' de la gamification.",
       },
     ],
   },
@@ -49,12 +61,12 @@ const faqSections = [
     title: "Soumissions et catégories",
     items: [
       {
-        q: "Puis-je soumettre plusieurs morceaux ?",
-        a: "Vous pouvez soumettre un morceau par semaine et par catégorie. Cela garantit une compétition équitable pour tous les artistes.",
+        q: "Quelles sont les 12 catégories musicales ?",
+        a: "Weekly Music Awards propose 12 catégories : Rap/Trap, Pop, Afro, Electronic, R&B, Lofi, Rock/Indé, Open, DJ, Reggae, Country et Jazz. Chaque catégorie a ses propres critères de notation, sous-genres acceptés et conseils de production.",
       },
       {
-        q: "Quelles sont les catégories musicales ?",
-        a: "Nous proposons 9 catégories : Pop, Rock, Hip-Hop/Rap, Electro, R&B, Jazz, Classique, World/Afro et Autres. Chaque catégorie a son propre classement hebdomadaire.",
+        q: "Puis-je soumettre plusieurs morceaux ?",
+        a: "Vous pouvez soumettre un morceau par semaine et par catégorie. Cela garantit une compétition équitable pour tous les artistes.",
       },
       {
         q: "Quel format audio est accepté ?",
@@ -63,11 +75,11 @@ const faqSections = [
     ],
   },
   {
-    title: "Récompenses",
+    title: "Récompenses et cagnotte",
     items: [
       {
-        q: "Quelles sont les récompenses ?",
-        a: "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont financées par nos sponsors, jamais par les participants.",
+        q: "Quelles sont les récompenses hebdomadaires ?",
+        a: "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont 100% financées par nos sponsors, jamais par les participants.",
       },
       {
         q: "Comment recevoir mes gains ?",
@@ -80,31 +92,54 @@ const faqSections = [
     ],
   },
   {
+    title: "Gamification et badges",
+    items: [
+      {
+        q: "Comment fonctionnent les badges hebdomadaires ?",
+        a: "Weekly Music Awards attribue 4 badges chaque semaine : 🏆 Top Voter (le plus de votes), 🔍 Découvreur (premier à voter pour un futur gagnant), 📝 Critique étoilé (le plus de commentaires), 🌈 Éclectique (votes dans le plus de catégories). Les badges sont visibles sur votre profil et dans le leaderboard.",
+      },
+      {
+        q: "Comment fonctionne le streak de votes ?",
+        a: "Voter chaque semaine consécutive augmente votre streak (série). Les paliers vont de Start (1 semaine) à Legendary (10+ semaines). Un streak élevé témoigne de votre engagement dans la communauté.",
+      },
+    ],
+  },
+  {
     title: "Abonnements",
     items: [
       {
         q: "Quels abonnements proposez-vous ?",
-        a: "Nous proposons trois formules : Gratuit (écoute + 5 votes/semaine), Pro à 9,99 €/mois (soumission + votes illimités + outils IA) et Elite à 19,99 €/mois (toutes les fonctionnalités Pro + feedback IA détaillé + badge Elite).",
+        a: "Trois formules : Gratuit (écoute + 5 votes/semaine), Pro à 9,99 €/mois (soumission + votes illimités + outils IA) et Elite à 19,99 €/mois (toutes les fonctionnalités Pro + feedback IA détaillé + badge Elite + commentaires illimités).",
+      },
+      {
+        q: "Le paiement influence-t-il le classement ?",
+        a: "Absolument pas. Le classement de Weekly Music Awards est 100 % méritocratique. Les abonnements donnent accès à des outils (soumission, analytics, IA) mais n'influencent jamais les résultats du concours.",
       },
       {
         q: "Puis-je résilier à tout moment ?",
         a: "Oui, tous nos abonnements sont sans engagement. Vous pouvez résilier à tout moment depuis votre espace personnel. L'accès est maintenu jusqu'à la fin de la période facturée.",
-      },
-      {
-        q: "Le paiement influence-t-il le classement ?",
-        a: "Absolument pas. Le classement est 100 % méritocratique. Les abonnements donnent accès à des outils (soumission, analytics, IA) mais n'influencent jamais les résultats.",
       },
     ],
   },
 ];
 
 const Faq = () => {
+  // Flatten all FAQs for JSON-LD
+  const allFaqs = faqSections.flatMap(s => s.items);
+
   return (
     <Layout>
       <SEOHead
-        title="FAQ"
-        description="Toutes les réponses à vos questions sur Weekly Music Awards : participation, votes, récompenses, abonnements et plus."
+        title="FAQ — Questions fréquentes"
+        description="Toutes les réponses sur Weekly Music Awards : comment ça marche, comment voter, les récompenses hebdomadaires, le système anti-fraude IA, les 12 catégories musicales et les abonnements."
         url="/faq"
+        jsonLd={[
+          faqJsonLd(allFaqs),
+          breadcrumbJsonLd([
+            { name: "Accueil", url: "/" },
+            { name: "FAQ", url: "/faq" },
+          ]),
+        ]}
       />
       <section className="py-16 md:py-24">
         <div className="container max-w-3xl">
