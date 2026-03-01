@@ -39,6 +39,8 @@ const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
 const CGV = lazy(() => import("./pages/CGV"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Badges = lazy(() => import("./pages/Badges"));
+const Articles = lazy(() => import("./pages/Articles"));
+const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
 const Sitemap = lazy(() => import("./components/seo/Sitemap"));
 
 function PageLoader() {
@@ -91,6 +93,8 @@ const App = () => (
             <Route path="/categories/:slug" element={<CategoryDetail />} />
             <Route path="/vote" element={<Vote />} />
             <Route path="/badges" element={<Badges />} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/stats/artist/:id" element={<ArtistStats />} />
             <Route path="/sitemap.xml" element={<Sitemap />} />
