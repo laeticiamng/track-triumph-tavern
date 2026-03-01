@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { BadgePills } from "@/components/gamification/BadgeShowcase";
 
 const navItems = [
   { label: "Explorer", href: "/explore", icon: Search },
@@ -73,6 +74,7 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <>
+              <BadgePills />
               <StreakBadge compact showRecord />
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile" className="flex items-center gap-2">

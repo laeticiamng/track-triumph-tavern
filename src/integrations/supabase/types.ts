@@ -468,6 +468,41 @@ export type Database = {
           },
         ]
       }
+      weekly_badges: {
+        Row: {
+          badge_type: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          user_id: string
+          week_id: string
+        }
+        Insert: {
+          badge_type: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          user_id: string
+          week_id: string
+        }
+        Update: {
+          badge_type?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string
+          week_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_badges_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       weeks: {
         Row: {
           created_at: string

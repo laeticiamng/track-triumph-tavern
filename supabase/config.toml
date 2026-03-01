@@ -41,3 +41,6 @@ verify_jwt = true
 
 [functions.ai-recommendations]
 verify_jwt = true
+
+[functions.compute-badges]
+verify_jwt = true
