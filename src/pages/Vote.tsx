@@ -12,6 +12,7 @@ import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Music, Sparkles } from "lucide-react";
+import { BadgeProgress } from "@/components/gamification/BadgeProgress";
 import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -184,6 +185,12 @@ const Vote = () => {
             </button>
           ))}
         </div>
+        {/* Badge progress */}
+        {user && (
+          <div className="pointer-events-auto">
+            <BadgeProgress weekId={activeWeekId} />
+          </div>
+        )}
         {/* AI Recommendations loader (Pro/Elite only) */}
         {user && (voteState.tier === "pro" || voteState.tier === "elite") && (
           <div className="pointer-events-auto">

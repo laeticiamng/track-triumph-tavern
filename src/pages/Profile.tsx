@@ -18,6 +18,7 @@ import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, H
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
+import { BadgeShowcase } from "@/components/gamification/BadgeShowcase";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -271,6 +272,11 @@ const Profile = () => {
 
         {/* Vote Streak */}
         <StreakBadge showRecord />
+
+        {/* Weekly Badges */}
+        <div className="mb-8">
+          <BadgeShowcase showEmpty />
+        </div>
 
         {/* Stats Chart (Pro/Elite) */}
         {tier !== "free" && (
