@@ -49,6 +49,7 @@ export function Footer() {
               <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">Hall of Fame</Link>
               <Link to="/pricing" className="hover:text-foreground transition-colors">Abonnements</Link>
               <Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link>
+              <Link to="/articles" className="hover:text-foreground transition-colors">Articles</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">À propos</Link>
             </nav>
           </div>
