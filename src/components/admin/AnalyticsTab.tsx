@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Eye, UserPlus, Vote, TrendingUp } from "lucide-react";
+import { Loader2, Eye, UserPlus, Vote, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, LineChart, Line,
@@ -30,6 +30,7 @@ export function AnalyticsTab() {
   const [votesPerDay, setVotesPerDay] = useState<DailyCount[]>([]);
   const [pageViewsPerDay, setPageViewsPerDay] = useState<DailyCount[]>([]);
   const [totals, setTotals] = useState({ views: 0, signups: 0, votes: 0 });
+  const [prevTotals, setPrevTotals] = useState({ views: 0, signups: 0, votes: 0 });
 
   useEffect(() => {
     loadAnalytics();
@@ -37,19 +38,24 @@ export function AnalyticsTab() {
 
   const loadAnalytics = async () => {
     setLoading(true);
-    const since = subDays(new Date(), period).toISOString();
+    const now = new Date();
+    const since = subDays(now, period).toISOString();
+    const prevSince = subDays(now, period * 2).toISOString();
 
     try {
-      // Fetch all analytics events from last 30 days
-      const { data: events } = await supabase
+      // Fetch current + previous period in one query
+      const { data: allEvents } = await supabase
         .from("analytics_events")
         .select("event_name, properties, created_at")
-        .gte("created_at", since)
+        .gte("created_at", prevSince)
         .order("created_at", { ascending: true });
 
-      if (!events) { setLoading(false); return; }
+      if (!allEvents) { setLoading(false); return; }
 
-      // Top pages
+      const events = allEvents.filter((e) => e.created_at >= since);
+      const prevEvents = allEvents.filter((e) => e.created_at < since);
+
+      // Top pages (current period only)
       const pageViews = events.filter((e) => e.event_name === "page_view");
       const pageCounts: Record<string, number> = {};
       pageViews.forEach((e) => {
@@ -66,7 +72,7 @@ export function AnalyticsTab() {
       const groupByDay = (items: typeof events): DailyCount[] => {
         const counts: Record<string, number> = {};
         for (let i = period - 1; i >= 0; i--) {
-          const d = format(subDays(new Date(), i), "yyyy-MM-dd");
+          const d = format(subDays(now, i), "yyyy-MM-dd");
           counts[d] = 0;
         }
         items.forEach((e) => {
@@ -90,11 +96,48 @@ export function AnalyticsTab() {
         signups: signups.length,
         votes: votes.length,
       });
+
+      // Previous period totals
+      const prevPageViews = prevEvents.filter((e) => e.event_name === "page_view");
+      const prevSignups = prevEvents.filter((e) => e.event_name === "signup_completed");
+      const prevVotes = prevEvents.filter((e) => e.event_name === "vote_cast");
+      setPrevTotals({
+        views: prevPageViews.length,
+        signups: prevSignups.length,
+        votes: prevVotes.length,
+      });
     } catch (err) {
       console.error("Analytics load error:", err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const getTrend = (current: number, previous: number) => {
+    if (previous === 0) return current > 0 ? { pct: 100, direction: "up" as const } : { pct: 0, direction: "flat" as const };
+    const pct = Math.round(((current - previous) / previous) * 100);
+    if (pct > 0) return { pct, direction: "up" as const };
+    if (pct < 0) return { pct: Math.abs(pct), direction: "down" as const };
+    return { pct: 0, direction: "flat" as const };
+  };
+
+  const TrendBadge = ({ current, previous }: { current: number; previous: number }) => {
+    const { pct, direction } = getTrend(current, previous);
+    if (direction === "flat") {
+      return (
+        <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-muted-foreground mt-1">
+          <Minus className="h-3 w-3" /> 0%
+        </span>
+      );
+    }
+    return (
+      <span className={`inline-flex items-center gap-0.5 text-[10px] font-medium mt-1 ${
+        direction === "up" ? "text-emerald-500" : "text-red-500"
+      }`}>
+        {direction === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+        {direction === "up" ? "+" : "-"}{pct}%
+      </span>
+    );
   };
 
   if (loading) {
@@ -128,6 +171,7 @@ export function AnalyticsTab() {
             <Eye className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.views}</p>
             <p className="text-xs text-muted-foreground">Pages vues</p>
+            <TrendBadge current={totals.views} previous={prevTotals.views} />
           </CardContent>
         </Card>
         <Card>
@@ -135,6 +179,7 @@ export function AnalyticsTab() {
             <UserPlus className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.signups}</p>
             <p className="text-xs text-muted-foreground">Inscriptions</p>
+            <TrendBadge current={totals.signups} previous={prevTotals.signups} />
           </CardContent>
         </Card>
         <Card>
@@ -142,6 +187,7 @@ export function AnalyticsTab() {
             <Vote className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.votes}</p>
             <p className="text-xs text-muted-foreground">Votes trackés</p>
+            <TrendBadge current={totals.votes} previous={prevTotals.votes} />
           </CardContent>
         </Card>
       </div>
