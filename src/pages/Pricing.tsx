@@ -14,6 +14,8 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { SUBSCRIPTION_TIERS, type SubscriptionTier } from "@/lib/subscription-tiers";
 import { WhyEliteSection } from "@/components/pricing/WhyEliteSection";
+import { SocialProofCounters } from "@/components/pricing/SocialProofCounters";
+import { PricingFAQ } from "@/components/pricing/PricingFAQ";
 import { trackEvent } from "@/lib/analytics";
 
 const tierConfig: Record<SubscriptionTier, {
@@ -286,8 +288,14 @@ const Pricing = () => {
         </div>
       </section>
 
+      {/* Social proof counters */}
+      <SocialProofCounters />
+
       {/* Why Elite */}
       <WhyEliteSection />
+
+      {/* Pricing FAQ */}
+      <PricingFAQ />
 
       {/* Comparison table */}
       <section className="pb-20">

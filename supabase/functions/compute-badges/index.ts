@@ -11,19 +11,42 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Verify caller is admin
     const authHeader = req.headers.get("Authorization");
-    if (authHeader) {
+
+    // If auth header present, verify admin
+    if (authHeader && !authHeader.includes(Deno.env.get("SUPABASE_ANON_KEY") ?? "__none__")) {
       const { data: { user } } = await supabase.auth.getUser(authHeader.replace("Bearer ", ""));
       if (!user) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: cors });
-      
+
       const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
       const isAdmin = roles?.some(r => r.role === "admin");
       if (!isAdmin) return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: cors });
     }
 
-    const { week_id } = await req.json();
-    if (!week_id) return new Response(JSON.stringify({ error: "week_id required" }), { status: 400, headers: cors });
+    // Determine week_id: from body or auto-detect
+    let week_id: string | undefined;
+    try {
+      const body = await req.json();
+      week_id = body?.week_id;
+    } catch {
+      // No body (e.g. cron call) — auto-detect
+    }
+
+    if (!week_id) {
+      // Find the most recent week whose voting just closed
+      const { data: recentWeek } = await supabase
+        .from("weeks")
+        .select("id")
+        .lte("voting_close_at", new Date().toISOString())
+        .order("voting_close_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!recentWeek) {
+        return new Response(JSON.stringify({ badges: 0, message: "No closed week found" }), { headers: cors });
+      }
+      week_id = recentWeek.id;
+    }
 
     // Get all votes for this week
     const { data: votes } = await supabase
@@ -38,7 +61,7 @@ Deno.serve(async (req) => {
 
     const badges: Array<{ user_id: string; badge_type: string; metadata: Record<string, unknown> }> = [];
 
-    // 🏆 TOP VOTER: user with most votes
+    // 🏆 TOP VOTER
     const votesByUser = new Map<string, number>();
     for (const v of votes) {
       votesByUser.set(v.user_id, (votesByUser.get(v.user_id) || 0) + 1);
@@ -50,7 +73,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 📝 CRITIQUE ÉTOILÉ: user with most comments
+    // 📝 CRITIQUE ÉTOILÉ
     const commentsByUser = new Map<string, number>();
     for (const v of votes) {
       if (v.comment && v.comment.trim().length > 0) {
@@ -66,7 +89,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 🌈 ÉCLECTIQUE: user who voted in most distinct categories
+    // 🌈 ÉCLECTIQUE
     const categoriesByUser = new Map<string, Set<string>>();
     for (const v of votes) {
       if (!categoriesByUser.has(v.user_id)) categoriesByUser.set(v.user_id, new Set());
@@ -81,7 +104,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 🔍 DÉCOUVREUR: first voter on a submission that ended in Top 3
+    // 🔍 DÉCOUVREUR
     const { data: winners } = await supabase
       .from("winners")
       .select("submission_id")
@@ -90,8 +113,7 @@ Deno.serve(async (req) => {
 
     if (winners && winners.length > 0) {
       const winnerSubIds = new Set(winners.map(w => w.submission_id));
-      // Find first voter for each winning submission
-      const discoverers = new Map<string, string>(); // submission_id -> user_id
+      const discoverers = new Map<string, string>();
       const winningVotes = votes
         .filter(v => winnerSubIds.has(v.submission_id))
         .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
@@ -109,15 +131,15 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Upsert badges
+    // Upsert badges (idempotent)
     if (badges.length > 0) {
       const rows = badges.map(b => ({ ...b, week_id }));
       const { error } = await supabase.from("weekly_badges").upsert(rows, { onConflict: "user_id,week_id,badge_type" });
       if (error) throw error;
     }
 
-    return new Response(JSON.stringify({ badges: badges.length, details: badges }), { headers: cors });
+    return new Response(JSON.stringify({ week_id, badges: badges.length, details: badges }), { headers: cors });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ error: (err as Error).message }), { status: 500, headers: cors });
   }
 });

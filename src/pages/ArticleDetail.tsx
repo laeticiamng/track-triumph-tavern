@@ -74,6 +74,23 @@ const ArticleDetail = () => {
           </Link>
         </nav>
 
+        {/* CTA above the fold */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-3"
+        >
+          <p className="text-sm text-muted-foreground">
+            🎵 Envie de tester vos compétences ? Soumettez votre morceau au concours.
+          </p>
+          <Button asChild size="sm" className="bg-gradient-primary whitespace-nowrap">
+            <Link to="/compete">
+              Soumettre <ArrowRight className="ml-1 h-3 w-3" />
+            </Link>
+          </Button>
+        </motion.div>
+
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 20 }}
