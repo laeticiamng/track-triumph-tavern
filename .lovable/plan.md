@@ -1,40 +1,69 @@
 
 
-# Fix Build Errors
+# Analyse des 8 tickets — Statut réel et plan d'action
 
-## Error 1: Edge Functions - Invalid npm import
+## Tickets déjà résolus (rien à faire)
 
-3 edge functions use `npm:@supabase/supabase-js@2.57.2` which is not supported. Replace with `https://esm.sh/@supabase/supabase-js@2` (the pattern used by all other edge functions).
+### Ticket 2 (JSON-LD statique) — ✅ FAIT
+`index.html` contient déjà les 4 schémas statiques : `Organization`, `WebSite`, `FAQPage`, `HowTo`. C'est le dernier diff appliqué. Aucune action requise.
 
-**Files:**
-- `supabase/functions/check-subscription/index.ts` (line 3)
-- `supabase/functions/create-checkout/index.ts` (line 3)
-- `supabase/functions/customer-portal/index.ts` (line 3)
+### Ticket 3 (Routes GEO / 404) — ✅ FAIT (côté code)
+Toutes les routes (`/articles`, `/scoring-method`, `/faq`, `/categories/:slug`) sont déclarées dans `App.tsx`. Lovable gère le SPA fallback automatiquement. Il suffit de **publier** pour que tout fonctionne en prod. Aucune modification de code nécessaire.
 
-## Error 2: FraudMonitoring - Type mismatch
+### Ticket 4 (Streak) — ✅ FAIT
+Le trigger `update_vote_streak` est en place en base, le hook `use-vote-streak.ts` et le composant `StreakBadge.tsx` sont fonctionnels. La logique semaine consécutive/reset est correcte. Les RLS empêchent INSERT/UPDATE/DELETE côté client — seul le trigger SECURITY DEFINER écrit.
 
-In `src/components/admin/FraudMonitoring.tsx` line 102, the `ip_address` field from the database is typed as `unknown` (it's an `inet` column), but the code expects `string`. Fix by casting properly.
+### Ticket 5 (Badges hebdomadaires) — ✅ FAIT
+L'edge function `compute-badges` est complète (4 types de badges, upsert avec contrainte d'unicité). Le hook `use-weekly-badges.ts` et la page `/badges` existent. L'unique point à vérifier : le déclenchement automatique en fin de semaine (cron), mais c'est opérationnel en appel admin.
 
-**Change:** Replace the map callback type annotation to match the actual Supabase return type, casting `ip_address` to `string` explicitly.
+## Ticket non-actionnable via le code
 
-## Error 3: `.catch()` on PromiseLike
+### Ticket 1 (Leaked Password Protection) — ⚠️ NON ACTIONNABLE
+Comme déjà documenté dans la mémoire du projet, cette protection est un **paramètre plateforme** qui ne peut pas être activé via le code source. Il faut une intervention dans les paramètres Auth de la plateforme backend. Je peux marquer ce finding comme "difficulté élevée" dans le panneau sécurité si tu le souhaites, mais aucune modification de code ne résoudra ce point.
 
-The Supabase client's `.then()` returns `PromiseLike<void>` which does not have a `.catch()` method. The fix is to wrap each call in `Promise.resolve()` before chaining `.catch()`.
+## Tickets à implémenter (3 restants)
 
-**12 occurrences across 8 files:**
-- `src/components/landing/CategoriesSection.tsx` (line 39)
-- `src/components/landing/HeroSection.tsx` (line 45)
-- `src/components/layout/Header.tsx` (line 33)
-- `src/components/vote/VoteButton.tsx` (line 48)
-- `src/hooks/use-active-week.ts` (line 23)
-- `src/hooks/use-vote-state.ts` (line 50)
-- `src/pages/AdminDashboard.tsx` (line 85)
-- `src/pages/Compete.tsx` (lines 130, 136, 147, 164)
-- `src/pages/Explore.tsx` (lines 34, 49, 72)
+### Ticket 6 — Analytics/Tracking conversion
+**Statut** : Aucun système de tracking n'existe actuellement (0 résultat pour analytics/gtag/posthog dans le code).
 
-**Pattern:** Change `supabase.from(...).select(...).then(...).catch(...)` to `Promise.resolve(supabase.from(...).select(...)).then(...).catch(...)` -- or restructure to use `async/await` with try/catch inside the useEffect.
+**Plan d'implémentation** :
+1. Créer `src/lib/analytics.ts` — module léger avec une fonction `trackEvent(name, properties)` qui envoie les événements vers une table `analytics_events` en base
+2. Créer la table `analytics_events` (user_id nullable, event_name, properties jsonb, created_at)
+3. Instrumenter les 5 points clés : `signup_completed` (Auth.tsx), `submission_created` (Compete.tsx), `vote_cast` (VoteButton.tsx), `plan_upgrade_clicked` (Pricing.tsx), `page_view` (Layout.tsx)
+4. Fichiers modifiés : ~6 fichiers + 1 migration
 
----
+### Ticket 7 — Blog maillage interne
+**Statut** : Les articles existent dans `src/lib/articles-data.ts` et les pages `/articles` et `/articles/:slug` sont en place, mais il n'y a pas de liens croisés entre articles ni de CTA vers `/compete`.
 
-**Summary:** 11 files modified, 0 files created. All fixes are mechanical (import paths, type casts, Promise wrapping). No functional changes.
+**Plan d'implémentation** :
+1. Ajouter un bloc "Articles connexes" en bas de chaque `ArticleDetail.tsx` (2-3 articles liés par catégorie)
+2. Ajouter des liens contextuels vers les pages catégories (`/categories/:slug`)
+3. Ajouter un CTA "Soumettez votre morceau" vers `/compete` dans chaque article
+4. Fichiers modifiés : `ArticleDetail.tsx`, `articles-data.ts` (ajout champ `relatedSlugs`)
+
+### Ticket 8 — Pricing émotionnel
+**Statut** : La page Pricing existe (351 lignes) avec un comparatif, mais manque une section "Pourquoi passer Elite" avec des arguments émotionnels.
+
+**Plan d'implémentation** :
+1. Ajouter une section "Pourquoi les artistes choisissent Elite" avec témoignages/bénéfices concrets avant le comparatif
+2. Améliorer les CTA avec un langage orienté bénéfice ("Commencez à gagner" plutôt que "S'abonner")
+3. Ajouter des badges sociaux (nombre d'artistes inscrits, etc.)
+4. Fichier modifié : `Pricing.tsx`
+
+## Résumé
+
+| Ticket | Statut | Action |
+|--------|--------|--------|
+| 1 Leaked Password | ⚠️ Non actionnable code | Config plateforme uniquement |
+| 2 JSON-LD statique | ✅ Déjà fait | — |
+| 3 Routes GEO | ✅ Fait, publier | Cliquer "Publish" |
+| 4 Streak | ✅ Fait | — |
+| 5 Badges | ✅ Fait | — |
+| 6 Analytics | 🔨 À faire | ~6 fichiers + 1 migration |
+| 7 Blog maillage | 🔨 À faire | 2 fichiers |
+| 8 Pricing | 🔨 À faire | 1 fichier |
+
+**Recommandation pour traction rapide** : Ticket 7 (maillage blog) → Ticket 8 (pricing conversion) → Ticket 6 (analytics). Le maillage interne améliore immédiatement le SEO, le pricing améliore la conversion, et l'analytics permet de mesurer l'impact.
+
+Souhaites-tu que j'implémente les 3 tickets restants (6, 7, 8) dans cet ordre ?
 
