@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Eye, UserPlus, Vote, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Loader2, Eye, UserPlus, Vote, TrendingUp, TrendingDown, Minus, Download } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, LineChart, Line,
@@ -9,6 +9,7 @@ import {
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Button } from "@/components/ui/button";
 
 type Period = 7 | 30 | 90;
 
@@ -140,6 +141,26 @@ export function AnalyticsTab() {
     );
   };
 
+  const exportCSV = () => {
+    const rows = [["date", "pages_vues", "inscriptions", "votes"]];
+    pageViewsPerDay.forEach((pv, i) => {
+      rows.push([
+        pv.date,
+        String(pv.count),
+        String(signupsPerDay[i]?.count ?? 0),
+        String(votesPerDay[i]?.count ?? 0),
+      ]);
+    });
+    const csv = rows.map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `analytics-${period}j.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -152,17 +173,23 @@ export function AnalyticsTab() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="font-display text-xl font-semibold">Analytics ({period} derniers jours)</h2>
-        <ToggleGroup
-          type="single"
-          value={String(period)}
-          onValueChange={(v) => v && setPeriod(Number(v) as Period)}
-          variant="outline"
-          size="sm"
-        >
-          <ToggleGroupItem value="7">7j</ToggleGroupItem>
-          <ToggleGroupItem value="30">30j</ToggleGroupItem>
-          <ToggleGroupItem value="90">90j</ToggleGroupItem>
-        </ToggleGroup>
+        <div className="flex items-center gap-2">
+          <ToggleGroup
+            type="single"
+            value={String(period)}
+            onValueChange={(v) => v && setPeriod(Number(v) as Period)}
+            variant="outline"
+            size="sm"
+          >
+            <ToggleGroupItem value="7">7j</ToggleGroupItem>
+            <ToggleGroupItem value="30">30j</ToggleGroupItem>
+            <ToggleGroupItem value="90">90j</ToggleGroupItem>
+          </ToggleGroup>
+          <Button variant="outline" size="sm" onClick={exportCSV}>
+            <Download className="h-4 w-4 mr-1" />
+            CSV
+          </Button>
+        </div>
       </div>
       {/* KPI Cards */}
       <div className="grid grid-cols-3 gap-4">
