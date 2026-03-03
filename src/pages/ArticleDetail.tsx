@@ -2,9 +2,9 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead, breadcrumbJsonLd } from "@/components/seo/SEOHead";
-import { getArticleBySlug } from "@/lib/articles-data";
+import { getArticleBySlug, getRelatedArticles } from "@/lib/articles-data";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, Calendar, Tag, Lightbulb, ArrowRight } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Tag, Lightbulb, ArrowRight, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function articleJsonLd(article: ReturnType<typeof getArticleBySlug>) {
@@ -41,6 +41,7 @@ function articleJsonLd(article: ReturnType<typeof getArticleBySlug>) {
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? getArticleBySlug(slug) : undefined;
+  const relatedArticles = article ? getRelatedArticles(article) : [];
 
   if (!article) return <Navigate to="/articles" replace />;
 
@@ -156,6 +157,49 @@ const ArticleDetail = () => {
           ))}
         </div>
 
+        {/* Category link */}
+        {article.categorySlug && (
+          <div className="mt-10">
+            <Link
+              to={`/categories/${article.categorySlug}`}
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+            >
+              <Music className="h-4 w-4" />
+              Voir la catégorie {article.category} →
+            </Link>
+          </div>
+        )}
+
+        {/* Related articles */}
+        {relatedArticles.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12"
+          >
+            <h2 className="font-display text-xl font-semibold mb-4">Articles connexes</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {relatedArticles.map((ra) => (
+                <Link
+                  key={ra.slug}
+                  to={`/articles/${ra.slug}`}
+                  className="group rounded-xl border border-border bg-card p-4 transition-all hover:shadow-md hover:border-primary/30"
+                >
+                  <span className="text-xs font-medium text-primary">{ra.category}</span>
+                  <h3 className="mt-1 font-display text-sm font-semibold group-hover:text-primary transition-colors line-clamp-2">
+                    {ra.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{ra.subtitle}</p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs text-primary">
+                    Lire <ArrowRight className="h-3 w-3" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -170,9 +214,9 @@ const ArticleDetail = () => {
             Soumettez votre morceau au concours Weekly Music Awards et recevez les votes de la communauté.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button asChild>
-              <Link to="/auth?tab=signup">
-                Rejoindre le concours
+            <Button asChild className="bg-gradient-primary">
+              <Link to="/compete">
+                Soumettre mon morceau
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

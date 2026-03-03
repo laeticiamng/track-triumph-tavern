@@ -13,6 +13,8 @@ import { Check, Crown, Star, Zap, Loader2, Settings, ShieldCheck, X } from "luci
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { SUBSCRIPTION_TIERS, type SubscriptionTier } from "@/lib/subscription-tiers";
+import { WhyEliteSection } from "@/components/pricing/WhyEliteSection";
+import { trackEvent } from "@/lib/analytics";
 
 const tierConfig: Record<SubscriptionTier, {
   icon: React.ReactNode;
@@ -84,6 +86,7 @@ const Pricing = () => {
     if (!plan.price_id) return;
 
     setLoadingTier(tier);
+    trackEvent("plan_upgrade_clicked", { tier, price_id: plan.price_id });
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { price_id: plan.price_id },
@@ -254,7 +257,7 @@ const Pricing = () => {
                             {loadingTier === key ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : null}
-                            {isCurrentPlan ? "Plan actuel" : currentTier !== "free" ? "Upgrader" : "S'abonner"}
+                            {isCurrentPlan ? "Plan actuel" : currentTier !== "free" ? "Upgrader" : "Commencer à gagner"}
                           </Button>
                         )}
                       </CardFooter>
@@ -282,6 +285,9 @@ const Pricing = () => {
           </div>
         </div>
       </section>
+
+      {/* Why Elite */}
+      <WhyEliteSection />
 
       {/* Comparison table */}
       <section className="pb-20">

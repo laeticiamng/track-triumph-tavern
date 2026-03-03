@@ -19,6 +19,7 @@ import { Upload, Music, Image, ArrowLeft, Lock, Clock, AlertCircle, Play, Pause,
 import { Link } from "react-router-dom";
 import { AITagSuggest } from "@/components/ai/AITagSuggest";
 import type { Tables } from "@/integrations/supabase/types";
+import { trackEvent } from "@/lib/analytics";
 
 type Category = Tables<"categories">;
 
@@ -215,6 +216,7 @@ const Compete = () => {
       });
 
       if (insertError) throw insertError;
+      trackEvent("submission_created", { category_id: categoryId, week_id: activeWeek.id });
       toast({ title: "Soumission envoyée !", description: "Elle sera examinée par l'équipe de modération." });
       navigate("/explore");
     } catch (err) {
