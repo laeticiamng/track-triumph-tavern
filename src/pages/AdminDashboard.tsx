@@ -18,6 +18,7 @@ import {
   Download, Clock, Plus, Trash2, Lock, Loader2
 } from "lucide-react";
 import { FraudMonitoring } from "@/components/admin/FraudMonitoring";
+import { AnalyticsTab } from "@/components/admin/AnalyticsTab";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -34,6 +35,7 @@ const pathTabMap: Record<string, string> = {
   "/admin/weeks": "weeks",
   "/admin/rewards": "rewards",
   "/admin/moderation": "moderation",
+  "/admin/analytics": "analytics",
 };
 
 const AdminDashboard = () => {
@@ -297,11 +299,12 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs defaultValue={defaultTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="moderation">Modération</TabsTrigger>
             <TabsTrigger value="weeks">Semaines</TabsTrigger>
             <TabsTrigger value="rewards">Récompenses</TabsTrigger>
             <TabsTrigger value="fraud">Anti-fraude</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
           {/* Moderation Tab */}
@@ -560,6 +563,11 @@ const AdminDashboard = () => {
           {/* Fraud Tab */}
           <TabsContent value="fraud" className="space-y-4">
             <FraudMonitoring weeks={weeks} />
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics" className="space-y-4">
+            <AnalyticsTab />
           </TabsContent>
         </Tabs>
       </div>
