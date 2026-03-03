@@ -1,69 +1,68 @@
 
 
-# Analyse des 8 tickets — Statut réel et plan d'action
+# Analyse des 8 tickets — Statut et plan d'action
 
 ## Tickets déjà résolus (rien à faire)
 
-### Ticket 2 (JSON-LD statique) — ✅ FAIT
-`index.html` contient déjà les 4 schémas statiques : `Organization`, `WebSite`, `FAQPage`, `HowTo`. C'est le dernier diff appliqué. Aucune action requise.
+| # | Sujet | Statut |
+|---|-------|--------|
+| 1 | Leaked Password Protection | ⚠️ Non actionnable code — paramètre plateforme Auth uniquement (documenté en mémoire projet) |
+| 2 | Publier + vérifier routes GEO | ✅ Routes OK dans `App.tsx`. Action = cliquer **Publish** |
+| 3 | Dashboard admin analytics | ✅ Déjà implémenté (`AnalyticsTab.tsx`, onglet dans `AdminDashboard.tsx`, route `/admin/analytics`). KPIs, graphiques recharts, top pages — tout est en place |
 
-### Ticket 3 (Routes GEO / 404) — ✅ FAIT (côté code)
-Toutes les routes (`/articles`, `/scoring-method`, `/faq`, `/categories/:slug`) sont déclarées dans `App.tsx`. Lovable gère le SPA fallback automatiquement. Il suffit de **publier** pour que tout fonctionne en prod. Aucune modification de code nécessaire.
+## Tickets à implémenter (5 restants)
 
-### Ticket 4 (Streak) — ✅ FAIT
-Le trigger `update_vote_streak` est en place en base, le hook `use-vote-streak.ts` et le composant `StreakBadge.tsx` sont fonctionnels. La logique semaine consécutive/reset est correcte. Les RLS empêchent INSERT/UPDATE/DELETE côté client — seul le trigger SECURITY DEFINER écrit.
+### Ticket 4 — Indexes + rétention analytics_events
+**Migration SQL :**
+- Ajouter index `(event_name, created_at)` et `(created_at)` sur `analytics_events`
+- Créer une edge function `purge-analytics` qui supprime les lignes > 90 jours
+- RLS déjà correcte (insert auth/anon, select admin-only)
 
-### Ticket 5 (Badges hebdomadaires) — ✅ FAIT
-L'edge function `compute-badges` est complète (4 types de badges, upsert avec contrainte d'unicité). Le hook `use-weekly-badges.ts` et la page `/badges` existent. L'unique point à vérifier : le déclenchement automatique en fin de semaine (cron), mais c'est opérationnel en appel admin.
+**Fichiers :** 1 migration, 1 nouvelle edge function `supabase/functions/purge-analytics/index.ts`
 
-## Ticket non-actionnable via le code
+### Ticket 5 — Normaliser events + déduplier page_view
+**Modifications :**
+- `src/lib/analytics.ts` : ajouter un guard de déduplication (stocker `lastPath + lastTs` en mémoire module, ignorer si même path < 3s)
+- Ajouter `referrer: document.referrer` dans les properties de `page_view`
+- Standardiser les properties des autres events (déjà assez propre, juste s'assurer d'un schéma cohérent)
 
-### Ticket 1 (Leaked Password Protection) — ⚠️ NON ACTIONNABLE
-Comme déjà documenté dans la mémoire du projet, cette protection est un **paramètre plateforme** qui ne peut pas être activé via le code source. Il faut une intervention dans les paramètres Auth de la plateforme backend. Je peux marquer ce finding comme "difficulté élevée" dans le panneau sécurité si tu le souhaites, mais aucune modification de code ne résoudra ce point.
+**Fichiers :** `src/lib/analytics.ts`
 
-## Tickets à implémenter (3 restants)
+### Ticket 6 — Cron compute-badges automatique
+**Modifications :**
+- Modifier `compute-badges` pour accepter un appel sans `week_id` : dans ce cas, trouver automatiquement la semaine dont `voting_close_at` vient de passer
+- Permettre l'appel sans auth header (pour le cron) en vérifiant un secret ou en bypassant quand pas de header
+- Configurer un cron via `pg_cron` + `pg_net` qui appelle la fonction chaque lundi à 00:05
 
-### Ticket 6 — Analytics/Tracking conversion
-**Statut** : Aucun système de tracking n'existe actuellement (0 résultat pour analytics/gtag/posthog dans le code).
+**Fichiers :** `supabase/functions/compute-badges/index.ts`, 1 SQL insert (cron.schedule)
 
-**Plan d'implémentation** :
-1. Créer `src/lib/analytics.ts` — module léger avec une fonction `trackEvent(name, properties)` qui envoie les événements vers une table `analytics_events` en base
-2. Créer la table `analytics_events` (user_id nullable, event_name, properties jsonb, created_at)
-3. Instrumenter les 5 points clés : `signup_completed` (Auth.tsx), `submission_created` (Compete.tsx), `vote_cast` (VoteButton.tsx), `plan_upgrade_clicked` (Pricing.tsx), `page_view` (Layout.tsx)
-4. Fichiers modifiés : ~6 fichiers + 1 migration
+### Ticket 7 — Blog maillage avancé
+Les articles connexes + CTA `/compete` + lien catégorie sont déjà en place dans `ArticleDetail.tsx`. Ce qui reste :
+- Page `/articles` : ajouter un regroupement par catégorie/tags et un CTA concours
+- ArticleDetail : ajouter un 2e CTA en haut de l'article (above the fold)
 
-### Ticket 7 — Blog maillage interne
-**Statut** : Les articles existent dans `src/lib/articles-data.ts` et les pages `/articles` et `/articles/:slug` sont en place, mais il n'y a pas de liens croisés entre articles ni de CTA vers `/compete`.
+**Fichiers :** `src/pages/Articles.tsx`, `src/pages/ArticleDetail.tsx`
 
-**Plan d'implémentation** :
-1. Ajouter un bloc "Articles connexes" en bas de chaque `ArticleDetail.tsx` (2-3 articles liés par catégorie)
-2. Ajouter des liens contextuels vers les pages catégories (`/categories/:slug`)
-3. Ajouter un CTA "Soumettez votre morceau" vers `/compete` dans chaque article
-4. Fichiers modifiés : `ArticleDetail.tsx`, `articles-data.ts` (ajout champ `relatedSlugs`)
+### Ticket 8 — Pricing preuve sociale + FAQ
+La section WhyElite existe déjà. Ce qui reste :
+- Ajouter des compteurs dynamiques (nombre d'artistes, votes, gagnants) récupérés depuis la DB
+- Ajouter une mini-FAQ pricing (3 Q/R) avec lien vers `/faq`
+- Vérifier la cohérence des CTA
 
-### Ticket 8 — Pricing émotionnel
-**Statut** : La page Pricing existe (351 lignes) avec un comparatif, mais manque une section "Pourquoi passer Elite" avec des arguments émotionnels.
-
-**Plan d'implémentation** :
-1. Ajouter une section "Pourquoi les artistes choisissent Elite" avec témoignages/bénéfices concrets avant le comparatif
-2. Améliorer les CTA avec un langage orienté bénéfice ("Commencez à gagner" plutôt que "S'abonner")
-3. Ajouter des badges sociaux (nombre d'artistes inscrits, etc.)
-4. Fichier modifié : `Pricing.tsx`
+**Fichiers :** `src/pages/Pricing.tsx`, `src/components/pricing/WhyEliteSection.tsx`
 
 ## Résumé
 
-| Ticket | Statut | Action |
-|--------|--------|--------|
-| 1 Leaked Password | ⚠️ Non actionnable code | Config plateforme uniquement |
-| 2 JSON-LD statique | ✅ Déjà fait | — |
-| 3 Routes GEO | ✅ Fait, publier | Cliquer "Publish" |
-| 4 Streak | ✅ Fait | — |
-| 5 Badges | ✅ Fait | — |
-| 6 Analytics | 🔨 À faire | ~6 fichiers + 1 migration |
-| 7 Blog maillage | 🔨 À faire | 2 fichiers |
-| 8 Pricing | 🔨 À faire | 1 fichier |
+| # | Sujet | Statut | Effort |
+|---|-------|--------|--------|
+| 1 | Leaked Password | ⚠️ Paramètre plateforme | — |
+| 2 | Publish + routes | ✅ Cliquer Publish | 0 |
+| 3 | Dashboard analytics | ✅ Déjà fait | 0 |
+| 4 | Indexes + rétention | 🔨 À faire | Migration + 1 edge fn |
+| 5 | Dédup page_view | 🔨 À faire | 1 fichier |
+| 6 | Cron badges | 🔨 À faire | 1 edge fn + 1 SQL |
+| 7 | Blog maillage avancé | 🔨 À faire | 2 fichiers |
+| 8 | Pricing social proof | 🔨 À faire | 2 fichiers |
 
-**Recommandation pour traction rapide** : Ticket 7 (maillage blog) → Ticket 8 (pricing conversion) → Ticket 6 (analytics). Le maillage interne améliore immédiatement le SEO, le pricing améliore la conversion, et l'analytics permet de mesurer l'impact.
-
-Souhaites-tu que j'implémente les 3 tickets restants (6, 7, 8) dans cet ordre ?
+**Ordre recommandé :** Ticket 5 (rapide, données propres) → Ticket 4 (perf/coût) → Ticket 6 (automatisation) → Ticket 7 (SEO) → Ticket 8 (conversion).
 
