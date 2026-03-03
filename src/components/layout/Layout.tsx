@@ -1,11 +1,19 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { BottomNav } from "./BottomNav";
 import { AIChatbot } from "@/components/ai/AIChatbot";
 import { useSubscription } from "@/hooks/use-subscription";
+import { trackEvent } from "@/lib/analytics";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { tier } = useSubscription();
   const showChatbot = tier === "pro" || tier === "elite";
+  const location = useLocation();
+
+  useEffect(() => {
+    trackEvent("page_view", { path: location.pathname });
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-background">
