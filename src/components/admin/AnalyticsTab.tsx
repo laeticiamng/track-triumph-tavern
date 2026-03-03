@@ -8,6 +8,9 @@ import {
 } from "recharts";
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
+type Period = 7 | 30 | 90;
 
 interface DailyCount {
   date: string;
@@ -21,6 +24,7 @@ interface TopPage {
 
 export function AnalyticsTab() {
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<Period>(30);
   const [topPages, setTopPages] = useState<TopPage[]>([]);
   const [signupsPerDay, setSignupsPerDay] = useState<DailyCount[]>([]);
   const [votesPerDay, setVotesPerDay] = useState<DailyCount[]>([]);
@@ -29,11 +33,11 @@ export function AnalyticsTab() {
 
   useEffect(() => {
     loadAnalytics();
-  }, []);
+  }, [period]);
 
   const loadAnalytics = async () => {
     setLoading(true);
-    const since = subDays(new Date(), 30).toISOString();
+    const since = subDays(new Date(), period).toISOString();
 
     try {
       // Fetch all analytics events from last 30 days
@@ -61,8 +65,7 @@ export function AnalyticsTab() {
       // Group by day helper
       const groupByDay = (items: typeof events): DailyCount[] => {
         const counts: Record<string, number> = {};
-        // Pre-fill last 30 days
-        for (let i = 29; i >= 0; i--) {
+        for (let i = period - 1; i >= 0; i--) {
           const d = format(subDays(new Date(), i), "yyyy-MM-dd");
           counts[d] = 0;
         }
@@ -104,8 +107,20 @@ export function AnalyticsTab() {
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display text-xl font-semibold">Analytics (30 derniers jours)</h2>
-
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h2 className="font-display text-xl font-semibold">Analytics ({period} derniers jours)</h2>
+        <ToggleGroup
+          type="single"
+          value={String(period)}
+          onValueChange={(v) => v && setPeriod(Number(v) as Period)}
+          variant="outline"
+          size="sm"
+        >
+          <ToggleGroupItem value="7">7j</ToggleGroupItem>
+          <ToggleGroupItem value="30">30j</ToggleGroupItem>
+          <ToggleGroupItem value="90">90j</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
       {/* KPI Cards */}
       <div className="grid grid-cols-3 gap-4">
         <Card>
