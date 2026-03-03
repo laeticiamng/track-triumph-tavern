@@ -142,7 +142,7 @@ export function AnalyticsTab() {
   };
 
   const exportCSV = () => {
-    const rows = [["date", "pages_vues", "inscriptions", "votes"]];
+    const rows: string[][] = [["date", "pages_vues", "inscriptions", "votes"]];
     pageViewsPerDay.forEach((pv, i) => {
       rows.push([
         pv.date,
@@ -150,6 +150,11 @@ export function AnalyticsTab() {
         String(signupsPerDay[i]?.count ?? 0),
         String(votesPerDay[i]?.count ?? 0),
       ]);
+    });
+    rows.push([]);
+    rows.push(["top_page", "vues"]);
+    topPages.forEach((p) => {
+      rows.push([p.path, String(p.views)]);
     });
     const csv = rows.map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
