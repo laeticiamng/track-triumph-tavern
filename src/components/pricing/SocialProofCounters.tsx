@@ -28,7 +28,7 @@ export function SocialProofCounters() {
     load();
   }, []);
 
-  if (!counts || (counts.artists === 0 && counts.votes === 0 && counts.winners === 0)) {
+  if (!counts) {
     return null;
   }
 
@@ -36,7 +36,9 @@ export function SocialProofCounters() {
     { icon: <Users className="h-5 w-5" />, value: counts.artists, label: "artistes inscrits" },
     { icon: <Vote className="h-5 w-5" />, value: counts.votes, label: "votes exprimés" },
     { icon: <Trophy className="h-5 w-5" />, value: counts.winners, label: "gagnants récompensés" },
-  ];
+  ].filter((s) => s.value > 0);
+
+  if (stats.length === 0) return null;
 
   return (
     <section className="pb-12">
@@ -46,7 +48,7 @@ export function SocialProofCounters() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-3 gap-4"
+          className={`grid gap-4 ${stats.length === 1 ? "grid-cols-1 max-w-xs mx-auto" : stats.length === 2 ? "grid-cols-2 max-w-lg mx-auto" : "grid-cols-3"}`}
         >
           {stats.map((s) => (
             <div
