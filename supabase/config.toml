@@ -43,4 +43,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.compute-badges]
-verify_jwt = true
+verify_jwt = false
+
+[functions.purge-analytics]
+verify_jwt = false
