@@ -4,12 +4,14 @@ export interface Article {
   subtitle: string;
   description: string;
   category: string;
+  categorySlug?: string;
   readTime: number;
   publishedAt: string;
   updatedAt?: string;
   author: string;
   tags: string[];
   sections: ArticleSection[];
+  relatedSlugs?: string[];
 }
 
 export interface ArticleSection {
@@ -23,6 +25,8 @@ export const articles: Article[] = [
     slug: "guide-mixage-vocal-rap",
     title: "Guide complet du mixage vocal en Rap : de l'enregistrement au master",
     subtitle: "Les techniques pro pour un rendu vocal percutant",
+    categorySlug: "rap-trap",
+    relatedSlugs: ["sound-design-edm-debutant", "guide-production-rnb-soul"],
     description:
       "Apprenez à mixer des voix rap comme un professionnel : chaîne de traitement, compression, EQ, ad-libs, doubles et spatialisation. Guide étape par étape avec des réglages concrets.",
     category: "Rap / Trap",
@@ -70,6 +74,8 @@ export const articles: Article[] = [
     slug: "creer-ambiance-lofi-parfaite",
     title: "Comment créer l'ambiance Lofi parfaite : atmosphère, texture et émotion",
     subtitle: "L'art de l'imperfection maîtrisée",
+    categorySlug: "lofi-chill",
+    relatedSlugs: ["guide-production-rnb-soul", "ecrire-chanson-pop-accrocheuse"],
     description:
       "Maîtrisez les techniques de production Lofi : vinyle crackle, side-chain subtil, accords jazz, sampling, et comment créer une atmosphère émotionnelle authentique qui touche les auditeurs.",
     category: "Lofi / Chill",
@@ -116,6 +122,8 @@ export const articles: Article[] = [
     slug: "sound-design-edm-debutant",
     title: "Sound design en EDM : créer des sons uniques qui marquent les esprits",
     subtitle: "De la synthèse soustractive au design de drops mémorables",
+    categorySlug: "electro-edm",
+    relatedSlugs: ["guide-mixage-vocal-rap", "creer-ambiance-lofi-parfaite"],
     description:
       "Apprenez les fondamentaux du sound design en musique électronique : synthèse soustractive, wavetable, FM, design de basses, leads, et comment créer un drop EDM percutant. Guide pratique avec exemples.",
     category: "Électro / EDM",
@@ -163,6 +171,8 @@ export const articles: Article[] = [
     slug: "ecrire-chanson-pop-accrocheuse",
     title: "Écrire une chanson Pop accrocheuse : structure, mélodie et hook",
     subtitle: "Les secrets des hits qui restent en tête",
+    categorySlug: "pop",
+    relatedSlugs: ["creer-ambiance-lofi-parfaite", "guide-production-rnb-soul"],
     description:
       "Découvrez les techniques de songwriting Pop : structure couplet-refrain, écriture de hooks mémorables, progression d'accords, et comment captiver les auditeurs dès les 10 premières secondes.",
     category: "Pop",
@@ -209,6 +219,8 @@ export const articles: Article[] = [
     slug: "guide-production-rnb-soul",
     title: "Produire du R&B/Soul authentique : groove, harmonies et émotion",
     subtitle: "Créer une connexion émotionnelle profonde par la musique",
+    categorySlug: "rnb-soul",
+    relatedSlugs: ["guide-mixage-vocal-rap", "ecrire-chanson-pop-accrocheuse"],
     description:
       "Guide de production R&B et Soul : groove rythmique, harmonies sophistiquées, traitement vocal, et comment créer un morceau qui touche profondément les auditeurs. Techniques et conseils d'experts.",
     category: "R&B / Soul",
@@ -255,4 +267,11 @@ export const articles: Article[] = [
 
 export function getArticleBySlug(slug: string): Article | undefined {
   return articles.find((a) => a.slug === slug);
+}
+
+export function getRelatedArticles(article: Article): Article[] {
+  if (!article.relatedSlugs) return [];
+  return article.relatedSlugs
+    .map((slug) => articles.find((a) => a.slug === slug))
+    .filter((a): a is Article => !!a);
 }

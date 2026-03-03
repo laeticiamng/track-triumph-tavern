@@ -8,6 +8,7 @@ import { Heart, Star, Sparkles, Music2, ChevronDown, ChevronUp, Check, Loader2, 
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { trackEvent } from "@/lib/analytics";
 
 type ScoringCriterion = { criterion: string; weight: number; description: string };
 
@@ -90,6 +91,8 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
         toast({ title: "Erreur", description: result.error, variant: "destructive" });
       } else {
         setVoted(true);
+        trackEvent("vote_cast", { submission_id: submissionId, detailed: showDetails, had_comment: hadComment });
+        toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
         toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
         onVoted?.(hadComment);
       }

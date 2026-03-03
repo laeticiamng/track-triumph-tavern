@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import type { User as SupabaseUser, Session } from "@supabase/supabase-js";
 import type { LoginValues, SignupValues } from "@/lib/auth-schemas";
+import { trackEvent } from "@/lib/analytics";
 import AuthLoginForm from "@/components/auth/AuthLoginForm";
 import AuthSignupForm from "@/components/auth/AuthSignupForm";
 import AuthForgotPassword from "@/components/auth/AuthForgotPassword";
@@ -77,6 +78,7 @@ const Auth = () => {
           toast({ title: "Erreur", description: error.message, variant: "destructive" });
         }
       } else if (!data.session) {
+        trackEvent("signup_completed", { method: "email" });
         setConfirmEmail(values.email);
         setView("confirmation");
       }
