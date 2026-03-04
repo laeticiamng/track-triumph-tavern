@@ -6,6 +6,7 @@ import { BottomNav } from "./BottomNav";
 import { AIChatbot } from "@/components/ai/AIChatbot";
 import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+import { OfflineBanner } from "@/components/pwa/OfflineBanner";
 import { useSubscription } from "@/hooks/use-subscription";
 import { trackEvent } from "@/lib/analytics";
 
@@ -25,6 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {t("layout.skipToContent")}
       </a>
       <Header />
+      <OfflineBanner />
       <main id="main-content" className="pt-16 pb-20 md:pb-0">{children}</main>
       <PersistentAudioPlayer />
       <BottomNav />

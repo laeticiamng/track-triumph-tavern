@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hors ligne — Weekly Music Awards</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0b;
+      color: #e4e4e7;
+      padding: 1.5rem;
+    }
+    .card {
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+    }
+    .icon-wrap {
+      width: 80px; height: 80px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.8; }
+    }
+    .icon-wrap svg {
+      width: 36px; height: 36px;
+      stroke: #a855f7;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    h1 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    p {
+      font-size: 0.875rem;
+      color: #a1a1aa;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      background: rgba(168, 85, 247, 0.1);
+      color: #c084fc;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { background: rgba(168, 85, 247, 0.2); }
+    .btn:active { transform: scale(0.97); }
+    .btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .status {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #71717a;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .online .dot { background: #22c55e; animation: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <line x1="1" y1="1" x2="23" y2="23" />
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9" />
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" />
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+        <line x1="12" y1="20" x2="12.01" y2="20" />
+      </svg>
+    </div>
+    <h1>Vous êtes hors ligne</h1>
+    <p>Pas de connexion internet détectée. Vérifiez votre réseau et réessayez pour retrouver Weekly Music Awards.</p>
+    <button class="btn" onclick="window.location.reload()">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" /></svg>
+      Réessayer
+    </button>
+    <div class="status" id="status">
+      <span class="dot"></span>
+      <span>Hors ligne</span>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('online', () => {
+      document.getElementById('status').classList.add('online');
+      document.getElementById('status').querySelector('span:last-child').textContent = 'Connexion rétablie !';
+      setTimeout(() => window.location.reload(), 1000);
+    });
+  </script>
+</body>
+</html>
