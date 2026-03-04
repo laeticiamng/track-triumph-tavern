@@ -1,89 +1,29 @@
 
 
-# Internationalisation FR / EN / DE — Plan d'implémentation
+## Test Results: Theme Toggle on Landing Page
 
-## Scope
+### What works well
+- **Dark mode**: Looks polished and cohesive across all sections (hero, content, CTA, footer).
+- **Toggle functionality**: Switching between modes works correctly, icon updates (sun/moon), and preference persists in localStorage.
+- **Light mode content sections**: Cards, categories, FAQ, and footer all look clean with good contrast.
 
-La plateforme contient **~30 pages** et **~40 composants** avec du texte en dur en français. L'ajout de 3 langues (FR, EN, DE) nécessite une refonte structurelle du système de textes.
+### Issues found in Light Mode
 
-## Architecture retenue
+1. **Hero section**: The `bg-gradient-hero` applies a vibrant purple gradient (same as dark mode since the last edit changed it to `hsl(263, 65%, 52%) → hsl(300, 55%, 50%)`). All text is hardcoded `text-white` which works on the dark gradient, but the overall effect feels heavy and out of place in a "light" theme context.
 
-**Librairie : `react-i18next` + `i18next`** — standard de facto pour React, léger, supporté par TypeScript.
+2. **CTA section**: Same issue -- the `bg-gradient-hero` creates a very bold purple block. The "View plans" button (`border-white/30 text-white`) is nearly invisible against this gradient.
 
-```text
-src/
-├── i18n/
-│   ├── index.ts              ← config i18next (détection langue, fallback FR)
-│   ├── locales/
-│   │   ├── fr.json            ← toutes les clés FR
-│   │   ├── en.json            ← toutes les clés EN
-│   │   └── de.json            ← toutes les clés DE
-├── components/
-│   └── LanguageSwitcher.tsx   ← sélecteur de langue (Header + Footer)
-```
+3. **"Learn more" button in Hero**: Uses `border-white/30 text-white` styling, making it barely visible against the gradient in light mode.
 
-## Etapes d'implémentation
+These are not blocking bugs since the gradient intentionally provides a dark background for white text (this is a design pattern). However, the contrast on outline buttons could be improved.
 
-### 1. Installer les dépendances
-- `i18next`, `react-i18next`, `i18next-browser-languagedetector`
+### Proposed Fixes
 
-### 2. Créer la config i18n + les 3 fichiers de traduction
+1. **Improve outline button contrast on gradient sections**: In both `HeroSection.tsx` and `CTASection.tsx`, increase the border opacity for the outline buttons from `border-white/30` to `border-white/50` so they're more visible against the gradient.
 
-**`src/i18n/index.ts`** — initialise i18next avec :
-- Détection automatique de la langue du navigateur
-- Fallback sur `fr`
-- Namespace unique `translation`
-- Stockage du choix utilisateur dans `localStorage`
+2. **No changes needed for the gradient itself**: The hero/CTA gradient is intentionally bold in both modes -- this is standard for landing pages (e.g., Spotify, Apple Music). Changing it to a pale gradient in light mode would make the white text unreadable.
 
-**Fichiers JSON** — structurés par section :
-```json
-{
-  "nav": { "explore": "Explorer", "vote": "Voter", ... },
-  "hero": { "title": "Le seul concours musical...", "subtitle": "..." },
-  "footer": { "navigation": "Navigation", "legal": "Légal", ... },
-  "auth": { "login": "Connexion", "signup": "S'inscrire", ... },
-  "pricing": { ... },
-  "common": { "loading": "Chargement...", "back": "Retour", ... }
-}
-```
-
-Environ **300-400 clés** réparties sur les sections : `nav`, `hero`, `howItWorks`, `whyUs`, `artistBenefits`, `categories`, `socialProof`, `faq`, `cta`, `footer`, `auth`, `pricing`, `vote`, `results`, `profile`, `admin`, `badges`, `legal`, `common`, `errors`, `cookies`.
-
-### 3. Créer le composant LanguageSwitcher
-- Dropdown compact (drapeau + code langue) dans le Header
-- Utilise `i18n.changeLanguage()`
-- Persiste le choix dans `localStorage`
-
-### 4. Brancher i18n dans l'app
-- Importer `src/i18n/index.ts` dans `src/main.tsx`
-- Wrapper avec `<Suspense>` pour le chargement initial
-
-### 5. Migrer les composants — remplacement des textes en dur
-
-Chaque composant est modifié pour utiliser `const { t } = useTranslation()` et remplacer les chaînes par `t("section.key")`.
-
-**Composants impactés** (liste non exhaustive) :
-- **Layout** : Header, Footer, BottomNav
-- **Landing** : HeroSection, HowItWorks, WhyUs, ArtistBenefits, CategoriesSection, SocialProof, FAQ, CTASection, WeeklyPodium
-- **Auth** : AuthLoginForm, AuthSignupForm, AuthForgotPassword, AuthConfirmationScreen
-- **Vote** : VoteCard, VoteButton, VoteFeed, VoteQuotaBar, ShareSheet, CategoryProgressBar
-- **Pricing** : PricingFAQ, SocialProofCounters, WhyEliteSection
-- **Pages** : Pricing, Profile, Results, Explore, Compete, Stats, About, Badges, HallOfFame, Faq, NotFound
-- **Legal** : Terms, Privacy, ContestRules, Cookies, CGV, MentionsLegales (contenu long)
-- **Shared** : WeekCountdown, CookieConsent, ErrorBoundary
-- **Admin** : AnalyticsTab, FraudMonitoring
-- **Gamification** : BadgeProgress, BadgeShowcase, StreakBadge
-- **AI** : AIChatbot, AIRecommendations, AITagSuggest, AIVoteSummary
-- **SEO** : SEOHead (titres et descriptions)
-
-### 6. Pages légales (Terms, Privacy, Cookies, CGV, ContestRules, MentionsLegales)
-
-Ces pages contiennent des textes longs. Les traductions seront stockées dans les JSON sous des clés dédiées (ex: `legal.terms.article1`). Chaque article/section aura sa propre clé.
-
-## Points d'attention
-
-- **SEO** : Les balises `<title>` et `<meta description>` dans SEOHead utiliseront aussi `t()` pour être traduites
-- **Dates** : `date-fns` supporte déjà les locales — on importera `fr`, `enUS`, `de` selon la langue active
-- **Routes** : Les routes restent en anglais (pas de `/fr/`, `/en/`, `/de/` prefix) — la langue est gérée par le sélecteur, pas par l'URL
-- **Volume** : C'est un changement massif (~50+ fichiers modifiés, ~1500 lignes de JSON par langue). L'implémentation sera faite par lots.
+### Files to modify
+- `src/components/landing/HeroSection.tsx` -- line 126: `border-white/30` → `border-white/50`
+- `src/components/landing/CTASection.tsx` -- line 51: `border-white/30` → `border-white/50`
 
