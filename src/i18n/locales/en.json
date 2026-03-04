@@ -1052,6 +1052,9 @@
     "followers": "Followers",
     "following": "Following"
   },
+  "popular": {
+    "title": "Popular artists"
+  },
   "feed": {
     "title": "Activity feed",
     "empty": "Follow artists to see their activity here",

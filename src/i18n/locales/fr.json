@@ -1052,6 +1052,9 @@
     "followers": "Abonnés",
     "following": "Abonnements"
   },
+  "popular": {
+    "title": "Artistes populaires"
+  },
   "feed": {
     "title": "Fil d'activité",
     "empty": "Suivez des artistes pour voir leur activité ici",

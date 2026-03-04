@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
 import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
+import { PopularArtists } from "@/components/social/PopularArtists";
 import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -223,8 +224,9 @@ const Explore = () => {
             </motion.div>
           )}
 
-          {/* Artist suggestions */}
+          {/* Artist suggestions (logged in) + Popular artists (public) */}
           <ArtistSuggestions />
+          <PopularArtists />
         </div>
       </section>
       <Footer />
