@@ -8,6 +8,7 @@ import { VoteFeed } from "@/components/vote/VoteFeed";
 import { VoteQuotaBar } from "@/components/vote/VoteQuotaBar";
 import { CategoryProgressBar } from "@/components/vote/CategoryProgressBar";
 import { AIRecommendations } from "@/components/ai/AIRecommendations";
+import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
 import { SEOHead, eventJsonLd } from "@/components/seo/SEOHead";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -229,6 +230,9 @@ const Vote = () => {
               >
                 {t("votePage.howItWorks")}
               </Link>
+            </div>
+            <div className="w-full max-w-lg mt-6">
+              <ArtistSuggestions />
             </div>
           </div>
         ) : (
