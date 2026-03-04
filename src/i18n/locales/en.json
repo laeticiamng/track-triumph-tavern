@@ -310,6 +310,18 @@
   "layout": {
     "skipToContent": "Skip to main content"
   },
+  "a11y": {
+    "close": "Close",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "goToPreviousPage": "Go to previous page",
+    "previous": "Previous",
+    "goToNextPage": "Go to next page",
+    "next": "Next",
+    "morePages": "More pages",
+    "toggleSidebar": "Toggle sidebar",
+    "more": "More"
+  },
   "common": {
     "loading": "Loading...",
     "back": "Back",
