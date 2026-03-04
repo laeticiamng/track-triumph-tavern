@@ -30,7 +30,7 @@ export function HeroSection() {
     ).then(async ({ data }) => {
         if (data) {
           const season = (data as { seasons?: { name: string } | null }).seasons?.name || `${t("hero.season")} 1`;
-          const title = data.title || `Semaine ${data.week_number}`;
+          const title = data.title || `${t("hero.week")} ${data.week_number}`;
           setWeekLabel(`${season} — ${title} ${t("hero.weekOpen")}`);
           setVotingCloseAt(data.voting_close_at);
 
