@@ -324,7 +324,11 @@
     "more": "Mehr",
     "pause": "Pausieren",
     "playExcerpt": "Auszug abspielen",
-    "audioProgress": "Audio-Fortschritt"
+    "audioProgress": "Audio-Fortschritt",
+    "changeLanguage": "Sprache ändern",
+    "mainNavigation": "Hauptnavigation",
+    "footerNavigation": "Website-Navigation",
+    "footerLegal": "Rechtliche Links"
   },
   "common": {
     "loading": "Laden...",

@@ -34,7 +34,7 @@ export function Footer() {
           {/* Navigation */}
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.navigation")}</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <nav aria-label={t("a11y.footerNavigation")} className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/explore" className="hover:text-foreground transition-colors">{t("footer.explore")}</Link>
               <Link to="/scoring-method" className="hover:text-foreground transition-colors">{t("footer.ranking")}</Link>
               <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">{t("footer.hallOfFame")}</Link>
@@ -48,7 +48,7 @@ export function Footer() {
           {/* Legal */}
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.legal")}</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <nav aria-label={t("a11y.footerLegal")} className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/legal/mentions" className="hover:text-foreground transition-colors">{t("footer.legalNotices")}</Link>
               <Link to="/terms" className="hover:text-foreground transition-colors">{t("footer.cgu")}</Link>
               <Link to="/legal/cgv" className="hover:text-foreground transition-colors">{t("footer.cgv")}</Link>

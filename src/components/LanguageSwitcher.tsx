@@ -22,7 +22,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
       <DropdownMenuTrigger asChild>
         <button
           className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-          aria-label="Change language"
+          aria-label={i18n.t("a11y.changeLanguage")}
         >
           <Globe className="h-4 w-4" />
           {!compact && <span>{current.flag} {current.code.toUpperCase()}</span>}
