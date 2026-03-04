@@ -149,8 +149,7 @@
     "copyright": "© {{year}} Weekly Music Awards. All rights reserved."
   },
   "auth": {
-    "login": "Log in",
-    "signup": "Sign up",
+    "email": "Email",
     "email": "Email",
     "password": "Password",
     "artistName": "Artist name",
@@ -332,26 +331,15 @@
     "footerLegal": "Legal links"
   },
   "common": {
-    "loading": "Loading...",
     "back": "Back",
     "save": "Save",
     "cancel": "Cancel",
-    "delete": "Delete",
     "edit": "Edit",
-    "confirm": "Confirm",
-    "search": "Search",
-    "noResults": "No results",
-    "seeMore": "See more",
     "close": "Close"
   },
   "seo": {
     "defaultTitle": "Weekly Music Awards — The only 100% community-driven and meritocratic music contest",
     "defaultDescription": "Weekly Music Awards is the weekly music contest where the community listens, votes, and rewards independent artists. Submit your music, get rated on 3 criteria (originality, production, emotion), and win up to €200 every week."
-  },
-  "language": {
-    "fr": "Français",
-    "en": "English",
-    "de": "Deutsch"
   },
   "pricing": {
     "seoTitle": "Pricing",
@@ -400,9 +388,6 @@
     "premiumBadge": "Premium + badge",
     "detailed": "Detailed",
     "no": "No",
-    "freeName": "Free",
-    "proName": "Pro",
-    "eliteName": "Elite",
     "freeTagline": "Listen, vote, discover",
     "proTagline": "Submit, progress, shine",
     "eliteTagline": "The full experience, no limits",
@@ -492,11 +477,9 @@
     "artistName": "Artist name",
     "bio": "Bio",
     "socialLinks": "Social links",
-    "addLink": "Add",
     "mySubmissions": "My submissions",
     "noSubmissions": "No submissions yet.",
     "submitTrack": "Submit a track",
-    "viewSubmission": "View",
     "subscriptionActivated": "Subscription activated! 🎉",
     "welcomeNewPlan": "Welcome to your new plan.",
     "avatarUpdated": "Avatar updated ✓",
@@ -560,10 +543,8 @@
     "uploadAudio": "Click to upload an audio file (MP3, WAV, max 10 MB)",
     "mp3WavOnly": "MP3 or WAV only",
     "previewWindow": "Preview window (30s)",
-    "adjustStart": "Adjust the start point",
     "coverImage": "Cover image",
     "uploadCover": "Click to upload (JPG, PNG, max 5 MB)",
-    "jpgPngOnly": "JPG or PNG",
     "externalLink": "External link (optional)",
     "rightsDeclaration": "I declare that I am the author or hold the necessary rights",
     "acceptRules": "I accept the contest rules",
@@ -651,9 +632,6 @@
     "discoverTracks": "Discover tracks",
     "resultsPublished": "Results published on",
     "noSubmissionsWeek": "No submissions this week.",
-    "first": "1st",
-    "second": "2nd",
-    "third": "3rd",
     "weekLabel": "Week {{number}}",
     "voteSingular": "vote",
     "votePlural": "votes"

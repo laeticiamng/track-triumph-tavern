@@ -149,8 +149,7 @@
     "copyright": "© {{year}} Weekly Music Awards. Alle Rechte vorbehalten."
   },
   "auth": {
-    "login": "Anmelden",
-    "signup": "Registrieren",
+    "email": "E-Mail",
     "email": "E-Mail",
     "password": "Passwort",
     "artistName": "Künstlername",
@@ -332,26 +331,15 @@
     "footerLegal": "Rechtliche Links"
   },
   "common": {
-    "loading": "Laden...",
     "back": "Zurück",
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "delete": "Löschen",
     "edit": "Bearbeiten",
-    "confirm": "Bestätigen",
-    "search": "Suchen",
-    "noResults": "Keine Ergebnisse",
-    "seeMore": "Mehr anzeigen",
     "close": "Schließen"
   },
   "seo": {
     "defaultTitle": "Weekly Music Awards — Der einzige 100% Community-gesteuerte und leistungsorientierte Musikwettbewerb",
     "defaultDescription": "Weekly Music Awards ist der wöchentliche Musikwettbewerb, bei dem die Community zuhört, abstimmt und unabhängige Künstler belohnt. Reichen Sie Ihre Musik ein, werden Sie nach 3 Kriterien bewertet und gewinnen Sie jede Woche bis zu 200 €."
-  },
-  "language": {
-    "fr": "Français",
-    "en": "English",
-    "de": "Deutsch"
   },
   "pricing": {
     "seoTitle": "Preise",
@@ -400,9 +388,6 @@
     "premiumBadge": "Premium + Abzeichen",
     "detailed": "Detailliert",
     "no": "Nein",
-    "freeName": "Free",
-    "proName": "Pro",
-    "eliteName": "Elite",
     "freeTagline": "Hören, abstimmen, entdecken",
     "proTagline": "Einreichen, wachsen, glänzen",
     "eliteTagline": "Das komplette Erlebnis, ohne Grenzen",
@@ -492,11 +477,9 @@
     "artistName": "Künstlername",
     "bio": "Bio",
     "socialLinks": "Soziale Links",
-    "addLink": "Hinzufügen",
     "mySubmissions": "Meine Einreichungen",
     "noSubmissions": "Noch keine Einreichungen.",
     "submitTrack": "Track einreichen",
-    "viewSubmission": "Ansehen",
     "subscriptionActivated": "Abonnement aktiviert! 🎉",
     "welcomeNewPlan": "Willkommen bei Ihrem neuen Plan.",
     "avatarUpdated": "Avatar aktualisiert ✓",
@@ -560,10 +543,8 @@
     "uploadAudio": "Klicken Sie zum Hochladen einer Audiodatei (MP3, WAV, max 10 MB)",
     "mp3WavOnly": "Nur MP3 oder WAV",
     "previewWindow": "Vorschaufenster (30s)",
-    "adjustStart": "Startpunkt anpassen",
     "coverImage": "Coverbild",
     "uploadCover": "Klicken zum Hochladen (JPG, PNG, max 5 MB)",
-    "jpgPngOnly": "JPG oder PNG",
     "externalLink": "Externer Link (optional)",
     "rightsDeclaration": "Ich erkläre, dass ich der Autor bin oder die erforderlichen Rechte besitze",
     "acceptRules": "Ich akzeptiere die Wettbewerbsregeln",
@@ -651,9 +632,6 @@
     "discoverTracks": "Tracks entdecken",
     "resultsPublished": "Ergebnisse veröffentlicht am",
     "noSubmissionsWeek": "Keine Einreichungen diese Woche.",
-    "first": "1.",
-    "second": "2.",
-    "third": "3.",
     "weekLabel": "Woche {{number}}",
     "voteSingular": "Stimme",
     "votePlural": "Stimmen"
