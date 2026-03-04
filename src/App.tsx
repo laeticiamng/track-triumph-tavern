@@ -8,6 +8,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
+import { InstallPromptProvider } from "@/hooks/use-install-prompt";
 import { Loader2 } from "lucide-react";
 
 // Eagerly load the landing page for fast first paint
@@ -60,6 +61,7 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <AudioPlayerProvider>
+      <InstallPromptProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -134,6 +136,7 @@ const App = () => (
           </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
+      </InstallPromptProvider>
       </AudioPlayerProvider>
     </QueryClientProvider>
   </HelmetProvider>
