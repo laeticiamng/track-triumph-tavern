@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +27,6 @@ interface ScanResults {
   summary: { total_votes: number; flagged_votes: number; flagged_users: number; flagged_ips: number; invalidated: number; mode: string };
 }
 
-// GDPR: mask sensitive data
 function maskIp(ip: string) {
   const parts = ip.split(".");
   if (parts.length === 4) return `${parts[0]}.${parts[1]}.xxx.xxx`;
@@ -37,19 +37,20 @@ function maskUserId(id: string) {
   return id.substring(0, 8) + "…";
 }
 
-const FLAG_LABELS: Record<string, string> = {
-  burst: "Rafale",
-  new_account: "Compte récent",
-  ip_cluster: "Cluster IP",
-  ip_concentration: "Concentration IP",
-};
-
 export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
+  const { t } = useTranslation();
   const [selectedWeekId, setSelectedWeekId] = useState("");
   const [scanning, setScanning] = useState(false);
   const [invalidating, setInvalidating] = useState(false);
   const [results, setResults] = useState<ScanResults | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const FLAG_LABELS: Record<string, string> = {
+    burst: t("fraud.flagBurst"),
+    new_account: t("fraud.flagNewAccount"),
+    ip_cluster: t("fraud.flagIpCluster"),
+    ip_concentration: t("fraud.flagIpConcentration"),
+  };
 
   const runScan = async (invalidate = false) => {
     if (!selectedWeekId) return;
@@ -63,7 +64,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
       if (fnError) throw fnError;
       setResults(data as ScanResults);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erreur lors du scan");
+      setError(err instanceof Error ? err.message : t("fraud.scanError"));
     } finally {
       setScanning(false);
       setInvalidating(false);
@@ -83,22 +84,14 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
 
   const exportEventsCSV = async () => {
     if (!selectedWeekId) return;
-    // Fetch vote_events for the week via votes
-    const { data: votes } = await supabase
-      .from("votes")
-      .select("id")
-      .eq("week_id", selectedWeekId);
-
+    const { data: votes } = await supabase.from("votes").select("id").eq("week_id", selectedWeekId);
     if (!votes || votes.length === 0) return;
-
     const voteIds = votes.map((v) => v.id);
     const { data: events } = await supabase
       .from("vote_events")
       .select("id, vote_id, user_id, event_type, ip_address, user_agent, created_at")
-      .in("vote_id", voteIds.slice(0, 100)); // batch
-
+      .in("vote_id", voteIds.slice(0, 100));
     if (!events || events.length === 0) return;
-
     const masked = events.map((e) => ({
       ...e,
       ip_address: e.ip_address ? maskIp(String(e.ip_address)) : "",
@@ -114,27 +107,22 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
     const blob = new Blob([`\uFEFF${headers}\n${rows}`], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `${filename}.csv`;
-    a.click();
+    a.href = url; a.download = `${filename}.csv`; a.click();
     URL.revokeObjectURL(url);
   };
-
-  const selectedWeek = weeks.find((w) => w.id === selectedWeekId);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-xl font-semibold flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-destructive" /> Monitoring Anti-Fraude
+          <AlertTriangle className="h-5 w-5 text-destructive" /> {t("fraud.title")}
         </h2>
       </div>
 
-      {/* Fraud Detection Rules Reference */}
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Shield className="h-4 w-4 text-primary" /> Regles de detection actives
+            <Shield className="h-4 w-4 text-primary" /> {t("fraud.rulesTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -142,123 +130,110 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
             <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
               <Zap className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium">Rate limiting</p>
-                <p className="text-xs text-muted-foreground">Max 50 votes/heure par utilisateur. 1 vote par track par semaine.</p>
+                <p className="text-sm font-medium">{t("fraud.ruleRateLimit")}</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.ruleRateLimitDesc")}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
               <Globe className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium">Detection IP</p>
-                <p className="text-xs text-muted-foreground">Alerte si &gt;3 comptes distincts votent depuis la meme IP.</p>
+                <p className="text-sm font-medium">{t("fraud.ruleIP")}</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.ruleIPDesc")}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
               <Clock className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium">Pattern temporel</p>
-                <p className="text-xs text-muted-foreground">Detection de rafales : &gt;10 votes en 5 min = flag automatique.</p>
+                <p className="text-sm font-medium">{t("fraud.rulePattern")}</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.rulePatternDesc")}</p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
               <Users className="h-4 w-4 text-purple-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium">Comptes recents</p>
-                <p className="text-xs text-muted-foreground">Comptes crees &lt;24h avant le vote sont signales pour review.</p>
+                <p className="text-sm font-medium">{t("fraud.ruleNewAccount")}</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.ruleNewAccountDesc")}</p>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Section 1: Launch scan */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Lancer un scan</CardTitle>
+          <CardTitle className="text-base">{t("fraud.launchScan")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Semaine</label>
+            <label className="text-sm font-medium">{t("admin.week")}</label>
             <select
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={selectedWeekId}
               onChange={(e) => { setSelectedWeekId(e.target.value); setResults(null); }}
             >
-              <option value="">Sélectionner une semaine…</option>
+              <option value="">{t("fraud.selectWeek")}</option>
               {weeks.map((w) => (
                 <option key={w.id} value={w.id}>
-                  {w.title || `Semaine ${w.week_number}`}
+                  {w.title || t("fraud.weekLabel", { number: w.week_number })}
                 </option>
               ))}
             </select>
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button
-              onClick={() => runScan(false)}
-              disabled={!selectedWeekId || scanning || invalidating}
-            >
+            <Button onClick={() => runScan(false)} disabled={!selectedWeekId || scanning || invalidating}>
               {scanning ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Search className="mr-2 h-4 w-4" />}
-              Analyser (dry run)
+              {t("fraud.analyzeDryRun")}
             </Button>
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  disabled={!selectedWeekId || scanning || invalidating || !results || results.summary.flagged_votes === 0}
-                >
+                <Button variant="destructive" disabled={!selectedWeekId || scanning || invalidating || !results || results.summary.flagged_votes === 0}>
                   {invalidating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldAlert className="mr-2 h-4 w-4" />}
-                  Invalider les suspects
+                  {t("fraud.invalidateSuspects")}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Confirmer l'invalidation</AlertDialogTitle>
+                  <AlertDialogTitle>{t("fraud.confirmInvalidation")}</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Cette action va marquer {results?.summary.flagged_votes || 0} vote(s) comme invalides.
-                    Cette opération est irréversible. Continuer ?
+                    {t("fraud.confirmInvalidationDesc", { count: results?.summary.flagged_votes || 0 })}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogCancel>{t("fraud.cancel")}</AlertDialogCancel>
                   <AlertDialogAction onClick={() => runScan(true)}>
-                    Confirmer l'invalidation
+                    {t("fraud.confirmBtn")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           </div>
 
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
         </CardContent>
       </Card>
 
-      {/* Section 2: Summary cards */}
       {results && (
         <>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <Card>
               <CardContent className="py-4 text-center">
                 <p className="text-2xl font-bold font-display">{results.summary.total_votes}</p>
-                <p className="text-xs text-muted-foreground">Votes totaux</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.totalVotes")}</p>
               </CardContent>
             </Card>
             <Card className={results.summary.flagged_votes > 0 ? "border-destructive/30" : ""}>
               <CardContent className="py-4 text-center">
-                <p className="text-2xl font-bold font-display text-destructive">
-                  {results.summary.flagged_votes}
-                </p>
-                <p className="text-xs text-muted-foreground">Votes flaggés</p>
+                <p className="text-2xl font-bold font-display text-destructive">{results.summary.flagged_votes}</p>
+                <p className="text-xs text-muted-foreground">{t("fraud.flaggedVotes")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="py-4 text-center">
                 <p className="text-2xl font-bold font-display">{results.summary.flagged_users}</p>
                 <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
-                  <Users className="h-3 w-3" /> Users suspects
+                  <Users className="h-3 w-3" /> {t("fraud.suspiciousUsers")}
                 </p>
               </CardContent>
             </Card>
@@ -266,7 +241,7 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
               <CardContent className="py-4 text-center">
                 <p className="text-2xl font-bold font-display">{results.summary.flagged_ips}</p>
                 <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
-                  <Globe className="h-3 w-3" /> IPs suspectes
+                  <Globe className="h-3 w-3" /> {t("fraud.suspiciousIPs")}
                 </p>
               </CardContent>
             </Card>
@@ -275,27 +250,26 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
           {results.summary.invalidated > 0 && (
             <Card className="border-primary/30">
               <CardContent className="py-3 text-center text-sm text-primary font-medium">
-                ✓ {results.summary.invalidated} vote(s) invalidé(s) avec succès
+                {t("fraud.invalidatedSuccess", { count: results.summary.invalidated })}
               </CardContent>
             </Card>
           )}
 
-          {/* Section 3: Tables */}
           {results.suspicious_users.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Users className="h-4 w-4" /> Top Users Suspects ({results.suspicious_users.length})
+                  <Users className="h-4 w-4" /> {t("fraud.topSuspiciousUsers", { count: results.suspicious_users.length })}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>User ID</TableHead>
-                      <TableHead>Nom</TableHead>
-                      <TableHead>Votes</TableHead>
-                      <TableHead>Flags</TableHead>
+                      <TableHead>{t("fraud.userId")}</TableHead>
+                      <TableHead>{t("fraud.name")}</TableHead>
+                      <TableHead>{t("fraud.votes")}</TableHead>
+                      <TableHead>{t("fraud.flags")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -325,16 +299,16 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Globe className="h-4 w-4" /> Top IPs Suspectes ({results.suspicious_ips.length})
+                  <Globe className="h-4 w-4" /> {t("fraud.topSuspiciousIPs", { count: results.suspicious_ips.length })}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>IP (masquée)</TableHead>
-                      <TableHead>Users distincts</TableHead>
-                      <TableHead>Votes</TableHead>
+                      <TableHead>{t("fraud.ipMasked")}</TableHead>
+                      <TableHead>{t("fraud.distinctUsers")}</TableHead>
+                      <TableHead>{t("fraud.votes")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -355,17 +329,17 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Music className="h-4 w-4" /> Soumissions Suspectes ({results.suspicious_submissions.length})
+                  <Music className="h-4 w-4" /> {t("fraud.suspiciousSubmissions", { count: results.suspicious_submissions.length })}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Titre</TableHead>
-                      <TableHead>Artiste</TableHead>
-                      <TableHead>Concentration IP</TableHead>
-                      <TableHead>Flags</TableHead>
+                      <TableHead>{t("fraud.trackTitle")}</TableHead>
+                      <TableHead>{t("fraud.artist")}</TableHead>
+                      <TableHead>{t("fraud.ipConcentration")}</TableHead>
+                      <TableHead>{t("fraud.flags")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -394,18 +368,17 @@ export function FraudMonitoring({ weeks }: { weeks: Week[] }) {
           {results.suspicious_users.length === 0 && results.suspicious_ips.length === 0 && results.suspicious_submissions.length === 0 && (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
-                ✓ Aucune activité suspecte détectée pour cette semaine.
+                {t("fraud.noSuspiciousActivity")}
               </CardContent>
             </Card>
           )}
 
-          {/* Section 4: Export */}
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" size="sm" onClick={exportEventsCSV} disabled={!selectedWeekId}>
-              <Download className="mr-1 h-3.5 w-3.5" /> Export vote_events (CSV)
+              <Download className="mr-1 h-3.5 w-3.5" /> {t("fraud.exportEvents")}
             </Button>
             <Button variant="outline" size="sm" onClick={exportScanCSV} disabled={!results}>
-              <Download className="mr-1 h-3.5 w-3.5" /> Export résultats scan (CSV)
+              <Download className="mr-1 h-3.5 w-3.5" /> {t("fraud.exportScanResults")}
             </Button>
           </div>
         </>

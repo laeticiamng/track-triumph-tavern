@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, UserPlus, Vote, TrendingUp, TrendingDown, Minus, Download } from "lucide-react";
@@ -7,7 +8,9 @@ import {
   ResponsiveContainer, LineChart, Line,
 } from "recharts";
 import { format, subDays } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr as frLocale } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
+import { de } from "date-fns/locale";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
 
@@ -23,7 +26,10 @@ interface TopPage {
   views: number;
 }
 
+const DATE_LOCALES: Record<string, typeof frLocale> = { fr: frLocale, en: enUS, de };
+
 export function AnalyticsTab() {
+  const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<Period>(30);
   const [topPages, setTopPages] = useState<TopPage[]>([]);
@@ -33,9 +39,11 @@ export function AnalyticsTab() {
   const [totals, setTotals] = useState({ views: 0, signups: 0, votes: 0 });
   const [prevTotals, setPrevTotals] = useState({ views: 0, signups: 0, votes: 0 });
 
+  const dateLocale = DATE_LOCALES[i18n.language] || frLocale;
+
   useEffect(() => {
     loadAnalytics();
-  }, [period]);
+  }, [period, i18n.language]);
 
   const loadAnalytics = async () => {
     setLoading(true);
@@ -44,7 +52,6 @@ export function AnalyticsTab() {
     const prevSince = subDays(now, period * 2).toISOString();
 
     try {
-      // Fetch current + previous period in one query
       const { data: allEvents } = await supabase
         .from("analytics_events")
         .select("event_name, properties, created_at")
@@ -56,7 +63,6 @@ export function AnalyticsTab() {
       const events = allEvents.filter((e) => e.created_at >= since);
       const prevEvents = allEvents.filter((e) => e.created_at < since);
 
-      // Top pages (current period only)
       const pageViews = events.filter((e) => e.event_name === "page_view");
       const pageCounts: Record<string, number> = {};
       pageViews.forEach((e) => {
@@ -69,7 +75,6 @@ export function AnalyticsTab() {
         .slice(0, 10);
       setTopPages(sortedPages);
 
-      // Group by day helper
       const groupByDay = (items: typeof events): DailyCount[] => {
         const counts: Record<string, number> = {};
         for (let i = period - 1; i >= 0; i--) {
@@ -81,7 +86,7 @@ export function AnalyticsTab() {
           if (counts[d] !== undefined) counts[d]++;
         });
         return Object.entries(counts).map(([date, count]) => ({
-          date: format(new Date(date), "dd MMM", { locale: fr }),
+          date: format(new Date(date), "dd MMM", { locale: dateLocale }),
           count,
         }));
       };
@@ -92,21 +97,12 @@ export function AnalyticsTab() {
       setPageViewsPerDay(groupByDay(pageViews));
       setSignupsPerDay(groupByDay(signups));
       setVotesPerDay(groupByDay(votes));
-      setTotals({
-        views: pageViews.length,
-        signups: signups.length,
-        votes: votes.length,
-      });
+      setTotals({ views: pageViews.length, signups: signups.length, votes: votes.length });
 
-      // Previous period totals
       const prevPageViews = prevEvents.filter((e) => e.event_name === "page_view");
       const prevSignups = prevEvents.filter((e) => e.event_name === "signup_completed");
       const prevVotes = prevEvents.filter((e) => e.event_name === "vote_cast");
-      setPrevTotals({
-        views: prevPageViews.length,
-        signups: prevSignups.length,
-        votes: prevVotes.length,
-      });
+      setPrevTotals({ views: prevPageViews.length, signups: prevSignups.length, votes: prevVotes.length });
     } catch (err) {
       console.error("Analytics load error:", err);
     } finally {
@@ -142,27 +138,18 @@ export function AnalyticsTab() {
   };
 
   const exportCSV = () => {
-    const rows: string[][] = [["date", "pages_vues", "inscriptions", "votes"]];
+    const rows: string[][] = [[t("analytics.pageViews"), t("analytics.signups"), t("analytics.trackedVotes")]];
     pageViewsPerDay.forEach((pv, i) => {
-      rows.push([
-        pv.date,
-        String(pv.count),
-        String(signupsPerDay[i]?.count ?? 0),
-        String(votesPerDay[i]?.count ?? 0),
-      ]);
+      rows.push([pv.date, String(pv.count), String(signupsPerDay[i]?.count ?? 0), String(votesPerDay[i]?.count ?? 0)]);
     });
     rows.push([]);
-    rows.push(["top_page", "vues"]);
-    topPages.forEach((p) => {
-      rows.push([p.path, String(p.views)]);
-    });
+    rows.push([t("analytics.topPages"), t("analytics.views")]);
+    topPages.forEach((p) => { rows.push([p.path, String(p.views)]); });
     const csv = rows.map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `analytics-${period}j.csv`;
-    a.click();
+    a.href = url; a.download = `analytics-${period}d.csv`; a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -177,7 +164,7 @@ export function AnalyticsTab() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h2 className="font-display text-xl font-semibold">Analytics ({period} derniers jours)</h2>
+        <h2 className="font-display text-xl font-semibold">{t("analytics.title", { period })}</h2>
         <div className="flex items-center gap-2">
           <ToggleGroup
             type="single"
@@ -186,23 +173,22 @@ export function AnalyticsTab() {
             variant="outline"
             size="sm"
           >
-            <ToggleGroupItem value="7">7j</ToggleGroupItem>
-            <ToggleGroupItem value="30">30j</ToggleGroupItem>
-            <ToggleGroupItem value="90">90j</ToggleGroupItem>
+            <ToggleGroupItem value="7">{t("analytics.days7")}</ToggleGroupItem>
+            <ToggleGroupItem value="30">{t("analytics.days30")}</ToggleGroupItem>
+            <ToggleGroupItem value="90">{t("analytics.days90")}</ToggleGroupItem>
           </ToggleGroup>
           <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download className="h-4 w-4 mr-1" />
-            CSV
+            <Download className="h-4 w-4 mr-1" /> CSV
           </Button>
         </div>
       </div>
-      {/* KPI Cards */}
+
       <div className="grid grid-cols-3 gap-4">
         <Card>
           <CardContent className="py-4 text-center">
             <Eye className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.views}</p>
-            <p className="text-xs text-muted-foreground">Pages vues</p>
+            <p className="text-xs text-muted-foreground">{t("analytics.pageViews")}</p>
             <TrendBadge current={totals.views} previous={prevTotals.views} />
           </CardContent>
         </Card>
@@ -210,7 +196,7 @@ export function AnalyticsTab() {
           <CardContent className="py-4 text-center">
             <UserPlus className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.signups}</p>
-            <p className="text-xs text-muted-foreground">Inscriptions</p>
+            <p className="text-xs text-muted-foreground">{t("analytics.signups")}</p>
             <TrendBadge current={totals.signups} previous={prevTotals.signups} />
           </CardContent>
         </Card>
@@ -218,17 +204,16 @@ export function AnalyticsTab() {
           <CardContent className="py-4 text-center">
             <Vote className="mx-auto mb-1 h-5 w-5 text-muted-foreground" />
             <p className="text-2xl font-bold font-display">{totals.votes}</p>
-            <p className="text-xs text-muted-foreground">Votes trackés</p>
+            <p className="text-xs text-muted-foreground">{t("analytics.trackedVotes")}</p>
             <TrendBadge current={totals.votes} previous={prevTotals.votes} />
           </CardContent>
         </Card>
       </div>
 
-      {/* Page views per day */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="h-4 w-4" /> Pages vues / jour
+            <TrendingUp className="h-4 w-4" /> {t("analytics.pageViewsPerDay")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -238,18 +223,17 @@ export function AnalyticsTab() {
               <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={4} />
               <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="count" name="Vues" className="stroke-primary" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="count" name={t("analytics.views")} className="stroke-primary" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
-      {/* Signups & votes per day */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <UserPlus className="h-4 w-4" /> Inscriptions / jour
+              <UserPlus className="h-4 w-4" /> {t("analytics.signupsPerDay")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -259,7 +243,7 @@ export function AnalyticsTab() {
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={6} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
                 <Tooltip />
-                <Bar dataKey="count" name="Inscriptions" className="fill-primary" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name={t("analytics.signups")} className="fill-primary" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -268,7 +252,7 @@ export function AnalyticsTab() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Vote className="h-4 w-4" /> Votes / jour
+              <Vote className="h-4 w-4" /> {t("analytics.votesPerDay")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -278,21 +262,20 @@ export function AnalyticsTab() {
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={6} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
                 <Tooltip />
-                <Bar dataKey="count" name="Votes" className="fill-accent" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name={t("analytics.trackedVotes")} className="fill-accent" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
 
-      {/* Top pages */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Top pages</CardTitle>
+          <CardTitle className="text-base">{t("analytics.topPages")}</CardTitle>
         </CardHeader>
         <CardContent>
           {topPages.length === 0 ? (
-            <p className="text-center text-muted-foreground py-4">Aucune donnée encore.</p>
+            <p className="text-center text-muted-foreground py-4">{t("analytics.noData")}</p>
           ) : (
             <div className="space-y-2">
               {topPages.map((p, i) => (
