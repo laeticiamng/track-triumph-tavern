@@ -47,3 +47,18 @@ verify_jwt = false
 
 [functions.purge-analytics]
 verify_jwt = false
+
+[functions.generate-vapid-keys]
+verify_jwt = false
+
+[functions.send-push]
+verify_jwt = false
+
+[functions.push-subscribe]
+verify_jwt = true
+
+[functions.push-unsubscribe]
+verify_jwt = true
+
+[functions.notify-status-change]
+verify_jwt = false
