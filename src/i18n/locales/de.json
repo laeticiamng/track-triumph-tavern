@@ -820,6 +820,32 @@
     "mentionsTitle": "Impressum",
     "mentionsSeoDesc": "Impressum der Weekly Music Awards Plattform."
   },
+  "chatbot": {
+    "openAI": "KI-Assistent öffnen",
+    "title": "WMA-Assistent",
+    "welcome": "Hallo! Ich bin der Weekly Music Awards Assistent. Stellen Sie mir eine Frage zum Wettbewerb, zur Musikproduktion oder zur Promotion.",
+    "loginRequired": "Sie müssen angemeldet sein, um den KI-Chatbot zu nutzen.",
+    "placeholder": "Eine Frage stellen...",
+    "errorGeneric": "Entschuldigung, ein Fehler ist aufgetreten."
+  },
+  "aiSummary": {
+    "title": "KI-Abstimmungszusammenfassung",
+    "analyze": "Analysieren",
+    "emptyState": "Klicken Sie auf \"Analysieren\", um eine KI-Zusammenfassung der Rückmeldungen zu Ihren Tracks zu erhalten.",
+    "loading": "Analyse läuft...",
+    "votesAnalyzed": "analysierte Stimmen",
+    "originality": "Originalität",
+    "production": "Produktion",
+    "emotion": "Emotion",
+    "strengths": "Stärken",
+    "improvements": "Verbesserungsbereiche",
+    "overall": "Zusammenfassung",
+    "refresh": "Analyse aktualisieren"
+  },
+  "header": {
+    "closeMenu": "Menü schließen",
+    "openMenu": "Menü öffnen"
+  },
   "scoring": {
     "seoTitle": "Bewertungsmethode — Wie das Ranking berechnet wird",
     "seoDesc": "Erfahren Sie im Detail, wie das Ranking von Weekly Music Awards berechnet wird: 3 Bewertungskriterien (Emotion, Originalität, Produktion), genrespezifische Gewichtung, KI-Anti-Betrugs-System und volle Transparenz. Keine Zahlung beeinflusst die Ergebnisse.",
