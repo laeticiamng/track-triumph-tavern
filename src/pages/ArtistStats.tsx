@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -36,6 +37,7 @@ interface ArtistData {
 }
 
 const ArtistStats = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<ArtistData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,25 +47,20 @@ const ArtistStats = () => {
 
     const load = async () => {
       try {
-        // Get profile
         const { data: profile } = await supabase
           .from("profiles")
           .select("display_name, avatar_url, bio")
           .eq("id", id)
           .single();
 
-        if (!profile) {
-          return;
-        }
+        if (!profile) return;
 
-        // Get submissions with week & category info
         const { data: submissions } = await supabase
           .from("submissions")
           .select("id, title, cover_image_url, vote_count, status, week_id, category_id")
           .eq("user_id", id)
           .order("created_at", { ascending: false });
 
-        // Get weeks and categories for lookup
         const [{ data: weeks }, { data: categories }, { data: wins }] = await Promise.all([
           supabase.from("weeks").select("id, title, week_number").order("week_number"),
           supabase.from("categories").select("id, name"),
@@ -77,7 +74,7 @@ const ArtistStats = () => {
           const week = weekMap.get(s.week_id);
           return {
             ...s,
-            week_title: week?.title || `Semaine ${week?.week_number || "?"}`,
+            week_title: week?.title || `${t("artistStats.weekLabel", { number: week?.week_number || "?" })}`,
             week_number: week?.week_number || 0,
             category_name: catMap.get(s.category_id) || "",
           };
@@ -85,7 +82,6 @@ const ArtistStats = () => {
 
         const totalVotesReceived = enrichedSubmissions.reduce((sum, s) => sum + s.vote_count, 0);
 
-        // Build weekly progress
         const weeklyMap = new Map<number, number>();
         enrichedSubmissions.forEach((s) => {
           if (s.week_number > 0) {
@@ -99,7 +95,7 @@ const ArtistStats = () => {
           .map(([wk, votes]) => ({ week: `S${wk}`, votes }));
 
         setData({
-          displayName: profile.display_name || "Artiste",
+          displayName: profile.display_name || t("artistStats.defaultArtist"),
           avatarUrl: profile.avatar_url,
           bio: profile.bio,
           submissions: enrichedSubmissions,
@@ -116,7 +112,19 @@ const ArtistStats = () => {
     };
 
     load();
-  }, [id]);
+  }, [id, t]);
+
+  const statusLabel: Record<string, string> = {
+    pending: t("artistStats.pending"),
+    approved: t("artistStats.approved"),
+    rejected: t("artistStats.rejected"),
+  };
+
+  const statusColor: Record<string, string> = {
+    pending: "bg-yellow-500/10 text-yellow-500",
+    approved: "bg-green-500/10 text-green-500",
+    rejected: "bg-destructive/10 text-destructive",
+  };
 
   if (loading) return (
     <div className="flex min-h-screen items-center justify-center">
@@ -127,9 +135,9 @@ const ArtistStats = () => {
     return (
       <Layout>
         <div className="container py-16 text-center">
-          <p className="text-muted-foreground">Artiste introuvable.</p>
+          <p className="text-muted-foreground">{t("artistStats.notFound")}</p>
           <Link to="/explore" className="mt-4 inline-flex text-sm text-primary hover:underline">
-            Retour
+            {t("artistStats.back")}
           </Link>
         </div>
         <Footer />
@@ -137,17 +145,11 @@ const ArtistStats = () => {
     );
   }
 
-  const statusColor: Record<string, string> = {
-    pending: "bg-yellow-500/10 text-yellow-500",
-    approved: "bg-green-500/10 text-green-500",
-    rejected: "bg-destructive/10 text-destructive",
-  };
-
   return (
     <Layout>
       <SEOHead
-        title={`Statistiques de ${data.displayName}`}
-        description={`Statistiques et historique de ${data.displayName} sur Weekly Music Awards.`}
+        title={t("artistStats.seoTitle", { name: data.displayName })}
+        description={t("artistStats.seoDesc", { name: data.displayName })}
         url={`/stats/artist/${id}`}
         jsonLd={musicGroupJsonLd({
           name: data.displayName,
@@ -160,7 +162,7 @@ const ArtistStats = () => {
           to={`/artist/${id}`}
           className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" /> Retour au profil
+          <ArrowLeft className="h-4 w-4" /> {t("artistStats.backToProfile")}
         </Link>
 
         {/* Artist Header */}
@@ -171,7 +173,7 @@ const ArtistStats = () => {
           </Avatar>
           <div>
             <h1 className="font-display text-2xl font-bold">{data.displayName}</h1>
-            <p className="text-sm text-muted-foreground">Statistiques détaillées</p>
+            <p className="text-sm text-muted-foreground">{t("artistStats.detailedStats")}</p>
           </div>
         </div>
 
@@ -180,19 +182,19 @@ const ArtistStats = () => {
           <Card className="text-center p-4">
             <Music className="h-4 w-4 mx-auto mb-1 text-primary" />
             <p className="font-display text-2xl font-bold">{data.totalSubmissions}</p>
-            <p className="text-xs text-muted-foreground">Soumissions</p>
+            <p className="text-xs text-muted-foreground">{t("artistStats.submissions")}</p>
           </Card>
           <Card className="text-center p-4">
             <Heart className="h-4 w-4 mx-auto mb-1 text-primary" />
             <p className="font-display text-2xl font-bold">{data.totalVotesReceived}</p>
-            <p className="text-xs text-muted-foreground">Votes reçus</p>
+            <p className="text-xs text-muted-foreground">{t("artistStats.votesReceived")}</p>
           </Card>
           <Card className="text-center p-4">
             <Trophy className="h-4 w-4 mx-auto mb-1 text-primary" />
             <p className="font-display text-2xl font-bold">
               {data.bestRank ? `#${data.bestRank}` : "—"}
             </p>
-            <p className="text-xs text-muted-foreground">Meilleur classement</p>
+            <p className="text-xs text-muted-foreground">{t("artistStats.bestRank")}</p>
           </Card>
         </div>
 
@@ -203,7 +205,7 @@ const ArtistStats = () => {
               <CardHeader>
                 <CardTitle className="font-display flex items-center gap-2 text-lg">
                   <TrendingUp className="h-5 w-5 text-primary" />
-                  Progression semaine par semaine
+                  {t("artistStats.weeklyProgress")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -240,12 +242,12 @@ const ArtistStats = () => {
           <CardHeader>
             <CardTitle className="font-display flex items-center gap-2 text-lg">
               <BarChart3 className="h-5 w-5 text-primary" />
-              Historique des soumissions
+              {t("artistStats.submissionHistory")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {data.submissions.length === 0 ? (
-              <p className="py-6 text-center text-muted-foreground">Aucune soumission.</p>
+              <p className="py-6 text-center text-muted-foreground">{t("artistStats.noSubmissions")}</p>
             ) : (
               <div className="space-y-3">
                 {data.submissions.map((sub) => (
@@ -256,7 +258,7 @@ const ArtistStats = () => {
                   >
                     <img
                       src={sub.cover_image_url}
-                      alt={`Couverture de ${sub.title}`}
+                      alt={sub.title}
                       className="h-12 w-12 rounded-lg object-cover"
                     />
                     <div className="flex-1 min-w-0">
@@ -267,14 +269,10 @@ const ArtistStats = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className={statusColor[sub.status]}>
-                        {sub.status === "pending"
-                          ? "En attente"
-                          : sub.status === "approved"
-                          ? "Approuvé"
-                          : "Rejeté"}
+                        {statusLabel[sub.status] || sub.status}
                       </Badge>
                       <Badge className="bg-primary/10 text-primary font-display text-xs">
-                        {sub.vote_count} votes
+                        {sub.vote_count} {t("artistStats.votePlural")}
                       </Badge>
                     </div>
                   </Link>
