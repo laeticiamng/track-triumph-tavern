@@ -651,6 +651,7 @@ export type Database = {
         Args: { _submission_id: string }
         Returns: undefined
       }
+      purge_vote_events_pii: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
