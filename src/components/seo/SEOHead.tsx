@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
 interface SEOHeadProps {
   title?: string;
@@ -10,30 +11,31 @@ interface SEOHeadProps {
 }
 
 const BASE_URL = "https://weeklymusicawards.com";
-const DEFAULT_TITLE = "Weekly Music Awards — Le seul concours musical 100% communautaire et méritocratique";
-const DEFAULT_DESCRIPTION =
-  "Weekly Music Awards est le concours musical hebdomadaire où la communauté écoute, vote et récompense les artistes indépendants. Soumettez votre musique, recevez des votes sur 3 critères (originalité, production, émotion) et gagnez jusqu'à 200 € chaque semaine. 100% gratuit pour voter, anti-fraude IA, 12 catégories musicales.";
 
 export function SEOHead({
   title,
-  description = DEFAULT_DESCRIPTION,
+  description,
   url,
   image,
   type = "website",
   jsonLd,
 }: SEOHeadProps) {
-  const fullTitle = title ? `${title} | Weekly Music Awards` : DEFAULT_TITLE;
+  const { t } = useTranslation();
+  const defaultTitle = t("seo.defaultTitle");
+  const defaultDescription = t("seo.defaultDescription");
+  const resolvedDescription = description || defaultDescription;
+  const fullTitle = title ? `${title} | Weekly Music Awards` : defaultTitle;
   const fullUrl = url ? `${BASE_URL}${url}` : BASE_URL;
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={resolvedDescription} />
       <link rel="canonical" href={fullUrl} />
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={resolvedDescription} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={fullUrl} />
       {image && <meta property="og:image" content={image} />}
@@ -41,7 +43,7 @@ export function SEOHead({
       {/* Twitter */}
       <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={resolvedDescription} />
       {image && <meta name="twitter:image" content={image} />}
 
       {/* JSON-LD */}
