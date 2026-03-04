@@ -37,7 +37,8 @@ const medals = [
 ];
 
 const HallOfFame = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
   const [results, setResults] = useState<WeekResult[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -124,11 +125,11 @@ const HallOfFame = () => {
                 <div key={week.id} className="rounded-2xl border border-border bg-card p-5">
                   <div className="mb-4">
                     <h2 className="font-display text-lg font-semibold">
-                      {week.title || `Semaine ${week.week_number}`}
+                      {week.title || t("hallOfFame.weekLabel", { number: week.week_number })}
                     </h2>
                    <p className="text-xs text-muted-foreground">
                       {t("hallOfFame.resultsPublished")}{" "}
-                      {new Date(week.results_published_at!).toLocaleDateString("fr-FR", {
+                      {new Date(week.results_published_at!).toLocaleDateString(dateLocale, {
                         day: "numeric",
                         month: "long",
                         year: "numeric",
@@ -168,7 +169,7 @@ const HallOfFame = () => {
                                 </Badge>
                               )}
                               <span className="text-sm font-semibold tabular-nums">
-                                {w.vote_count} vote{w.vote_count !== 1 ? "s" : ""}
+                                {w.vote_count} {w.vote_count !== 1 ? t("hallOfFame.votePlural") : t("hallOfFame.voteSingular")}
                               </span>
                             </div>
                           </Link>

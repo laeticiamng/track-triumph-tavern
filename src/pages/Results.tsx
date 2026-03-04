@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -12,11 +13,14 @@ import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
 
 const Results = () => {
+  const { t, i18n } = useTranslation();
   const [winners, setWinners] = useState<Array<Tables<"winners"> & { submissions: { title: string; artist_name: string; cover_image_url: string } | null }>>([]);
   const [rewards, setRewards] = useState<Tables<"rewards">[]>([]);
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
 
   useEffect(() => {
     const load = async () => {
@@ -29,22 +33,16 @@ const Results = () => {
         if (cats) setCategories(cats);
         if (week) {
           setActiveWeek(week);
-
-          // Load winners with submission details
           const { data: w } = await supabase
             .from("winners")
             .select("*, submissions(title, artist_name, cover_image_url)")
             .eq("week_id", week.id)
             .order("rank");
-
           if (w) setWinners(w);
-
-          // Load rewards for these winners
           const { data: r } = await supabase
             .from("rewards")
             .select("*")
             .eq("week_id", week.id);
-
           if (r) setRewards(r);
         }
       } catch (err) {
@@ -71,14 +69,12 @@ const Results = () => {
           filter: `week_id=eq.${activeWeek.id}`,
         },
         async () => {
-          // Reload winners when changes occur
           const { data: w } = await supabase
             .from("winners")
             .select("*, submissions(title, artist_name, cover_image_url)")
             .eq("week_id", activeWeek.id)
             .order("rank");
           if (w) setWinners(w);
-
           const { data: r } = await supabase
             .from("rewards")
             .select("*")
@@ -117,27 +113,28 @@ const Results = () => {
 
   const podiumLabels = ["🥇", "🥈", "🥉"];
 
-  // Grand winner: rank 1 with highest vote_count across all categories
   const grandWinner = isResultsPublished && winners.length > 0
     ? winners.filter((w) => w.rank === 1).sort((a, b) => (b.weighted_score || 0) - (a.weighted_score || 0))[0]
     : null;
 
+  const voteLabel = (count: number) => count !== 1 ? t("results.votePlural") : t("results.voteSingular");
+
   return (
     <Layout>
       <SEOHead
-        title="Résultats"
-        description="Découvrez les gagnants du concours musical Weekly Music Awards de cette semaine."
+        title={t("results.seoTitle")}
+        description={t("results.seoDesc")}
         url="/results"
       />
       <div className="container py-8">
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Résultats</h1>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("results.title")}</h1>
           <p className="mt-2 text-muted-foreground">
-            {activeWeek?.title || "Semaine en cours"} — {isResultsPublished ? "Résultats publiés" : "En attente de publication"}
+            {activeWeek?.title || t("results.currentWeek")} — {isResultsPublished ? t("results.published") : t("results.pending")}
           </p>
           {isResultsPublished && (
             <Link to="/scoring-method" className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:underline">
-              Comment sont calculés les scores ?
+              {t("results.howScoresCalculated")}
             </Link>
           )}
         </div>
@@ -155,34 +152,32 @@ const Results = () => {
             <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10 mb-6">
               <Trophy className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="font-display text-2xl font-bold">Le podium se prépare…</h2>
+            <h2 className="font-display text-2xl font-bold">{t("results.podiumPreparing")}</h2>
             <p className="mt-3 max-w-md text-muted-foreground leading-relaxed">
-              Soyez parmi les premiers à découvrir le podium ! Les résultats seront publiés à la fin de la période de vote
+              {t("results.podiumPreparingDesc")}
               {activeWeek?.voting_close_at && (
-                <> (clôture le {new Date(activeWeek.voting_close_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })})</>
+                <> ({t("results.closeDate", { date: new Date(activeWeek.voting_close_at).toLocaleDateString(dateLocale, { day: "numeric", month: "long", year: "numeric" }) })})</>
               )}.
-              Une cagnotte attend les gagnants. 🎉
+              {" "}{t("results.poolAwaits")}
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <Link to="/explore" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
-                Découvrir les morceaux
+                {t("results.discoverTracks")}
               </Link>
               <Link to="/compete" className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-6 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
-                Soumettre un morceau
+                {t("results.submitTrack")}
               </Link>
             </div>
           </motion.div>
         ) : (
           <div className="space-y-10">
-            {/* Grand Winner */}
             {grandWinner && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-              <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
-                  {/* Celebration particles */}
+                <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
                   {[...Array(6)].map((_, i) => (
                     <motion.span
                       key={i}
@@ -195,14 +190,14 @@ const Results = () => {
                   <CardHeader>
                     <CardTitle className="font-display flex items-center gap-2 text-xl">
                       <Crown className="h-6 w-6 text-yellow-500" />
-                      Grand Gagnant de la Semaine
+                      {t("results.grandWinner")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Link to={`/submissions/${grandWinner.submission_id}`} className="flex items-center gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-accent/30">
                       <img
                         src={grandWinner.submissions?.cover_image_url}
-                        alt={`Couverture de ${grandWinner.submissions?.title || "gagnant"}`}
+                        alt={t("results.coverAlt", { title: grandWinner.submissions?.title || "" })}
                         className="h-20 w-20 rounded-xl object-cover"
                       />
                       <div className="flex-1 min-w-0">
@@ -229,7 +224,7 @@ const Results = () => {
                           </Badge>
                         )}
                         <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
-                          {grandWinner.vote_count} votes
+                          {grandWinner.vote_count} {voteLabel(grandWinner.vote_count)}
                         </Badge>
                       </div>
                     </Link>
@@ -238,7 +233,6 @@ const Results = () => {
               </motion.div>
             )}
 
-            {/* Per-category results */}
             {categories.map((cat, catIndex) => {
               const catWinners = getWinnersByCategory(cat.id);
               if (catWinners.length === 0) return null;
@@ -263,43 +257,43 @@ const Results = () => {
                           const reward = getRewardForWinner(w.id);
                           return (
                             <Link key={w.id} to={`/submissions/${w.submission_id}`}>
-                            <motion.div
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: catIndex * 0.1 + i * 0.15 }}
-                              className={`flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/30 ${
-                                i === 0
-                                  ? "bg-primary/10 border border-primary/20"
-                                  : "bg-secondary/50"
-                              }`}
-                            >
-                              <span className="text-2xl">{podiumLabels[i]}</span>
-                              <img src={w.submissions?.cover_image_url} alt={`Couverture de ${w.submissions?.title || "morceau"}`} className="h-12 w-12 rounded-lg object-cover" />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium truncate">{w.submissions?.title}</p>
-                                <p className="text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                {reward && reward.reward_type === "cash" && reward.amount_cents > 0 && (
-                                  <Badge className="bg-green-600 text-white text-xs">
-                                    {reward.amount_cents / 100}€
+                              <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: catIndex * 0.1 + i * 0.15 }}
+                                className={`flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/30 ${
+                                  i === 0
+                                    ? "bg-primary/10 border border-primary/20"
+                                    : "bg-secondary/50"
+                                }`}
+                              >
+                                <span className="text-2xl">{podiumLabels[i]}</span>
+                                <img src={w.submissions?.cover_image_url} alt={t("results.coverAlt", { title: w.submissions?.title || "" })} className="h-12 w-12 rounded-lg object-cover" />
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-medium truncate">{w.submissions?.title}</p>
+                                  <p className="text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {reward && reward.reward_type === "cash" && reward.amount_cents > 0 && (
+                                    <Badge className="bg-green-600 text-white text-xs">
+                                      {reward.amount_cents / 100}€
+                                    </Badge>
+                                  )}
+                                  {reward && reward.reward_type === "fallback" && (
+                                    <Badge variant="outline" className="text-xs">
+                                      <Gift className="mr-1 h-3 w-3" /> {t("results.reward")}
+                                    </Badge>
+                                  )}
+                                  {w.weighted_score > 0 && (
+                                    <Badge className="bg-primary/10 text-primary text-xs font-display">
+                                      {Number(w.weighted_score).toFixed(1)}/5
+                                    </Badge>
+                                  )}
+                                  <Badge variant="secondary" className="font-display">
+                                    {w.vote_count} {voteLabel(w.vote_count)}
                                   </Badge>
-                                )}
-                                {reward && reward.reward_type === "fallback" && (
-                                  <Badge variant="outline" className="text-xs">
-                                    <Gift className="mr-1 h-3 w-3" /> Récompense
-                                  </Badge>
-                                )}
-                                {w.weighted_score > 0 && (
-                                  <Badge className="bg-primary/10 text-primary text-xs font-display">
-                                    {Number(w.weighted_score).toFixed(1)}/5
-                                  </Badge>
-                                )}
-                                <Badge variant="secondary" className="font-display">
-                                  {w.vote_count} votes
-                                </Badge>
-                              </div>
-                            </motion.div>
+                                </div>
+                              </motion.div>
                             </Link>
                           );
                         })}
@@ -310,11 +304,10 @@ const Results = () => {
               );
             })}
 
-            {/* Link to Hall of Fame */}
             <div className="mt-10 flex flex-col items-center text-center">
-              <p className="text-sm text-muted-foreground">Envie de revoir les palmarès précédents ?</p>
+              <p className="text-sm text-muted-foreground">{t("results.hallOfFameCta")}</p>
               <Link to="/hall-of-fame" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-                Voir le Hall of Fame →
+                {t("results.hallOfFameLink")}
               </Link>
             </div>
           </div>
