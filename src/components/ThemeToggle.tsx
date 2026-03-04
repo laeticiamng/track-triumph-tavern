@@ -30,7 +30,11 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
     <Button
       variant="ghost"
       size={compact ? "icon" : "sm"}
-      onClick={() => setIsDark((prev) => !prev)}
+      onClick={() => {
+        document.documentElement.classList.add("theme-transition");
+        setIsDark((prev) => !prev);
+        setTimeout(() => document.documentElement.classList.remove("theme-transition"), 400);
+      }}
       aria-label={isDark ? t("theme.switchToLight", "Passer en mode clair") : t("theme.switchToDark", "Passer en mode sombre")}
       className="h-9 w-9"
     >
