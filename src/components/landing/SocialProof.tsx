@@ -95,7 +95,7 @@ export function SocialProof() {
         {hasData ? (
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-6 sm:grid-cols-3 max-w-3xl mx-auto">
             {stats.map((stat) => (
-              <div key={stat.labelKey} className="group flex flex-col items-center rounded-2xl border border-border bg-card p-8 text-center transition-all hover:shadow-lg hover:-translate-y-1">
+              <div key={stat.labelKey} className="group flex flex-col items-center rounded-2xl border border-border bg-card p-8 text-center shadow-card transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${stat.iconBg} ${stat.color} transition-transform group-hover:scale-110`}>
                   <stat.icon className="h-6 w-6" />
                 </div>

@@ -29,7 +29,7 @@ export function FAQ() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12">
           <Accordion type="single" collapsible className="space-y-3">
             {faqs.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-border bg-card px-6">
+              <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-border bg-card px-6 shadow-card">
                 <AccordionTrigger className="text-left font-display font-semibold hover:no-underline">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">{faq.a}</AccordionContent>
               </AccordionItem>
