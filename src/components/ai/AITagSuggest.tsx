@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ interface AITagSuggestProps {
 }
 
 export function AITagSuggest({ title, description, category, currentTags, onAcceptTags }: AITagSuggestProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -72,7 +74,7 @@ export function AITagSuggest({ title, description, category, currentTags, onAcce
         className="gap-1.5"
       >
         {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
-        Suggérer des tags avec l'IA
+        {t("aiTags.suggest")}
       </Button>
 
       {suggestions.length > 0 && (
@@ -92,10 +94,10 @@ export function AITagSuggest({ title, description, category, currentTags, onAcce
           </div>
           <div className="flex gap-2">
             <Button type="button" size="sm" onClick={acceptSelected} disabled={selected.size === 0}>
-              Ajouter {selected.size} tag{selected.size > 1 ? "s" : ""}
+              {t(selected.size > 1 ? "aiTags.addTagsPlural" : "aiTags.addTags", { count: selected.size })}
             </Button>
             <Button type="button" variant="ghost" size="sm" onClick={() => setSuggestions([])}>
-              Ignorer
+              {t("aiTags.ignore")}
             </Button>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useSubscription } from "@/hooks/use-subscription";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ interface Feedback {
 }
 
 export function AIFeedback({ submission }: AIFeedbackProps) {
+  const { t } = useTranslation();
   const { tier } = useSubscription();
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,7 +53,7 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
       if (result.error) throw new Error(result.error);
       setFeedback(result.feedback);
     } catch (err) {
-      setError("Impossible de générer le feedback. Réessayez.");
+      setError(t("aiFeedback.error"));
       console.error("AI feedback error:", err);
     } finally {
       setLoading(false);
@@ -63,9 +65,9 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
       <Card className="border-dashed border-muted-foreground/30">
         <CardContent className="flex flex-col items-center gap-3 py-6 text-center">
           <Lock className="h-8 w-8 text-muted-foreground/50" />
-          <p className="text-sm text-muted-foreground">Le feedback IA est réservé aux abonnés Elite</p>
+          <p className="text-sm text-muted-foreground">{t("aiFeedback.locked")}</p>
           <Button variant="outline" size="sm" asChild>
-            <Link to="/pricing">Passer à Elite</Link>
+            <Link to="/pricing">{t("aiFeedback.upgrade")}</Link>
           </Button>
         </CardContent>
       </Card>
@@ -77,10 +79,10 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
       <Card>
         <CardContent className="flex flex-col items-center gap-3 py-6">
           <Sparkles className="h-8 w-8 text-primary" />
-          <p className="text-sm text-muted-foreground">Obtenez un feedback IA structuré sur votre morceau</p>
+          <p className="text-sm text-muted-foreground">{t("aiFeedback.prompt")}</p>
           <Button onClick={requestFeedback} disabled={loading}>
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            Générer le feedback
+            {t("aiFeedback.generate")}
           </Button>
           {error && <p className="text-xs text-destructive">{error}</p>}
         </CardContent>
@@ -89,9 +91,9 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
   }
 
   const sections = [
-    { key: "vibe", label: "Ambiance", icon: <Star className="h-4 w-4 text-primary" />, content: feedback.vibe },
-    { key: "structure", label: "Structure", icon: <Music2 className="h-4 w-4 text-blue-500" />, content: feedback.structure },
-    { key: "production", label: "Production", icon: <Sparkles className="h-4 w-4 text-amber-500" />, content: feedback.production },
+    { key: "vibe", label: t("aiFeedback.vibe"), icon: <Star className="h-4 w-4 text-primary" />, content: feedback.vibe },
+    { key: "structure", label: t("aiFeedback.structure"), icon: <Music2 className="h-4 w-4 text-blue-500" />, content: feedback.structure },
+    { key: "production", label: t("aiFeedback.production"), icon: <Sparkles className="h-4 w-4 text-amber-500" />, content: feedback.production },
   ];
 
   return (
@@ -100,8 +102,8 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
         <CardHeader className="pb-3">
           <CardTitle className="font-display text-lg flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            Feedback IA
-            <Badge className="bg-primary/10 text-primary text-xs">Elite</Badge>
+            {t("aiFeedback.title")}
+            <Badge className="bg-primary/10 text-primary text-xs">{t("aiFeedback.elite")}</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -117,7 +119,7 @@ export function AIFeedback({ submission }: AIFeedbackProps) {
           {feedback.suggestions && feedback.suggestions.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-medium">
-                <Lightbulb className="h-4 w-4 text-green-500" /> Suggestions
+                <Lightbulb className="h-4 w-4 text-green-500" /> {t("aiFeedback.suggestions")}
               </div>
               <ul className="space-y-1">
                 {feedback.suggestions.map((s, i) => (

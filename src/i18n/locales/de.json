@@ -1067,5 +1067,28 @@
     "ctaDesc": "Nehmen Sie am Wettbewerb teil und lassen Sie Ihre Musik von einer Community von Enthusiasten hören.",
     "ctaJoin": "Am Wettbewerb teilnehmen",
     "ctaExplore": "Tracks entdecken"
+  },
+  "aiRecs": {
+    "loading": "KI analysiert Ihren Geschmack...",
+    "badge": "Für Sie empfohlen"
+  },
+  "aiTags": {
+    "suggest": "Tags mit KI vorschlagen",
+    "addTags": "{{count}} Tag hinzufügen",
+    "addTagsPlural": "{{count}} Tags hinzufügen",
+    "ignore": "Ignorieren"
+  },
+  "aiFeedback": {
+    "locked": "KI-Feedback ist Elite-Abonnenten vorbehalten",
+    "upgrade": "Auf Elite upgraden",
+    "prompt": "Erhalten Sie strukturiertes KI-Feedback zu Ihrem Track",
+    "generate": "Feedback generieren",
+    "error": "Feedback konnte nicht generiert werden. Versuchen Sie es erneut.",
+    "title": "KI-Feedback",
+    "elite": "Elite",
+    "vibe": "Stimmung",
+    "structure": "Struktur",
+    "production": "Produktion",
+    "suggestions": "Vorschläge"
   }
 }

@@ -1067,5 +1067,28 @@
     "ctaDesc": "Join the contest and let your music be heard by a community of enthusiasts.",
     "ctaJoin": "Join the contest",
     "ctaExplore": "Explore tracks"
+  },
+  "aiRecs": {
+    "loading": "AI is analyzing your taste...",
+    "badge": "Recommended for you"
+  },
+  "aiTags": {
+    "suggest": "Suggest tags with AI",
+    "addTags": "Add {{count}} tag",
+    "addTagsPlural": "Add {{count}} tags",
+    "ignore": "Ignore"
+  },
+  "aiFeedback": {
+    "locked": "AI feedback is reserved for Elite subscribers",
+    "upgrade": "Upgrade to Elite",
+    "prompt": "Get structured AI feedback on your track",
+    "generate": "Generate feedback",
+    "error": "Unable to generate feedback. Try again.",
+    "title": "AI Feedback",
+    "elite": "Elite",
+    "vibe": "Vibe",
+    "structure": "Structure",
+    "production": "Production",
+    "suggestions": "Suggestions"
   }
 }
