@@ -45,20 +45,20 @@ const tierConfig: Record<SubscriptionTier, {
   },
 };
 
-// Comparison table rows
-const comparisonRows = [
-  { label: "Écouter les morceaux", free: true, pro: true, elite: true },
-  { label: "Voter chaque semaine", free: "5 votes", pro: "Illimité", elite: "Illimité" },
-  { label: "Classement en direct", free: true, pro: true, elite: true },
-  { label: "Soumettre un morceau", free: false, pro: "1 / semaine", elite: "1 / semaine" },
-  { label: "Commentaires sur les votes", free: false, pro: "5 / semaine", elite: "Illimité" },
-  { label: "Profil artiste personnalisé", free: false, pro: true, elite: "Premium + badge" },
-  { label: "Statistiques de votes", free: false, pro: true, elite: "Détaillées" },
-  { label: "Résumé IA des votes", free: false, pro: true, elite: true },
-  { label: "Recommandations IA", free: false, pro: true, elite: true },
-  { label: "Chatbot musical IA", free: false, pro: true, elite: true },
-  { label: "Feedback IA structuré", free: false, pro: false, elite: true },
-  { label: "Banner profil personnalisé", free: false, pro: false, elite: true },
+// Comparison table rows - uses i18n keys
+const comparisonRowKeys = [
+  { labelKey: "pricing.listenTracks", free: true, pro: true, elite: true },
+  { labelKey: "pricing.voteWeekly", free: "pricing.votes5", pro: "pricing.unlimited", elite: "pricing.unlimited" },
+  { labelKey: "pricing.liveRanking", free: true, pro: true, elite: true },
+  { labelKey: "pricing.submitTrack", free: false, pro: "pricing.onePerWeek", elite: "pricing.onePerWeek" },
+  { labelKey: "pricing.voteComments", free: false, pro: "pricing.fivePerWeek", elite: "pricing.unlimited" },
+  { labelKey: "pricing.customProfile", free: false, pro: true, elite: "pricing.premiumBadge" },
+  { labelKey: "pricing.voteStats", free: false, pro: true, elite: "pricing.detailed" },
+  { labelKey: "pricing.aiSummary", free: false, pro: true, elite: true },
+  { labelKey: "pricing.aiRecommendations", free: false, pro: true, elite: true },
+  { labelKey: "pricing.aiChatbot", free: false, pro: true, elite: true },
+  { labelKey: "pricing.aiFeedback", free: false, pro: false, elite: true },
+  { labelKey: "pricing.bannerProfile", free: false, pro: false, elite: true },
 ];
 
 const Pricing = () => {
@@ -205,8 +205,8 @@ const Pricing = () => {
                         <div className={`mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl ${config.iconBg}`}>
                           {config.icon}
                         </div>
-                        <CardTitle className="font-display text-2xl">{plan.name}</CardTitle>
-                        <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+                        <CardTitle className="font-display text-2xl">{t(`pricing.${key}Name`)}</CardTitle>
+                        <p className="mt-1 text-sm text-muted-foreground">{t(`pricing.${key}Tagline`)}</p>
                         <div className="mt-4">
                           <span className="font-display text-4xl font-bold">
                             {plan.price === 0 ? t("pricing.free") : `${plan.price}€`}
@@ -220,21 +220,46 @@ const Pricing = () => {
                       {/* Quick highlights */}
                       <CardContent className="flex-1 space-y-4">
                         <div className="space-y-2 rounded-xl bg-background/50 p-3">
-                          {plan.highlights.map((h) => (
-                            <div key={h.label} className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">{h.label}</span>
-                              <span className={`font-medium ${h.value === "Non" ? "text-muted-foreground/50" : ""}`}>
-                                {h.value}
-                              </span>
-                            </div>
-                          ))}
+                          {plan.highlights.map((h, hi) => {
+                            const highlightLabelKeys: Record<string, string> = {
+                              "Votes": "pricing.highlightVotes",
+                              "Soumission": "pricing.highlightSubmission",
+                              "Commentaires": "pricing.highlightComments",
+                              "Profil artiste": "pricing.highlightProfile",
+                              "Statistiques": "pricing.highlightStats",
+                              "Outils IA": "pricing.highlightAI",
+                            };
+                            const highlightValueKeys: Record<string, string> = {
+                              "5 / semaine": "pricing.fivePerWeek",
+                              "Non": "pricing.no",
+                              "Basique": "pricing.highlightBasic",
+                              "Illimités": "pricing.unlimited",
+                              "1 / semaine": "pricing.onePerWeek",
+                              "Personnalisé": "pricing.highlightCustom",
+                              "Oui": "pricing.unlimited",
+                              "3 outils": "pricing.highlight3tools",
+                              "Premium + badge": "pricing.premiumBadge",
+                              "Détaillées": "pricing.detailed",
+                              "4 outils (+ feedback)": "pricing.highlight4tools",
+                            };
+                            const labelKey = highlightLabelKeys[h.label] || h.label;
+                            const valueKey = highlightValueKeys[h.value] || h.value;
+                            return (
+                              <div key={hi} className="flex items-center justify-between text-sm">
+                                <span className="text-muted-foreground">{t(labelKey)}</span>
+                                <span className={`font-medium ${h.value === "Non" ? "text-muted-foreground/50" : ""}`}>
+                                  {t(valueKey)}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
 
                         <ul className="space-y-2.5">
-                          {plan.features.map((f) => (
-                            <li key={f} className="flex items-start gap-2 text-sm">
+                          {plan.features.map((_f, fi) => (
+                            <li key={fi} className="flex items-start gap-2 text-sm">
                               <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                              <span>{f}</span>
+                              <span>{t(`pricing.${key}Feature${fi + 1}`)}</span>
                             </li>
                           ))}
                         </ul>
@@ -334,9 +359,9 @@ const Pricing = () => {
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map((row, i) => (
-                  <tr key={row.label} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-background"}`}>
-                    <td className="px-4 py-3 font-medium">{row.label}</td>
+                {comparisonRowKeys.map((row, i) => (
+                  <tr key={row.labelKey} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-background"}`}>
+                    <td className="px-4 py-3 font-medium">{t(row.labelKey)}</td>
                     {(["free", "pro", "elite"] as const).map((tier) => {
                       const val = row[tier];
                       return (
@@ -346,7 +371,7 @@ const Pricing = () => {
                           ) : val === false ? (
                             <X className="mx-auto h-4 w-4 text-muted-foreground/30" />
                           ) : (
-                            <span className="text-xs font-medium">{val}</span>
+                            <span className="text-xs font-medium">{t(val)}</span>
                           )}
                         </td>
                       );

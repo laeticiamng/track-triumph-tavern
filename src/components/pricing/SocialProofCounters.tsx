@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { Users, Vote, Trophy } from "lucide-react";
@@ -10,6 +11,7 @@ interface Counts {
 }
 
 export function SocialProofCounters() {
+  const { t, i18n } = useTranslation();
   const [counts, setCounts] = useState<Counts | null>(null);
 
   useEffect(() => {
@@ -28,14 +30,14 @@ export function SocialProofCounters() {
     load();
   }, []);
 
-  if (!counts) {
-    return null;
-  }
+  if (!counts) return null;
+
+  const locale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-US" : "fr-FR";
 
   const stats = [
-    { icon: <Users className="h-5 w-5" />, value: counts.artists, label: "artistes inscrits" },
-    { icon: <Vote className="h-5 w-5" />, value: counts.votes, label: "votes exprimés" },
-    { icon: <Trophy className="h-5 w-5" />, value: counts.winners, label: "gagnants récompensés" },
+    { icon: <Users className="h-5 w-5" />, value: counts.artists, label: t("pricing.socialProofArtists") },
+    { icon: <Vote className="h-5 w-5" />, value: counts.votes, label: t("pricing.socialProofVotes") },
+    { icon: <Trophy className="h-5 w-5" />, value: counts.winners, label: t("pricing.socialProofWinners") },
   ].filter((s) => s.value > 0);
 
   if (stats.length === 0) return null;
@@ -59,7 +61,7 @@ export function SocialProofCounters() {
                 {s.icon}
               </div>
               <span className="font-display text-2xl font-bold">
-                {s.value.toLocaleString("fr-FR")}
+                {s.value.toLocaleString(locale)}
               </span>
               <span className="text-xs text-muted-foreground mt-1">{s.label}</span>
             </div>

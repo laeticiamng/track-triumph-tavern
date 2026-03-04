@@ -1,40 +1,19 @@
 import { Crown, Mic, TrendingUp, MessageSquareHeart, BarChart3, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const benefits = [
-  {
-    icon: <Sparkles className="h-6 w-6" />,
-    title: "Feedback IA structuré",
-    description: "Recevez une analyse détaillée de vos forces et axes d'amélioration après chaque soumission.",
-  },
-  {
-    icon: <MessageSquareHeart className="h-6 w-6" />,
-    title: "Commentaires illimités",
-    description: "Échangez sans limite avec la communauté et construisez votre réseau musical.",
-  },
-  {
-    icon: <BarChart3 className="h-6 w-6" />,
-    title: "Statistiques avancées",
-    description: "Comprenez précisément ce qui plaît dans votre musique grâce à des données détaillées.",
-  },
-  {
-    icon: <Crown className="h-6 w-6" />,
-    title: "Badge Elite exclusif",
-    description: "Démarquez-vous avec un profil premium qui attire l'attention des votants.",
-  },
-  {
-    icon: <TrendingUp className="h-6 w-6" />,
-    title: "Visibilité accrue",
-    description: "Votre profil personnalisé et votre banner custom vous font sortir du lot.",
-  },
-  {
-    icon: <Mic className="h-6 w-6" />,
-    title: "Soumission hebdomadaire",
-    description: "Participez chaque semaine au concours et développez votre audience régulièrement.",
-  },
+const benefitKeys = [
+  { icon: <Sparkles className="h-6 w-6" />, titleKey: "pricing.whyEliteFeedback", descKey: "pricing.whyEliteFeedbackDesc" },
+  { icon: <MessageSquareHeart className="h-6 w-6" />, titleKey: "pricing.whyEliteComments", descKey: "pricing.whyEliteCommentsDesc" },
+  { icon: <BarChart3 className="h-6 w-6" />, titleKey: "pricing.whyEliteStats", descKey: "pricing.whyEliteStatsDesc" },
+  { icon: <Crown className="h-6 w-6" />, titleKey: "pricing.whyEliteBadgeTitle", descKey: "pricing.whyEliteBadgeDesc" },
+  { icon: <TrendingUp className="h-6 w-6" />, titleKey: "pricing.whyEliteVisibility", descKey: "pricing.whyEliteVisibilityDesc" },
+  { icon: <Mic className="h-6 w-6" />, titleKey: "pricing.whyEliteSubmission", descKey: "pricing.whyEliteSubmissionDesc" },
 ];
 
 export function WhyEliteSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="pb-16">
       <div className="container max-w-5xl">
@@ -46,22 +25,21 @@ export function WhyEliteSection() {
           className="text-center mb-10"
         >
           <span className="inline-block rounded-full bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400 mb-4">
-            Elite
+            {t("pricing.whyEliteBadge")}
           </span>
           <h2 className="font-display text-2xl font-bold sm:text-3xl">
-            Pourquoi les artistes choisissent{" "}
+            {t("pricing.whyEliteTitle")}{" "}
             <span className="text-amber-600 dark:text-amber-400">Elite</span>
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Les artistes qui progressent le plus vite sont ceux qui obtiennent du feedback précis.
-            Elite vous donne les outils pour comprendre, améliorer et vous démarquer.
+            {t("pricing.whyEliteDesc")}
           </p>
         </motion.div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {benefits.map((b, i) => (
+          {benefitKeys.map((b, i) => (
             <motion.div
-              key={b.title}
+              key={b.titleKey}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -71,8 +49,8 @@ export function WhyEliteSection() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-3">
                 {b.icon}
               </div>
-              <h3 className="font-display text-sm font-semibold">{b.title}</h3>
-              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{b.description}</p>
+              <h3 className="font-display text-sm font-semibold">{t(b.titleKey)}</h3>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{t(b.descKey)}</p>
             </motion.div>
           ))}
         </div>
@@ -84,9 +62,9 @@ export function WhyEliteSection() {
           className="mt-8 text-center"
         >
           <p className="text-sm text-muted-foreground italic">
-            « Depuis que j'ai Elite, je comprends enfin pourquoi certains morceaux fonctionnent mieux que d'autres. Le feedback IA a changé ma façon de produire. »
+            {t("pricing.whyEliteTestimonial")}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">— Un artiste Elite</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("pricing.whyEliteTestimonialAuthor")}</p>
         </motion.div>
       </div>
     </section>
