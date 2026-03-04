@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead, organizationJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
@@ -41,11 +42,12 @@ const timeline = [
 ];
 
 const About = () => {
+  const { t } = useTranslation();
   return (
     <Layout>
       <SEOHead
-        title="À propos"
-        description="Weekly Music Awards est le seul concours musical hebdomadaire 100% communautaire et méritocratique. Découvrez notre mission : offrir à chaque artiste indépendant une scène équitable basée uniquement sur le talent et le vote de la communauté."
+        title={t("aboutPage.seoTitle")}
+        description={t("aboutPage.seoDesc")}
         url="/about"
         jsonLd={[
           organizationJsonLd,
@@ -69,7 +71,7 @@ const About = () => {
               Équipe de passionnés
             </span>
             <h1 className="font-display text-3xl font-bold sm:text-5xl">
-              À propos de Weekly Music Awards
+              {t("aboutPage.title")}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
               <strong>Le seul concours musical hebdomadaire où c'est la communauté qui décide du podium.</strong>{" "}

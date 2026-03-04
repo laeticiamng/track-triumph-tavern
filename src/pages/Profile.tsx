@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,6 +26,7 @@ import type { Tables } from "@/integrations/supabase/types";
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading, signOut } = useAuth();
   const { tier, subscribed, subscriptionEnd, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ const Profile = () => {
   // Show success toast after checkout
   useEffect(() => {
     if (searchParams.get("checkout") === "success") {
-      toast({ title: "Abonnement activé ! 🎉", description: "Bienvenue dans votre nouveau plan." });
+      toast({ title: t("profilePage.subscriptionActivated"), description: t("profilePage.welcomeNewPlan") });
     }
   }, [searchParams, toast]);
 
@@ -200,11 +202,11 @@ const Profile = () => {
 
   return (
     <Layout>
-      <SEOHead title="Mon profil" description="Gérez votre profil artiste, vos soumissions et votre abonnement sur Weekly Music Awards." url="/profile" />
+      <SEOHead title={t("profilePage.seoTitle")} description={t("profilePage.seoDesc")} url="/profile" />
       <div className="container max-w-2xl py-8">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold">Mon Profil</h1>
+            <h1 className="font-display text-3xl font-bold">{t("profilePage.title")}</h1>
             {tier === "elite" && (
               <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
                 <Crown className="h-3 w-3" /> Elite
@@ -212,7 +214,7 @@ const Profile = () => {
             )}
           </div>
           <Button variant="ghost" size="sm" onClick={handleSignOut}>
-            <LogOut className="mr-2 h-4 w-4" /> Déconnexion
+            <LogOut className="mr-2 h-4 w-4" /> {t("profilePage.logout")}
           </Button>
         </div>
 
@@ -227,25 +229,25 @@ const Profile = () => {
               {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€/mois</span>}
             </CardTitle>
             {subscribed ? (
-              <Badge className="bg-green-600 text-white">Actif</Badge>
+              <Badge className="bg-green-600 text-white">{t("profilePage.active")}</Badge>
             ) : (
-              <Badge variant="secondary">Gratuit</Badge>
+              <Badge variant="secondary">{t("profilePage.freeLabel")}</Badge>
             )}
           </CardHeader>
           <CardContent className="space-y-3">
             {subscriptionEnd && (
               <p className="text-sm text-muted-foreground">
-                Prochain renouvellement : {new Date(subscriptionEnd).toLocaleDateString("fr-FR")}
+                {t("profilePage.nextRenewal")} {new Date(subscriptionEnd).toLocaleDateString("fr-FR")}
               </p>
             )}
             <div className="flex gap-2">
               {subscribed ? (
                 <Button variant="outline" size="sm" onClick={handleManageSubscription} disabled={portalLoading}>
-                  {portalLoading ? "..." : "Gérer l'abonnement"}
+                  {portalLoading ? "..." : t("profilePage.manageSubscription")}
                 </Button>
               ) : (
                 <Button size="sm" asChild>
-                  <Link to="/pricing">Voir les plans Pro & Elite</Link>
+                  <Link to="/pricing">{t("profilePage.viewPlans")}</Link>
                 </Button>
               )}
             </div>
@@ -256,17 +258,17 @@ const Profile = () => {
         <div className="mb-8 grid grid-cols-3 gap-4">
           <Card className="text-center p-4">
             <p className="font-display text-2xl font-bold">{submissions.length}</p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> Soumissions</p>
+            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> {t("profilePage.submissions")}</p>
           </Card>
           <Card className="text-center p-4">
             <p className="font-display text-2xl font-bold">{voteCount}</p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> Votes donnés</p>
+            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
           </Card>
           <Card className="text-center p-4">
             <p className="font-display text-2xl font-bold">
               {submissions.reduce((sum, s) => sum + s.vote_count, 0)}
             </p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><BarChart3 className="h-3 w-3" /> Votes reçus</p>
+            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><BarChart3 className="h-3 w-3" /> {t("profilePage.votesReceived")}</p>
           </Card>
         </div>
 

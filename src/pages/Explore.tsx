@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
@@ -18,6 +19,7 @@ type Submission = Tables<"submissions">;
 type Category = Tables<"categories">;
 
 const Explore = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -81,15 +83,15 @@ const Explore = () => {
   return (
     <Layout>
       <SEOHead
-        title="Explorer"
-        description="Découvrez les morceaux en compétition cette semaine. Écoutez, votez et soutenez vos artistes préférés."
+        title={t("explore.seoTitle")}
+        description={t("explore.seoDesc")}
         url="/explore"
       />
       <section className="py-8 md:py-12">
         <div className="container">
           <div className="mb-8">
-            <h1 className="font-display text-3xl font-bold sm:text-4xl">Explorer</h1>
-            <p className="mt-2 text-muted-foreground">Découvrez les soumissions approuvées de la semaine.</p>
+            <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("explore.title")}</h1>
+            <p className="mt-2 text-muted-foreground">{t("explore.subtitle")}</p>
             {activeWeek?.voting_close_at && (
               <div className="mt-2">
                 <WeekCountdown
@@ -108,7 +110,7 @@ const Explore = () => {
           <div className="relative mb-6 max-w-md">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Rechercher un titre ou artiste..."
+              placeholder={t("explore.searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
@@ -125,7 +127,7 @@ const Explore = () => {
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
-              Toutes
+              {t("explore.all")}
             </button>
             {categories.map((cat) => (
               <div key={cat.id} className="flex items-center gap-1">
@@ -154,13 +156,13 @@ const Explore = () => {
           {!loading && filtered.length > 0 && (
             <div className="mb-6 flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
               <p className="text-sm text-muted-foreground">
-                Prêt à voter ? <span className="font-medium text-foreground">Passez en mode vote</span> pour noter vos favoris.
+                {t("explore.readyToVote")} <span className="font-medium text-foreground">{t("explore.switchToVote")}</span> {t("explore.rateYourFavorites")}
               </p>
               <Link
                 to="/vote"
                 className="shrink-0 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Voter
+                {t("nav.vote")}
               </Link>
             </div>
           )}
@@ -234,26 +236,27 @@ function EmptyExploreState({
   hasFilter: boolean;
   votingCloseAt: string | null;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
         <Music className="h-10 w-10 text-accent-foreground" />
       </div>
       <h3 className="font-display text-xl font-semibold">
-        {noActiveWeek ? "Aucun concours actif" : "Le concours démarre bientôt"}
+        {noActiveWeek ? t("explore.noActiveContest") : t("explore.contestStartsSoon")}
       </h3>
       <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
         {noActiveWeek
-          ? "Aucune semaine de concours n'est active pour le moment. Inscrivez-vous pour être notifié du lancement !"
+          ? t("explore.noActiveWeekDesc")
           : hasFilter
-            ? "Aucune soumission dans cette catégorie cette semaine. Essayez une autre catégorie !"
-            : "Les soumissions apparaîtront ici dès qu'elles seront approuvées. Soyez parmi les premiers à soumettre votre musique !"}
+            ? t("explore.noCategorySubmissions")
+            : t("explore.noSubmissionsYet")}
       </p>
       {votingCloseAt && !noActiveWeek && (
         <div className="mt-4">
           <WeekCountdown
             targetDate={votingCloseAt}
-            label="La semaine se termine dans"
+            label={t("explore.weekEndsIn")}
             className="text-muted-foreground"
           />
         </div>
@@ -263,14 +266,14 @@ function EmptyExploreState({
           to="/auth?tab=signup"
           className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
         >
-          Rejoindre le concours
+          {t("explore.joinContest")}
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
           to="/about"
           className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
         >
-          En savoir plus
+          {t("explore.learnMoreLink")}
         </Link>
       </div>
     </div>

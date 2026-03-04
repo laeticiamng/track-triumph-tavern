@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -61,6 +62,7 @@ const comparisonRows = [
 ];
 
 const Pricing = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { tier: currentTier, loading: subLoading } = useSubscription();
   const { toast } = useToast();
@@ -72,8 +74,8 @@ const Pricing = () => {
   useEffect(() => {
     if (searchParams.get("checkout") === "cancelled") {
       toast({
-        title: "Paiement annulé",
-        description: "Vous pouvez reprendre votre abonnement à tout moment.",
+        title: t("pricing.paymentCancelled"),
+        description: t("pricing.paymentCancelledDesc"),
       });
     }
   }, [searchParams, toast]);
@@ -96,12 +98,12 @@ const Pricing = () => {
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.error) {
-        toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        toast({ title: t("errors.error"), description: result.error, variant: "destructive" });
       } else if (result.url) {
         window.location.href = result.url;
       }
     } catch {
-      toast({ title: "Erreur", description: "Impossible de créer la session de paiement.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: t("pricing.checkoutError"), variant: "destructive" });
     } finally {
       setLoadingTier(null);
     }
@@ -115,7 +117,7 @@ const Pricing = () => {
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.url) window.location.href = result.url;
     } catch {
-      toast({ title: "Erreur", description: "Impossible d'ouvrir le portail.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: t("pricing.portalError"), variant: "destructive" });
     } finally {
       setPortalLoading(false);
     }
@@ -125,7 +127,7 @@ const Pricing = () => {
 
   return (
     <Layout>
-      <SEOHead title="Tarifs" description="Découvrez les abonnements Weekly Music Awards : Free, Pro et Elite. Soumettez votre musique et accédez à des fonctionnalités exclusives." url="/pricing" />
+      <SEOHead title={t("pricing.seoTitle")} description={t("pricing.seoDesc")} url="/pricing" />
 
       {/* Header */}
       <section className="pt-12 pb-8 md:pt-20 md:pb-12 relative overflow-hidden">
@@ -135,18 +137,18 @@ const Pricing = () => {
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary mb-4">
-              Abonnements
+              {t("pricing.badge")}
             </span>
             <h1 className="font-display text-4xl font-bold sm:text-5xl">
-              Choisissez votre{" "}
-              <span className="text-gradient">plan</span>
+              {t("pricing.chooseYour")}{" "}
+              <span className="text-gradient">{t("pricing.plan")}</span>
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Écoutez et votez gratuitement. Débloquez la soumission et des outils IA avec un abonnement.
+              {t("pricing.subtitle")}
             </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
               <ShieldCheck className="h-3.5 w-3.5" />
-              Les abonnements n'influencent pas le classement — seuls les votes comptent
+              {t("pricing.noInfluence")}
             </div>
             {user && isSubscribed && (
               <div className="mt-4">
@@ -156,7 +158,7 @@ const Pricing = () => {
                   onClick={handleManageSubscription}
                 >
                   {portalLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings className="mr-2 h-4 w-4" />}
-                  Gérer mon abonnement
+                  {t("pricing.manageSubscription")}
                 </Button>
               </div>
             )}
@@ -190,12 +192,12 @@ const Pricing = () => {
                     >
                       {isPopular && (
                         <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-primary text-white border-0 px-4 py-1">
-                          Le plus populaire
+                          {t("pricing.mostPopular")}
                         </Badge>
                       )}
                       {isCurrentPlan && (
                         <Badge className="absolute -top-3 right-4 bg-success text-success-foreground">
-                          Votre plan
+                          {t("pricing.yourPlan")}
                         </Badge>
                       )}
 
@@ -207,10 +209,10 @@ const Pricing = () => {
                         <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
                         <div className="mt-4">
                           <span className="font-display text-4xl font-bold">
-                            {plan.price === 0 ? "Gratuit" : `${plan.price}€`}
+                            {plan.price === 0 ? t("pricing.free") : `${plan.price}€`}
                           </span>
                           {plan.price > 0 && (
-                            <span className="text-sm text-muted-foreground"> /mois</span>
+                            <span className="text-sm text-muted-foreground"> {t("pricing.perMonth")}</span>
                           )}
                         </div>
                       </CardHeader>
@@ -248,7 +250,7 @@ const Pricing = () => {
                               if (!user && !isCurrentPlan) navigate("/auth?tab=signup");
                             }}
                           >
-                            {isCurrentPlan ? "Plan actuel" : user ? "Plan Free" : "Créer mon compte"}
+                            {isCurrentPlan ? t("pricing.currentPlan") : user ? t("pricing.planFree") : t("pricing.createMyAccount")}
                           </Button>
                         ) : (
                           <Button
@@ -259,7 +261,7 @@ const Pricing = () => {
                             {loadingTier === key ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : null}
-                            {isCurrentPlan ? "Plan actuel" : currentTier !== "free" ? "Upgrader" : "Commencer à gagner"}
+                            {isCurrentPlan ? t("pricing.currentPlan") : currentTier !== "free" ? t("pricing.upgrade") : t("pricing.startWinning")}
                           </Button>
                         )}
                       </CardFooter>
@@ -274,15 +276,15 @@ const Pricing = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <Check className="h-4 w-4 text-success" />
-              Sans engagement
+              {t("pricing.noCommitment")}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Check className="h-4 w-4 text-success" />
-              Annulable à tout moment
+              {t("pricing.cancelAnytime")}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-success" />
-              Paiement sécurisé par Stripe
+              {t("pricing.securePayment")}
             </span>
           </div>
         </div>
@@ -308,10 +310,10 @@ const Pricing = () => {
             className="text-center mb-10"
           >
             <h2 className="font-display text-2xl font-bold sm:text-3xl">
-              Comparaison détaillée
+              {t("pricing.comparison")}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Tout ce que chaque abonnement inclut, en un coup d'oeil.
+              {t("pricing.comparisonDesc")}
             </p>
           </motion.div>
 
@@ -325,7 +327,7 @@ const Pricing = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-secondary/50">
-                  <th className="px-4 py-3 text-left font-display font-semibold">Fonctionnalité</th>
+                  <th className="px-4 py-3 text-left font-display font-semibold">{t("pricing.feature")}</th>
                   <th className="px-4 py-3 text-center font-display font-semibold">Free</th>
                   <th className="px-4 py-3 text-center font-display font-semibold text-primary">Pro</th>
                   <th className="px-4 py-3 text-center font-display font-semibold text-amber-600 dark:text-amber-400">Elite</th>
