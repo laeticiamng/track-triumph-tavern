@@ -1,12 +1,21 @@
-import { Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun, Monitor, Check } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 
 type ThemeMode = "light" | "dark" | "system";
 
-const CYCLE: ThemeMode[] = ["light", "dark", "system"];
+const THEMES: { value: ThemeMode; icon: typeof Sun }[] = [
+  { value: "light", icon: Sun },
+  { value: "dark", icon: Moon },
+  { value: "system", icon: Monitor },
+];
 
 function getInitialTheme(): ThemeMode {
   const stored = localStorage.getItem("theme");
@@ -25,13 +34,11 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const { t } = useTranslation();
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
 
-  // Apply theme whenever it changes
   useEffect(() => {
     applyTheme(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Listen for OS preference changes when in system mode
   useEffect(() => {
     if (theme !== "system") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -40,31 +47,41 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
     return () => mq.removeEventListener("change", handler);
   }, [theme]);
 
-  const cycle = useCallback(() => {
+  const selectTheme = useCallback((mode: ThemeMode) => {
     document.documentElement.classList.add("theme-transition");
-    setTheme((prev) => CYCLE[(CYCLE.indexOf(prev) + 1) % CYCLE.length]);
+    setTheme(mode);
     setTimeout(() => document.documentElement.classList.remove("theme-transition"), 400);
   }, []);
 
-  const icon = theme === "light" ? <Sun className="h-4 w-4" /> : theme === "dark" ? <Moon className="h-4 w-4" /> : <Monitor className="h-4 w-4" />;
-  const label = t(`theme.${theme}`, theme);
+  const ActiveIcon = THEMES.find((t) => t.value === theme)!.icon;
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size={compact ? "icon" : "sm"}
-          onClick={cycle}
-          aria-label={label}
+          aria-label={t("theme.label", "Thème")}
           className="h-9 w-9"
         >
-          {icon}
+          <ActiveIcon className="h-4 w-4" />
         </Button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom" className="text-xs">
-        {label}
-      </TooltipContent>
-    </Tooltip>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[140px]">
+        {THEMES.map(({ value, icon: Icon }) => (
+          <DropdownMenuItem
+            key={value}
+            onClick={() => selectTheme(value)}
+            className="flex items-center justify-between gap-2"
+          >
+            <span className="flex items-center gap-2">
+              <Icon className="h-4 w-4" />
+              {t(`theme.${value}`, value)}
+            </span>
+            {theme === value && <Check className="h-3.5 w-3.5 text-primary" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
