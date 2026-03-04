@@ -1150,5 +1150,21 @@
     "votes": "{{count}} Stimmen",
     "viewPage": "Seite anzeigen",
     "weekFallback": "Woche {{number}}"
+  },
+  "articleDetail": {
+    "allArticles": "Alle Artikel",
+    "ctaTop": "🎵 Lust, Ihre Fähigkeiten zu testen? Reichen Sie Ihren Track beim Wettbewerb ein.",
+    "submit": "Einreichen",
+    "readTime": "{{count}} Min. Lesezeit",
+    "proTip": "Profi-Tipp:",
+    "viewCategory": "Kategorie {{category}} anzeigen →",
+    "relatedArticles": "Verwandte Artikel",
+    "read": "Lesen",
+    "ctaTitle": "Bereit, diese Tipps in die Praxis umzusetzen?",
+    "ctaDesc": "Reichen Sie Ihren Track beim Weekly Music Awards Wettbewerb ein und erhalten Sie Stimmen der Community.",
+    "submitTrack": "Meinen Track einreichen",
+    "viewAllArticles": "Alle Artikel anzeigen",
+    "breadcrumbHome": "Startseite",
+    "breadcrumbArticles": "Artikel"
   }
 }

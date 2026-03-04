@@ -1150,5 +1150,21 @@
     "votes": "{{count}} votes",
     "viewPage": "View page",
     "weekFallback": "Week {{number}}"
+  },
+  "articleDetail": {
+    "allArticles": "All articles",
+    "ctaTop": "🎵 Want to test your skills? Submit your track to the contest.",
+    "submit": "Submit",
+    "readTime": "{{count}} min read",
+    "proTip": "Pro tip:",
+    "viewCategory": "View {{category}} category →",
+    "relatedArticles": "Related articles",
+    "read": "Read",
+    "ctaTitle": "Ready to put these tips into practice?",
+    "ctaDesc": "Submit your track to the Weekly Music Awards contest and get votes from the community.",
+    "submitTrack": "Submit my track",
+    "viewAllArticles": "View all articles",
+    "breadcrumbHome": "Home",
+    "breadcrumbArticles": "Articles"
   }
 }

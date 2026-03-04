@@ -1150,5 +1150,21 @@
     "votes": "{{count}} votes",
     "viewPage": "Voir la page",
     "weekFallback": "Semaine {{number}}"
+  },
+  "articleDetail": {
+    "allArticles": "Tous les articles",
+    "ctaTop": "🎵 Envie de tester vos compétences ? Soumettez votre morceau au concours.",
+    "submit": "Soumettre",
+    "readTime": "{{count}} min de lecture",
+    "proTip": "Conseil pro :",
+    "viewCategory": "Voir la catégorie {{category}} →",
+    "relatedArticles": "Articles connexes",
+    "read": "Lire",
+    "ctaTitle": "Prêt à mettre ces conseils en pratique ?",
+    "ctaDesc": "Soumettez votre morceau au concours Weekly Music Awards et recevez les votes de la communauté.",
+    "submitTrack": "Soumettre mon morceau",
+    "viewAllArticles": "Voir tous les articles",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbArticles": "Articles"
   }
 }
