@@ -999,6 +999,7 @@
     "openMenu": "Ouvrir le menu"
   },
   "theme": {
+    "label": "Thème",
     "light": "Mode clair",
     "dark": "Mode sombre",
     "system": "Thème système"
