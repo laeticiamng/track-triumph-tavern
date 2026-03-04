@@ -91,7 +91,7 @@ export function HeroSection() {
           {t("hero.title2")}
         </motion.h1>
 
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mt-6 max-w-xl text-base text-white/70 sm:text-lg">
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mt-6 max-w-xl text-base text-white/85 sm:text-lg">
           {t("hero.subtitle")}
         </motion.p>
 
@@ -130,7 +130,7 @@ export function HeroSection() {
           </Button>
         </motion.div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }} className="mt-5 text-xs text-white/40">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }} className="mt-5 text-xs text-white/55">
           {t("hero.meritocratic")}
         </motion.p>
       </div>
