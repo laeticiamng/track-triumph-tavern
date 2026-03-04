@@ -1003,6 +1003,11 @@
     "dark": "Dark mode",
     "system": "System theme"
   },
+  "player": {
+    "skipBack": "Skip back 10s",
+    "skipForward": "Skip forward 10s",
+    "openPersistent": "Open persistent player"
+  },
   "scoring": {
     "seoTitle": "Scoring Method — How Rankings Are Calculated",
     "seoDesc": "Discover in detail how Weekly Music Awards rankings are calculated: 3 scoring criteria (emotion, originality, production), genre-specific weighting, AI anti-fraud system and full transparency. No payment influences results.",

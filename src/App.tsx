@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { Loader2 } from "lucide-react";
 
 // Eagerly load the landing page for fast first paint
@@ -56,6 +57,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
+      <AudioPlayerProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -128,6 +130,7 @@ const App = () => (
           </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
+      </AudioPlayerProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );

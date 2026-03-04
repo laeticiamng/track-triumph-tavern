@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useOptionalGlobalPlayer } from "@/contexts/AudioPlayerContext";
 
 interface VoteCardSubmission {
   id: string;
@@ -92,6 +93,7 @@ export function VoteCard({
   commentsMax,
 }: VoteCardProps) {
   const { t } = useTranslation();
+  const globalPlayer = useOptionalGlobalPlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -116,19 +118,36 @@ export function VoteCard({
 
   const canComment = tier !== "free" && (commentsMax === "unlimited" || commentsUsed < commentsMax);
 
-  // Auto-play/pause based on visibility
+  // Auto-play/pause based on visibility — also sync global player
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (isVisible) {
-      if (hasPreview) audio.currentTime = pStart;
-      audio.play().then(() => setPlaying(true)).catch(() => {});
+      // Send to global player if available
+      if (globalPlayer) {
+        globalPlayer.play({
+          id: submission.id,
+          title: submission.title,
+          artist: submission.artist_name,
+          coverUrl: submission.cover_image_url,
+          audioUrl: submission.audio_excerpt_url,
+          previewStart: hasPreview ? pStart : undefined,
+          previewEnd: hasPreview ? pEnd : undefined,
+        });
+      } else {
+        if (hasPreview) audio.currentTime = pStart;
+        audio.play().then(() => setPlaying(true)).catch(() => {});
+      }
     } else {
-      audio.pause();
-      setPlaying(false);
+      if (globalPlayer && globalPlayer.track?.id === submission.id) {
+        globalPlayer.pause();
+      } else {
+        audio.pause();
+        setPlaying(false);
+      }
     }
-  }, [isVisible, hasPreview, pStart]);
+  }, [isVisible, hasPreview, pStart, pEnd, submission.id]);
 
   // Audio event listeners
   useEffect(() => {

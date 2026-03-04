@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Header } from "./Header";
 import { BottomNav } from "./BottomNav";
 import { AIChatbot } from "@/components/ai/AIChatbot";
+import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer";
 import { useSubscription } from "@/hooks/use-subscription";
 import { trackEvent } from "@/lib/analytics";
 
@@ -24,6 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </a>
       <Header />
       <main id="main-content" className="pt-16 pb-20 md:pb-0">{children}</main>
+      <PersistentAudioPlayer />
       <BottomNav />
       {showChatbot && <AIChatbot />}
     </div>
