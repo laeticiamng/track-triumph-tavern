@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -34,6 +35,7 @@ interface FeedSubmission {
 }
 
 const Vote = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [activeWeekId, setActiveWeekId] = useState<string | null>(null);
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
@@ -116,8 +118,8 @@ const Vote = () => {
   return (
     <div className="flex flex-col h-[100dvh] bg-background">
       <SEOHead
-        title="Voter"
-        description="Écoutez et votez pour vos morceaux préférés dans 9 catégories musicales."
+        title={t("votePage.seoTitle")}
+        description={t("votePage.seoDesc")}
         url="/vote"
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />
@@ -157,7 +159,7 @@ const Vote = () => {
                 : "bg-secondary text-secondary-foreground hover:bg-accent"
             }`}
           >
-            Tout
+            {t("votePage.all")}
           </button>
           {recommendedIds.length > 0 && (
             <button
@@ -168,7 +170,7 @@ const Vote = () => {
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
-              <Sparkles className="h-3 w-3" /> Pour vous
+              <Sparkles className="h-3 w-3" /> {t("votePage.forYou")}
             </button>
           )}
           {categories.map((cat) => (
@@ -210,22 +212,22 @@ const Vote = () => {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
               <Music className="h-10 w-10 text-accent-foreground" />
             </div>
-            <h3 className="font-display text-xl font-semibold">Le concours démarre bientôt</h3>
+            <h3 className="font-display text-xl font-semibold">{t("votePage.contestStartsSoon")}</h3>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Les morceaux de la semaine apparaîtront ici dès qu'ils seront approuvés. Inscrivez-vous pour être notifié !
+              {t("votePage.tracksWillAppear")}
             </p>
             <div className="mt-6 flex flex-col gap-3">
               <Link
                 to="/auth?tab=signup"
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Rejoindre le concours
+                {t("votePage.joinContest")}
               </Link>
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
               >
-                Comment ça marche ?
+                {t("votePage.howItWorks")}
               </Link>
             </div>
           </div>
