@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Loader2, UserPlus, Sparkles, RefreshCw } from "lucide-react";
+import { Loader2, UserPlus, Sparkles, RefreshCw, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -16,6 +16,7 @@ interface SuggestedArtist {
   bio: string | null;
   category_name: string;
   submission_count: number;
+  vote_count: number;
 }
 
 export function ArtistSuggestions() {
@@ -61,7 +62,7 @@ export function ArtistSuggestions() {
       // 3. Get approved submissions in those categories from other users
       const { data: submissions } = await supabase
         .from("submissions")
-        .select("user_id, category_id")
+        .select("user_id, category_id, vote_count")
         .in("category_id", votedCategoryIds)
         .eq("status", "approved")
         .limit(200);
@@ -73,17 +74,18 @@ export function ArtistSuggestions() {
       }
 
       // 4. Count submissions per user per category, exclude already followed
-      const userCategoryMap = new Map<string, { categories: Map<string, number>; total: number }>();
+      const userCategoryMap = new Map<string, { categories: Map<string, number>; total: number; votes: number }>();
 
       for (const sub of submissions) {
         if (alreadyFollowing.has(sub.user_id)) continue;
 
         if (!userCategoryMap.has(sub.user_id)) {
-          userCategoryMap.set(sub.user_id, { categories: new Map(), total: 0 });
+          userCategoryMap.set(sub.user_id, { categories: new Map(), total: 0, votes: 0 });
         }
         const entry = userCategoryMap.get(sub.user_id)!;
         entry.categories.set(sub.category_id, (entry.categories.get(sub.category_id) || 0) + 1);
         entry.total++;
+        entry.votes += sub.vote_count || 0;
       }
 
       // 5. Sort by submission count, take top 6
@@ -133,6 +135,7 @@ export function ArtistSuggestions() {
           bio: profile?.bio || null,
           category_name: categoryNameMap.get(topCatId) || "",
           submission_count: entry.total,
+          vote_count: entry.votes,
         };
       });
 
@@ -220,6 +223,10 @@ export function ArtistSuggestions() {
                 </p>
                 <p className="text-[11px] text-muted-foreground truncate">
                   {artist.category_name} · {t("following.submissions", "{{count}} soumission(s)", { count: artist.submission_count })}
+                </p>
+                <p className="text-[11px] text-muted-foreground/70 flex items-center gap-1">
+                  <Heart className="h-3 w-3" />
+                  {t("following.votesReceived", "{{count}} vote(s) reçu(s)", { count: artist.vote_count })}
                 </p>
               </button>
 
