@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -85,6 +85,11 @@ export function Header() {
               <BadgePills />
               <StreakBadge compact showRecord />
               <Button variant="ghost" size="sm" asChild>
+                <Link to="/following" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" /> {t("nav.following", "Abonnements")}
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile" className="flex items-center gap-2">
                   <User className="h-4 w-4" /> {t("nav.profile")}
                 </Link>
@@ -149,9 +154,17 @@ export function Header() {
               )}
               <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
                 {user ? (
-                  <Button variant="outline" asChild>
-                    <Link to="/profile" onClick={() => setMobileOpen(false)}>{t("nav.profile")}</Link>
-                  </Button>
+                  <>
+                    <Button variant="outline" asChild>
+                      <Link to="/following" onClick={() => setMobileOpen(false)}>
+                        <Users className="mr-2 h-4 w-4" />
+                        {t("nav.following", "Abonnements")}
+                      </Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link to="/profile" onClick={() => setMobileOpen(false)}>{t("nav.profile")}</Link>
+                    </Button>
+                  </>
                 ) : (
                   <>
                     <Button variant="outline" asChild>
