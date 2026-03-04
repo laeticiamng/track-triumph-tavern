@@ -12,6 +12,7 @@ import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { ArrowLeft, Music, ExternalLink, Crown, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { SEOHead, musicGroupJsonLd } from "@/components/seo/SEOHead";
+import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
 const ArtistProfile = () => {
@@ -21,6 +22,7 @@ const ArtistProfile = () => {
   const [submissions, setSubmissions] = useState<Tables<"submissions">[]>([]);
   const [loading, setLoading] = useState(true);
   const [tier, setTier] = useState<string>("free");
+  const [votingCloseAt, setVotingCloseAt] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -39,6 +41,13 @@ const ArtistProfile = () => {
             .order("created_at", { ascending: false });
           setSubmissions(subs || []);
 
+          // Fetch active week to determine if voting is open
+          const { data: activeWeek } = await supabase
+            .from("weeks")
+            .select("voting_close_at")
+            .eq("is_active", true)
+            .single();
+          if (activeWeek) setVotingCloseAt(activeWeek.voting_close_at);
           try {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.access_token) {
@@ -85,7 +94,7 @@ const ArtistProfile = () => {
   }
 
   const socialLinks = (profile.social_links as Record<string, string>) || {};
-  const totalVotes = submissions.reduce((sum, s) => sum + s.vote_count, 0);
+  const totalVotes = submissions.reduce((sum, s) => sum + maskVoteCount(s.vote_count, votingCloseAt), 0);
   const artistName = profile.display_name || t("artistProfile.artist");
 
   return (
@@ -186,7 +195,7 @@ const ArtistProfile = () => {
                     <img src={sub.cover_image_url} alt={t("artistProfile.coverAlt", { title: sub.title })} className="h-14 w-14 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{sub.title}</p>
-                      <p className="text-xs text-muted-foreground">{sub.vote_count} {t("artistProfile.votePlural")}</p>
+                      <p className="text-xs text-muted-foreground">{maskVoteCount(sub.vote_count, votingCloseAt)} {t("artistProfile.votePlural")}</p>
                     </div>
                   </Link>
                 </motion.div>

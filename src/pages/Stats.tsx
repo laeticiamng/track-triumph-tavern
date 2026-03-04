@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
+import { isVotingOpen } from "@/lib/vote-utils";
 
 interface WeekStats {
   totalVotes: number;
@@ -50,7 +51,7 @@ const Stats = () => {
         // Get active week
         const { data: week } = await supabase
           .from("weeks")
-          .select("id, title")
+          .select("id, title, voting_close_at")
           .eq("is_active", true)
           .single();
 
@@ -92,10 +93,12 @@ const Stats = () => {
         const uniqueVoters = new Set(voters?.map((v) => v.user_id) ?? []);
 
         // Votes per category
+        const votingStillOpen = isVotingOpen(week.voting_close_at);
         const catVoteCounts = new Map<string, number>();
         submissions?.forEach((s) => {
+          const count = votingStillOpen ? 0 : s.vote_count;
           const current = catVoteCounts.get(s.category_id) || 0;
-          catVoteCounts.set(s.category_id, current + s.vote_count);
+          catVoteCounts.set(s.category_id, current + count);
         });
 
         const categoriesData = (categories ?? [])
@@ -108,6 +111,7 @@ const Stats = () => {
         // Top 3 tracks
         const topTracks = (submissions ?? []).slice(0, 3).map((s) => ({
           ...s,
+          vote_count: votingStillOpen ? 0 : s.vote_count,
           category_name: catMap.get(s.category_id) || "",
         }));
 

@@ -13,6 +13,7 @@ import { Search, Music, Heart, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
+import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -211,7 +212,7 @@ const Explore = () => {
                     <AudioPlayer src={sub.audio_excerpt_url} compact />
                     <div className="flex items-center justify-between" onClick={(e) => e.preventDefault()}>
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Heart className="h-3 w-3" /> {sub.vote_count}
+                        <Heart className="h-3 w-3" /> {maskVoteCount(sub.vote_count, activeWeek?.voting_close_at)}
                       </span>
                       <VoteButton submissionId={sub.id} categoryId={sub.category_id} compact />
                     </div>
