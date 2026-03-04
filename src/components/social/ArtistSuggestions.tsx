@@ -204,7 +204,7 @@ export function ArtistSuggestions() {
             >
               <button
                 onClick={() => navigate(`/artist/${artist.id}`)}
-                className="flex-shrink-0"
+                className="relative flex-shrink-0"
               >
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={artist.avatar_url || undefined} />
@@ -212,6 +212,14 @@ export function ArtistSuggestions() {
                     {(artist.display_name || "?")[0].toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
+                <span className={`absolute -top-1.5 -left-1.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                  i === 0 ? "bg-yellow-500 text-yellow-950" :
+                  i === 1 ? "bg-gray-300 text-gray-700" :
+                  i === 2 ? "bg-amber-600 text-amber-50" :
+                  "bg-muted text-muted-foreground"
+                }`}>
+                  {i < 3 ? ["🥇", "🥈", "🥉"][i] : i + 1}
+                </span>
               </button>
 
               <button
