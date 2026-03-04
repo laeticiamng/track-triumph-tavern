@@ -62,3 +62,6 @@ verify_jwt = true
 
 [functions.notify-status-change]
 verify_jwt = false
+
+[functions.vapid-gen]
+verify_jwt = false
