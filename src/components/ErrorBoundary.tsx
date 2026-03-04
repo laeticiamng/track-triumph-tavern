@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import i18n from "@/i18n";
 
 interface Props {
   children: ReactNode;
@@ -28,24 +29,26 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
 
+      const t = i18n.t.bind(i18n);
+
       return (
         <div className="flex min-h-[60vh] flex-col items-center justify-center text-center px-4">
-          <h2 className="font-display text-2xl font-bold">Oups, quelque chose s'est mal passé</h2>
+          <h2 className="font-display text-2xl font-bold">{t("errors.title")}</h2>
           <p className="mt-3 text-muted-foreground max-w-md">
-            Une erreur inattendue est survenue. Essayez de rafraîchir la page.
+            {t("errors.message")}
           </p>
           <div className="mt-6 flex gap-3">
             <button
               onClick={() => this.setState({ hasError: false })}
               className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Réessayer
+              {t("errors.retry")}
             </button>
             <Link
               to="/"
               className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-2.5 text-sm font-medium hover:bg-accent transition-colors"
             >
-              Retour à l'accueil
+              {t("errors.backHome")}
             </Link>
           </div>
         </div>
