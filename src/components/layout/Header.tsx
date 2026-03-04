@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart, Users } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart, Users, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,7 @@ import { BadgePills } from "@/components/gamification/BadgeShowcase";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useInstallPrompt } from "@/hooks/use-install-prompt";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -18,6 +19,7 @@ export function Header() {
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const { t } = useTranslation();
+  const { canInstall, install } = useInstallPrompt();
 
   const navItems = [
     { label: t("nav.explore"), href: "/explore", icon: Search },
@@ -77,6 +79,12 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          {canInstall && (
+            <Button variant="outline" size="sm" onClick={install} className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10">
+              <Download className="h-3.5 w-3.5" />
+              {t("pwa.installButton", "Installer")}
+            </Button>
+          )}
           <ThemeToggle compact />
           <LanguageSwitcher compact />
           {user && <NotificationBell />}
