@@ -10,6 +10,7 @@ import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgePills } from "@/components/gamification/BadgeShowcase";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -78,6 +79,7 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle compact />
           <LanguageSwitcher compact />
+          {user && <NotificationBell />}
           {user ? (
             <>
               <BadgePills />
@@ -103,6 +105,7 @@ export function Header() {
         <div className="flex items-center gap-1 md:hidden">
           <ThemeToggle compact />
           <LanguageSwitcher compact />
+          {user && <NotificationBell />}
           <button
             className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
