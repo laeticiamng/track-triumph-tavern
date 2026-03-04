@@ -220,35 +220,13 @@ const Pricing = () => {
                       {/* Quick highlights */}
                       <CardContent className="flex-1 space-y-4">
                         <div className="space-y-2 rounded-xl bg-background/50 p-3">
-                          {plan.highlights.map((h, hi) => {
-                            const highlightLabelKeys: Record<string, string> = {
-                              "Votes": "pricing.highlightVotes",
-                              "Soumission": "pricing.highlightSubmission",
-                              "Commentaires": "pricing.highlightComments",
-                              "Profil artiste": "pricing.highlightProfile",
-                              "Statistiques": "pricing.highlightStats",
-                              "Outils IA": "pricing.highlightAI",
-                            };
-                            const highlightValueKeys: Record<string, string> = {
-                              "5 / semaine": "pricing.fivePerWeek",
-                              "Non": "pricing.no",
-                              "Basique": "pricing.highlightBasic",
-                              "Illimités": "pricing.unlimited",
-                              "1 / semaine": "pricing.onePerWeek",
-                              "Personnalisé": "pricing.highlightCustom",
-                              "Oui": "pricing.unlimited",
-                              "3 outils": "pricing.highlight3tools",
-                              "Premium + badge": "pricing.premiumBadge",
-                              "Détaillées": "pricing.detailed",
-                              "4 outils (+ feedback)": "pricing.highlight4tools",
-                            };
-                            const labelKey = highlightLabelKeys[h.label] || h.label;
-                            const valueKey = highlightValueKeys[h.value] || h.value;
+                          {plan.highlightKeys.map((h, hi) => {
+                            const isNo = h.valueKey === "pricing.no";
                             return (
                               <div key={hi} className="flex items-center justify-between text-sm">
-                                <span className="text-muted-foreground">{t(labelKey)}</span>
-                                <span className={`font-medium ${h.value === "Non" ? "text-muted-foreground/50" : ""}`}>
-                                  {t(valueKey)}
+                                <span className="text-muted-foreground">{t(h.labelKey)}</span>
+                                <span className={`font-medium ${isNo ? "text-muted-foreground/50" : ""}`}>
+                                  {t(h.valueKey)}
                                 </span>
                               </div>
                             );
@@ -256,10 +234,10 @@ const Pricing = () => {
                         </div>
 
                         <ul className="space-y-2.5">
-                          {plan.features.map((_f, fi) => (
+                          {plan.featureKeys.map((fk, fi) => (
                             <li key={fi} className="flex items-start gap-2 text-sm">
                               <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                              <span>{t(`pricing.${key}Feature${fi + 1}`)}</span>
+                              <span>{t(fk)}</span>
                             </li>
                           ))}
                         </ul>

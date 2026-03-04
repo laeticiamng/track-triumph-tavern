@@ -25,13 +25,13 @@ describe("SUBSCRIPTION_TIERS", () => {
       expect(tier.price).toBeGreaterThanOrEqual(0);
     });
 
-    it("has a non-empty features array", () => {
-      expect(Array.isArray(tier.features)).toBe(true);
-      expect(tier.features.length).toBeGreaterThan(0);
+    it("has a non-empty featureKeys array", () => {
+      expect(Array.isArray(tier.featureKeys)).toBe(true);
+      expect(tier.featureKeys.length).toBeGreaterThan(0);
     });
 
-    it("has only string entries in features", () => {
-      tier.features.forEach((feature) => {
+    it("has only string entries in featureKeys", () => {
+      tier.featureKeys.forEach((feature) => {
         expect(typeof feature).toBe("string");
         expect(feature.length).toBeGreaterThan(0);
       });

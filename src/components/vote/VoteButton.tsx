@@ -166,21 +166,21 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
               label={t("vote.originality")}
               value={originality}
               onChange={setOriginality}
-              tip={scoringCriteria.find((s) => s.criterion === "Originalité")?.description}
+              tip={scoringCriteria.find((s) => s.criterion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes("original"))?.description}
             />
             <ScoreSlider
               icon={<Music2 className="h-4 w-4 text-blue-500" />}
               label={t("vote.production")}
               value={production}
               onChange={setProduction}
-              tip={scoringCriteria.find((s) => s.criterion === "Production")?.description}
+              tip={scoringCriteria.find((s) => s.criterion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes("production"))?.description}
             />
             <ScoreSlider
               icon={<Star className="h-4 w-4 text-rose-500" />}
               label={t("vote.emotion")}
               value={emotion}
               onChange={setEmotion}
-              tip={scoringCriteria.find((s) => s.criterion === "Émotion")?.description}
+              tip={scoringCriteria.find((s) => s.criterion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes("emotion"))?.description}
             />
 
             {/* Comment section with tier-based gating */}

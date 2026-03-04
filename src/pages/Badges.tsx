@@ -96,8 +96,8 @@ const Badges = () => {
               <div className={`mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${config.color} text-2xl shadow-lg`}>
                 {config.emoji}
               </div>
-              <p className="text-sm font-semibold">{config.label}</p>
-              <p className="text-xs text-muted-foreground mt-1">{config.description}</p>
+              <p className="text-sm font-semibold">{t(config.labelKey)}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t(config.descriptionKey)}</p>
             </Card>
           ))}
         </div>
@@ -151,7 +151,7 @@ const Badges = () => {
                             </Avatar>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium truncate">{badge.display_name || t("badgesPage.anonymous")}</p>
-                              <p className="text-xs text-muted-foreground">{config.label}</p>
+                              <p className="text-xs text-muted-foreground">{t(config.labelKey)}</p>
                             </div>
                           </Link>
                         );

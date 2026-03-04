@@ -40,6 +40,7 @@ export function BadgeShowcase({ userId, weekId, compact = false, showEmpty = fal
 }
 
 function BadgeIcon({ badge, size }: { badge: WeeklyBadge; size: "sm" | "md" }) {
+  const { t } = useTranslation();
   const config = BADGE_CONFIG[badge.badge_type as BadgeType];
   if (!config) return null;
   const sizeClasses = size === "sm" ? "h-7 w-7 text-sm" : "h-10 w-10 text-lg";
@@ -52,14 +53,15 @@ function BadgeIcon({ badge, size }: { badge: WeeklyBadge; size: "sm" | "md" }) {
         </motion.div>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="text-center">
-        <p className="font-semibold">{config.label}</p>
-        <p className="text-xs text-muted-foreground">{config.description}</p>
+        <p className="font-semibold">{t(config.labelKey)}</p>
+        <p className="text-xs text-muted-foreground">{t(config.descriptionKey)}</p>
       </TooltipContent>
     </Tooltip>
   );
 }
 
 export function BadgePills({ userId }: { userId?: string }) {
+  const { t } = useTranslation();
   const { badges } = useWeeklyBadges(userId);
   if (badges.length === 0) return null;
   const latestWeek = badges[0]?.week_id;
@@ -72,7 +74,7 @@ export function BadgePills({ userId }: { userId?: string }) {
         return config ? (
           <Tooltip key={b.id}>
             <TooltipTrigger asChild><span className="text-xs cursor-default">{config.emoji}</span></TooltipTrigger>
-            <TooltipContent>{config.label}</TooltipContent>
+            <TooltipContent>{t(config.labelKey)}</TooltipContent>
           </Tooltip>
         ) : null;
       })}

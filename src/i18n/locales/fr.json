@@ -1167,5 +1167,15 @@
     "viewAllArticles": "Voir tous les articles",
     "breadcrumbHome": "Accueil",
     "breadcrumbArticles": "Articles"
+  },
+  "badgeTypes": {
+    "topVoterLabel": "Top Voter",
+    "topVoterDesc": "Le plus de votes cette semaine",
+    "discovererLabel": "Découvreur",
+    "discovererDesc": "Premier à voter pour un futur gagnant",
+    "criticLabel": "Critique étoilé",
+    "criticDesc": "Le plus de commentaires constructifs",
+    "eclecticLabel": "Éclectique",
+    "eclecticDesc": "Votes dans le plus de catégories"
   }
 }
