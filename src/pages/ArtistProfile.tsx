@@ -9,10 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
-import { ArrowLeft, Music, ExternalLink, Crown, Star } from "lucide-react";
+import { ArrowLeft, Music, ExternalLink, Crown, Star, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { SEOHead, musicGroupJsonLd } from "@/components/seo/SEOHead";
 import { maskVoteCount } from "@/lib/vote-utils";
+import { FollowButton } from "@/components/social/FollowButton";
+import { useFollow } from "@/hooks/use-follow";
 import type { Tables } from "@/integrations/supabase/types";
 
 const ArtistProfile = () => {
@@ -23,6 +25,7 @@ const ArtistProfile = () => {
   const [loading, setLoading] = useState(true);
   const [tier, setTier] = useState<string>("free");
   const [votingCloseAt, setVotingCloseAt] = useState<string | null>(null);
+  const { followerCount, followingCount } = useFollow(id);
 
   useEffect(() => {
     if (!id) return;
@@ -134,18 +137,21 @@ const ArtistProfile = () => {
         </div>
 
         <div className="mt-12">
-          <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold">{artistName}</h1>
-            {tier === "elite" && (
-              <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
-                <Crown className="h-3 w-3" /> Elite
-              </Badge>
-            )}
-            {tier === "pro" && (
-              <Badge className="bg-primary/10 text-primary border-primary/20 gap-1">
-                <Star className="h-3 w-3" /> Pro
-              </Badge>
-            )}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <h1 className="font-display text-3xl font-bold">{artistName}</h1>
+              {tier === "elite" && (
+                <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
+                  <Crown className="h-3 w-3" /> Elite
+                </Badge>
+              )}
+              {tier === "pro" && (
+                <Badge className="bg-primary/10 text-primary border-primary/20 gap-1">
+                  <Star className="h-3 w-3" /> Pro
+                </Badge>
+              )}
+            </div>
+            <FollowButton targetUserId={id!} />
           </div>
           {profile.bio && <p className="mt-2 text-muted-foreground">{profile.bio}</p>}
 
@@ -163,7 +169,7 @@ const ArtistProfile = () => {
           )}
 
           {/* Stats */}
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Card className="text-center p-4">
               <p className="font-display text-2xl font-bold">{submissions.length}</p>
               <p className="text-xs text-muted-foreground">{t("artistProfile.tracks")}</p>
@@ -171,6 +177,14 @@ const ArtistProfile = () => {
             <Card className="text-center p-4">
               <p className="font-display text-2xl font-bold">{totalVotes}</p>
               <p className="text-xs text-muted-foreground">{t("artistProfile.votesReceived")}</p>
+            </Card>
+            <Card className="text-center p-4">
+              <p className="font-display text-2xl font-bold">{followerCount}</p>
+              <p className="text-xs text-muted-foreground">{t("follow.followers", "Abonnés")}</p>
+            </Card>
+            <Card className="text-center p-4">
+              <p className="font-display text-2xl font-bold">{followingCount}</p>
+              <p className="text-xs text-muted-foreground">{t("follow.following", "Abonnements")}</p>
             </Card>
           </div>
 

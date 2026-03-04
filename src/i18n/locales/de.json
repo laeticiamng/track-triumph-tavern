@@ -1014,6 +1014,21 @@
     "empty": "Keine Benachrichtigungen",
     "markAllRead": "Alle als gelesen markieren"
   },
+  "follow": {
+    "follow": "Folgen",
+    "unfollow": "Entfolgen",
+    "followers": "Follower",
+    "following": "Folgt"
+  },
+  "feed": {
+    "title": "Aktivitätsfeed",
+    "empty": "Folgen Sie Künstlern, um deren Aktivitäten hier zu sehen",
+    "discoverArtists": "Künstler entdecken →",
+    "newSubmission": "hat einen neuen Track eingereicht",
+    "podium": "hat das Podium erreicht (#{{rank}})",
+    "badgeEarned": "hat ein neues Abzeichen erhalten",
+    "unknownArtist": "Künstler"
+  },
   "scoring": {
     "seoTitle": "Bewertungsmethode — Wie das Ranking berechnet wird",
     "seoDesc": "Erfahren Sie im Detail, wie das Ranking von Weekly Music Awards berechnet wird: 3 Bewertungskriterien (Emotion, Originalität, Produktion), genrespezifische Gewichtung, KI-Anti-Betrugs-System und volle Transparenz. Keine Zahlung beeinflusst die Ergebnisse.",

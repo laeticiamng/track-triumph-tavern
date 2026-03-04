@@ -1014,6 +1014,21 @@
     "empty": "No notifications",
     "markAllRead": "Mark all as read"
   },
+  "follow": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "followers": "Followers",
+    "following": "Following"
+  },
+  "feed": {
+    "title": "Activity feed",
+    "empty": "Follow artists to see their activity here",
+    "discoverArtists": "Discover artists →",
+    "newSubmission": "submitted a new track",
+    "podium": "reached the podium (#{{rank}})",
+    "badgeEarned": "earned a new badge",
+    "unknownArtist": "Artist"
+  },
   "scoring": {
     "seoTitle": "Scoring Method — How Rankings Are Calculated",
     "seoDesc": "Discover in detail how Weekly Music Awards rankings are calculated: 3 scoring criteria (emotion, originality, production), genre-specific weighting, AI anti-fraud system and full transparency. No payment influences results.",

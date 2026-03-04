@@ -10,6 +10,7 @@ import { CategoriesSection } from "@/components/landing/CategoriesSection";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
+import { ActivityFeed } from "@/components/social/ActivityFeed";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
         jsonLd={homePageJsonLd}
       />
       <HeroSection />
+      <ActivityFeed />
       <HowItWorks />
       <WeeklyPodium />
       <WhyUs />
