@@ -9,7 +9,8 @@
     "profile": "Profil",
     "login": "Connexion",
     "signup": "S'inscrire",
-    "home": "Accueil"
+    "home": "Accueil",
+    "following": "Abonnements"
   },
   "hero": {
     "contestLive": "Concours en cours",
@@ -1237,6 +1238,25 @@
     "viewAllArticles": "Voir tous les articles",
     "breadcrumbHome": "Accueil",
     "breadcrumbArticles": "Articles"
+  },
+  "reveal": {
+    "waiting": "En attente du reveal...",
+    "reward": "Prix",
+    "seoTitle": "Reveal en direct — Weekly Music Awards",
+    "seoDesc": "Assistez au dévoilement en direct des résultats du concours musical hebdomadaire.",
+    "title": "Reveal des résultats",
+    "subtitle": "Découvrez les gagnants catégorie par catégorie",
+    "notYet": "Le reveal n'a pas encore commencé",
+    "notYetDesc": "Les résultats seront révélés dès que la période de vote sera terminée. Revenez bientôt !",
+    "goVote": "Voter maintenant",
+    "seeResults": "Page résultats",
+    "start": "Lancer le reveal",
+    "categoriesToReveal": "catégories à révéler",
+    "skipAll": "Tout révéler",
+    "grandWinner": "Grand Gagnant",
+    "allRevealed": "Tous les résultats ont été révélés !",
+    "fullResults": "Résultats complets",
+    "hallOfFame": "Hall of Fame"
   },
   "badgeTypes": {
     "topVoterLabel": "Top Voter",
