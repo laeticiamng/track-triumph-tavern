@@ -1090,5 +1090,27 @@
     "structure": "Struktur",
     "production": "Produktion",
     "suggestions": "Vorschläge"
+  },
+  "voteStats": {
+    "title": "Statistiken",
+    "dailyLabel": "Erhaltene Stimmen (letzte 7 Tage)",
+    "noVotes": "Noch keine Stimmen in den letzten 7 Tagen erhalten. Reichen Sie einen Track ein, um loszulegen!",
+    "categoryLabel": "Verteilung nach Kategorie",
+    "other": "Sonstige"
+  },
+  "articles": {
+    "seoTitle": "Artikel & Musikproduktions-Guides",
+    "seoDesc": "Experten-Guides zur Musikproduktion für unabhängige Künstler: Rap-Vocal-Mixing, Lofi-Atmosphäre, EDM-Sounddesign, Pop-Songwriting, R&B-Produktion. Tipps und Techniken von Weekly Music Awards.",
+    "badge": "Ressourcen für Künstler",
+    "title": "Musikproduktions-Guides",
+    "subtitle": "Experten-Guides vom Weekly Music Awards Team, um Ihre Produktion zu verbessern, die Bewertungskriterien zu verstehen und Ihre Chancen im Wettbewerb zu maximieren.",
+    "ctaTitle": "Bereit, aktiv zu werden?",
+    "ctaDesc": "Reichen Sie Ihren Track beim Wettbewerb ein und erhalten Sie Stimmen der Community.",
+    "ctaButton": "Meinen Track einreichen",
+    "readTime": "{{count}} Min. Lesezeit",
+    "read": "Lesen",
+    "bottomText": "Neue Guides werden regelmäßig veröffentlicht.",
+    "createAccount": "Erstellen Sie ein Konto",
+    "createAccountSuffix": "um benachrichtigt zu werden."
   }
 }

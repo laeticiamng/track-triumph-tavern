@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
@@ -20,16 +21,20 @@ const PIE_COLORS = [
   "hsl(45 90% 55%)",
 ];
 
+const LOCALE_MAP: Record<string, string> = { fr: "fr-FR", en: "en-GB", de: "de-DE" };
+
 export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
+  const { t, i18n } = useTranslation();
   const [dailyData, setDailyData] = useState<{ date: string; votes: number }[]>([]);
   const [categoryData, setCategoryData] = useState<{ name: string; value: number }[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const dateLocale = LOCALE_MAP[i18n.language] || "fr-FR";
 
   useEffect(() => {
     async function fetchStats() {
       setLoading(true);
 
-      // Get user's submissions
       const { data: subs } = await supabase
         .from("submissions")
         .select("id, category_id")
@@ -42,7 +47,6 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
 
       const subIds = subs.map((s) => s.id);
 
-      // Get votes received on those submissions in the last 7 days
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -63,13 +67,13 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const key = d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" });
+        const key = d.toLocaleDateString(dateLocale, { weekday: "short", day: "numeric" });
         dayMap.set(key, 0);
       }
 
       for (const v of votes) {
         const d = new Date(v.created_at);
-        const key = d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" });
+        const key = d.toLocaleDateString(dateLocale, { weekday: "short", day: "numeric" });
         dayMap.set(key, (dayMap.get(key) || 0) + 1);
       }
 
@@ -80,14 +84,13 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
         const catMap = new Map<string, number>();
         const subCatMap = new Map(subs.map((s) => [s.id, s.category_id]));
 
-        // Get category names
         const { data: cats } = await supabase.from("categories").select("id, name");
         const catNameMap = new Map(cats?.map((c) => [c.id, c.name]) ?? []);
 
         for (const v of votes) {
           const catId = subCatMap.get(v.submission_id);
           if (catId) {
-            const catName = catNameMap.get(catId) || "Autre";
+            const catName = catNameMap.get(catId) || t("voteStats.other");
             catMap.set(catName, (catMap.get(catName) || 0) + 1);
           }
         }
@@ -99,14 +102,14 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
     }
 
     fetchStats();
-  }, [userId, tier]);
+  }, [userId, tier, dateLocale]);
 
   if (loading) {
     return (
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="font-display text-xl flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" /> Statistiques
+            <BarChart3 className="h-5 w-5" /> {t("voteStats.title")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -121,12 +124,12 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="font-display text-xl flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" /> Statistiques
+            <BarChart3 className="h-5 w-5" /> {t("voteStats.title")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground text-center py-6">
-            Pas encore de votes reçus ces 7 derniers jours. Soumettez un morceau pour commencer !
+            {t("voteStats.noVotes")}
           </p>
         </CardContent>
       </Card>
@@ -137,13 +140,13 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
     <Card className="mb-8">
       <CardHeader>
         <CardTitle className="font-display text-xl flex items-center gap-2">
-          <BarChart3 className="h-5 w-5" /> Statistiques
+          <BarChart3 className="h-5 w-5" /> {t("voteStats.title")}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Daily votes chart */}
         <div>
-          <p className="text-sm font-medium text-muted-foreground mb-3">Votes reçus (7 derniers jours)</p>
+          <p className="text-sm font-medium text-muted-foreground mb-3">{t("voteStats.dailyLabel")}</p>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={dailyData}>
               <defs>
@@ -176,7 +179,7 @@ export function VoteStatsChart({ userId, tier }: VoteStatsChartProps) {
         {/* Category breakdown (Elite only) */}
         {tier === "elite" && categoryData.length > 0 && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground mb-3">Répartition par catégorie</p>
+            <p className="text-sm font-medium text-muted-foreground mb-3">{t("voteStats.categoryLabel")}</p>
             <div className="flex items-center gap-6">
               <ResponsiveContainer width={160} height={160}>
                 <PieChart>
