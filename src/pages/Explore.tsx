@@ -96,7 +96,7 @@ const Explore = () => {
               <div className="mt-2">
                 <WeekCountdown
                   targetDate={activeWeek.voting_close_at}
-                  label="Fin du vote dans"
+                  label={t("countdown.voteEndIn")}
                   className="text-primary"
                 />
               </div>
@@ -144,7 +144,7 @@ const Explore = () => {
                 <Link
                   to={`/categories/${cat.slug}`}
                   className="text-xs text-muted-foreground hover:text-primary transition-colors"
-                  title={`En savoir plus sur ${cat.name}`}
+                  title={t("explore.learnMoreAbout", { name: cat.name })}
                 >
                   ℹ️
                 </Link>
