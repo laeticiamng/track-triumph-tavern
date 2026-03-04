@@ -999,6 +999,7 @@
     "openMenu": "Menü öffnen"
   },
   "theme": {
+    "label": "Design",
     "light": "Heller Modus",
     "dark": "Dunkler Modus",
     "system": "Systemdesign"
