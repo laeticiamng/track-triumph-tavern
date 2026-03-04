@@ -484,6 +484,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "votes_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "votes_week_id_fkey"
             columns: ["week_id"]
             isOneToOne: false
@@ -627,6 +634,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "winners_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submissions_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "winners_week_id_fkey"
             columns: ["week_id"]
             isOneToOne: false
@@ -637,7 +651,43 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      submissions_public: {
+        Row: {
+          artist_name: string | null
+          audio_excerpt_url: string | null
+          category_id: string | null
+          cover_image_url: string | null
+          created_at: string | null
+          description: string | null
+          external_url: string | null
+          id: string | null
+          rejection_reason: string | null
+          rights_declaration: boolean | null
+          status: Database["public"]["Enums"]["submission_status"] | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+          vote_count: number | null
+          week_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submissions_week_id_fkey"
+            columns: ["week_id"]
+            isOneToOne: false
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {
