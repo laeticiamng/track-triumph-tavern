@@ -22,8 +22,25 @@ Deno.serve(async (req) => {
 
     if (error) throw error;
 
+    // Also purge PII (IP/User-Agent) from vote_events older than 30 days
+    const piiCutoff = new Date();
+    piiCutoff.setDate(piiCutoff.getDate() - 30);
+
+    const { count: piiPurged, error: piiError } = await supabase
+      .from("vote_events")
+      .update({ ip_address: null, user_agent: null })
+      .lt("created_at", piiCutoff.toISOString())
+      .not("ip_address", "is", null);
+
+    if (piiError) console.error("PII purge error:", piiError);
+
     return new Response(
-      JSON.stringify({ purged: count, cutoff: cutoff.toISOString() }),
+      JSON.stringify({
+        analytics_purged: count,
+        pii_purged: piiPurged || 0,
+        analytics_cutoff: cutoff.toISOString(),
+        pii_cutoff: piiCutoff.toISOString(),
+      }),
       { headers: { ...cors, "Content-Type": "application/json" } }
     );
   } catch (err) {
