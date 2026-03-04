@@ -998,6 +998,11 @@
     "closeMenu": "Fermer le menu",
     "openMenu": "Ouvrir le menu"
   },
+  "theme": {
+    "light": "Mode clair",
+    "dark": "Mode sombre",
+    "system": "Thème système"
+  },
   "scoring": {
     "seoTitle": "Méthode de notation — Comment le classement est calculé",
     "seoDesc": "Découvrez en détail comment le classement de Weekly Music Awards est calculé : 3 critères de notation (émotion, originalité, production), pondération spécifique par genre musical, système anti-fraude IA et transparence totale. Aucun paiement n'influence les résultats.",
