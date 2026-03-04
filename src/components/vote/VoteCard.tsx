@@ -7,6 +7,7 @@ import { ShareSheet } from "./ShareSheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface VoteCardSubmission {
   id: string;
@@ -47,6 +48,7 @@ function StarRating({
   label: string;
   icon: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm w-[90px] flex items-center gap-1.5 text-white/80">
@@ -59,7 +61,7 @@ function StarRating({
             key={star}
             type="button"
             onClick={() => onChange(star)}
-            aria-label={`Note ${star} sur 5`}
+            aria-label={t("vote.scoreLabel", { score: star })}
             className="p-0.5 transition-transform active:scale-90"
           >
             <Star
@@ -89,6 +91,7 @@ export function VoteCard({
   commentsUsed,
   commentsMax,
 }: VoteCardProps) {
+  const { t } = useTranslation();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -197,14 +200,14 @@ export function VoteCard({
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.error) {
-        toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        toast({ title: t("errors.error"), description: result.error, variant: "destructive" });
       } else {
         setJustVoted(true);
         setShowPanel(false);
         onVoted(submission.category_id, !!(trimmedComment && canComment));
       }
     } catch {
-      toast({ title: "Erreur", description: "Impossible de voter.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: t("vote.voteError"), variant: "destructive" });
     } finally {
       setVoting(false);
     }
@@ -253,7 +256,7 @@ export function VoteCard({
         >
           <div className="h-7 w-7 rounded-full bg-white/20 overflow-hidden flex-shrink-0">
             {submission.artist_avatar ? (
-              <img src={submission.artist_avatar} alt={`Avatar de ${submission.artist_name}`} className="h-full w-full object-cover" />
+              <img src={submission.artist_avatar} alt={submission.artist_name} className="h-full w-full object-cover" />
             ) : (
               <div className="h-full w-full bg-primary/40" />
             )}
@@ -297,16 +300,16 @@ export function VoteCard({
               <div className="rounded-2xl bg-black/60 backdrop-blur-md p-4 space-y-3 border border-white/10">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
-                    Tes notes
+                    {t("vote.yourScores")}
                   </span>
                   <span className="text-xs text-white/50">
-                    Moyenne: <span className="text-white font-medium">{avgScore}/5</span>
+                    {t("vote.average")}: <span className="text-white font-medium">{avgScore}/5</span>
                   </span>
                 </div>
 
-                <StarRating value={emotionScore} onChange={setEmotionScore} label="Émotion" icon="💖" />
-                <StarRating value={originalityScore} onChange={setOriginalityScore} label="Originalité" icon="✨" />
-                <StarRating value={productionScore} onChange={setProductionScore} label="Production" icon="🎛️" />
+                <StarRating value={emotionScore} onChange={setEmotionScore} label={t("vote.emotion")} icon="💖" />
+                <StarRating value={originalityScore} onChange={setOriginalityScore} label={t("vote.originality")} icon="✨" />
+                <StarRating value={productionScore} onChange={setProductionScore} label={t("vote.production")} icon="🎛️" />
 
                 {/* Comment (Pro/Elite) */}
                 {canComment && (
@@ -314,14 +317,14 @@ export function VoteCard({
                     <textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value.slice(0, 280))}
-                      placeholder="Laisser un commentaire (optionnel)..."
+                      placeholder={t("vote.leaveComment")}
                       rows={2}
                       maxLength={280}
                       className="w-full rounded-xl bg-white/10 border border-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-primary/50 resize-none"
                     />
                     <div className="flex justify-between mt-1">
                       <span className="text-[10px] text-white/40">
-                        {tier === "pro" ? `${commentsUsed}/${commentsMax} commentaires` : "Illimité"}
+                        {tier === "pro" ? `${commentsUsed}/${commentsMax} ${t("vote.comments")}` : t("vote.unlimited")}
                       </span>
                       <span className="text-[10px] text-white/40">{comment.length}/280</span>
                     </div>
@@ -339,7 +342,7 @@ export function VoteCard({
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      Valider mon vote ({avgScore}/5)
+                      {t("vote.validateVote")} ({avgScore}/5)
                     </>
                   )}
                 </button>
@@ -357,7 +360,7 @@ export function VoteCard({
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-green-500/90">
                   <Check className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-[10px] font-medium text-green-400">Voté</span>
+                <span className="text-[10px] font-medium text-green-400">{t("vote.voted")}</span>
               </div>
             ) : !isAuthenticated ? (
               <Link
@@ -367,7 +370,7 @@ export function VoteCard({
                 <div className="flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm bg-white/15 hover:bg-primary/80">
                   <Heart className="h-5 w-5" />
                 </div>
-                <span className="text-[10px] font-medium">Connexion</span>
+                <span className="text-[10px] font-medium">{t("vote.loginRequired")}</span>
               </Link>
             ) : (
               <button
@@ -401,7 +404,7 @@ export function VoteCard({
                   )}
                 </div>
                 <span className="text-[10px] font-medium">
-                  {showPanel ? "Fermer" : "Voter"}
+                  {showPanel ? t("vote.close") : t("vote.voteAction")}
                 </span>
               </button>
             )}
@@ -414,7 +417,7 @@ export function VoteCard({
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
                 <MessageCircle className="h-5 w-5" />
               </div>
-              <span className="text-[10px] font-medium">Détail</span>
+              <span className="text-[10px] font-medium">{t("vote.detail")}</span>
             </Link>
 
             {/* Share */}
@@ -433,7 +436,7 @@ export function VoteCard({
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xs text-white/70 italic max-w-[140px] text-right"
               >
-                Merci, ton vote compte.
+                {t("vote.thankYou")}
               </motion.p>
             )}
             {showAlreadyVoted && (
@@ -442,7 +445,7 @@ export function VoteCard({
                 animate={{ opacity: 1 }}
                 className="text-xs text-white/50 max-w-[160px] text-right"
               >
-                Déjà voté en {categoryName} cette semaine
+                {t("vote.alreadyVoted", { category: categoryName })}
               </motion.p>
             )}
           </AnimatePresence>
