@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Bell, Heart, Trophy, Calendar, Check, CheckCheck } from "lucide-react";
+import { Bell, Heart, Trophy, Calendar, Check, CheckCheck, BellRing, BellOff } from "lucide-react";
 import { useNotifications, type Notification } from "@/hooks/use-notifications";
+import { usePushNotifications } from "@/hooks/use-push-notifications";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -76,6 +77,7 @@ export function NotificationBell() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
+  const { supported: pushSupported, isSubscribed, subscribe, unsubscribe } = usePushNotifications();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -133,15 +135,28 @@ export function NotificationBell() {
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <h3 className="text-sm font-semibold">{t("notifications.title", "Notifications")}</h3>
-              {unreadCount > 0 && (
-                <button
-                  onClick={markAllAsRead}
-                  className="flex items-center gap-1 text-xs text-primary hover:underline"
-                >
-                  <CheckCheck className="h-3 w-3" />
-                  {t("notifications.markAllRead", "Tout marquer comme lu")}
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {pushSupported && (
+                  <button
+                    onClick={() => isSubscribed ? unsubscribe() : subscribe()}
+                    className={`flex items-center gap-1 text-xs transition-colors ${
+                      isSubscribed ? "text-primary hover:text-destructive" : "text-muted-foreground hover:text-primary"
+                    }`}
+                    title={isSubscribed ? t("notifications.disablePush", "Désactiver push") : t("notifications.enablePush", "Activer push")}
+                  >
+                    {isSubscribed ? <BellOff className="h-3.5 w-3.5" /> : <BellRing className="h-3.5 w-3.5" />}
+                  </button>
+                )}
+                {unreadCount > 0 && (
+                  <button
+                    onClick={markAllAsRead}
+                    className="flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    <CheckCheck className="h-3 w-3" />
+                    {t("notifications.markAllRead", "Tout marquer comme lu")}
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* List */}
