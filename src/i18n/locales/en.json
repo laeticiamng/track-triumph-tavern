@@ -307,6 +307,9 @@
     "inPrizes": "€{{amount}} in prizes",
     "fallback": "Alternative rewards: visibility, coaching, badges"
   },
+  "layout": {
+    "skipToContent": "Skip to main content"
+  },
   "common": {
     "loading": "Loading...",
     "back": "Back",

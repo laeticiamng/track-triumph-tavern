@@ -307,6 +307,9 @@
     "inPrizes": "{{amount}}€ an Preisen",
     "fallback": "Alternative Belohnungen: Sichtbarkeit, Coaching, Abzeichen"
   },
+  "layout": {
+    "skipToContent": "Zum Hauptinhalt springen"
+  },
   "common": {
     "loading": "Laden...",
     "back": "Zurück",
