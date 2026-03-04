@@ -47,7 +47,7 @@ export function CTASection() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
+              <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10" asChild>
                 <Link to="/pricing">{t("cta.viewPlans")}</Link>
               </Button>
             </div>

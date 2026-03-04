@@ -123,7 +123,7 @@ export function HeroSection() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm" asChild>
+          <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 backdrop-blur-sm" asChild>
             <Link to={hasContent ? "/auth?tab=signup" : "/about"}>
               {hasContent ? t("hero.createAccount") : t("hero.learnMore")}
             </Link>
