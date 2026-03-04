@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -25,6 +26,7 @@ interface BadgeWithProfile {
 }
 
 const Badges = () => {
+  const { t } = useTranslation();
   const [badges, setBadges] = useState<BadgeWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
@@ -72,8 +74,8 @@ const Badges = () => {
   return (
     <Layout>
       <SEOHead
-        title="Badges Hebdomadaires"
-        description="Découvrez les badges gagnés chaque semaine par les votants les plus actifs."
+        title={t("badgesPage.seoTitle")}
+        description={t("badgesPage.seoDesc")}
         url="/badges"
       />
       <div className="container max-w-3xl py-8">
@@ -82,8 +84,8 @@ const Badges = () => {
             <Award className="h-6 w-6 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-display text-3xl font-bold">Badges Hebdomadaires</h1>
-            <p className="text-sm text-muted-foreground">Récompenses pour les votants les plus engagés</p>
+            <h1 className="font-display text-3xl font-bold">{t("badgesPage.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("badgesPage.subtitle")}</p>
           </div>
         </div>
 
@@ -108,9 +110,9 @@ const Badges = () => {
           <Card className="text-center py-12">
             <CardContent>
               <Trophy className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="font-display text-xl font-semibold">Aucun badge attribué</h3>
+              <h3 className="font-display text-xl font-semibold">{t("badgesPage.noBadgesAwarded")}</h3>
               <p className="text-sm text-muted-foreground mt-2">
-                Les badges seront attribués à la fin de chaque semaine de vote.
+                {t("badgesPage.noBadgesDesc")}
               </p>
             </CardContent>
           </Card>
@@ -126,7 +128,7 @@ const Badges = () => {
                   <CardHeader className="pb-3">
                     <CardTitle className="font-display text-lg flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
-                      Semaine {weekBadges[0]?.week_number ?? "?"}
+                      {t("badgesPage.week")} {weekBadges[0]?.week_number ?? "?"}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -148,7 +150,7 @@ const Badges = () => {
                               <AvatarFallback className="text-xs">{(badge.display_name || "?")[0]}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium truncate">{badge.display_name || "Anonyme"}</p>
+                              <p className="text-sm font-medium truncate">{badge.display_name || t("badgesPage.anonymous")}</p>
                               <p className="text-xs text-muted-foreground">{config.label}</p>
                             </div>
                           </Link>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -38,6 +39,7 @@ const CHART_COLORS = [
 ];
 
 const Stats = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<WeekStats | null>(null);
   const [weekTitle, setWeekTitle] = useState("");
   const [loading, setLoading] = useState(true);
@@ -56,7 +58,7 @@ const Stats = () => {
           return;
         }
 
-        setWeekTitle(week.title || "Semaine en cours");
+        setWeekTitle(week.title || t("stats.currentWeek"));
 
         // Fetch all data in parallel
         const [
@@ -131,14 +133,14 @@ const Stats = () => {
   return (
     <Layout>
       <SEOHead
-        title="Statistiques"
-        description="Découvrez les statistiques en temps réel du concours musical Weekly Music Awards."
+        title={t("stats.seoTitle")}
+        description={t("stats.seoDesc")}
         url="/stats"
       />
       <div className="container py-8">
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Statistiques</h1>
-          <p className="mt-2 text-muted-foreground">{weekTitle} — Données en temps réel</p>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("stats.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{weekTitle} — {t("stats.realTimeData")}</p>
         </div>
 
         {loading ? (
@@ -154,10 +156,10 @@ const Stats = () => {
           </div>
         ) : !stats ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <BarChart3 className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h2 className="font-display text-xl font-semibold">Pas de données disponibles</h2>
+           <BarChart3 className="h-12 w-12 text-muted-foreground/50 mb-4" />
+            <h2 className="font-display text-xl font-semibold">{t("stats.noData")}</h2>
             <p className="mt-2 text-muted-foreground">
-              Les statistiques seront disponibles dès le début de la prochaine compétition.
+              {t("stats.noDataDesc")}
             </p>
           </div>
         ) : (
@@ -169,7 +171,7 @@ const Stats = () => {
                   <CardContent className="py-6 text-center">
                     <Heart className="h-5 w-5 mx-auto mb-2 text-primary" />
                     <p className="font-display text-3xl font-bold">{stats.totalVotes}</p>
-                    <p className="text-xs text-muted-foreground">Votes cette semaine</p>
+                    <p className="text-xs text-muted-foreground">{t("stats.votesThisWeek")}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -178,7 +180,7 @@ const Stats = () => {
                   <CardContent className="py-6 text-center">
                     <Users className="h-5 w-5 mx-auto mb-2 text-primary" />
                     <p className="font-display text-3xl font-bold">{stats.totalParticipants}</p>
-                    <p className="text-xs text-muted-foreground">Participants</p>
+                    <p className="text-xs text-muted-foreground">{t("stats.participants")}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -187,7 +189,7 @@ const Stats = () => {
                   <CardContent className="py-6 text-center">
                     <Music className="h-5 w-5 mx-auto mb-2 text-primary" />
                     <p className="font-display text-3xl font-bold">{stats.totalSubmissions}</p>
-                    <p className="text-xs text-muted-foreground">Morceaux en compétition</p>
+                    <p className="text-xs text-muted-foreground">{t("stats.tracksCompeting")}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -198,7 +200,7 @@ const Stats = () => {
                     <p className="font-display text-3xl font-bold">
                       {stats.categoriesData.length > 0 ? stats.categoriesData[0].name : "—"}
                     </p>
-                    <p className="text-xs text-muted-foreground">Catégorie la plus votée</p>
+                    <p className="text-xs text-muted-foreground">{t("stats.mostVotedCategory")}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -211,7 +213,7 @@ const Stats = () => {
                   <CardHeader>
                     <CardTitle className="font-display flex items-center gap-2">
                       <Trophy className="h-5 w-5 text-primary" />
-                      Top 3 du moment
+                      {t("stats.topThree")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -243,7 +245,7 @@ const Stats = () => {
                               {track.category_name}
                             </Badge>
                             <Badge className="bg-primary/10 text-primary font-display">
-                              {track.vote_count} votes
+                              {track.vote_count} {t("stats.votes")}
                             </Badge>
                           </div>
                         </Link>
@@ -261,7 +263,7 @@ const Stats = () => {
                   <CardHeader>
                     <CardTitle className="font-display flex items-center gap-2">
                       <BarChart3 className="h-5 w-5 text-primary" />
-                      Votes par catégorie
+                      {t("stats.votesByCategory")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

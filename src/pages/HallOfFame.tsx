@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -36,6 +37,7 @@ const medals = [
 ];
 
 const HallOfFame = () => {
+  const { t } = useTranslation();
   const [results, setResults] = useState<WeekResult[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -74,23 +76,23 @@ const HallOfFame = () => {
   return (
     <Layout>
       <SEOHead
-        title="Palmarès"
-        description="Découvrez tous les gagnants des éditions précédentes du concours Weekly Music Awards."
+        title={t("hallOfFame.seoTitle")}
+        description={t("hallOfFame.seoDesc")}
         url="/hall-of-fame"
       />
       <section className="py-8 md:py-12">
         <div className="container max-w-3xl">
           <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="h-4 w-4" /> Retour
+            <ArrowLeft className="h-4 w-4" /> {t("common.back")}
           </Link>
 
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Palmarès</h1>
-          <p className="mt-2 text-muted-foreground">Chaque semaine écrit une nouvelle page de l'histoire musicale.</p>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("hallOfFame.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("hallOfFame.subtitle")}</p>
           <Link
             to="/results"
             className="mt-2 inline-flex items-center gap-1 text-sm text-primary hover:underline transition-colors"
           >
-            Voir les résultats de la semaine en cours
+            {t("hallOfFame.viewCurrentResults")}
             <ArrowLeft className="h-3 w-3 rotate-180" />
           </Link>
 
@@ -105,15 +107,15 @@ const HallOfFame = () => {
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-5">
                 <Trophy className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="font-display text-xl font-bold">L'histoire commence ici</h3>
+              <h3 className="font-display text-xl font-bold">{t("hallOfFame.historyBegins")}</h3>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
-                La première semaine de Weekly Music Awards sera historique. Les gagnants apparaîtront ici — et vous pourriez en faire partie.
+                {t("hallOfFame.historyBeginsDesc")}
               </p>
               <Link
                 to="/explore"
                 className="mt-5 inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Découvrir les morceaux
+                {t("hallOfFame.discoverTracks")}
               </Link>
             </div>
           ) : (
@@ -124,8 +126,8 @@ const HallOfFame = () => {
                     <h2 className="font-display text-lg font-semibold">
                       {week.title || `Semaine ${week.week_number}`}
                     </h2>
-                    <p className="text-xs text-muted-foreground">
-                      Résultats publiés le{" "}
+                   <p className="text-xs text-muted-foreground">
+                      {t("hallOfFame.resultsPublished")}{" "}
                       {new Date(week.results_published_at!).toLocaleDateString("fr-FR", {
                         day: "numeric",
                         month: "long",
@@ -135,7 +137,7 @@ const HallOfFame = () => {
                   </div>
 
                   {winners.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">Aucune soumission cette semaine.</p>
+                    <p className="text-sm text-muted-foreground">{t("hallOfFame.noSubmissionsWeek")}</p>
                   ) : (
                     <div className="space-y-3">
                       {winners.map((w, idx) => {

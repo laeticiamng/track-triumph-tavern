@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead, faqJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
@@ -124,19 +125,20 @@ const faqSections = [
 ];
 
 const Faq = () => {
+  const { t } = useTranslation();
   // Flatten all FAQs for JSON-LD
   const allFaqs = faqSections.flatMap(s => s.items);
 
   return (
     <Layout>
       <SEOHead
-        title="FAQ — Questions fréquentes"
-        description="Toutes les réponses sur Weekly Music Awards : comment ça marche, comment voter, les récompenses hebdomadaires, le système anti-fraude IA, les 12 catégories musicales et les abonnements."
+        title={t("faqPage.seoTitle")}
+        description={t("faqPage.seoDesc")}
         url="/faq"
         jsonLd={[
           faqJsonLd(allFaqs),
           breadcrumbJsonLd([
-            { name: "Accueil", url: "/" },
+            { name: t("nav.home"), url: "/" },
             { name: "FAQ", url: "/faq" },
           ]),
         ]}
@@ -150,10 +152,10 @@ const Faq = () => {
             className="text-center"
           >
             <h1 className="font-display text-3xl font-bold sm:text-5xl">
-              Questions fréquentes
+              {t("faqPage.title")}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Tout ce que vous devez savoir sur Weekly Music Awards.
+              {t("faqPage.subtitle")}
             </p>
           </motion.div>
 
@@ -195,10 +197,10 @@ const Faq = () => {
             className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">
-              Vous ne trouvez pas votre réponse ?
+              {t("faqPage.noAnswer")}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Contactez-nous directement, on vous répond rapidement.
+              {t("faqPage.contactUs")}
             </p>
             <a
               href="mailto:contact@emotionscare.com"

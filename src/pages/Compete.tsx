@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -31,6 +32,7 @@ interface ActiveWeek {
 }
 
 const Compete = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { tier, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
@@ -238,20 +240,20 @@ const Compete = () => {
     return (
       <Layout>
         <SEOHead
-          title="Soumettre"
-          description="Soumettez votre morceau au concours musical Weekly Music Awards."
+          title={t("compete.seoTitle")}
+          description={t("compete.seoDesc")}
           url="/compete"
         />
         <div className="container max-w-lg py-16 text-center">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
             <Lock className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="font-display text-2xl font-bold">Abonnement requis</h1>
+          <h1 className="font-display text-2xl font-bold">{t("compete.subscriptionRequired")}</h1>
           <p className="mt-3 text-muted-foreground">
-            La soumission de morceaux est réservée aux abonnés Pro et Elite. Votre participation au concours ne coûte rien de plus que l'abonnement.
+            {t("compete.subscriptionRequiredDesc")}
           </p>
           <Button asChild className="mt-6 bg-gradient-primary" size="lg">
-            <Link to="/pricing">Voir les offres</Link>
+            <Link to="/pricing">{t("compete.viewOffers")}</Link>
           </Button>
         </div>
         <Footer />
@@ -267,16 +269,16 @@ const Compete = () => {
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/50">
             <AlertCircle className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h1 className="font-display text-2xl font-bold">Soumission déjà envoyée</h1>
+          <h1 className="font-display text-2xl font-bold">{t("compete.alreadySubmitted")}</h1>
           <p className="mt-3 text-muted-foreground">
-            Vous avez déjà soumis un morceau cette semaine. Une seule soumission par semaine est autorisée.
+            {t("compete.alreadySubmittedDesc")}
           </p>
           <div className="mt-6 flex flex-col gap-3">
             <Button asChild className="bg-gradient-primary" size="lg">
-              <Link to="/submit/review">Suivre mes soumissions</Link>
+              <Link to="/submit/review">{t("compete.trackSubmissions")}</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link to="/explore">Explorer les soumissions</Link>
+              <Link to="/explore">{t("compete.exploreSubmissions")}</Link>
             </Button>
           </div>
         </div>
@@ -288,8 +290,8 @@ const Compete = () => {
   return (
     <Layout>
       <SEOHead
-        title="Soumettre"
-        description="Soumettez votre morceau au concours musical Weekly Music Awards."
+        title={t("compete.seoTitle")}
+        description={t("compete.seoDesc")}
         url="/compete"
       />
       <div className="container max-w-2xl py-8">
