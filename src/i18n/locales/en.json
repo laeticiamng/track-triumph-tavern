@@ -710,6 +710,32 @@
     "hallOfFameCta": "Want to revisit previous winners?",
     "hallOfFameLink": "View Hall of Fame →"
   },
+  "submissionDetail": {
+    "notFound": "Submission not found",
+    "backToExplore": "Back to explore",
+    "back": "Back",
+    "listenFullDesc": "Listen to {{title}} by {{artist}} on Weekly Music Awards.",
+    "avatarAlt": "Avatar of {{name}}",
+    "listenFull": "Listen in full",
+    "votesReceived": "votes received",
+    "voteSingular": "vote",
+    "votePlural": "votes",
+    "coverAlt": "Cover of {{title}}"
+  },
+  "artistProfile": {
+    "notFound": "Artist not found",
+    "explore": "Explore",
+    "artist": "Artist",
+    "back": "Back",
+    "profileDesc": "Discover {{name}}'s profile on Weekly Music Awards.",
+    "bannerAlt": "Banner of {{name}}",
+    "photoAlt": "Photo of {{name}}",
+    "tracks": "Tracks",
+    "votesReceived": "Votes received",
+    "noTracks": "No tracks published yet.",
+    "coverAlt": "Cover of {{title}}",
+    "votePlural": "votes"
+  },
   "legal": {
     "lastUpdated": "Last updated: February 2026",
     "editor": "Publisher: EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com",
