@@ -320,7 +320,10 @@
     "next": "Next",
     "morePages": "More pages",
     "toggleSidebar": "Toggle sidebar",
-    "more": "More"
+    "more": "More",
+    "pause": "Pause",
+    "playExcerpt": "Play excerpt",
+    "audioProgress": "Audio progress"
   },
   "common": {
     "loading": "Loading...",
