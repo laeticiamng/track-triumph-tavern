@@ -1013,7 +1013,38 @@
     "bell": "Benachrichtigungen",
     "title": "Benachrichtigungen",
     "empty": "Keine Benachrichtigungen",
-    "markAllRead": "Alle als gelesen markieren"
+    "markAllRead": "Alle als gelesen markieren",
+    "disablePush": "Push-Benachrichtigungen deaktivieren",
+    "enablePush": "Push-Benachrichtigungen aktivieren"
+  },
+  "pwa": {
+    "installTitle": "App installieren",
+    "installDescription": "Fügen Sie WMA zu Ihrem Startbildschirm hinzu.",
+    "installButton": "Installieren",
+    "iosGuide": "Tippen Sie auf Teilen (↑) und dann \"Zum Home-Bildschirm\".",
+    "dismiss": "Schließen"
+  },
+  "offline": {
+    "banner": "Sie sind offline",
+    "retry": "Erneut versuchen"
+  },
+  "following": {
+    "pageTitle": "Gefolgte Künstler",
+    "pageDesc": "Finden Sie alle Künstler, denen Sie folgen",
+    "title": "Gefolgte Künstler",
+    "count": "{{count}} Künstler",
+    "empty": "Keine gefolgten Künstler",
+    "emptyDesc": "Entdecken und folgen Sie Künstlern, um sie hier zu finden.",
+    "explore": "Entdecken",
+    "unknownArtist": "Künstler",
+    "suggestions": "Vorschläge für Sie",
+    "refresh": "Aktualisieren",
+    "submissions": "{{count}} Einreichung(en)",
+    "votesReceived": "{{count}} Stimme(n) erhalten",
+    "followed": "Künstler gefolgt!",
+    "errorFollow": "Fehler",
+    "unfollowed": "Sie folgen {{name}} nicht mehr",
+    "errorUnfollow": "Fehler beim Entfolgen"
   },
   "follow": {
     "follow": "Folgen",

@@ -1013,7 +1013,38 @@
     "bell": "Notifications",
     "title": "Notifications",
     "empty": "No notifications",
-    "markAllRead": "Mark all as read"
+    "markAllRead": "Mark all as read",
+    "disablePush": "Disable push notifications",
+    "enablePush": "Enable push notifications"
+  },
+  "pwa": {
+    "installTitle": "Install the app",
+    "installDescription": "Add WMA to your home screen for quick access.",
+    "installButton": "Install",
+    "iosGuide": "Tap Share (↑) then \"Add to Home Screen\".",
+    "dismiss": "Close"
+  },
+  "offline": {
+    "banner": "You are offline",
+    "retry": "Retry"
+  },
+  "following": {
+    "pageTitle": "Followed artists",
+    "pageDesc": "Find all the artists you follow",
+    "title": "Followed artists",
+    "count": "{{count}} artist(s)",
+    "empty": "No followed artists",
+    "emptyDesc": "Explore and follow artists to find them here.",
+    "explore": "Explore",
+    "unknownArtist": "Artist",
+    "suggestions": "Suggestions for you",
+    "refresh": "Refresh",
+    "submissions": "{{count}} submission(s)",
+    "votesReceived": "{{count}} vote(s) received",
+    "followed": "Artist followed!",
+    "errorFollow": "Error",
+    "unfollowed": "You unfollowed {{name}}",
+    "errorUnfollow": "Error unfollowing"
   },
   "follow": {
     "follow": "Follow",
