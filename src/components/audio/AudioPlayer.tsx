@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
-import { Play, Pause, Volume2 } from "lucide-react";
+import { Play, Pause, Volume2, Maximize2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
+import { useOptionalGlobalPlayer, type Track } from "@/contexts/AudioPlayerContext";
 
 interface AudioPlayerProps {
   src: string;
@@ -11,10 +12,12 @@ interface AudioPlayerProps {
   compact?: boolean;
   previewStart?: number;
   previewEnd?: number;
+  submissionId?: string;
 }
 
-export function AudioPlayer({ src, title, artist, coverUrl, compact = false, previewStart, previewEnd }: AudioPlayerProps) {
+export function AudioPlayer({ src, title, artist, coverUrl, compact = false, previewStart, previewEnd, submissionId }: AudioPlayerProps) {
   const { t } = useTranslation();
+  const globalPlayer = useOptionalGlobalPlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -24,13 +27,15 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
   const windowDuration = hasPreviewWindow ? previewEnd! - previewStart! : duration;
   const displayTime = hasPreviewWindow ? currentTime - previewStart! : currentTime;
 
+  // Check if this track is playing in global player
+  const isGlobalTrack = globalPlayer?.track?.id === submissionId && globalPlayer?.playing;
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const onTime = () => {
       setCurrentTime(audio.currentTime);
-      // Auto-stop at preview end
       if (hasPreviewWindow && audio.currentTime >= previewEnd!) {
         audio.pause();
         setPlaying(false);
@@ -55,7 +60,6 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
     if (playing) {
       audioRef.current.pause();
     } else {
-      // Start from preview start if before window or past end
       if (hasPreviewWindow) {
         if (audioRef.current.currentTime < previewStart! || audioRef.current.currentTime >= previewEnd!) {
           audioRef.current.currentTime = previewStart!;
@@ -64,6 +68,23 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
       audioRef.current.play();
     }
     setPlaying(!playing);
+  };
+
+  const openInGlobalPlayer = () => {
+    if (!globalPlayer) return;
+    // Pause local
+    audioRef.current?.pause();
+    setPlaying(false);
+
+    globalPlayer.play({
+      id: submissionId || src,
+      title: title || "Unknown",
+      artist: artist || "Unknown",
+      coverUrl: coverUrl || "/placeholder.svg",
+      audioUrl: src,
+      previewStart,
+      previewEnd,
+    });
   };
 
   const seek = (value: number[]) => {
@@ -104,6 +125,15 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
         <span className="text-xs text-muted-foreground tabular-nums w-10 text-right">
           {fmt(Math.max(0, displayTime))}
         </span>
+        {globalPlayer && (
+          <button
+            onClick={openInGlobalPlayer}
+            aria-label={t("player.openPersistent", "Ouvrir le lecteur persistant")}
+            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent transition-colors"
+          >
+            <Maximize2 className="h-3.5 w-3.5 text-muted-foreground" />
+          </button>
+        )}
       </div>
     );
   }
@@ -144,6 +174,15 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
             <span className="text-xs text-muted-foreground tabular-nums">
               {fmt(Math.max(0, displayTime))} / {fmt(windowDuration)}
             </span>
+            {globalPlayer && (
+              <button
+                onClick={openInGlobalPlayer}
+                aria-label={t("player.openPersistent", "Ouvrir le lecteur persistant")}
+                className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-accent transition-colors"
+              >
+                <Maximize2 className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+            )}
           </div>
         </div>
       </div>
