@@ -9,7 +9,8 @@
     "profile": "Profile",
     "login": "Log in",
     "signup": "Sign up",
-    "home": "Home"
+    "home": "Home",
+    "following": "Following"
   },
   "hero": {
     "contestLive": "Contest live",
@@ -1237,6 +1238,25 @@
     "viewAllArticles": "View all articles",
     "breadcrumbHome": "Home",
     "breadcrumbArticles": "Articles"
+  },
+  "reveal": {
+    "waiting": "Waiting for the reveal...",
+    "reward": "Prize",
+    "seoTitle": "Live Reveal — Weekly Music Awards",
+    "seoDesc": "Watch the live reveal of the weekly music contest results.",
+    "title": "Results reveal",
+    "subtitle": "Discover the winners category by category",
+    "notYet": "The reveal hasn't started yet",
+    "notYetDesc": "Results will be revealed once the voting period ends. Come back soon!",
+    "goVote": "Vote now",
+    "seeResults": "Results page",
+    "start": "Start the reveal",
+    "categoriesToReveal": "categories to reveal",
+    "skipAll": "Reveal all",
+    "grandWinner": "Grand Winner",
+    "allRevealed": "All results have been revealed!",
+    "fullResults": "Full results",
+    "hallOfFame": "Hall of Fame"
   },
   "badgeTypes": {
     "topVoterLabel": "Top Voter",
