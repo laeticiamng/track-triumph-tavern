@@ -50,7 +50,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav aria-label={t("a11y.mainNavigation")} className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}

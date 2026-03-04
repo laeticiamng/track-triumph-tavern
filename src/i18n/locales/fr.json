@@ -324,7 +324,11 @@
     "more": "Plus",
     "pause": "Mettre en pause",
     "playExcerpt": "Lire l'extrait",
-    "audioProgress": "Progression audio"
+    "audioProgress": "Progression audio",
+    "changeLanguage": "Changer de langue",
+    "mainNavigation": "Navigation principale",
+    "footerNavigation": "Navigation du site",
+    "footerLegal": "Liens légaux"
   },
   "common": {
     "loading": "Chargement...",
