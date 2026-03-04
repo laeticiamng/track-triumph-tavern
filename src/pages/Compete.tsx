@@ -32,7 +32,7 @@ interface ActiveWeek {
 }
 
 const Compete = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { tier, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
@@ -172,20 +172,27 @@ const Compete = () => {
   const isInSubmissionPeriod = submissionOpen && submissionClose && now >= submissionOpen && now <= submissionClose;
   const canSubmit = tier !== "free";
 
+  const getLocale = () => {
+    const lang = i18n.language;
+    if (lang === "de") return "de-DE";
+    if (lang === "en") return "en-GB";
+    return "fr-FR";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !activeWeek) return;
 
     if (!title.trim() || !artistName.trim() || !categoryId || !audioFile || !coverFile) {
-      toast({ title: "Champs requis", description: "Remplissez tous les champs obligatoires.", variant: "destructive" });
+      toast({ title: t("compete.requiredFields"), description: t("compete.fillRequired"), variant: "destructive" });
       return;
     }
     if (audioFile.size > 10 * 1024 * 1024) {
-      toast({ title: "Fichier trop volumineux", description: "L'extrait audio ne doit pas dépasser 10 MB.", variant: "destructive" });
+      toast({ title: t("compete.fileTooLarge"), description: t("compete.audioMaxSize"), variant: "destructive" });
       return;
     }
     if (!rightsDeclaration || !acceptRules) {
-      toast({ title: "Déclarations requises", description: "Vous devez accepter les conditions.", variant: "destructive" });
+      toast({ title: t("compete.declarationsRequired"), description: t("compete.mustAcceptConditions"), variant: "destructive" });
       return;
     }
 
@@ -219,11 +226,11 @@ const Compete = () => {
 
       if (insertError) throw insertError;
       trackEvent("submission_created", { category_id: categoryId, week_id: activeWeek.id });
-      toast({ title: "Soumission envoyée !", description: "Elle sera examinée par l'équipe de modération." });
+      toast({ title: t("compete.submissionSent"), description: t("compete.submissionSentDesc") });
       navigate("/explore");
     } catch (err) {
       console.error("Submission error:", err);
-      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'envoi.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: err instanceof Error ? err.message : t("errors.message"), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -296,21 +303,21 @@ const Compete = () => {
       />
       <div className="container max-w-2xl py-8">
         <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Retour
+          <ArrowLeft className="h-4 w-4" /> {t("common.back")}
         </Link>
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="font-display text-2xl">Soumettre votre morceau</CardTitle>
+            <CardTitle className="font-display text-2xl">{t("compete.submitYourTrack")}</CardTitle>
             <CardDescription>
-              <span className="block font-medium text-foreground">Votre musique mérite d'être entendue. 🎶</span>
+              <span className="block font-medium text-foreground">{t("compete.yourMusicDeserves")}</span>
               {activeWeek && isInSubmissionPeriod
-                ? `${activeWeek.title || "Semaine en cours"} — Votre soumission sera examinée avant publication.`
+                ? `${activeWeek.title || t("stats.currentWeek")} — ${t("compete.willBeReviewed")}`
                 : null}
               {activeWeek && !isInSubmissionPeriod
-                ? "La période de soumission n'est pas active actuellement."
+                ? t("compete.notInPeriod")
                 : null}
-              {!activeWeek && "Aucune semaine de soumission active pour le moment."}
+              {!activeWeek && t("compete.noActiveWeek")}
             </CardDescription>
           </CardHeader>
 
@@ -320,28 +327,28 @@ const Compete = () => {
                 <Clock className="h-10 w-10 text-muted-foreground/50 mb-3" />
                 <p className="text-muted-foreground">
                   {activeWeek && submissionOpen && now < submissionOpen
-                    ? `Les soumissions ouvrent le ${submissionOpen.toLocaleDateString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}.`
-                    : "Les soumissions ne sont pas ouvertes actuellement. Revenez bientôt !"}
+                    ? t("compete.submissionsOpenOn", { date: submissionOpen.toLocaleDateString(getLocale(), { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) })
+                    : t("compete.submissionsNotOpen")}
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="title">Titre du morceau *</Label>
-                    <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Mon morceau" required maxLength={100} />
+                    <Label htmlFor="title">{t("compete.trackTitle")} *</Label>
+                    <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("compete.trackTitle")} required maxLength={100} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="artist">Nom d'artiste *</Label>
-                    <Input id="artist" value={artistName} onChange={(e) => setArtistName(e.target.value)} placeholder="Votre nom" required maxLength={100} />
+                    <Label htmlFor="artist">{t("profilePage.artistName")} *</Label>
+                    <Input id="artist" value={artistName} onChange={(e) => setArtistName(e.target.value)} placeholder={t("auth.artistNamePlaceholder")} required maxLength={100} />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Catégorie *</Label>
+                  <Label>{t("compete.category")} *</Label>
                   <Select value={categoryId} onValueChange={setCategoryId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Choisir une catégorie" />
+                      <SelectValue placeholder={t("compete.chooseCategory")} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((cat) => (
@@ -356,7 +363,7 @@ const Compete = () => {
                     return (
                       <div className="mt-2 rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-1">
                         <p className="text-xs font-medium text-primary flex items-center gap-1">
-                          <Music className="h-3 w-3" /> Conseils de production — {cat?.name}
+                          <Music className="h-3 w-3" /> {t("compete.productionTips")} — {cat?.name}
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {tips.map((tip, i) => (
@@ -371,13 +378,13 @@ const Compete = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Décrivez votre morceau..." rows={3} maxLength={500} />
+                  <Label htmlFor="description">{t("compete.description")}</Label>
+                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={t("compete.describeTrack")} rows={3} maxLength={500} />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="tags">Tags (séparés par des virgules)</Label>
-                  <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="rap, français, chill" maxLength={200} />
+                  <Label htmlFor="tags">{t("compete.tags")}</Label>
+                  <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder={t("compete.tagsPlaceholder")} maxLength={200} />
                   <AITagSuggest
                     title={title}
                     description={description}
@@ -388,13 +395,13 @@ const Compete = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Extrait audio (30s) *</Label>
+                  <Label>{t("compete.audioExcerpt")} *</Label>
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
                     <Music className="h-8 w-8 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {audioFile ? audioFile.name : "Cliquez pour uploader un fichier audio (MP3, WAV, max 10 MB)"}
+                      {audioFile ? audioFile.name : t("compete.uploadAudio")}
                     </span>
-                    <span className="text-xs text-muted-foreground/70">MP3 ou WAV uniquement</span>
+                    <span className="text-xs text-muted-foreground/70">{t("compete.mp3WavOnly")}</span>
                     <input
                       type="file"
                       accept="audio/mp3,audio/wav,audio/mpeg"
@@ -419,16 +426,16 @@ const Compete = () => {
                       <div className="flex items-center gap-2">
                         <Scissors className="h-4 w-4 text-primary" />
                         <span className="text-sm font-medium text-primary">
-                          Sélectionner l'extrait de 30 secondes
+                          {t("compete.previewWindow")}
                         </span>
                       </div>
                       {audioDuration > 0 && (
                         <>
                           <div className="space-y-2">
                             <div className="flex items-center justify-between text-xs text-muted-foreground">
-                              <span>Début: {fmtTime(previewStart)}</span>
-                              <span>Fin: {fmtTime(Math.min(previewStart + PREVIEW_LENGTH, audioDuration))}</span>
-                              <span>Durée totale: {fmtTime(audioDuration)}</span>
+                              <span>{fmtTime(previewStart)}</span>
+                              <span>{fmtTime(Math.min(previewStart + PREVIEW_LENGTH, audioDuration))}</span>
+                              <span>{fmtTime(audioDuration)}</span>
                             </div>
                             <Slider
                               value={[previewStart]}
@@ -464,7 +471,7 @@ const Compete = () => {
                             className="gap-2"
                           >
                             {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                            {previewPlaying ? "Pause" : "Écouter l'extrait"}
+                            {previewPlaying ? "Pause" : "▶"}
                           </Button>
                         </>
                       )}
@@ -473,11 +480,11 @@ const Compete = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Image de couverture *</Label>
+                  <Label>{t("compete.coverImage")} *</Label>
                   <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
                     <Image className="h-8 w-8 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {coverFile ? coverFile.name : "Cliquez pour uploader une image (JPG, PNG, max 5 MB)"}
+                      {coverFile ? coverFile.name : t("compete.uploadCover")}
                     </span>
                     <input
                       type="file"
@@ -486,7 +493,7 @@ const Compete = () => {
                       onChange={(e) => {
                         const file = e.target.files?.[0] || null;
                         if (file && file.size > 5 * 1024 * 1024) {
-                          toast({ title: "Image trop volumineuse", description: "Max 5 MB.", variant: "destructive" });
+                          toast({ title: t("compete.fileTooLarge"), description: t("profilePage.max5mb"), variant: "destructive" });
                           return;
                         }
                         setCoverFile(file);
@@ -496,7 +503,7 @@ const Compete = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="external">Lien externe (optionnel)</Label>
+                  <Label htmlFor="external">{t("compete.externalLink")}</Label>
                   <Input id="external" type="url" value={externalUrl} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://open.spotify.com/..." />
                 </div>
 
@@ -504,20 +511,19 @@ const Compete = () => {
                   <div className="flex items-start gap-3">
                     <Checkbox id="rights" checked={rightsDeclaration} onCheckedChange={(c) => setRightsDeclaration(c === true)} />
                     <Label htmlFor="rights" className="text-sm leading-relaxed">
-                      Je déclare être l'auteur ou avoir les droits sur ce morceau. *
+                      {t("compete.rightsDeclaration")} *
                     </Label>
                   </div>
                   <div className="flex items-start gap-3">
                     <Checkbox id="rules" checked={acceptRules} onCheckedChange={(c) => setAcceptRules(c === true)} />
                     <Label htmlFor="rules" className="text-sm leading-relaxed">
-                      J'accepte le{" "}
-                      <Link to="/contest-rules" className="text-primary hover:underline" target="_blank">
-                        règlement du concours
-                      </Link>{" "}
-                      et les{" "}
+                      {t("compete.acceptRules")}{" "}
+                      (<Link to="/contest-rules" className="text-primary hover:underline" target="_blank">
+                        {t("footer.rules")}
+                      </Link>{" / "}
                       <Link to="/terms" className="text-primary hover:underline" target="_blank">
-                        conditions d'utilisation
-                      </Link>. *
+                        {t("footer.cgu")}
+                      </Link>) *
                     </Label>
                   </div>
                 </div>
@@ -529,10 +535,10 @@ const Compete = () => {
                   size="lg"
                 >
                   {loading ? (
-                    "Envoi en cours..."
+                    t("compete.submitting")
                   ) : (
                     <>
-                      <Upload className="mr-2 h-4 w-4" /> Soumettre mon morceau
+                      <Upload className="mr-2 h-4 w-4" /> {t("compete.submitAction")}
                     </>
                   )}
                 </Button>

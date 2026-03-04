@@ -3,46 +3,27 @@ import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead, organizationJsonLd, breadcrumbJsonLd } from "@/components/seo/SEOHead";
 import { motion } from "framer-motion";
-import { Music, Target, Shield, Gift, Users, Rocket, Star, ArrowRight, CheckCircle } from "lucide-react";
+import { Target, Shield, Gift, Users, Rocket, Star, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-const values = [
-  {
-    icon: Target,
-    title: "Notre mission",
-    description:
-      "Offrir à chaque artiste indépendant une scène équitable pour se faire connaître, basée uniquement sur le talent et le vote de la communauté.",
-  },
-  {
-    icon: Shield,
-    title: "Intégrité",
-    description:
-      "Notre système anti-fraude par IA analyse chaque vote en temps réel. Le classement ne peut être influencé par aucun paiement ni manipulation.",
-  },
-  {
-    icon: Gift,
-    title: "Cagnotte hebdomadaire",
-    description:
-      "Chaque semaine, une cagnotte sponsorisée est redistribuée au podium : 🥇 200 € · 🥈 100 € · 🥉 50 €. 100 % financée par nos sponsors, jamais par les participants.",
-  },
-  {
-    icon: Users,
-    title: "Communauté",
-    description:
-      "Weekly Music Awards est construit par et pour les passionnés de musique. Écoutez, votez, partagez et soutenez les artistes émergents.",
-  },
-];
-
-const timeline = [
-  { label: "Bêta ouverte", description: "Testez la plateforme, soumettez vos morceaux et donnez-nous vos retours.", active: true },
-  { label: "Saison 1 — Lancement officiel", description: "Cagnotte active chaque semaine, classement complet et premiers sponsors.", active: false },
-  { label: "Croissance", description: "Nouveaux genres, événements live, partenariats labels et coaching artistes.", active: false },
-  { label: "Internationalisation", description: "Ouverture à de nouveaux pays et catégories musicales.", active: false },
-];
-
 const About = () => {
   const { t } = useTranslation();
+
+  const values = [
+    { icon: Target, titleKey: "aboutPage.missionTitle", descKey: "aboutPage.missionDesc" },
+    { icon: Shield, titleKey: "aboutPage.integrityTitle", descKey: "aboutPage.integrityDesc" },
+    { icon: Gift, titleKey: "aboutPage.poolTitle", descKey: "aboutPage.poolDesc" },
+    { icon: Users, titleKey: "aboutPage.communityTitle", descKey: "aboutPage.communityDesc" },
+  ];
+
+  const timeline = [
+    { labelKey: "aboutPage.betaOpen", descKey: "aboutPage.betaOpenDesc", active: true },
+    { labelKey: "aboutPage.season1", descKey: "aboutPage.season1Desc", active: false },
+    { labelKey: "aboutPage.growth", descKey: "aboutPage.growthDesc", active: false },
+    { labelKey: "aboutPage.international", descKey: "aboutPage.internationalDesc", active: false },
+  ];
+
   return (
     <Layout>
       <SEOHead
@@ -52,8 +33,8 @@ const About = () => {
         jsonLd={[
           organizationJsonLd,
           breadcrumbJsonLd([
-            { name: "Accueil", url: "/" },
-            { name: "À propos", url: "/about" },
+            { name: t("nav.home"), url: "/" },
+            { name: t("aboutPage.seoTitle"), url: "/about" },
           ]),
         ]}
       />
@@ -68,16 +49,15 @@ const About = () => {
           >
             <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary mb-4">
               <Rocket className="h-3.5 w-3.5" />
-              Équipe de passionnés
+              {t("aboutPage.teamBadge")}
             </span>
             <h1 className="font-display text-3xl font-bold sm:text-5xl">
               {t("aboutPage.title")}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              <strong>Le seul concours musical hebdomadaire où c'est la communauté qui décide du podium.</strong>{" "}
-              Pas de jury opaque, pas de passe-droits : les artistes soumettent, la communauté écoute et vote sur 3 critères
-              (originalité, production, émotion), et les gagnants remportent jusqu'à 200 € chaque semaine.
-              Édité par <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445).
+              <strong>{t("aboutPage.intro")}</strong>{" "}
+              {t("aboutPage.introDesc")}{" "}
+              {t("aboutPage.editedBy")} <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445).
             </p>
           </motion.div>
 
@@ -90,21 +70,13 @@ const About = () => {
           >
             <h2 className="font-display text-xl font-semibold flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
-              Notre histoire
+              {t("aboutPage.ourStory")}
             </h2>
             <div className="mt-4 space-y-3 text-muted-foreground leading-relaxed">
-              <p>
-                Tout est parti d'un constat simple : des milliers d'artistes indépendants créent des morceaux incroyables chaque jour, mais la plupart n'ont aucune visibilité. Les algorithmes des plateformes de streaming favorisent les artistes déjà établis, et les concours traditionnels manquent souvent de transparence.
-              </p>
-              <p>
-                Weekly Music Awards est né de cette frustration. L'idée ? Créer un concours <strong>100 % méritocratique</strong>, où seul le talent compte. Pas de jury opaque, pas de passe-droits : c'est la communauté qui écoute, qui vote, et qui décide du podium.
-              </p>
-              <p>
-                La plateforme est éditée par <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445), une entreprise française dédiée à la valorisation des talents musicaux émergents.
-              </p>
-              <p>
-                Nous sommes actuellement en <strong>bêta ouverte</strong> — chaque retour de votre part nous aide à construire la meilleure plateforme possible. Rejoignez-nous et participez à cette aventure dès le début.
-              </p>
+              <p>{t("aboutPage.storyP1")}</p>
+              <p>{t("aboutPage.storyP2")}</p>
+              <p>{t("aboutPage.storyP3")}</p>
+              <p>{t("aboutPage.storyP4")}</p>
             </div>
           </motion.div>
 
@@ -112,7 +84,7 @@ const About = () => {
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
             {values.map((v, i) => (
               <motion.div
-                key={v.title}
+                key={v.titleKey}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + 0.1 * i }}
@@ -121,9 +93,9 @@ const About = () => {
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                   <v.icon className="h-5 w-5 text-accent-foreground" />
                 </div>
-                <h3 className="mt-4 font-display text-lg font-semibold">{v.title}</h3>
+                <h3 className="mt-4 font-display text-lg font-semibold">{t(v.titleKey)}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {v.description}
+                  {t(v.descKey)}
                 </p>
               </motion.div>
             ))}
@@ -136,10 +108,10 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mt-14"
           >
-            <h2 className="font-display text-xl font-semibold text-center mb-8">Où en sommes-nous ?</h2>
+            <h2 className="font-display text-xl font-semibold text-center mb-8">{t("aboutPage.whereAreWe")}</h2>
             <div className="relative flex flex-col gap-6 pl-8 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
               {timeline.map((step, i) => (
-                <div key={step.label} className="relative">
+                <div key={step.labelKey} className="relative">
                   <div className={`absolute -left-8 top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
                     step.active
                       ? "border-primary bg-primary text-primary-foreground"
@@ -153,14 +125,14 @@ const About = () => {
                   </div>
                   <div>
                     <p className={`font-display font-semibold ${step.active ? "text-primary" : "text-muted-foreground"}`}>
-                      {step.label}
+                      {t(step.labelKey)}
                       {step.active && (
                         <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                          En cours
+                          {t("aboutPage.inProgress")}
                         </span>
                       )}
                     </p>
-                    <p className="mt-1 text-sm text-muted-foreground">{step.description}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{t(step.descKey)}</p>
                   </div>
                 </div>
               ))}
@@ -174,20 +146,20 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
           >
-            <h2 className="font-display text-xl font-semibold">Envie de participer ou de poser une question ?</h2>
+            <h2 className="font-display text-xl font-semibold">{t("aboutPage.contactTitle")}</h2>
             <p className="mt-2 text-muted-foreground">
-              On adore échanger avec notre communauté. Écrivez-nous ou rejoignez directement le concours.
+              {t("aboutPage.contactDesc")}
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button asChild>
                 <Link to="/auth?tab=signup">
-                  Rejoindre le concours
+                  {t("aboutPage.joinContest")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <a href="mailto:contact@emotionscare.com">
-                  Nous contacter
+                  {t("aboutPage.contactUs")}
                 </a>
               </Button>
             </div>
