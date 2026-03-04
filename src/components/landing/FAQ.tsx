@@ -1,89 +1,44 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const faqs = [
-  {
-    q: "C'est vraiment gratuit ?",
-    a: "Le vote et l'écoute sont 100% gratuits pour tous les membres. Pour soumettre un morceau au concours, un abonnement Pro (à partir de 9,99 €/mois) est nécessaire. Aucun paiement n'influence le classement.",
-  },
-  {
-    q: "Qui peut participer ?",
-    a: "Tout artiste ou groupe musical peut s'inscrire. Il suffit de posséder les droits sur le morceau soumis et de respecter le règlement du concours.",
-  },
-  {
-    q: "Comment les notes sont-elles calculées ?",
-    a: "Chaque vote évalue trois critères : originalité, production et émotion. La moyenne pondérée des trois donne le score final. Notre système anti-fraude IA garantit l'intégrité de chaque vote.",
-  },
-  {
-    q: "Quelles sont les récompenses ?",
-    a: "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont financées par nos sponsors, jamais par les participants.",
-  },
-  {
-    q: "Comment fonctionne l'anti-fraude ?",
-    a: "Notre intelligence artificielle analyse chaque vote en temps réel : détection de comptes suspects, rafales de votes, comportements anormaux. Les votes frauduleux sont automatiquement invalidés.",
-  },
-  {
-    q: "Puis-je soumettre plusieurs morceaux ?",
-    a: "Vous pouvez soumettre un morceau par semaine et par catégorie. Cela garantit une compétition équitable pour tous les artistes.",
-  },
-];
-
 export function FAQ() {
+  const { t } = useTranslation();
+
+  const faqs = [
+    { q: t("faq.q1"), a: t("faq.a1") },
+    { q: t("faq.q2"), a: t("faq.a2") },
+    { q: t("faq.q3"), a: t("faq.a3") },
+    { q: t("faq.q4"), a: t("faq.a4") },
+    { q: t("faq.q5"), a: t("faq.a5") },
+    { q: t("faq.q6"), a: t("faq.a6") },
+  ];
+
   return (
     <section className="py-24 md:py-32">
       <div className="container max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            Questions fréquentes
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Tout ce que vous devez savoir avant de vous lancer.
-          </p>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
+          <h2 className="font-display text-3xl font-bold sm:text-4xl">{t("faq.title")}</h2>
+          <p className="mt-4 text-muted-foreground">{t("faq.subtitle")}</p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mt-12"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12">
           <Accordion type="single" collapsible className="space-y-3">
             {faqs.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                value={`faq-${i}`}
-                className="rounded-xl border border-border bg-card px-6"
-              >
-                <AccordionTrigger className="text-left font-display font-semibold hover:no-underline">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  {faq.a}
-                </AccordionContent>
+              <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-border bg-card px-6">
+                <AccordionTrigger className="text-left font-display font-semibold hover:no-underline">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">{faq.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
 
           <div className="mt-8 text-center">
-            <Link
-              to="/faq"
-              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-            >
-              Voir toutes les questions
+            <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+              {t("faq.viewAll")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
