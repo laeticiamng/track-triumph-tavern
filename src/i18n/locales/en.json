@@ -1127,5 +1127,25 @@
     "bottomText": "New guides published regularly.",
     "createAccount": "Create an account",
     "createAccountSuffix": "to be notified."
+  },
+  "submissionReview": {
+    "seoTitle": "Submission Tracking",
+    "seoDesc": "Track the status of your music submissions.",
+    "title": "Submission Tracking",
+    "subtitle": "Track the status of each submitted track. You'll be notified of every status change.",
+    "newSubmission": "New submission",
+    "pendingLabel": "Pending moderation",
+    "pendingDesc": "Your submission is being reviewed by our team.",
+    "approvedLabel": "Approved",
+    "approvedDesc": "Your track is now in competition!",
+    "rejectedLabel": "Rejected",
+    "rejectedDesc": "Your submission was not accepted.",
+    "noSubmissions": "No submissions",
+    "noSubmissionsDesc": "You haven't submitted a track yet. Join the competition!",
+    "submitTrack": "Submit a track",
+    "rejectionReason": "Rejection reason",
+    "votes": "{{count}} votes",
+    "viewPage": "View page",
+    "weekFallback": "Week {{number}}"
   }
 }

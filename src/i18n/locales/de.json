@@ -1127,5 +1127,25 @@
     "bottomText": "Neue Guides werden regelmäßig veröffentlicht.",
     "createAccount": "Erstellen Sie ein Konto",
     "createAccountSuffix": "um benachrichtigt zu werden."
+  },
+  "submissionReview": {
+    "seoTitle": "Einreichungsverfolgung",
+    "seoDesc": "Verfolgen Sie den Status Ihrer Musikeinreichungen.",
+    "title": "Einreichungsverfolgung",
+    "subtitle": "Verfolgen Sie den Status jedes eingereichten Tracks. Sie werden bei jeder Statusänderung benachrichtigt.",
+    "newSubmission": "Neue Einreichung",
+    "pendingLabel": "Moderation ausstehend",
+    "pendingDesc": "Ihre Einreichung wird von unserem Team überprüft.",
+    "approvedLabel": "Genehmigt",
+    "approvedDesc": "Ihr Track ist jetzt im Wettbewerb!",
+    "rejectedLabel": "Abgelehnt",
+    "rejectedDesc": "Ihre Einreichung wurde nicht angenommen.",
+    "noSubmissions": "Keine Einreichungen",
+    "noSubmissionsDesc": "Sie haben noch keinen Track eingereicht. Nehmen Sie am Wettbewerb teil!",
+    "submitTrack": "Track einreichen",
+    "rejectionReason": "Ablehnungsgrund",
+    "votes": "{{count}} Stimmen",
+    "viewPage": "Seite anzeigen",
+    "weekFallback": "Woche {{number}}"
   }
 }

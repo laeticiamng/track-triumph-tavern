@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
@@ -22,32 +23,34 @@ interface EnrichedSubmission extends Submission {
   week_title: string;
 }
 
-const statusConfig = {
-  pending: {
-    icon: Clock,
-    label: "En attente de modération",
-    color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
-    description: "Votre soumission est en cours d'examen par notre équipe.",
-  },
-  approved: {
-    icon: CheckCircle2,
-    label: "Approuvée",
-    color: "bg-green-500/10 text-green-600 border-green-500/20",
-    description: "Votre morceau est maintenant en compétition !",
-  },
-  rejected: {
-    icon: XCircle,
-    label: "Rejetée",
-    color: "bg-destructive/10 text-destructive border-destructive/20",
-    description: "Votre soumission n'a pas été retenue.",
-  },
+const statusIcons = {
+  pending: Clock,
+  approved: CheckCircle2,
+  rejected: XCircle,
+};
+
+const statusColors = {
+  pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
+  approved: "bg-green-500/10 text-green-600 border-green-500/20",
+  rejected: "bg-destructive/10 text-destructive border-destructive/20",
 };
 
 const SubmissionReview = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [submissions, setSubmissions] = useState<EnrichedSubmission[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const getStatusLabel = (status: keyof typeof statusIcons) => {
+    const map = { pending: "pendingLabel", approved: "approvedLabel", rejected: "rejectedLabel" } as const;
+    return t(`submissionReview.${map[status]}`);
+  };
+
+  const getStatusDesc = (status: keyof typeof statusIcons) => {
+    const map = { pending: "pendingDesc", approved: "approvedDesc", rejected: "rejectedDesc" } as const;
+    return t(`submissionReview.${map[status]}`);
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -71,7 +74,6 @@ const SubmissionReview = () => {
         return;
       }
 
-      // Get categories and weeks for display
       const [{ data: categories }, { data: weeks }] = await Promise.all([
         supabase.from("categories").select("id, name"),
         supabase.from("weeks").select("id, title, week_number"),
@@ -79,7 +81,7 @@ const SubmissionReview = () => {
 
       const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
       const weekMap = new Map(
-        weeks?.map((w) => [w.id, w.title || `Semaine ${w.week_number}`]) ?? []
+        weeks?.map((w) => [w.id, w.title || t("submissionReview.weekFallback", { number: w.week_number })]) ?? []
       );
 
       setSubmissions(
@@ -93,9 +95,8 @@ const SubmissionReview = () => {
     };
 
     load();
-  }, [user]);
+  }, [user, t]);
 
-  // Subscribe to realtime changes on user's submissions
   useEffect(() => {
     if (!user) return;
 
@@ -135,8 +136,8 @@ const SubmissionReview = () => {
   return (
     <Layout>
       <SEOHead
-        title="Suivi des soumissions"
-        description="Suivez le statut de vos soumissions musicales."
+        title={t("submissionReview.seoTitle")}
+        description={t("submissionReview.seoDesc")}
         url="/submit/review"
       />
       <div className="container max-w-2xl py-8">
@@ -144,15 +145,15 @@ const SubmissionReview = () => {
           to="/compete"
           className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" /> Nouvelle soumission
+          <ArrowLeft className="h-4 w-4" /> {t("submissionReview.newSubmission")}
         </Link>
 
         <div className="mb-8">
           <h1 className="font-display text-2xl font-bold sm:text-3xl">
-            Suivi des soumissions
+            {t("submissionReview.title")}
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Suivez le statut de chaque morceau soumis. Vous recevrez une notification à chaque changement.
+            {t("submissionReview.subtitle")}
           </p>
         </div>
 
@@ -171,19 +172,19 @@ const SubmissionReview = () => {
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent mb-4">
               <Music className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h2 className="font-display text-xl font-semibold">Aucune soumission</h2>
+            <h2 className="font-display text-xl font-semibold">{t("submissionReview.noSubmissions")}</h2>
             <p className="mt-2 text-muted-foreground max-w-sm">
-              Vous n'avez pas encore soumis de morceau. Participez à la compétition !
+              {t("submissionReview.noSubmissionsDesc")}
             </p>
             <Button asChild className="mt-6 bg-gradient-primary">
-              <Link to="/compete">Soumettre un morceau</Link>
+              <Link to="/compete">{t("submissionReview.submitTrack")}</Link>
             </Button>
           </div>
         ) : (
           <div className="space-y-4">
             {submissions.map((sub, i) => {
-              const config = statusConfig[sub.status];
-              const StatusIcon = config.icon;
+              const StatusIcon = statusIcons[sub.status];
+              const color = statusColors[sub.status];
 
               return (
                 <motion.div
@@ -192,10 +193,9 @@ const SubmissionReview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <Card className={`border ${config.color.split(" ")[0].replace("bg-", "border-")}/30`}>
+                  <Card className={`border ${color.split(" ")[0].replace("bg-", "border-")}/30`}>
                     <CardContent className="p-5">
                       <div className="flex items-start gap-4">
-                        {/* Cover */}
                         <img
                           src={sub.cover_image_url}
                           alt={sub.title}
@@ -203,7 +203,6 @@ const SubmissionReview = () => {
                         />
 
                         <div className="flex-1 min-w-0">
-                          {/* Title & meta */}
                           <div className="flex items-start justify-between gap-2">
                             <div>
                               <h3 className="font-display font-semibold truncate">
@@ -218,23 +217,21 @@ const SubmissionReview = () => {
                             </div>
                             <Badge
                               variant="outline"
-                              className={`flex-shrink-0 ${config.color}`}
+                              className={`flex-shrink-0 ${color}`}
                             >
                               <StatusIcon className="mr-1 h-3 w-3" />
-                              {config.label}
+                              {getStatusLabel(sub.status)}
                             </Badge>
                           </div>
 
-                          {/* Status message */}
                           <p className="mt-2 text-sm text-muted-foreground">
-                            {config.description}
+                            {getStatusDesc(sub.status)}
                           </p>
 
-                          {/* Rejection reason */}
                           {sub.status === "rejected" && sub.rejection_reason && (
                             <div className="mt-2 rounded-lg bg-destructive/5 border border-destructive/10 p-3">
                               <p className="text-xs font-medium text-destructive flex items-center gap-1">
-                                <AlertCircle className="h-3 w-3" /> Motif du rejet
+                                <AlertCircle className="h-3 w-3" /> {t("submissionReview.rejectionReason")}
                               </p>
                               <p className="text-sm text-muted-foreground mt-1">
                                 {sub.rejection_reason}
@@ -242,7 +239,6 @@ const SubmissionReview = () => {
                             </div>
                           )}
 
-                          {/* Audio preview */}
                           <div className="mt-3">
                             <AudioPlayer
                               src={sub.audio_excerpt_url}
@@ -252,17 +248,16 @@ const SubmissionReview = () => {
                             />
                           </div>
 
-                          {/* Stats if approved */}
                           {sub.status === "approved" && (
                             <div className="mt-3 flex items-center gap-3">
                               <Badge className="bg-primary/10 text-primary text-xs">
-                                {sub.vote_count} votes
+                                {t("submissionReview.votes", { count: sub.vote_count })}
                               </Badge>
                               <Link
                                 to={`/submissions/${sub.id}`}
                                 className="text-xs text-primary hover:underline flex items-center gap-1"
                               >
-                                <ExternalLink className="h-3 w-3" /> Voir la page
+                                <ExternalLink className="h-3 w-3" /> {t("submissionReview.viewPage")}
                               </Link>
                             </div>
                           )}

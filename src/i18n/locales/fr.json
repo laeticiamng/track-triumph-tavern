@@ -1127,5 +1127,25 @@
     "bottomText": "Nouveaux guides publiés régulièrement.",
     "createAccount": "Créez un compte",
     "createAccountSuffix": "pour être notifié."
+  },
+  "submissionReview": {
+    "seoTitle": "Suivi des soumissions",
+    "seoDesc": "Suivez le statut de vos soumissions musicales.",
+    "title": "Suivi des soumissions",
+    "subtitle": "Suivez le statut de chaque morceau soumis. Vous recevrez une notification à chaque changement.",
+    "newSubmission": "Nouvelle soumission",
+    "pendingLabel": "En attente de modération",
+    "pendingDesc": "Votre soumission est en cours d'examen par notre équipe.",
+    "approvedLabel": "Approuvée",
+    "approvedDesc": "Votre morceau est maintenant en compétition !",
+    "rejectedLabel": "Rejetée",
+    "rejectedDesc": "Votre soumission n'a pas été retenue.",
+    "noSubmissions": "Aucune soumission",
+    "noSubmissionsDesc": "Vous n'avez pas encore soumis de morceau. Participez à la compétition !",
+    "submitTrack": "Soumettre un morceau",
+    "rejectionReason": "Motif du rejet",
+    "votes": "{{count}} votes",
+    "viewPage": "Voir la page",
+    "weekFallback": "Semaine {{number}}"
   }
 }
