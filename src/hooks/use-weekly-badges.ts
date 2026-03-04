@@ -13,11 +13,11 @@ export interface WeeklyBadge {
   created_at: string;
 }
 
-export const BADGE_CONFIG: Record<BadgeType, { emoji: string; label: string; description: string; color: string }> = {
-  top_voter: { emoji: "🏆", label: "Top Voter", description: "Le plus de votes cette semaine", color: "from-yellow-500 to-amber-600" },
-  discoverer: { emoji: "🔍", label: "Découvreur", description: "Premier à voter pour un futur gagnant", color: "from-blue-500 to-cyan-600" },
-  critic: { emoji: "📝", label: "Critique étoilé", description: "Le plus de commentaires constructifs", color: "from-purple-500 to-pink-600" },
-  eclectic: { emoji: "🌈", label: "Éclectique", description: "Votes dans le plus de catégories", color: "from-green-500 to-emerald-600" },
+export const BADGE_CONFIG: Record<BadgeType, { emoji: string; labelKey: string; descriptionKey: string; color: string }> = {
+  top_voter: { emoji: "🏆", labelKey: "badgeTypes.topVoterLabel", descriptionKey: "badgeTypes.topVoterDesc", color: "from-yellow-500 to-amber-600" },
+  discoverer: { emoji: "🔍", labelKey: "badgeTypes.discovererLabel", descriptionKey: "badgeTypes.discovererDesc", color: "from-blue-500 to-cyan-600" },
+  critic: { emoji: "📝", labelKey: "badgeTypes.criticLabel", descriptionKey: "badgeTypes.criticDesc", color: "from-purple-500 to-pink-600" },
+  eclectic: { emoji: "🌈", labelKey: "badgeTypes.eclecticLabel", descriptionKey: "badgeTypes.eclecticDesc", color: "from-green-500 to-emerald-600" },
 };
 
 export function useWeeklyBadges(userId?: string, weekId?: string | null) {
