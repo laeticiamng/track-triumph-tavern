@@ -34,6 +34,7 @@ const Vote = lazy(() => import("./pages/Vote"));
 const Stats = lazy(() => import("./pages/Stats"));
 const ArtistStats = lazy(() => import("./pages/ArtistStats"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const LiveReveal = lazy(() => import("./pages/LiveReveal"));
 const About = lazy(() => import("./pages/About"));
 const CategoryDetail = lazy(() => import("./pages/CategoryDetail"));
 const MentionsLegales = lazy(() => import("./pages/MentionsLegales"));
@@ -74,6 +75,7 @@ const App = () => (
             <Route path="/submit/review" element={<SubmissionReview />} />
             <Route path="/submissions/:id" element={<SubmissionDetail />} />
             <Route path="/results" element={<Results />} />
+            <Route path="/reveal" element={<LiveReveal />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/artist/:id" element={<ArtistProfile />} />
