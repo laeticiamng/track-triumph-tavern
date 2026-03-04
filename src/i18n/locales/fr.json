@@ -320,7 +320,10 @@
     "next": "Suivant",
     "morePages": "Plus de pages",
     "toggleSidebar": "Ouvrir/fermer le menu",
-    "more": "Plus"
+    "more": "Plus",
+    "pause": "Mettre en pause",
+    "playExcerpt": "Lire l'extrait",
+    "audioProgress": "Progression audio"
   },
   "common": {
     "loading": "Chargement...",

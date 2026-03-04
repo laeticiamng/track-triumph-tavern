@@ -320,7 +320,10 @@
     "next": "Weiter",
     "morePages": "Mehr Seiten",
     "toggleSidebar": "Seitenleiste umschalten",
-    "more": "Mehr"
+    "more": "Mehr",
+    "pause": "Pausieren",
+    "playExcerpt": "Auszug abspielen",
+    "audioProgress": "Audio-Fortschritt"
   },
   "common": {
     "loading": "Laden...",

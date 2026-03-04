@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Play, Pause, Volume2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { useTranslation } from "react-i18next";
 
 interface AudioPlayerProps {
   src: string;
@@ -13,6 +14,7 @@ interface AudioPlayerProps {
 }
 
 export function AudioPlayer({ src, title, artist, coverUrl, compact = false, previewStart, previewEnd }: AudioPlayerProps) {
+  const { t } = useTranslation();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -84,7 +86,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
         <audio ref={audioRef} src={src} preload="metadata" controlsList="nodownload" onContextMenu={(e) => e.preventDefault()} />
         <button
           onClick={toggle}
-          aria-label={playing ? "Mettre en pause" : "Lire l'extrait"}
+          aria-label={playing ? t("a11y.pause") : t("a11y.playExcerpt")}
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95"
         >
           {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
@@ -96,7 +98,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
             step={0.1}
             onValueChange={seek}
             className="cursor-pointer"
-            aria-label="Progression audio"
+            aria-label={t("a11y.audioProgress")}
           />
         </div>
         <span className="text-xs text-muted-foreground tabular-nums w-10 text-right">
@@ -126,7 +128,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
           <div className="mt-2 flex items-center gap-3">
             <button
               onClick={toggle}
-              aria-label={playing ? "Mettre en pause" : "Lire l'extrait"}
+              aria-label={playing ? t("a11y.pause") : t("a11y.playExcerpt")}
               className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95"
             >
               {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
@@ -137,7 +139,7 @@ export function AudioPlayer({ src, title, artist, coverUrl, compact = false, pre
               step={0.1}
               onValueChange={seek}
               className="flex-1 cursor-pointer"
-              aria-label="Progression audio"
+              aria-label={t("a11y.audioProgress")}
             />
             <span className="text-xs text-muted-foreground tabular-nums">
               {fmt(Math.max(0, displayTime))} / {fmt(windowDuration)}
