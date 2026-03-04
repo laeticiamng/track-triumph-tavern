@@ -1,6 +1,7 @@
 import { Moon, Sun, Monitor } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTranslation } from "react-i18next";
 
 type ThemeMode = "light" | "dark" | "system";
@@ -49,14 +50,21 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const label = t(`theme.${theme}`, theme);
 
   return (
-    <Button
-      variant="ghost"
-      size={compact ? "icon" : "sm"}
-      onClick={cycle}
-      aria-label={label}
-      className="h-9 w-9"
-    >
-      {icon}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="ghost"
+          size={compact ? "icon" : "sm"}
+          onClick={cycle}
+          aria-label={label}
+          className="h-9 w-9"
+        >
+          {icon}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom" className="text-xs">
+        {label}
+      </TooltipContent>
+    </Tooltip>
   );
 }
