@@ -90,7 +90,7 @@ export function ArtistSuggestions() {
 
       // 5. Sort by submission count, take top 6
       const topUserIds = [...userCategoryMap.entries()]
-        .sort((a, b) => b[1].total - a[1].total)
+        .sort((a, b) => b[1].votes - a[1].votes)
         .slice(0, 6)
         .map(([uid]) => uid);
 
