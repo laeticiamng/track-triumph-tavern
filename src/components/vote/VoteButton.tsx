@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { trackEvent } from "@/lib/analytics";
+import { useTranslation } from "react-i18next";
 
 type ScoringCriterion = { criterion: string; weight: number; description: string };
 
@@ -24,6 +25,7 @@ interface VoteButtonProps {
 }
 
 export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false, compact = false, tier = "free", commentsUsed = 0, commentsMax = 0 }: VoteButtonProps) {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -53,7 +55,7 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
     return (
       <Button variant="outline" size={compact ? "sm" : "default"} asChild>
         <Link to="/auth">
-          <Heart className="mr-2 h-4 w-4" /> Connectez-vous pour voter
+          <Heart className="mr-2 h-4 w-4" /> {t("vote.loginToVote")}
         </Link>
       </Button>
     );
@@ -62,7 +64,7 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
   if (voted) {
     return (
       <Button disabled size={compact ? "sm" : "default"} className="bg-green-600 hover:bg-green-600 text-white">
-        <Check className="mr-2 h-4 w-4" /> Voté
+        <Check className="mr-2 h-4 w-4" /> {t("vote.voted")}
       </Button>
     );
   }
@@ -88,17 +90,16 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
       const result = typeof data === "string" ? JSON.parse(data) : data;
 
       if (result.error) {
-        toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        toast({ title: t("errors.error"), description: result.error, variant: "destructive" });
       } else {
         setVoted(true);
         trackEvent("vote_cast", { submission_id: submissionId, detailed: showDetails, had_comment: hadComment });
-        toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
-        toast({ title: "Vote enregistré !", description: "Merci pour votre vote." });
+        toast({ title: t("vote.voteRecorded"), description: t("vote.voteRecordedDesc") });
         onVoted?.(hadComment);
       }
     } catch (err) {
       console.error("Vote error:", err);
-      toast({ title: "Erreur", description: "Impossible de voter. Réessayez.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: t("vote.voteErrorRetry"), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -108,7 +109,7 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
     return (
       <Button size="sm" onClick={handleVote} disabled={loading}>
         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Heart className="mr-2 h-4 w-4" />}
-        Voter
+        {t("vote.voteAction")}
       </Button>
     );
   }
@@ -118,13 +119,13 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
       <div className="flex items-center gap-2">
         <Button onClick={handleVote} disabled={loading} className="flex-1 bg-gradient-primary hover:opacity-90">
           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Heart className="mr-2 h-4 w-4" />}
-          Voter pour ce titre
+          {t("vote.voteForTrack")}
         </Button>
         <Button
           variant="outline"
           size="icon"
           onClick={() => setShowDetails(!showDetails)}
-          aria-label="Détails du vote"
+          aria-label={t("vote.voteDetails")}
         >
           {showDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
@@ -138,14 +139,14 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
             exit={{ opacity: 0, height: 0 }}
             className="space-y-4 overflow-hidden rounded-xl border border-border bg-card p-4"
           >
-            <p className="text-xs text-muted-foreground">Notes optionnelles (1-5)</p>
+            <p className="text-xs text-muted-foreground">{t("vote.optionalScores")}</p>
 
             {/* Contextual scoring tips */}
             {scoringCriteria.length > 0 && (
               <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 space-y-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
                   <Lightbulb className="h-3.5 w-3.5" />
-                  Conseils pour cette catégorie
+                  {t("vote.categoryTips")}
                 </div>
                 {scoringCriteria.map((sc) => {
                   const criterionKey = sc.criterion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -162,21 +163,21 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
 
             <ScoreSlider
               icon={<Sparkles className="h-4 w-4 text-yellow-500" />}
-              label="Originalité"
+              label={t("vote.originality")}
               value={originality}
               onChange={setOriginality}
               tip={scoringCriteria.find((s) => s.criterion === "Originalité")?.description}
             />
             <ScoreSlider
               icon={<Music2 className="h-4 w-4 text-blue-500" />}
-              label="Production"
+              label={t("vote.production")}
               value={production}
               onChange={setProduction}
               tip={scoringCriteria.find((s) => s.criterion === "Production")?.description}
             />
             <ScoreSlider
               icon={<Star className="h-4 w-4 text-rose-500" />}
-              label="Émotion"
+              label={t("vote.emotion")}
               value={emotion}
               onChange={setEmotion}
               tip={scoringCriteria.find((s) => s.criterion === "Émotion")?.description}
@@ -185,31 +186,31 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
             {/* Comment section with tier-based gating */}
             {tier === "free" ? (
               <p className="text-xs text-muted-foreground italic">
-                <Link to="/pricing" className="text-primary hover:underline">Passez à Pro</Link> pour laisser un commentaire
+                <Link to="/pricing" className="text-primary hover:underline">{t("vote.upgradeForComment")}</Link> {t("vote.upgradeForCommentDesc")}
               </p>
             ) : (
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-medium text-muted-foreground">Commentaire (optionnel)</label>
+                  <label className="text-xs font-medium text-muted-foreground">{t("vote.commentOptional")}</label>
                   <span className="text-xs text-muted-foreground">
                     {commentsMax === "unlimited"
-                      ? "Commentaires illimités"
-                      : `${commentsUsed}/${commentsMax} cette semaine`}
+                      ? t("vote.unlimitedComments")
+                      : t("vote.commentsThisWeek", { used: commentsUsed, max: commentsMax })}
                   </span>
                 </div>
                 {canComment ? (
                   <Textarea
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    placeholder="Un mot sur ce titre..."
+                    placeholder={t("vote.oneWordComment")}
                     className="mt-1 resize-none"
                     rows={2}
                     maxLength={500}
                   />
                 ) : (
                   <p className="text-xs text-muted-foreground italic">
-                    Quota de commentaires atteint cette semaine.{" "}
-                    {tier === "pro" && <Link to="/pricing" className="text-primary hover:underline">Passez à Elite pour des commentaires illimités</Link>}
+                    {t("vote.commentQuotaReached")}{" "}
+                    {tier === "pro" && <Link to="/pricing" className="text-primary hover:underline">{t("vote.upgradeElite")}</Link>}
                   </p>
                 )}
               </div>
@@ -234,6 +235,7 @@ function ScoreSlider({
   onChange: (v: number) => void;
   tip?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-3">
@@ -246,7 +248,7 @@ function ScoreSlider({
           value={[value]}
           onValueChange={([v]) => onChange(v)}
           className="flex-1"
-          aria-label={`Note ${label}`}
+          aria-label={t("vote.scoreLabel", { score: value })}
         />
         <span className="w-6 text-center text-sm font-medium" aria-live="polite">{value}</span>
       </div>
