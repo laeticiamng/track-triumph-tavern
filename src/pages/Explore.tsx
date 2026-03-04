@@ -13,6 +13,7 @@ import { Search, Music, Heart, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
+import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
 import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -221,6 +222,9 @@ const Explore = () => {
               ))}
             </motion.div>
           )}
+
+          {/* Artist suggestions */}
+          <ArtistSuggestions />
         </div>
       </section>
       <Footer />
