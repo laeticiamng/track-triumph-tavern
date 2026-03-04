@@ -1,5 +1,7 @@
 # 🎵 Track Triumph
 
+![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)
+
 Plateforme de compétition musicale communautaire — soumettez vos morceaux, votez pour vos favoris, grimpez dans le classement.
 
 ## Fonctionnalités
