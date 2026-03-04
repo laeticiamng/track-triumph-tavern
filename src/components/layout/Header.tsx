@@ -1,26 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Info, BarChart3, Heart } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgePills } from "@/components/gamification/BadgeShowcase";
-
-const navItems = [
-  { label: "Explorer", href: "/explore", icon: Search },
-  { label: "Voter", href: "/vote", icon: Heart },
-  { label: "Soumettre", href: "/compete", icon: Music },
-  { label: "Résultats", href: "/results", icon: Trophy },
-  { label: "Tarifs", href: "/pricing", icon: CreditCard },
-];
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const { t } = useTranslation();
+
+  const navItems = [
+    { label: t("nav.explore"), href: "/explore", icon: Search },
+    { label: t("nav.vote"), href: "/vote", icon: Heart },
+    { label: t("nav.submit"), href: "/compete", icon: Music },
+    { label: t("nav.results"), href: "/results", icon: Trophy },
+    { label: t("nav.pricing"), href: "/pricing", icon: CreditCard },
+  ];
 
   useEffect(() => {
     if (!user) { setIsAdmin(false); return; }
@@ -66,41 +69,45 @@ export function Header() {
                 location.pathname.startsWith("/admin") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
               }`}
             >
-              <Shield className="h-3.5 w-3.5" /> Admin
+              <Shield className="h-3.5 w-3.5" /> {t("nav.admin")}
             </Link>
           )}
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <LanguageSwitcher compact />
           {user ? (
             <>
               <BadgePills />
               <StreakBadge compact showRecord />
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile" className="flex items-center gap-2">
-                  <User className="h-4 w-4" /> Profil
+                  <User className="h-4 w-4" /> {t("nav.profile")}
                 </Link>
               </Button>
             </>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth">Connexion</Link>
+                <Link to="/auth">{t("nav.login")}</Link>
               </Button>
               <Button size="sm" className="bg-gradient-primary hover:opacity-90 transition-opacity" asChild>
-                <Link to="/auth?tab=signup">S'inscrire</Link>
+                <Link to="/auth?tab=signup">{t("nav.signup")}</Link>
               </Button>
             </>
           )}
         </div>
 
-        <button
-          className="flex h-10 w-10 items-center justify-center rounded-lg md:hidden hover:bg-accent transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <LanguageSwitcher compact />
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -131,21 +138,21 @@ export function Header() {
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-muted-foreground hover:bg-accent"
                 >
-                  <Shield className="h-4 w-4" /> Admin
+                  <Shield className="h-4 w-4" /> {t("nav.admin")}
                 </Link>
               )}
               <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
                 {user ? (
                   <Button variant="outline" asChild>
-                    <Link to="/profile" onClick={() => setMobileOpen(false)}>Mon Profil</Link>
+                    <Link to="/profile" onClick={() => setMobileOpen(false)}>{t("nav.profile")}</Link>
                   </Button>
                 ) : (
                   <>
                     <Button variant="outline" asChild>
-                      <Link to="/auth" onClick={() => setMobileOpen(false)}>Connexion</Link>
+                      <Link to="/auth" onClick={() => setMobileOpen(false)}>{t("nav.login")}</Link>
                     </Button>
                     <Button className="bg-gradient-primary" asChild>
-                      <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>S'inscrire</Link>
+                      <Link to="/auth?tab=signup" onClick={() => setMobileOpen(false)}>{t("nav.signup")}</Link>
                     </Button>
                   </>
                 )}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 
 interface PodiumEntry {
@@ -25,13 +26,13 @@ const medalLabels: Record<number, string> = {
 };
 
 export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<PodiumEntry[]>([]);
   const [weekTitle, setWeekTitle] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPodium() {
-      // Get the latest week with published results
       const { data: week } = await supabase
         .from("weeks")
         .select("id, title, week_number, results_published_at, seasons(name)")
@@ -45,10 +46,9 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         return;
       }
 
-      const season = (week as { seasons?: { name: string } | null }).seasons?.name || "Saison 1";
+      const season = (week as { seasons?: { name: string } | null }).seasons?.name || `${t("hero.season")} 1`;
       setWeekTitle(`${season} — ${week.title || `Semaine ${week.week_number}`}`);
 
-      // Get top 3 winners for that week
       const { data: winners } = await supabase
         .from("winners")
         .select("rank, submission_id")
@@ -61,7 +61,6 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         return;
       }
 
-      // Fetch submission details
       const subIds = winners.map((w) => w.submission_id);
       const { data: subs } = await supabase
         .from("submissions")
@@ -73,8 +72,8 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
           const sub = subs.find((s) => s.id === w.submission_id);
           return {
             rank: w.rank,
-            artist_name: sub?.artist_name || "Artiste",
-            title: sub?.title || "Sans titre",
+            artist_name: sub?.artist_name || t("podium.artist"),
+            title: sub?.title || t("podium.untitled"),
             cover_image_url: sub?.cover_image_url || "/placeholder.svg",
             submission_id: w.submission_id,
           };
@@ -84,7 +83,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
       setLoading(false);
     }
     fetchPodium();
-  }, []);
+  }, [t]);
 
   if (loading || entries.length === 0) return null;
 
@@ -94,7 +93,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold">Podium de la semaine</span>
+            <span className="text-sm font-semibold">{t("podium.weeklyPodium")}</span>
             {weekTitle && (
               <span className="text-xs text-muted-foreground">· {weekTitle}</span>
             )}
@@ -103,7 +102,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
             to="/results"
             className="text-xs font-medium text-primary hover:underline"
           >
-            Voir les résultats →
+            {t("podium.viewResults")}
           </Link>
         </div>
         <div className="flex gap-3 overflow-x-auto">
@@ -142,10 +141,10 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         >
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
             <Trophy className="h-4 w-4" />
-            Podium de la semaine
+            {t("podium.weeklyPodium")}
           </div>
           <h2 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl">
-            Les gagnants de la semaine
+            {t("podium.weeklyWinners")}
           </h2>
           {weekTitle && (
             <p className="mt-2 text-muted-foreground">{weekTitle}</p>
@@ -153,7 +152,6 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         </motion.div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          {/* Show in order: 2nd, 1st, 3rd for visual podium effect on desktop */}
           {[entries.find((e) => e.rank === 2), entries.find((e) => e.rank === 1), entries.find((e) => e.rank === 3)]
             .filter(Boolean)
             .map((entry, i) => {
@@ -201,7 +199,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
             to="/results"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
           >
-            Voir tous les résultats →
+            {t("podium.viewAllResults")}
           </Link>
         </div>
       </div>

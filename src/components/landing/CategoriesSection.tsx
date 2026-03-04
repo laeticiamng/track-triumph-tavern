@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 
 const categoryMeta: Record<string, { icon: React.ElementType; gradient: string; iconBg: string }> = {
@@ -31,6 +32,7 @@ const fallbackCategories: { id: string; name: string; slug: string }[] = [
 ];
 
 export function CategoriesSection() {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>(fallbackCategories);
 
   useEffect(() => {
@@ -53,13 +55,13 @@ export function CategoriesSection() {
           className="text-center"
         >
           <span className="inline-block rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 mb-4">
-            Tous les styles
+            {t("categories.badge")}
           </span>
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            {categories.length} catégories musicales
+            {t("categories.title", { count: categories.length })}
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Chaque semaine, participez dans votre style.
+            {t("categories.subtitle")}
           </p>
         </motion.div>
 
