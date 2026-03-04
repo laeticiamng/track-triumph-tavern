@@ -310,6 +310,18 @@
   "layout": {
     "skipToContent": "Zum Hauptinhalt springen"
   },
+  "a11y": {
+    "close": "Schließen",
+    "previousSlide": "Vorherige Folie",
+    "nextSlide": "Nächste Folie",
+    "goToPreviousPage": "Zur vorherigen Seite",
+    "previous": "Zurück",
+    "goToNextPage": "Zur nächsten Seite",
+    "next": "Weiter",
+    "morePages": "Mehr Seiten",
+    "toggleSidebar": "Seitenleiste umschalten",
+    "more": "Mehr"
+  },
   "common": {
     "loading": "Laden...",
     "back": "Zurück",

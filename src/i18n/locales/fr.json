@@ -310,6 +310,18 @@
   "layout": {
     "skipToContent": "Aller au contenu principal"
   },
+  "a11y": {
+    "close": "Fermer",
+    "previousSlide": "Diapositive précédente",
+    "nextSlide": "Diapositive suivante",
+    "goToPreviousPage": "Aller à la page précédente",
+    "previous": "Précédent",
+    "goToNextPage": "Aller à la page suivante",
+    "next": "Suivant",
+    "morePages": "Plus de pages",
+    "toggleSidebar": "Ouvrir/fermer le menu",
+    "more": "Plus"
+  },
   "common": {
     "loading": "Chargement...",
     "back": "Retour",
