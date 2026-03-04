@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
@@ -15,6 +16,7 @@ import type { Tables } from "@/integrations/supabase/types";
 
 const ArtistProfile = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null);
   const [submissions, setSubmissions] = useState<Tables<"submissions">[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,6 @@ const ArtistProfile = () => {
             .order("created_at", { ascending: false });
           setSubmissions(subs || []);
 
-          // Check artist tier (authenticated endpoint)
           try {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.access_token) {
@@ -74,9 +75,9 @@ const ArtistProfile = () => {
     return (
       <Layout>
         <div className="container flex flex-col items-center justify-center py-20 text-center">
-          <h2 className="font-display text-2xl font-bold">Artiste introuvable</h2>
+          <h2 className="font-display text-2xl font-bold">{t("artistProfile.notFound")}</h2>
           <Button variant="outline" className="mt-4" asChild>
-            <Link to="/explore"><ArrowLeft className="mr-2 h-4 w-4" />Explorer</Link>
+            <Link to="/explore"><ArrowLeft className="mr-2 h-4 w-4" />{t("artistProfile.explore")}</Link>
           </Button>
         </div>
       </Layout>
@@ -85,38 +86,39 @@ const ArtistProfile = () => {
 
   const socialLinks = (profile.social_links as Record<string, string>) || {};
   const totalVotes = submissions.reduce((sum, s) => sum + s.vote_count, 0);
+  const artistName = profile.display_name || t("artistProfile.artist");
 
   return (
     <Layout>
       <SEOHead
-        title={profile.display_name || "Artiste"}
-        description={profile.bio || `Découvrez le profil de ${profile.display_name || "cet artiste"} sur Weekly Music Awards.`}
+        title={artistName}
+        description={profile.bio || t("artistProfile.profileDesc", { name: artistName })}
         url={`/artist/${id}`}
         image={profile.avatar_url || undefined}
         jsonLd={musicGroupJsonLd({
-          name: profile.display_name || "Artiste",
+          name: artistName,
           id: id || "",
           image: profile.avatar_url || undefined,
         })}
       />
       <div className="container max-w-3xl py-8">
         <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Retour
+          <ArrowLeft className="h-4 w-4" /> {t("artistProfile.back")}
         </Link>
 
         {/* Banner & Avatar */}
         <div className="relative mb-8">
           {profile.banner_url ? (
-            <img src={profile.banner_url} alt={`Bannière de ${profile.display_name || "l'artiste"}`} className="h-48 w-full rounded-2xl object-cover" />
+            <img src={profile.banner_url} alt={t("artistProfile.bannerAlt", { name: artistName })} className="h-48 w-full rounded-2xl object-cover" />
           ) : (
             <div className="h-48 w-full rounded-2xl bg-gradient-to-r from-primary/20 to-primary/5" />
           )}
           <div className="absolute -bottom-10 left-6 flex items-end gap-4">
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt={`Photo de ${profile.display_name || "l'artiste"}`} className="h-20 w-20 rounded-full border-4 border-background object-cover" />
+              <img src={profile.avatar_url} alt={t("artistProfile.photoAlt", { name: artistName })} className="h-20 w-20 rounded-full border-4 border-background object-cover" />
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-background bg-secondary text-2xl font-bold">
-                {(profile.display_name || "?")[0]}
+                {artistName[0]}
               </div>
             )}
           </div>
@@ -124,7 +126,7 @@ const ArtistProfile = () => {
 
         <div className="mt-12">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold">{profile.display_name || "Artiste"}</h1>
+            <h1 className="font-display text-3xl font-bold">{artistName}</h1>
             {tier === "elite" && (
               <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
                 <Crown className="h-3 w-3" /> Elite
@@ -155,20 +157,20 @@ const ArtistProfile = () => {
           <div className="mt-6 grid grid-cols-2 gap-4">
             <Card className="text-center p-4">
               <p className="font-display text-2xl font-bold">{submissions.length}</p>
-              <p className="text-xs text-muted-foreground">Morceaux</p>
+              <p className="text-xs text-muted-foreground">{t("artistProfile.tracks")}</p>
             </Card>
             <Card className="text-center p-4">
               <p className="font-display text-2xl font-bold">{totalVotes}</p>
-              <p className="text-xs text-muted-foreground">Votes reçus</p>
+              <p className="text-xs text-muted-foreground">{t("artistProfile.votesReceived")}</p>
             </Card>
           </div>
 
           {/* Tracks */}
           <h2 className="mt-8 mb-4 font-display text-xl font-semibold flex items-center gap-2">
-            <Music className="h-5 w-5" /> Morceaux
+            <Music className="h-5 w-5" /> {t("artistProfile.tracks")}
           </h2>
           {submissions.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">Aucun morceau publié.</p>
+            <p className="py-8 text-center text-muted-foreground">{t("artistProfile.noTracks")}</p>
           ) : (
             <div className="space-y-3">
               {submissions.map((sub) => (
@@ -181,10 +183,10 @@ const ArtistProfile = () => {
                     to={`/submissions/${sub.id}`}
                     className="flex items-center gap-3 rounded-xl border border-border p-3 hover:bg-accent/50 transition-colors"
                   >
-                    <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-14 w-14 rounded-lg object-cover" />
+                    <img src={sub.cover_image_url} alt={t("artistProfile.coverAlt", { title: sub.title })} className="h-14 w-14 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{sub.title}</p>
-                      <p className="text-xs text-muted-foreground">{sub.vote_count} votes</p>
+                      <p className="text-xs text-muted-foreground">{sub.vote_count} {t("artistProfile.votePlural")}</p>
                     </div>
                   </Link>
                 </motion.div>

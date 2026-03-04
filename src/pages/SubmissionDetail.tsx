@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscription } from "@/hooks/use-subscription";
@@ -20,6 +21,7 @@ type Submission = Tables<"submissions">;
 
 const SubmissionDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { tier } = useSubscription();
   const [submission, setSubmission] = useState<Submission | null>(null);
@@ -29,6 +31,7 @@ const SubmissionDetail = () => {
   const [hasVoted, setHasVoted] = useState(false);
 
   const voteState = useVoteState(submission?.week_id ?? null);
+  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
 
   useEffect(() => {
     if (!id) return;
@@ -82,9 +85,9 @@ const SubmissionDetail = () => {
     return (
       <Layout>
         <div className="container flex flex-col items-center justify-center py-20 text-center">
-          <h2 className="font-display text-2xl font-bold">Soumission introuvable</h2>
+          <h2 className="font-display text-2xl font-bold">{t("submissionDetail.notFound")}</h2>
           <Button variant="outline" className="mt-4" asChild>
-            <Link to="/explore"><ArrowLeft className="mr-2 h-4 w-4" />Retour à l'explorer</Link>
+            <Link to="/explore"><ArrowLeft className="mr-2 h-4 w-4" />{t("submissionDetail.backToExplore")}</Link>
           </Button>
         </div>
       </Layout>
@@ -92,12 +95,13 @@ const SubmissionDetail = () => {
   }
 
   const isOwnSubmission = user?.id === submission.user_id;
+  const voteLabel = (count: number) => count !== 1 ? t("submissionDetail.votePlural") : t("submissionDetail.voteSingular");
 
   return (
     <Layout>
       <SEOHead
         title={`${submission.title} — ${submission.artist_name}`}
-        description={submission.description || `Écoutez ${submission.title} par ${submission.artist_name} sur Weekly Music Awards.`}
+        description={submission.description || t("submissionDetail.listenFullDesc", { title: submission.title, artist: submission.artist_name })}
         url={`/submissions/${submission.id}`}
         image={submission.cover_image_url}
         jsonLd={{
@@ -113,7 +117,7 @@ const SubmissionDetail = () => {
       />
       <div className="container py-8">
         <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Retour
+          <ArrowLeft className="h-4 w-4" /> {t("submissionDetail.back")}
         </Link>
 
         <div className="grid gap-8 md:grid-cols-[1fr_1.2fr]">
@@ -121,7 +125,7 @@ const SubmissionDetail = () => {
           <div className="overflow-hidden rounded-2xl">
             <img
               src={submission.cover_image_url}
-              alt={submission.title}
+              alt={t("submissionDetail.coverAlt", { title: submission.title })}
               className="aspect-square w-full object-cover"
             />
           </div>
@@ -136,7 +140,7 @@ const SubmissionDetail = () => {
               )}
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
-                {new Date(submission.created_at).toLocaleDateString("fr-FR")}
+                {new Date(submission.created_at).toLocaleDateString(dateLocale)}
               </span>
             </div>
 
@@ -144,7 +148,7 @@ const SubmissionDetail = () => {
 
             <Link to={`/artist/${submission.user_id}`} className="mt-3 flex items-center gap-3 group">
               {profile?.avatar_url && (
-                <img src={profile.avatar_url} alt={`Avatar de ${profile.display_name || "l'artiste"}`} className="h-8 w-8 rounded-full object-cover" />
+                <img src={profile.avatar_url} alt={t("submissionDetail.avatarAlt", { name: profile.display_name || t("artistProfile.artist") })} className="h-8 w-8 rounded-full object-cover" />
               )}
               <span className="text-lg text-muted-foreground group-hover:text-foreground transition-colors">
                 {submission.artist_name}
@@ -182,7 +186,7 @@ const SubmissionDetail = () => {
             {submission.external_url && (
               <Button variant="outline" className="mt-4" asChild>
                 <a href={submission.external_url} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="mr-2 h-4 w-4" /> Écouter en entier
+                  <ExternalLink className="mr-2 h-4 w-4" /> {t("submissionDetail.listenFull")}
                 </a>
               </Button>
             )}
@@ -192,7 +196,7 @@ const SubmissionDetail = () => {
               {isOwnSubmission ? (
                 <div className="rounded-xl bg-secondary/50 p-4 text-center">
                   <p className="text-3xl font-display font-bold">{submission.vote_count}</p>
-                  <p className="text-sm text-muted-foreground">votes reçus</p>
+                  <p className="text-sm text-muted-foreground">{t("submissionDetail.votesReceived")}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -206,7 +210,7 @@ const SubmissionDetail = () => {
                     commentsMax={voteState.commentsMax}
                   />
                   <p className="text-center text-sm text-muted-foreground">
-                    {submission.vote_count} vote{submission.vote_count !== 1 ? "s" : ""}
+                    {submission.vote_count} {voteLabel(submission.vote_count)}
                   </p>
                 </div>
               )}
