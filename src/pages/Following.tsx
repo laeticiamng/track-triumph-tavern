@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, UserMinus, Users, Music } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
 
 interface FollowedArtist {
   id: string;
@@ -177,6 +178,8 @@ export default function Following() {
             </div>
           </AnimatePresence>
         )}
+
+        <ArtistSuggestions />
       </div>
     </Layout>
   );
