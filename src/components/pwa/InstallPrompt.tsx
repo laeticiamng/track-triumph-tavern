@@ -1,15 +1,17 @@
-import { Download, X } from "lucide-react";
+import { Download, X, Share } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInstallPrompt } from "@/hooks/use-install-prompt";
 
 export function InstallPrompt() {
   const { t } = useTranslation();
-  const { canInstall, install, dismiss } = useInstallPrompt();
+  const { canInstall, install, dismiss, showIosGuide, dismissIos } = useInstallPrompt();
+
+  const showBanner = canInstall || showIosGuide;
 
   return (
     <AnimatePresence>
-      {canInstall && (
+      {showBanner && (
         <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -19,25 +21,33 @@ export function InstallPrompt() {
         >
           <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-xl">
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
-              <Download className="h-5 w-5 text-primary" />
+              {showIosGuide ? (
+                <Share className="h-5 w-5 text-primary" />
+              ) : (
+                <Download className="h-5 w-5 text-primary" />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold leading-tight">
                 {t("pwa.installTitle", "Installer l'application")}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {t("pwa.installDescription", "Ajoutez WMA à votre écran d'accueil pour un accès rapide.")}
+                {showIosGuide
+                  ? t("pwa.iosGuide", "Appuyez sur Partager (↑) puis \"Sur l'écran d'accueil\".")
+                  : t("pwa.installDescription", "Ajoutez WMA à votre écran d'accueil pour un accès rapide.")}
               </p>
             </div>
             <div className="flex flex-shrink-0 items-center gap-1">
+              {!showIosGuide && (
+                <button
+                  onClick={install}
+                  className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  {t("pwa.installButton", "Installer")}
+                </button>
+              )}
               <button
-                onClick={install}
-                className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                {t("pwa.installButton", "Installer")}
-              </button>
-              <button
-                onClick={dismiss}
+                onClick={showIosGuide ? dismissIos : dismiss}
                 className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-accent transition-colors"
                 aria-label={t("pwa.dismiss", "Fermer")}
               >
