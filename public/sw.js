@@ -1,12 +1,13 @@
-const CACHE_NAME = 'wma-cache-v1';
+const CACHE_NAME = 'wma-cache-v2';
 const PRECACHE_URLS = [
   '/',
+  '/offline.html',
   '/manifest.json',
   '/favicon.ico',
   '/apple-touch-icon.png'
 ];
 
-// Install: precache shell
+// Install: precache shell + offline page
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
@@ -24,13 +25,13 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first for navigations, cache-first for assets
+// Fetch: network-first for navigations with offline fallback
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/'))
+      fetch(request).catch(() => caches.match('/offline.html'))
     );
     return;
   }
