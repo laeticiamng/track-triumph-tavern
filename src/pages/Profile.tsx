@@ -26,7 +26,7 @@ import type { Tables } from "@/integrations/supabase/types";
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
 
 const Profile = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, loading: authLoading, signOut } = useAuth();
   const { tier, subscribed, subscriptionEnd, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
@@ -46,6 +46,13 @@ const Profile = () => {
   const [bannerUploading, setBannerUploading] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
+
+  const getLocale = () => {
+    const lang = i18n.language;
+    if (lang === "de") return "de-DE";
+    if (lang === "en") return "en-GB";
+    return "fr-FR";
+  };
 
   // Show success toast after checkout
   useEffect(() => {
@@ -83,7 +90,7 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
     if (file.size > 2 * 1024 * 1024) {
-      toast({ title: "Fichier trop volumineux", description: "Max 2 MB.", variant: "destructive" });
+      toast({ title: t("profilePage.fileTooLarge"), description: t("profilePage.max2mb"), variant: "destructive" });
       return;
     }
     setAvatarUploading(true);
@@ -97,9 +104,9 @@ const Profile = () => {
       const { error: updateErr } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", user.id);
       if (updateErr) throw updateErr;
       setProfile((prev) => prev ? { ...prev, avatar_url: avatarUrl } : prev);
-      toast({ title: "Avatar mis à jour ✓" });
+      toast({ title: t("profilePage.avatarUpdated") });
     } catch (err) {
-      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'upload", variant: "destructive" });
+      toast({ title: t("errors.error"), description: err instanceof Error ? err.message : t("profilePage.uploadError"), variant: "destructive" });
     } finally {
       setAvatarUploading(false);
     }
@@ -109,7 +116,7 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
     if (file.size > 5 * 1024 * 1024) {
-      toast({ title: "Fichier trop volumineux", description: "Max 5 MB.", variant: "destructive" });
+      toast({ title: t("profilePage.fileTooLarge"), description: t("profilePage.max5mb"), variant: "destructive" });
       return;
     }
     setBannerUploading(true);
@@ -123,9 +130,9 @@ const Profile = () => {
       const { error: updateErr } = await supabase.from("profiles").update({ banner_url: bannerUrl }).eq("id", user.id);
       if (updateErr) throw updateErr;
       setProfile((prev) => prev ? { ...prev, banner_url: bannerUrl } : prev);
-      toast({ title: "Bannière mise à jour ✓" });
+      toast({ title: t("profilePage.bannerUpdated") });
     } catch (err) {
-      toast({ title: "Erreur", description: err instanceof Error ? err.message : "Erreur lors de l'upload", variant: "destructive" });
+      toast({ title: t("errors.error"), description: err instanceof Error ? err.message : t("profilePage.uploadError"), variant: "destructive" });
     } finally {
       setBannerUploading(false);
     }
@@ -142,9 +149,9 @@ const Profile = () => {
     }).eq("id", user.id);
 
     if (error) {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      toast({ title: t("errors.error"), description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Profil mis à jour ✓" });
+      toast({ title: t("profilePage.profileUpdated") });
       setEditing(false);
       setProfile((prev) => prev ? { ...prev, display_name: displayName.trim(), bio: bio.trim() || null, social_links: filteredLinks } : prev);
     }
@@ -160,10 +167,10 @@ const Profile = () => {
       if (result.url) {
         window.location.href = result.url;
       } else if (result.error) {
-        toast({ title: "Erreur", description: result.error, variant: "destructive" });
+        toast({ title: t("errors.error"), description: result.error, variant: "destructive" });
       }
     } catch {
-      toast({ title: "Erreur", description: "Impossible d'ouvrir le portail.", variant: "destructive" });
+      toast({ title: t("errors.error"), description: t("pricing.portalError"), variant: "destructive" });
     } finally {
       setPortalLoading(false);
     }
@@ -226,7 +233,7 @@ const Profile = () => {
                tier === "pro" ? <Star className="h-5 w-5 text-primary" /> :
                <CreditCard className="h-5 w-5" />}
               Plan {currentPlan.name}
-              {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€/mois</span>}
+              {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€/{t("pricing.perMonth").replace("/", "")}</span>}
             </CardTitle>
             {subscribed ? (
               <Badge className="bg-green-600 text-white">{t("profilePage.active")}</Badge>
@@ -237,7 +244,7 @@ const Profile = () => {
           <CardContent className="space-y-3">
             {subscriptionEnd && (
               <p className="text-sm text-muted-foreground">
-                {t("profilePage.nextRenewal")} {new Date(subscriptionEnd).toLocaleDateString("fr-FR")}
+                {t("profilePage.nextRenewal")} {new Date(subscriptionEnd).toLocaleDateString(getLocale())}
               </p>
             )}
             <div className="flex gap-2">
@@ -293,16 +300,16 @@ const Profile = () => {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="font-display text-xl flex items-center gap-2">
-                <ImagePlus className="h-5 w-5" /> Bannière de profil
+                <ImagePlus className="h-5 w-5" /> {t("profilePage.profileBanner")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {profile?.banner_url ? (
                 <div className="relative rounded-lg overflow-hidden">
-                  <img src={profile.banner_url} alt="Bannière" className="w-full h-32 object-cover" />
+                  <img src={profile.banner_url} alt={t("profilePage.profileBanner")} className="w-full h-32 object-cover" />
                   <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                     <Button variant="secondary" size="sm" onClick={() => bannerInputRef.current?.click()} disabled={bannerUploading}>
-                      <Camera className="mr-1 h-3.5 w-3.5" /> {bannerUploading ? "..." : "Changer"}
+                      <Camera className="mr-1 h-3.5 w-3.5" /> {bannerUploading ? "..." : t("profilePage.changeBanner")}
                     </Button>
                   </div>
                 </div>
@@ -313,11 +320,11 @@ const Profile = () => {
                   className="w-full h-32 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center gap-2 text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors"
                 >
                   <ImagePlus className="h-6 w-6" />
-                  <span className="text-sm">{bannerUploading ? "Upload..." : "Ajouter une bannière"}</span>
+                  <span className="text-sm">{bannerUploading ? "..." : t("profilePage.addBanner")}</span>
                 </button>
               )}
               <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
-              <p className="text-xs text-muted-foreground">Image max 5 MB. S'affiche sur votre page artiste publique.</p>
+              <p className="text-xs text-muted-foreground">{t("profilePage.bannerInfo")}</p>
             </CardContent>
           </Card>
         )}
@@ -326,11 +333,11 @@ const Profile = () => {
         <Card className="mb-8">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
-              <User className="h-5 w-5" /> Informations
+              <User className="h-5 w-5" /> {t("profilePage.info")}
             </CardTitle>
             {!editing && (
               <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
-                <Edit2 className="mr-1 h-3.5 w-3.5" /> Modifier
+                <Edit2 className="mr-1 h-3.5 w-3.5" /> {t("common.edit")}
               </Button>
             )}
           </CardHeader>
@@ -348,7 +355,7 @@ const Profile = () => {
                       onClick={() => avatarInputRef.current?.click()}
                       disabled={avatarUploading}
                       className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
-                      aria-label="Changer l'avatar"
+                      aria-label={t("profilePage.changeAvatar")}
                     >
                       <Camera className="h-3 w-3" />
                     </button>
@@ -357,11 +364,11 @@ const Profile = () => {
                 )}
               </div>
               <div>
-                <p className="font-medium">{profile?.display_name || "Non défini"}</p>
+                <p className="font-medium">{profile?.display_name || t("profilePage.notDefined")}</p>
                 <p className="text-xs text-muted-foreground">{user.email}</p>
                 {!canEditProfile && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    <Link to="/pricing" className="text-primary hover:underline">Passez à Pro</Link> pour personnaliser votre profil
+                    <Link to="/pricing" className="text-primary hover:underline">{t("profilePage.upgradeForProfile")}</Link>
                   </p>
                 )}
               </div>
@@ -370,18 +377,18 @@ const Profile = () => {
             {editing ? (
               <>
                 <div className="space-y-2">
-                  <Label>Nom d'artiste</Label>
+                  <Label>{t("profilePage.artistName")}</Label>
                   <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={100} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Bio</Label>
+                  <Label>{t("profilePage.bio")}</Label>
                   <Textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} maxLength={500} />
                 </div>
 
                 {/* Social Links (Pro/Elite only) */}
                 {canEditProfile && (
                   <div className="space-y-2">
-                    <Label>Liens sociaux</Label>
+                    <Label>{t("profilePage.socialLinks")}</Label>
                     {Object.entries(socialLinks).map(([platform, url]) => (
                       <div key={platform} className="flex items-center gap-2">
                         <span className="text-sm w-24 shrink-0">{platform}</span>
@@ -410,23 +417,23 @@ const Profile = () => {
 
                 <div className="flex gap-2">
                   <Button onClick={handleSave} disabled={saving} size="sm">
-                    <Save className="mr-1 h-3.5 w-3.5" /> {saving ? "..." : "Enregistrer"}
+                    <Save className="mr-1 h-3.5 w-3.5" /> {saving ? "..." : t("common.save")}
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>Annuler</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>{t("common.cancel")}</Button>
                 </div>
               </>
             ) : (
               <>
                 {profile?.bio && (
                   <div>
-                    <Label className="text-xs text-muted-foreground">Bio</Label>
+                    <Label className="text-xs text-muted-foreground">{t("profilePage.bio")}</Label>
                     <p className="text-sm">{profile.bio}</p>
                   </div>
                 )}
                 {/* Display social links */}
                 {profile?.social_links && Object.keys(profile.social_links as Record<string, string>).length > 0 && (
                   <div>
-                    <Label className="text-xs text-muted-foreground">Liens sociaux</Label>
+                    <Label className="text-xs text-muted-foreground">{t("profilePage.socialLinks")}</Label>
                     <div className="mt-1 flex flex-wrap gap-2">
                       {Object.entries(profile.social_links as Record<string, string>).map(([platform, url]) => (
                         <Button key={platform} variant="outline" size="sm" asChild>
@@ -447,17 +454,17 @@ const Profile = () => {
         <Card>
           <CardHeader>
             <CardTitle className="font-display text-xl flex items-center gap-2">
-              <Music className="h-5 w-5" /> Mes Soumissions
+              <Music className="h-5 w-5" /> {t("profilePage.mySubmissions")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {submissions.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">Aucune soumission pour le moment.</p>
+                <p className="text-muted-foreground mb-4">{t("profilePage.noSubmissions")}</p>
                 {currentPlan.limits.can_submit ? (
-                  <Button asChild><Link to="/compete">Soumettre un morceau</Link></Button>
+                  <Button asChild><Link to="/compete">{t("profilePage.submitTrack")}</Link></Button>
                 ) : (
-                  <Button asChild variant="outline"><Link to="/pricing">Passer à Pro pour soumettre</Link></Button>
+                  <Button asChild variant="outline"><Link to="/pricing">{t("profilePage.viewPlans")}</Link></Button>
                 )}
               </div>
             ) : (
@@ -468,13 +475,13 @@ const Profile = () => {
                     to={`/submissions/${sub.id}`}
                     className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-accent/50 transition-colors"
                   >
-                    <img src={sub.cover_image_url} alt={`Couverture de ${sub.title}`} className="h-12 w-12 rounded-lg object-cover" />
+                    <img src={sub.cover_image_url} alt={sub.title} className="h-12 w-12 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{sub.title}</p>
-                      <p className="text-xs text-muted-foreground">{sub.artist_name} · {sub.vote_count} votes</p>
+                      <p className="text-xs text-muted-foreground">{sub.artist_name} · {sub.vote_count} {t("stats.votes")}</p>
                     </div>
                     <Badge variant="outline" className={statusColor[sub.status]}>
-                      {sub.status === "pending" ? "En attente" : sub.status === "approved" ? "Approuvé" : "Rejeté"}
+                      {sub.status === "pending" ? t("profilePage.pending") : sub.status === "approved" ? t("profilePage.approved") : t("profilePage.rejected")}
                     </Badge>
                   </Link>
                 ))}
