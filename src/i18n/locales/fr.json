@@ -1067,5 +1067,28 @@
     "ctaDesc": "Rejoignez le concours et faites entendre votre musique à une communauté de passionnés.",
     "ctaJoin": "Rejoindre le concours",
     "ctaExplore": "Explorer les morceaux"
+  },
+  "aiRecs": {
+    "loading": "L'IA analyse vos goûts...",
+    "badge": "Recommandés pour vous"
+  },
+  "aiTags": {
+    "suggest": "Suggérer des tags avec l'IA",
+    "addTags": "Ajouter {{count}} tag",
+    "addTagsPlural": "Ajouter {{count}} tags",
+    "ignore": "Ignorer"
+  },
+  "aiFeedback": {
+    "locked": "Le feedback IA est réservé aux abonnés Elite",
+    "upgrade": "Passer à Elite",
+    "prompt": "Obtenez un feedback IA structuré sur votre morceau",
+    "generate": "Générer le feedback",
+    "error": "Impossible de générer le feedback. Réessayez.",
+    "title": "Feedback IA",
+    "elite": "Elite",
+    "vibe": "Ambiance",
+    "structure": "Structure",
+    "production": "Production",
+    "suggestions": "Suggestions"
   }
 }

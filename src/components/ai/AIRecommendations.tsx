@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Loader2 } from "lucide-react";
@@ -9,6 +10,7 @@ interface AIRecommendationsProps {
 }
 
 export function AIRecommendations({ weekId, onRecommendations }: AIRecommendationsProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [hasRecommendations, setHasRecommendations] = useState(false);
 
@@ -41,7 +43,7 @@ export function AIRecommendations({ weekId, onRecommendations }: AIRecommendatio
     return (
       <div className="flex items-center gap-2 px-3.5 py-1.5">
         <Loader2 className="h-3 w-3 animate-spin text-primary" />
-        <span className="text-xs text-muted-foreground">IA analyse vos goûts...</span>
+        <span className="text-xs text-muted-foreground">{t("aiRecs.loading")}</span>
       </div>
     );
   }
@@ -49,7 +51,7 @@ export function AIRecommendations({ weekId, onRecommendations }: AIRecommendatio
   if (hasRecommendations) {
     return (
       <Badge variant="outline" className="border-primary/30 text-primary gap-1 text-xs">
-        <Sparkles className="h-3 w-3" /> Recommandés pour vous
+        <Sparkles className="h-3 w-3" /> {t("aiRecs.badge")}
       </Badge>
     );
   }
