@@ -1,4 +1,5 @@
 import { useParams, Link, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead, breadcrumbJsonLd } from "@/components/seo/SEOHead";
@@ -38,18 +39,22 @@ function articleJsonLd(article: ReturnType<typeof getArticleBySlug>) {
   };
 }
 
+const LOCALE_MAP: Record<string, string> = { fr: "fr-FR", en: "en-GB", de: "de-DE" };
+
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { t, i18n } = useTranslation();
   const article = slug ? getArticleBySlug(slug) : undefined;
   const relatedArticles = article ? getRelatedArticles(article) : [];
+  const dateLocale = LOCALE_MAP[i18n.language] || "fr-FR";
 
   if (!article) return <Navigate to="/articles" replace />;
 
   const jsonLd = [
     articleJsonLd(article)!,
     breadcrumbJsonLd([
-      { name: "Accueil", url: "/" },
-      { name: "Articles", url: "/articles" },
+      { name: t("articleDetail.breadcrumbHome"), url: "/" },
+      { name: t("articleDetail.breadcrumbArticles"), url: "/articles" },
       { name: article.title, url: `/articles/${article.slug}` },
     ]),
   ];
@@ -70,7 +75,7 @@ const ArticleDetail = () => {
             to="/articles"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" /> Tous les articles
+            <ArrowLeft className="h-4 w-4" /> {t("articleDetail.allArticles")}
           </Link>
         </nav>
 
@@ -82,11 +87,11 @@ const ArticleDetail = () => {
           className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-3"
         >
           <p className="text-sm text-muted-foreground">
-            🎵 Envie de tester vos compétences ? Soumettez votre morceau au concours.
+            {t("articleDetail.ctaTop")}
           </p>
           <Button asChild size="sm" className="bg-gradient-primary whitespace-nowrap">
             <Link to="/compete">
-              Soumettre <ArrowRight className="ml-1 h-3 w-3" />
+              {t("articleDetail.submit")} <ArrowRight className="ml-1 h-3 w-3" />
             </Link>
           </Button>
         </motion.div>
@@ -108,7 +113,7 @@ const ArticleDetail = () => {
           <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
-              {new Date(article.publishedAt).toLocaleDateString("fr-FR", {
+              {new Date(article.publishedAt).toLocaleDateString(dateLocale, {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -116,7 +121,7 @@ const ArticleDetail = () => {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Clock className="h-4 w-4" />
-              {article.readTime} min de lecture
+              {t("articleDetail.readTime", { count: article.readTime })}
             </span>
           </div>
 
@@ -166,7 +171,7 @@ const ArticleDetail = () => {
                 <div className="mt-4 flex gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
                   <Lightbulb className="h-5 w-5 shrink-0 text-primary mt-0.5" />
                   <p className="text-sm text-foreground/80">
-                    <strong className="text-primary">Conseil pro :</strong> {section.tip}
+                    <strong className="text-primary">{t("articleDetail.proTip")}</strong> {section.tip}
                   </p>
                 </div>
               )}
@@ -182,7 +187,7 @@ const ArticleDetail = () => {
               className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
             >
               <Music className="h-4 w-4" />
-              Voir la catégorie {article.category} →
+              {t("articleDetail.viewCategory", { category: article.category })}
             </Link>
           </div>
         )}
@@ -195,7 +200,7 @@ const ArticleDetail = () => {
             viewport={{ once: true }}
             className="mt-12"
           >
-            <h2 className="font-display text-xl font-semibold mb-4">Articles connexes</h2>
+            <h2 className="font-display text-xl font-semibold mb-4">{t("articleDetail.relatedArticles")}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {relatedArticles.map((ra) => (
                 <Link
@@ -209,7 +214,7 @@ const ArticleDetail = () => {
                   </h3>
                   <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{ra.subtitle}</p>
                   <span className="mt-2 inline-flex items-center gap-1 text-xs text-primary">
-                    Lire <ArrowRight className="h-3 w-3" />
+                    {t("articleDetail.read")} <ArrowRight className="h-3 w-3" />
                   </span>
                 </Link>
               ))}
@@ -225,20 +230,20 @@ const ArticleDetail = () => {
           className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
         >
           <h2 className="font-display text-xl font-semibold">
-            Prêt à mettre ces conseils en pratique ?
+            {t("articleDetail.ctaTitle")}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Soumettez votre morceau au concours Weekly Music Awards et recevez les votes de la communauté.
+            {t("articleDetail.ctaDesc")}
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild className="bg-gradient-primary">
               <Link to="/compete">
-                Soumettre mon morceau
+                {t("articleDetail.submitTrack")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/articles">Voir tous les articles</Link>
+              <Link to="/articles">{t("articleDetail.viewAllArticles")}</Link>
             </Button>
           </div>
         </motion.div>
