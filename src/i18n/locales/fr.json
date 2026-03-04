@@ -820,6 +820,32 @@
     "mentionsTitle": "Mentions Légales",
     "mentionsSeoDesc": "Mentions légales de la plateforme Weekly Music Awards."
   },
+  "chatbot": {
+    "openAI": "Ouvrir l'assistant IA",
+    "title": "Assistant WMA",
+    "welcome": "Salut ! Je suis l'assistant Weekly Music Awards. Pose-moi une question sur le concours, la production, ou la promotion musicale.",
+    "loginRequired": "Vous devez être connecté pour utiliser le chatbot IA.",
+    "placeholder": "Poser une question...",
+    "errorGeneric": "Désolé, une erreur est survenue."
+  },
+  "aiSummary": {
+    "title": "Résumé IA de vos votes",
+    "analyze": "Analyser",
+    "emptyState": "Cliquez sur \"Analyser\" pour obtenir un résumé IA des retours reçus sur vos morceaux.",
+    "loading": "Analyse en cours...",
+    "votesAnalyzed": "votes analysés",
+    "originality": "Originalité",
+    "production": "Production",
+    "emotion": "Émotion",
+    "strengths": "Points forts",
+    "improvements": "Axes d'amélioration",
+    "overall": "Résumé",
+    "refresh": "Rafraîchir l'analyse"
+  },
+  "header": {
+    "closeMenu": "Fermer le menu",
+    "openMenu": "Ouvrir le menu"
+  },
   "scoring": {
     "seoTitle": "Méthode de notation — Comment le classement est calculé",
     "seoDesc": "Découvrez en détail comment le classement de Weekly Music Awards est calculé : 3 critères de notation (émotion, originalité, production), pondération spécifique par genre musical, système anti-fraude IA et transparence totale. Aucun paiement n'influence les résultats.",

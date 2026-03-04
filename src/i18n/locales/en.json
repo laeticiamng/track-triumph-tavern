@@ -820,6 +820,32 @@
     "mentionsTitle": "Legal Notices",
     "mentionsSeoDesc": "Legal notices for the Weekly Music Awards platform."
   },
+  "chatbot": {
+    "openAI": "Open AI assistant",
+    "title": "WMA Assistant",
+    "welcome": "Hi! I'm the Weekly Music Awards assistant. Ask me anything about the contest, music production, or promotion.",
+    "loginRequired": "You must be logged in to use the AI chatbot.",
+    "placeholder": "Ask a question...",
+    "errorGeneric": "Sorry, an error occurred."
+  },
+  "aiSummary": {
+    "title": "AI vote summary",
+    "analyze": "Analyze",
+    "emptyState": "Click \"Analyze\" to get an AI summary of feedback received on your tracks.",
+    "loading": "Analyzing...",
+    "votesAnalyzed": "votes analyzed",
+    "originality": "Originality",
+    "production": "Production",
+    "emotion": "Emotion",
+    "strengths": "Strengths",
+    "improvements": "Areas for improvement",
+    "overall": "Summary",
+    "refresh": "Refresh analysis"
+  },
+  "header": {
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu"
+  },
   "scoring": {
     "seoTitle": "Scoring Method — How Rankings Are Calculated",
     "seoDesc": "Discover in detail how Weekly Music Awards rankings are calculated: 3 scoring criteria (emotion, originality, production), genre-specific weighting, AI anti-fraud system and full transparency. No payment influences results.",

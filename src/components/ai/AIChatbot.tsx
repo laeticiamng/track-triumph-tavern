@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { Bot, Send, X, Loader2, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -11,6 +11,7 @@ type Message = { role: "user" | "assistant"; content: string };
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
 export function AIChatbot() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -37,7 +38,7 @@ export function AIChatbot() {
       if (!session?.access_token) {
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Vous devez être connecté pour utiliser le chatbot IA." },
+          { role: "assistant", content: t("chatbot.loginRequired") },
         ]);
         setLoading(false);
         return;
@@ -55,7 +56,7 @@ export function AIChatbot() {
 
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || "Erreur");
+        throw new Error(err.error || "Error");
       }
 
       if (!resp.body) throw new Error("No stream");
@@ -103,7 +104,7 @@ export function AIChatbot() {
       console.error("Chat error:", err);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: err instanceof Error ? err.message : "Désolé, une erreur est survenue." },
+        { role: "assistant", content: err instanceof Error ? err.message : t("chatbot.errorGeneric") },
       ]);
     } finally {
       setLoading(false);
@@ -121,7 +122,7 @@ export function AIChatbot() {
             exit={{ scale: 0 }}
             onClick={() => setOpen(true)}
             className="fixed bottom-20 right-4 md:bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-colors"
-            aria-label="Ouvrir l'assistant IA"
+            aria-label={t("chatbot.openAI")}
           >
             <MessageCircle className="h-6 w-6" />
           </motion.button>
@@ -141,7 +142,7 @@ export function AIChatbot() {
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card">
               <div className="flex items-center gap-2">
                 <Bot className="h-5 w-5 text-primary" />
-                <span className="font-display font-semibold text-sm">Assistant WMA</span>
+                <span className="font-display font-semibold text-sm">{t("chatbot.title")}</span>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="h-7 w-7">
                 <X className="h-4 w-4" />
@@ -154,7 +155,7 @@ export function AIChatbot() {
                 <div className="text-center py-8">
                   <Bot className="h-10 w-10 text-muted-foreground/40 mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">
-                    Salut ! Je suis l'assistant Weekly Music Awards. Pose-moi une question sur le concours, la production, ou la promotion musicale.
+                    {t("chatbot.welcome")}
                   </p>
                 </div>
               )}
@@ -196,7 +197,7 @@ export function AIChatbot() {
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Poser une question..."
+                  placeholder={t("chatbot.placeholder")}
                   className="flex-1 text-sm"
                   disabled={loading}
                 />
