@@ -29,5 +29,8 @@ jobs:
       - name: Check i18n keys
         run: node scripts/check-i18n.mjs
 
+      - name: Check unused i18n keys
+        run: node scripts/check-i18n-unused.mjs
+
       - name: Run tests
         run: bun run test
