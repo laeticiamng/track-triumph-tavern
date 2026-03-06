@@ -155,7 +155,7 @@
     "artistName": "Artist name",
     "artistNamePlaceholder": "Your artist name",
     "emailPlaceholder": "you@example.com",
-    "passwordPlaceholder": "Min. 6 characters",
+    "passwordPlaceholder": "Min. 8 characters",
     "forgotPassword": "Forgot password?",
     "loading": "Loading...",
     "loginButton": "Log in",
