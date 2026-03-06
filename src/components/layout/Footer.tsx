@@ -26,9 +26,6 @@ export function Footer() {
             <p className="mt-3 text-xs text-muted-foreground leading-relaxed max-w-xs">
               {t("footer.tagline")}
             </p>
-            <span className="mt-2 inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-              {t("footer.beta")}
-            </span>
           </div>
 
           {/* Navigation */}
