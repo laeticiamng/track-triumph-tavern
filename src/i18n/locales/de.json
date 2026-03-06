@@ -1252,5 +1252,18 @@
     "criticDesc": "Die meisten konstruktiven Kommentare",
     "eclecticLabel": "Eklektisch",
     "eclecticDesc": "Stimmen in den meisten Kategorien"
+  },
+  "onboarding": {
+    "welcomeTitle": "Willkommen bei Weekly Music Awards",
+    "welcomeDesc": "So starten Sie in 3 einfachen Schritten.",
+    "step1Title": "Tracks entdecken",
+    "step1Desc": "Hören Sie Einreichungen von Künstlern aller Kategorien.",
+    "step2Title": "Jede Woche abstimmen",
+    "step2Desc": "Bewerten Sie nach 3 Kriterien: Originalität, Produktion, Emotion.",
+    "step3Title": "Belohnungen gewinnen",
+    "step3Desc": "Die bestbewerteten Künstler schaffen es aufs Podium.",
+    "startVoting": "Abstimmung starten",
+    "exploreTracks": "Tracks erkunden",
+    "later": "Später"
   }
 }
