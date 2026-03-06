@@ -22,6 +22,7 @@ import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgeShowcase } from "@/components/gamification/BadgeShowcase";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
+import WelcomeDialog from "@/components/onboarding/WelcomeDialog";
 
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
 
