@@ -30,10 +30,10 @@ interface WeekResult {
   winners: WinnerWithSubmission[];
 }
 
-const medals = [
-  { icon: Trophy, color: "text-yellow-500", label: "1er" },
-  { icon: Medal, color: "text-gray-400", label: "2e" },
-  { icon: Medal, color: "text-amber-700", label: "3e" },
+const medalConfig = [
+  { icon: Trophy, color: "text-yellow-500", key: "rank1" },
+  { icon: Medal, color: "text-gray-400", key: "rank2" },
+  { icon: Medal, color: "text-amber-700", key: "rank3" },
 ];
 
 const HallOfFame = () => {
@@ -142,7 +142,7 @@ const HallOfFame = () => {
                   ) : (
                     <div className="space-y-3">
                       {winners.map((w, idx) => {
-                        const medal = medals[idx];
+                        const medal = medalConfig[idx];
                         const Icon = medal?.icon || Medal;
                         return (
                           <Link

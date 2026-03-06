@@ -641,7 +641,10 @@
     "noSubmissionsWeek": "Aucune soumission cette semaine.",
     "weekLabel": "Semaine {{number}}",
     "voteSingular": "vote",
-    "votePlural": "votes"
+    "votePlural": "votes",
+    "rank1": "1er",
+    "rank2": "2e",
+    "rank3": "3e"
   },
   "faqPage": {
     "seoTitle": "FAQ — Questions fréquentes",
