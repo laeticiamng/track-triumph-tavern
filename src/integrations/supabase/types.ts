@@ -779,6 +779,44 @@ export type Database = {
           vote_count: number | null
           week_id: string | null
         }
+        Insert: {
+          artist_name?: string | null
+          audio_excerpt_url?: string | null
+          category_id?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          external_url?: string | null
+          id?: string | null
+          rejection_reason?: string | null
+          rights_declaration?: boolean | null
+          status?: Database["public"]["Enums"]["submission_status"] | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vote_count?: number | null
+          week_id?: string | null
+        }
+        Update: {
+          artist_name?: string | null
+          audio_excerpt_url?: string | null
+          category_id?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          external_url?: string | null
+          id?: string | null
+          rejection_reason?: string | null
+          rights_declaration?: boolean | null
+          status?: Database["public"]["Enums"]["submission_status"] | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vote_count?: number | null
+          week_id?: string | null
+        }
         Relationships: [
           {
             foreignKeyName: "submissions_category_id_fkey"
@@ -792,6 +830,41 @@ export type Database = {
             columns: ["week_id"]
             isOneToOne: false
             referencedRelation: "weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vote_events_safe: {
+        Row: {
+          created_at: string | null
+          event_type: string | null
+          id: number | null
+          metadata: Json | null
+          user_id: string | null
+          vote_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type?: string | null
+          id?: number | null
+          metadata?: Json | null
+          user_id?: string | null
+          vote_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string | null
+          id?: number | null
+          metadata?: Json | null
+          user_id?: string | null
+          vote_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vote_events_vote_id_fkey"
+            columns: ["vote_id"]
+            isOneToOne: false
+            referencedRelation: "votes"
             referencedColumns: ["id"]
           },
         ]

@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupValues } from "@/lib/auth-schemas";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,6 +59,12 @@ const AuthSignupForm = ({ onSubmit, loading }: AuthSignupFormProps) => {
             <FormMessage />
           </FormItem>
         )} />
+        <p className="text-xs text-muted-foreground text-center">
+          {t("auth.signupLegal1")}{" "}
+          <Link to="/terms" className="underline hover:text-primary">{t("auth.termsLink")}</Link>
+          {" "}{t("auth.signupLegalAnd")}{" "}
+          <Link to="/privacy" className="underline hover:text-primary">{t("auth.privacyLink")}</Link>.
+        </p>
         <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90 transition-opacity" disabled={loading}>
           {loading ? t("auth.loading") : t("auth.signupButton")}
         </Button>

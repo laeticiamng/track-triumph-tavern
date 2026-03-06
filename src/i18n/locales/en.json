@@ -160,6 +160,10 @@
     "loading": "Loading...",
     "loginButton": "Log in",
     "signupButton": "Sign up for free",
+    "signupLegal1": "By creating an account, you agree to our",
+    "signupLegalAnd": "and our",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
     "signupLink": "Sign up",
@@ -388,6 +392,9 @@
     "premiumBadge": "Premium + badge",
     "detailed": "Detailed",
     "no": "No",
+    "freeName": "Free",
+    "proName": "Pro",
+    "eliteName": "Elite",
     "freeTagline": "Listen, vote, discover",
     "proTagline": "Submit, progress, shine",
     "eliteTagline": "The full experience, no limits",
@@ -1245,5 +1252,18 @@
     "criticDesc": "Most constructive comments",
     "eclecticLabel": "Eclectic",
     "eclecticDesc": "Votes across the most categories"
+  },
+  "onboarding": {
+    "welcomeTitle": "Welcome to Weekly Music Awards",
+    "welcomeDesc": "Here's how to get started in 3 simple steps.",
+    "step1Title": "Discover tracks",
+    "step1Desc": "Listen to submissions from artists across all categories.",
+    "step2Title": "Vote every week",
+    "step2Desc": "Rate on 3 criteria: originality, production, emotion.",
+    "step3Title": "Win rewards",
+    "step3Desc": "Top-rated artists make it to the podium.",
+    "startVoting": "Start voting",
+    "exploreTracks": "Explore tracks",
+    "later": "Later"
   }
 }
