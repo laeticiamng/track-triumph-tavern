@@ -142,7 +142,7 @@ const HallOfFame = () => {
                   ) : (
                     <div className="space-y-3">
                       {winners.map((w, idx) => {
-                        const medal = medals[idx];
+                        const medal = medalConfig[idx];
                         const Icon = medal?.icon || Medal;
                         return (
                           <Link
