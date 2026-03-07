@@ -498,7 +498,14 @@
     "changeAvatar": "Changer l'avatar",
     "pending": "En attente",
     "approved": "Approuvé",
-    "rejected": "Refusé"
+    "rejected": "Refusé",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteAccountDesc": "Cette action est irréversible. Toutes vos données (profil, soumissions, votes, badges) seront définitivement supprimées.",
+    "deleteAccountBtn": "Supprimer mon compte",
+    "deleteConfirmTitle": "Supprimer définitivement votre compte ?",
+    "deleteConfirmDesc": "Cette action est irréversible. Toutes vos données seront supprimées conformément au RGPD article 17 (droit à l'effacement).",
+    "deleteConfirmBtn": "Oui, supprimer mon compte",
+    "deleteError": "Impossible de supprimer le compte."
   },
   "explore": {
     "seoTitle": "Explorer",
