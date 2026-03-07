@@ -18,8 +18,8 @@ const MentionsLegales = () => {
           <ul className="list-none space-y-1 pl-0">
             <li><strong>Raison sociale :</strong> EMOTIONSCARE SASU</li>
             <li><strong>SIREN :</strong> 944 505 445</li>
-            <li><strong>E-mail :</strong> <a href="mailto:contact@weeklymusicawards.com" className="text-primary hover:underline">contact@weeklymusicawards.com</a></li>
-            <li><strong>DPO :</strong> <a href="mailto:dpo@weeklymusicawards.com" className="text-primary hover:underline">dpo@weeklymusicawards.com</a></li>
+            <li><strong>E-mail :</strong> <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></li>
+            <li><strong>DPO :</strong> <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></li>
           </ul>
 
           <h2 className="text-foreground font-display">2. Hébergement</h2>

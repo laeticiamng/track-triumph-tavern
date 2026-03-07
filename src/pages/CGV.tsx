@@ -46,7 +46,7 @@ const CGV = () => {
           <p>Voir notre <Link to="/privacy" className="text-primary hover:underline">Politique de confidentialité</Link>.</p>
 
           <h2 className="text-foreground font-display">9. Service client</h2>
-          <p>Contact : <a href="mailto:contact@weeklymusicawards.com" className="text-primary hover:underline">contact@weeklymusicawards.com</a></p>
+          <p>Contact : <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></p>
 
           <h2 className="text-foreground font-display">10. Médiation</h2>
           <p>Conformément au Code de la consommation, le Client peut recourir à un médiateur.</p>
