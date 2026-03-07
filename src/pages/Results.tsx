@@ -130,7 +130,7 @@ const Results = () => {
         <div className="mb-8">
           <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("results.title")}</h1>
           <p className="mt-2 text-muted-foreground">
-            {activeWeek?.title || t("results.currentWeek")} — {isResultsPublished ? t("results.published") : t("results.pending")}
+            {activeWeek ? `${t("hero.season")} 1 — ${t("hero.week")} ${activeWeek.week_number}` : t("results.currentWeek")} — {isResultsPublished ? t("results.published") : t("results.pending")}
           </p>
           {isResultsPublished && (
             <Link to="/scoring-method" className="mt-1 inline-flex items-center gap-1 text-sm text-primary hover:underline">

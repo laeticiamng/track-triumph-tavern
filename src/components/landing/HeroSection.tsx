@@ -29,8 +29,10 @@ export function HeroSection() {
       .maybeSingle()
     ).then(async ({ data }) => {
         if (data) {
-          const title = data.title || `${t("hero.season")} 1 — ${t("hero.week")} ${data.week_number}`;
-          setWeekLabel(`${title} ${t("hero.weekOpen")}`);
+          // Always use translated labels to avoid language mixing
+          const seasonLabel = `${t("hero.season")} 1`;
+          const weekLabel = `${t("hero.week")} ${data.week_number}`;
+          setWeekLabel(`${seasonLabel} — ${weekLabel} ${t("hero.weekOpen")}`);
           setVotingCloseAt(data.voting_close_at);
 
           const { count } = await supabase
