@@ -26,7 +26,7 @@ const Contact = () => {
 
     setSending(true);
     // For now, open mailto — in production, hook to an edge function
-    const mailtoUrl = `mailto:contact@emotionscare.com?subject=${encodeURIComponent(subject || "Contact WMA")}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
+    const mailtoUrl = `mailto:contact@weeklymusicawards.com?subject=${encodeURIComponent(subject || "Contact WMA")}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
     window.open(mailtoUrl, "_blank");
     
     toast({ title: t("contact.sent"), description: t("contact.sentDesc") });
@@ -122,8 +122,8 @@ const Contact = () => {
 
             <div className="mt-6 pt-6 border-t border-border text-center">
               <p className="text-sm text-muted-foreground">{t("contact.directEmail")}</p>
-              <a href="mailto:contact@emotionscare.com" className="text-sm text-primary hover:underline">
-                contact@emotionscare.com
+              <a href="mailto:contact@weeklymusicawards.com" className="text-sm text-primary hover:underline">
+                contact@weeklymusicawards.com
               </a>
             </div>
           </CardContent>
