@@ -34,7 +34,7 @@ describe("loginSchema", () => {
     if (!result.success) {
       const emailError = result.error.issues.find((i) => i.path[0] === "email");
       expect(emailError).toBeDefined();
-      expect(emailError!.message).toBe("Adresse email invalide");
+      expect(emailError!.message).toBe("Invalid email");
     }
   });
 
@@ -64,7 +64,7 @@ describe("loginSchema", () => {
     if (!result.success) {
       const pwError = result.error.issues.find((i) => i.path[0] === "password");
       expect(pwError).toBeDefined();
-      expect(pwError!.message).toBe("Min. 8 caractères");
+      expect(pwError!.message).toBe("Min. 8 characters");
     }
   });
 
@@ -85,7 +85,7 @@ describe("loginSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const pwError = result.error.issues.find(
-        (i) => i.path[0] === "password" && i.message === "Au moins une minuscule"
+        (i) => i.path[0] === "password" && i.message === "At least one lowercase"
       );
       expect(pwError).toBeDefined();
     }
@@ -99,7 +99,7 @@ describe("loginSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const pwError = result.error.issues.find(
-        (i) => i.path[0] === "password" && i.message === "Au moins une majuscule"
+        (i) => i.path[0] === "password" && i.message === "At least one uppercase"
       );
       expect(pwError).toBeDefined();
     }
@@ -113,7 +113,7 @@ describe("loginSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const pwError = result.error.issues.find(
-        (i) => i.path[0] === "password" && i.message === "Au moins un chiffre"
+        (i) => i.path[0] === "password" && i.message === "At least one digit"
       );
       expect(pwError).toBeDefined();
     }
@@ -174,7 +174,7 @@ describe("signupSchema", () => {
     if (!result.success) {
       const nameError = result.error.issues.find((i) => i.path[0] === "displayName");
       expect(nameError).toBeDefined();
-      expect(nameError!.message).toBe("Max. 50 caractères");
+      expect(nameError!.message).toBe("Max. 50 characters");
     }
   });
 
@@ -211,7 +211,7 @@ describe("resetSchema", () => {
     const result = resetSchema.safeParse({ email: "nope" });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe("Adresse email invalide");
+      expect(result.error.issues[0].message).toBe("Invalid email");
     }
   });
 
