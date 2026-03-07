@@ -1277,5 +1277,24 @@
     "startVoting": "Abstimmung starten",
     "exploreTracks": "Tracks erkunden",
     "later": "Später"
+  },
+  "contact": {
+    "seoTitle": "Kontakt",
+    "seoDesc": "Kontaktieren Sie das Weekly Music Awards Team. Frage, Partnerschaft oder Feedback.",
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Eine Frage, Partnerschaft oder Feedback? Wir freuen uns auf den Austausch.",
+    "formTitle": "Senden Sie uns eine Nachricht",
+    "name": "Name",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "sie@beispiel.com",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Betreff Ihrer Nachricht",
+    "message": "Nachricht",
+    "messagePlaceholder": "Ihre Nachricht...",
+    "send": "Senden",
+    "sent": "Nachricht gesendet",
+    "sentDesc": "Wir melden uns so schnell wie möglich.",
+    "directEmail": "Oder schreiben Sie uns direkt an:"
   }
 }
