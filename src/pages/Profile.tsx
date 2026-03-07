@@ -56,6 +56,7 @@ const Profile = () => {
   const [portalLoading, setPortalLoading] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [bannerUploading, setBannerUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
