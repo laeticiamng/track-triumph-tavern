@@ -752,13 +752,16 @@
   },
   "votePage": {
     "seoTitle": "Abstimmen",
-    "seoDesc": "Hören Sie sich Ihre Lieblingsstücke an und stimmen Sie in 9 Musikkategorien ab.",
+    "seoDesc": "Hören Sie sich Ihre Lieblingsstücke an und stimmen Sie in 12 Musikkategorien ab.",
     "all": "Alle",
     "forYou": "Für Sie",
     "contestStartsSoon": "Der Wettbewerb startet bald",
-    "tracksWillAppear": "Die Tracks der Woche erscheinen hier, sobald sie genehmigt sind. Melden Sie sich an, um benachrichtigt zu werden!",
+    "tracksWillAppear": "Die Tracks der Woche erscheinen hier, sobald sie genehmigt sind.",
     "joinContest": "Am Wettbewerb teilnehmen",
-    "howItWorks": "Wie funktioniert es?"
+    "howItWorks": "Wie funktioniert es?",
+    "loginToVote": "Anmelden zum Abstimmen",
+    "loginToVoteDesc": "Erstellen Sie ein kostenloses Konto, um jede Woche Ihre Lieblings-Tracks zu hören, zu entdecken und abzustimmen.",
+    "browseFirst": "Tracks zuerst durchsuchen"
   },
   "categoryDetail": {
     "notFound": "Kategorie nicht gefunden",

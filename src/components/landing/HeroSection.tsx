@@ -24,14 +24,13 @@ export function HeroSection() {
   useEffect(() => {
     Promise.resolve(supabase
       .from("weeks")
-      .select("title, week_number, season_id, voting_close_at, id, seasons(name)")
+      .select("title, week_number, season_id, voting_close_at, id")
       .eq("is_active", true)
       .maybeSingle()
     ).then(async ({ data }) => {
         if (data) {
-          const season = (data as { seasons?: { name: string } | null }).seasons?.name || `${t("hero.season")} 1`;
-          const title = data.title || `${t("hero.week")} ${data.week_number}`;
-          setWeekLabel(`${season} — ${title} ${t("hero.weekOpen")}`);
+          const title = data.title || `${t("hero.season")} 1 — ${t("hero.week")} ${data.week_number}`;
+          setWeekLabel(`${title} ${t("hero.weekOpen")}`);
           setVotingCloseAt(data.voting_close_at);
 
           const { count } = await supabase

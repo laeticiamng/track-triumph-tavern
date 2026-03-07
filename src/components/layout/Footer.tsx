@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
-import { Instagram, Music, Youtube } from "lucide-react";
+import { Music } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const socialLinks = [
-  { name: "Instagram", href: "https://instagram.com/weeklymusicawards", icon: Instagram },
-  { name: "YouTube", href: "https://www.youtube.com/@weeklymusicawards", icon: Youtube },
-] as const;
+// Social links removed until official accounts are created — empty links hurt credibility
 
 export function Footer() {
   const { t } = useTranslation();
@@ -70,23 +67,6 @@ export function Footer() {
             <a href="mailto:contact@emotionscare.com" className="mt-2 inline-block text-sm text-primary hover:underline">
               contact@emotionscare.com
             </a>
-            <div className="mt-4">
-              <p className="text-xs font-medium text-foreground">{t("footer.followUs")}</p>
-              <div className="mt-2 flex items-center gap-2">
-                {socialLinks.map(({ name, href, icon: Icon }) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={t("footer.followOnPlatform", { platform: name })}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                  >
-                    <Icon className="h-4 w-4" />
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 

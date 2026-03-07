@@ -752,13 +752,16 @@
   },
   "votePage": {
     "seoTitle": "Voter",
-    "seoDesc": "Écoutez et votez pour vos morceaux préférés dans 9 catégories musicales.",
+    "seoDesc": "Écoutez et votez pour vos morceaux préférés dans 12 catégories musicales.",
     "all": "Tout",
     "forYou": "Pour vous",
     "contestStartsSoon": "Le concours démarre bientôt",
-    "tracksWillAppear": "Les morceaux de la semaine apparaîtront ici dès qu'ils seront approuvés. Inscrivez-vous pour être notifié !",
+    "tracksWillAppear": "Les morceaux de la semaine apparaîtront ici dès qu'ils seront approuvés.",
     "joinContest": "Rejoindre le concours",
-    "howItWorks": "Comment ça marche ?"
+    "howItWorks": "Comment ça marche ?",
+    "loginToVote": "Connectez-vous pour voter",
+    "loginToVoteDesc": "Créez un compte gratuit pour écouter, découvrir et voter pour vos morceaux préférés chaque semaine.",
+    "browseFirst": "Parcourir les morceaux"
   },
   "categoryDetail": {
     "notFound": "Catégorie introuvable",

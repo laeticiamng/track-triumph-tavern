@@ -213,24 +213,49 @@ const Vote = () => {
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent mb-6">
               <Music className="h-10 w-10 text-accent-foreground" />
             </div>
-            <h3 className="font-display text-xl font-semibold">{t("votePage.contestStartsSoon")}</h3>
-            <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              {t("votePage.tracksWillAppear")}
-            </p>
-            <div className="mt-6 flex flex-col gap-3">
-              <Link
-                to="/auth?tab=signup"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                {t("votePage.joinContest")}
-              </Link>
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
-              >
-                {t("votePage.howItWorks")}
-              </Link>
-            </div>
+            {!user ? (
+              <>
+                <h3 className="font-display text-xl font-semibold">{t("votePage.loginToVote", "Sign in to start voting")}</h3>
+                <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
+                  {t("votePage.loginToVoteDesc", "Create a free account to listen, discover, and vote for your favorite tracks every week.")}
+                </p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <Link
+                    to="/auth?tab=signup"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                  >
+                    {t("votePage.joinContest")}
+                  </Link>
+                  <Link
+                    to="/explore"
+                    className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+                  >
+                    {t("votePage.browseFirst", "Browse tracks first")}
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="font-display text-xl font-semibold">{t("votePage.contestStartsSoon")}</h3>
+                <p className="mt-2 max-w-sm text-sm text-muted-foreground leading-relaxed">
+                  {t("votePage.tracksWillAppear")}
+                </p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <Link
+                    to="/explore"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                  >
+                    {t("votePage.browseFirst", "Browse tracks")}
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent transition-colors"
+                  >
+                    {t("votePage.howItWorks")}
+                  </Link>
+                </div>
+              </>
+            )}
             <div className="w-full max-w-lg mt-6">
               <ArtistSuggestions />
             </div>
