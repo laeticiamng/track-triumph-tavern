@@ -8,11 +8,14 @@ import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer"
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { OfflineBanner } from "@/components/pwa/OfflineBanner";
 import { useSubscription } from "@/hooks/use-subscription";
+import { useAuth } from "@/hooks/use-auth";
 import { trackEvent } from "@/lib/analytics";
+import WelcomeDialog from "@/components/onboarding/WelcomeDialog";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const { tier } = useSubscription();
+  const { user } = useAuth();
   const showChatbot = tier === "pro" || tier === "elite";
   const location = useLocation();
 
@@ -27,6 +30,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </a>
       <Header />
       <OfflineBanner />
+      {user && <WelcomeDialog userId={user.id} />}
       <main id="main-content" className="pt-16 pb-20 md:pb-0">{children}</main>
       <PersistentAudioPlayer />
       <BottomNav />
