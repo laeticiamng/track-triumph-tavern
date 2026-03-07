@@ -752,13 +752,16 @@
   },
   "votePage": {
     "seoTitle": "Vote",
-    "seoDesc": "Listen and vote for your favorite tracks in 9 music categories.",
+    "seoDesc": "Listen and vote for your favorite tracks in 12 music categories.",
     "all": "All",
     "forYou": "For you",
     "contestStartsSoon": "Contest starts soon",
-    "tracksWillAppear": "This week's tracks will appear here once approved. Sign up to be notified!",
+    "tracksWillAppear": "This week's tracks will appear here once approved.",
     "joinContest": "Join the contest",
-    "howItWorks": "How does it work?"
+    "howItWorks": "How does it work?",
+    "loginToVote": "Sign in to start voting",
+    "loginToVoteDesc": "Create a free account to listen, discover, and vote for your favorite tracks every week.",
+    "browseFirst": "Browse tracks first"
   },
   "categoryDetail": {
     "notFound": "Category not found",
