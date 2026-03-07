@@ -65,8 +65,8 @@ export function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t("footer.contactText")}
             </p>
-            <a href="mailto:contact@emotionscare.com" className="mt-2 inline-block text-sm text-primary hover:underline">
-              contact@emotionscare.com
+            <a href="mailto:contact@weeklymusicawards.com" className="mt-2 inline-block text-sm text-primary hover:underline">
+              contact@weeklymusicawards.com
             </a>
           </div>
         </div>

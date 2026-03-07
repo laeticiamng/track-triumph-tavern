@@ -54,8 +54,8 @@ describe("Footer", () => {
 
   it("renders contact email", () => {
     renderFooter();
-    const mail = screen.getByText("contact@emotionscare.com");
-    expect(mail.closest("a")).toHaveAttribute("href", "mailto:contact@emotionscare.com");
+    const mail = screen.getByText("contact@weeklymusicawards.com");
+    expect(mail.closest("a")).toHaveAttribute("href", "mailto:contact@weeklymusicawards.com");
   });
 
   it("has accessible nav landmarks", () => {
