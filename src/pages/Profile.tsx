@@ -211,7 +211,7 @@ const Profile = () => {
   return (
     <Layout>
       <SEOHead title={t("profilePage.seoTitle")} description={t("profilePage.seoDesc")} url="/profile" />
-      <WelcomeDialog userId={user.id} />
+      {/* WelcomeDialog is rendered in Layout.tsx */}
       <div className="container max-w-2xl py-8">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">

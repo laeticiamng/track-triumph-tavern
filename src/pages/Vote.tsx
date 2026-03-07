@@ -127,6 +127,8 @@ const Vote = () => {
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />
       <Header />
+      <OfflineBanner />
+      {user && <WelcomeDialog userId={user.id} />}
 
       {/* Overlay controls */}
       <div className="fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-2 space-y-2 pointer-events-none">
