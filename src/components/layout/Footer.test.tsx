@@ -40,14 +40,10 @@ describe("Footer", () => {
     expect(screen.getByText("footer.cookies")).toBeInTheDocument();
   });
 
-  it("renders social media links with aria-labels", () => {
+  it("does not render social media links (removed until accounts are created)", () => {
     renderFooter();
-    const links = screen.getAllByLabelText("footer.followOnPlatform");
-    expect(links).toHaveLength(2);
-    links.forEach((link) => {
-      expect(link).toHaveAttribute("target", "_blank");
-      expect(link).toHaveAttribute("rel", "noreferrer");
-    });
+    const links = screen.queryAllByLabelText("footer.followOnPlatform");
+    expect(links).toHaveLength(0);
   });
 
   it("renders copyright with current year", () => {
