@@ -8,20 +8,16 @@ export function useActiveWeek() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.resolve(supabase
+    supabase
       .from("weeks")
       .select("*")
       .eq("is_active", true)
-      .single())
+      .maybeSingle()
       .then(({ data, error: err }) => {
-        if (err && err.code !== "PGRST116") {
+        if (err) {
           setError("Failed to load active week");
         }
         setWeek(data || null);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Network error");
         setLoading(false);
       });
   }, []);

@@ -13,7 +13,7 @@ export function RewardPoolBanner() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: week } = await supabase.from("weeks").select("id").eq("is_active", true).single();
+      const { data: week } = await supabase.from("weeks").select("id").eq("is_active", true).maybeSingle();
       if (!week) return;
       const { data } = await supabase.from("reward_pools").select("*").eq("week_id", week.id).single();
       if (data) setPool(data);

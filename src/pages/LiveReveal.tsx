@@ -312,7 +312,7 @@ const LiveReveal = () => {
       try {
         const [{ data: cats }, { data: week }] = await Promise.all([
           supabase.from("categories").select("*").order("sort_order"),
-          supabase.from("weeks").select("*").eq("is_active", true).single(),
+          supabase.from("weeks").select("*").eq("is_active", true).maybeSingle(),
         ]);
         if (cats) setCategories(cats);
         if (week) {
