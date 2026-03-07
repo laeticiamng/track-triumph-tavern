@@ -268,7 +268,8 @@ const Vote = () => {
             commentsMax={voteState.commentsMax}
           />
         )}
-      </main>
+        </main>
+      </div>
 
       <BottomNav />
     </div>
