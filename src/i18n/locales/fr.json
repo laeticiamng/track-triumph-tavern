@@ -108,7 +108,7 @@
   "cta": {
     "registrationsOpen": "Inscriptions ouvertes",
     "title": "Prêt à rejoindre le concours ?",
-    "subtitle": "Rejoignez les premiers membres de la bêta. Les premières semaines sont décisives — faites-vous un nom dès le début.",
+    "subtitle": "Les premières semaines sont décisives — faites-vous un nom dès le début.",
     "joinContest": "Rejoindre le concours",
     "viewPlans": "Voir les abonnements",
     "signup30s": "Inscription en 30s",
@@ -596,7 +596,7 @@
     "storyP1": "Tout est parti d'un constat simple : des milliers d'artistes indépendants créent des morceaux incroyables chaque jour, mais la plupart n'ont aucune visibilité.",
     "storyP2": "Weekly Music Awards est né de cette frustration. L'idée ? Créer un concours 100 % méritocratique, où seul le talent compte.",
     "storyP3": "La plateforme est éditée par EMOTIONSCARE SASU (SIREN 944 505 445), une entreprise française dédiée à la valorisation des talents musicaux émergents.",
-    "storyP4": "Nous sommes actuellement en bêta ouverte — chaque retour de votre part nous aide à construire la meilleure plateforme possible.",
+    "storyP4": "Chaque retour de votre part nous aide à construire la meilleure plateforme possible.",
     "missionTitle": "Notre mission",
     "missionDesc": "Offrir à chaque artiste indépendant une scène équitable pour se faire connaître.",
     "integrityTitle": "Intégrité",
@@ -804,7 +804,7 @@
   },
   "legal": {
     "lastUpdated": "Dernière mise à jour : Février 2026",
-    "editor": "Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com",
+    "editor": "Éditeur : EMOTIONSCARE SASU — SIREN 944 505 445 — contact@weeklymusicawards.com",
     "termsTitle": "Conditions Générales d'Utilisation",
     "termsSeoDesc": "Conditions Générales d'Utilisation de la plateforme Weekly Music Awards.",
     "privacyTitle": "Politique de Confidentialité",

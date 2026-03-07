@@ -106,10 +106,10 @@ const Faq = () => {
               {t("faqPage.contactUs")}
             </p>
             <a
-              href="mailto:contact@emotionscare.com"
+              href="mailto:contact@weeklymusicawards.com"
               className="mt-4 inline-block text-primary hover:underline font-medium"
             >
-              contact@emotionscare.com
+              contact@weeklymusicawards.com
             </a>
           </motion.div>
         </div>

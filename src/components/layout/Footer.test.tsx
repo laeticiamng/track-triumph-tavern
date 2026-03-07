@@ -43,7 +43,7 @@ describe("Footer", () => {
   it("renders social media links with aria-labels", () => {
     renderFooter();
     const links = screen.getAllByLabelText("footer.followOnPlatform");
-    expect(links).toHaveLength(3);
+    expect(links).toHaveLength(2);
     links.forEach((link) => {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noreferrer");
@@ -58,8 +58,8 @@ describe("Footer", () => {
 
   it("renders contact email", () => {
     renderFooter();
-    const mail = screen.getByText("contact@emotionscare.com");
-    expect(mail.closest("a")).toHaveAttribute("href", "mailto:contact@emotionscare.com");
+    const mail = screen.getByText("contact@weeklymusicawards.com");
+    expect(mail.closest("a")).toHaveAttribute("href", "mailto:contact@weeklymusicawards.com");
   });
 
   it("has accessible nav landmarks", () => {
