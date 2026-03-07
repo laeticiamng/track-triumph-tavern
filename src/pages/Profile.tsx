@@ -194,7 +194,6 @@ const Profile = () => {
     navigate("/");
   };
 
-  const [deleting, setDeleting] = useState(false);
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
