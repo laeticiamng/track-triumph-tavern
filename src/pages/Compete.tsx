@@ -117,11 +117,7 @@ const Compete = () => {
     return `${m}:${sec.toString().padStart(2, "0")}`;
   };
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?tab=signup&redirect=/compete");
-    }
-  }, [user, authLoading, navigate]);
+  // No longer auto-redirect — show in-page explanation for non-auth users
 
   // Pre-fill artist name from profile
   useEffect(() => {
@@ -241,6 +237,34 @@ const Compete = () => {
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </div>
   );
+
+  // Gate: Non-authenticated users see an explanatory screen
+  if (!user) {
+    return (
+      <Layout>
+        <SEOHead title={t("compete.seoTitle")} description={t("compete.seoDesc")} url="/compete" />
+        <div className="container max-w-lg py-16 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+            <Music className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="font-display text-2xl font-bold">{t("compete.submitYourTrack")}</h1>
+          <p className="mt-3 text-muted-foreground">{t("compete.loginRequiredDesc")}</p>
+          <div className="mt-6 flex flex-col gap-3">
+            <Button asChild className="bg-gradient-primary" size="lg">
+              <Link to="/auth?tab=signup&redirect=/compete">{t("compete.createAccountToSubmit")}</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/auth?tab=login&redirect=/compete">{t("compete.alreadyHaveAccount")}</Link>
+            </Button>
+            <Button asChild variant="ghost" size="lg">
+              <Link to="/pricing">{t("compete.viewOffers")}</Link>
+            </Button>
+          </div>
+        </div>
+        <Footer />
+      </Layout>
+    );
+  }
 
   // Gate: Free users cannot submit
   if (!canSubmit) {
