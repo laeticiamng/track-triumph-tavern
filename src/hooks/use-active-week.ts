@@ -15,13 +15,13 @@ export function useActiveWeek() {
       .single())
       .then(({ data, error: err }) => {
         if (err && err.code !== "PGRST116") {
-          setError("Impossible de charger la semaine active");
+          setError("Failed to load active week");
         }
         setWeek(data || null);
         setLoading(false);
       })
       .catch(() => {
-        setError("Erreur réseau");
+        setError("Network error");
         setLoading(false);
       });
   }, []);
