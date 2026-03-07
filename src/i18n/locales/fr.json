@@ -564,7 +564,9 @@
     "declarationsRequired": "Déclarations requises",
     "mustAcceptConditions": "Vous devez accepter les conditions.",
     "submissionSent": "Soumission envoyée !",
-    "submissionSentDesc": "Elle sera examinée par l'équipe de modération."
+    "submissionSentDesc": "Elle sera examinée par l'équipe de modération.",
+    "play": "Écouter",
+    "pause": "Pause"
   },
   "stats": {
     "seoTitle": "Statistiques",

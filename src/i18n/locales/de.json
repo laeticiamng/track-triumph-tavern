@@ -564,7 +564,9 @@
     "declarationsRequired": "Erklärungen erforderlich",
     "mustAcceptConditions": "Sie müssen die Bedingungen akzeptieren.",
     "submissionSent": "Einreichung gesendet!",
-    "submissionSentDesc": "Sie wird vom Moderationsteam überprüft."
+    "submissionSentDesc": "Sie wird vom Moderationsteam überprüft.",
+    "play": "Abspielen",
+    "pause": "Pause"
   },
   "stats": {
     "seoTitle": "Statistiken",
