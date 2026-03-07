@@ -24,7 +24,7 @@ export function HeroSection() {
   useEffect(() => {
     Promise.resolve(supabase
       .from("weeks")
-      .select("title, week_number, season_id, voting_close_at, id, seasons(name)")
+      .select("title, week_number, season_id, voting_close_at, id")
       .eq("is_active", true)
       .maybeSingle()
     ).then(async ({ data }) => {
