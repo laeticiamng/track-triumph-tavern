@@ -108,7 +108,7 @@
   "cta": {
     "registrationsOpen": "Registrierungen offen",
     "title": "Bereit, am Wettbewerb teilzunehmen?",
-    "subtitle": "Treten Sie den ersten Beta-Mitgliedern bei. Die ersten Wochen sind entscheidend — machen Sie sich von Anfang an einen Namen.",
+    "subtitle": "Die ersten Wochen sind entscheidend — machen Sie sich von Anfang an einen Namen.",
     "joinContest": "Am Wettbewerb teilnehmen",
     "viewPlans": "Pläne anzeigen",
     "signup30s": "Anmeldung in 30s",
@@ -596,7 +596,7 @@
     "storyP1": "Alles begann mit einer einfachen Beobachtung: Tausende unabhängige Künstler erstellen jeden Tag unglaubliche Tracks, aber die meisten haben keine Sichtbarkeit.",
     "storyP2": "Weekly Music Awards entstand aus dieser Frustration. Die Idee? Einen 100% leistungsorientierten Wettbewerb schaffen, in dem nur Talent zählt.",
     "storyP3": "Die Plattform wird von EMOTIONSCARE SASU (SIREN 944 505 445) herausgegeben, einem französischen Unternehmen zur Förderung aufstrebender Musiktalente.",
-    "storyP4": "Wir befinden uns derzeit in der offenen Beta — jedes Feedback von Ihnen hilft uns, die bestmögliche Plattform zu bauen.",
+    "storyP4": "Jedes Feedback von Ihnen hilft uns, die bestmögliche Plattform zu bauen.",
     "missionTitle": "Unsere Mission",
     "missionDesc": "Jedem unabhängigen Künstler eine faire Bühne bieten.",
     "integrityTitle": "Integrität",
@@ -804,7 +804,7 @@
   },
   "legal": {
     "lastUpdated": "Letzte Aktualisierung: Februar 2026",
-    "editor": "Herausgeber: EMOTIONSCARE SASU — SIREN 944 505 445 — contact@emotionscare.com",
+    "editor": "Herausgeber: EMOTIONSCARE SASU — SIREN 944 505 445 — contact@weeklymusicawards.com",
     "termsTitle": "Nutzungsbedingungen",
     "termsSeoDesc": "Nutzungsbedingungen der Weekly Music Awards Plattform.",
     "privacyTitle": "Datenschutzrichtlinie",
