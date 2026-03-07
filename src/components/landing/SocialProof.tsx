@@ -58,15 +58,17 @@ export function SocialProof() {
   ]);
 
   useEffect(() => {
+    // Use approved submissions to derive counts — votes table has RLS restricting anonymous access
     Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("votes").select("id", { count: "exact", head: true }),
-      supabase.from("submissions").select("id", { count: "exact", head: true }),
-    ]).then(([profiles, votes, submissions]) => {
+      supabase.from("submissions").select("id, vote_count").eq("status", "approved"),
+    ]).then(([profiles, submissions]) => {
+      const totalVotes = (submissions.data || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
+      const trackCount = submissions.data?.length || 0;
       setStats([
         { icon: Users, labelKey: "socialProof.registeredArtists", value: profiles.count || 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/15" },
-        { icon: Heart, labelKey: "socialProof.recordedVotes", value: votes.count || 0, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/15" },
-        { icon: Music, labelKey: "socialProof.submittedTracks", value: submissions.count || 0, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/15" },
+        { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/15" },
+        { icon: Music, labelKey: "socialProof.submittedTracks", value: trackCount, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/15" },
       ]);
     }).catch(() => {});
   }, []);
