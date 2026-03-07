@@ -509,6 +509,8 @@
     "searchPlaceholder": "Search for a title or artist...",
     "all": "All",
     "readyToVote": "Ready to vote?",
+    "goToVotePage": "Rate your favorite tracks now",
+    "voteNow": "Vote",
     "switchToVote": "Switch to vote mode",
     "rateYourFavorites": "to rate your favorites.",
     "noActiveContest": "No active contest",
