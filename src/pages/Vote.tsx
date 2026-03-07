@@ -12,6 +12,8 @@ import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
 import { SEOHead, eventJsonLd } from "@/components/seo/SEOHead";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { OfflineBanner } from "@/components/pwa/OfflineBanner";
+import WelcomeDialog from "@/components/onboarding/WelcomeDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Music, Sparkles } from "lucide-react";
 import { BadgeProgress } from "@/components/gamification/BadgeProgress";
@@ -125,6 +127,8 @@ const Vote = () => {
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />
       <Header />
+      <OfflineBanner />
+      {user && <WelcomeDialog userId={user.id} />}
 
       {/* Overlay controls */}
       <div className="fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-2 space-y-2 pointer-events-none">
