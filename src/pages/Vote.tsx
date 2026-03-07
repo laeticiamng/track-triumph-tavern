@@ -130,84 +130,76 @@ const Vote = () => {
       <OfflineBanner />
       {user && <WelcomeDialog userId={user.id} />}
 
-      {/* Overlay controls */}
-      <div className="fixed top-16 left-0 right-0 z-40 px-4 pt-3 pb-2 space-y-2 pointer-events-none">
-        <div className="pointer-events-auto">
+      {/* Main scrollable area below header */}
+      <div className="flex-1 pt-16 pb-16 md:pb-0 overflow-y-auto flex flex-col">
+        {/* Sticky controls */}
+        <div className="sticky top-0 z-40 px-4 pt-3 pb-2 space-y-2 bg-background/95 backdrop-blur-sm">
           <VoteQuotaBar
             voteCount={voteState.voteCount}
             remainingVotes={voteState.remainingVotes}
             tier={voteState.tier}
           />
-        </div>
 
-        <div className="pointer-events-auto">
           <StreakBadge showRecord />
-        </div>
 
-        {/* Category vote progress */}
-        {user && categories.length > 0 && voteState.votedCategories.size > 0 && (
-          <div className="pointer-events-auto">
+          {/* Category vote progress */}
+          {user && categories.length > 0 && voteState.votedCategories.size > 0 && (
             <CategoryProgressBar
               categories={categories.map((c) => ({ id: c.id, name: c.name }))}
               votedCategories={voteState.votedCategories}
             />
-          </div>
-        )}
-
-        {/* Category filter pills + AI recommendations */}
-        <div className="pointer-events-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-          <button
-            onClick={() => { setActiveFilter("all"); setShowRecsOnly(false); }}
-            className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-              activeFilter === "all" && !showRecsOnly
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-accent"
-            }`}
-          >
-            {t("votePage.all")}
-          </button>
-          {recommendedIds.length > 0 && (
-            <button
-              onClick={() => { setShowRecsOnly(!showRecsOnly); setActiveFilter("all"); }}
-              className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors flex items-center gap-1 ${
-                showRecsOnly
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-accent"
-              }`}
-            >
-              <Sparkles className="h-3 w-3" /> {t("votePage.forYou")}
-            </button>
           )}
-          {categories.map((cat) => (
+
+          {/* Category filter pills + AI recommendations */}
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
             <button
-              key={cat.id}
-              onClick={() => { setActiveFilter(cat.id); setShowRecsOnly(false); }}
+              onClick={() => { setActiveFilter("all"); setShowRecsOnly(false); }}
               className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                activeFilter === cat.id
+                activeFilter === "all" && !showRecsOnly
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
             >
-              {cat.name}
+              {t("votePage.all")}
             </button>
-          ))}
-        </div>
-        {/* Badge progress */}
-        {user && (
-          <div className="pointer-events-auto">
+            {recommendedIds.length > 0 && (
+              <button
+                onClick={() => { setShowRecsOnly(!showRecsOnly); setActiveFilter("all"); }}
+                className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors flex items-center gap-1 ${
+                  showRecsOnly
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-accent"
+                }`}
+              >
+                <Sparkles className="h-3 w-3" /> {t("votePage.forYou")}
+              </button>
+            )}
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => { setActiveFilter(cat.id); setShowRecsOnly(false); }}
+                className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                  activeFilter === cat.id
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-accent"
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+          {/* Badge progress */}
+          {user && (
             <BadgeProgress weekId={activeWeekId} />
-          </div>
-        )}
-        {/* AI Recommendations loader (Pro/Elite only) */}
-        {user && (voteState.tier === "pro" || voteState.tier === "elite") && (
-          <div className="pointer-events-auto">
+          )}
+          {/* AI Recommendations loader (Pro/Elite only) */}
+          {user && (voteState.tier === "pro" || voteState.tier === "elite") && (
             <AIRecommendations weekId={activeWeekId} onRecommendations={setRecommendedIds} />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* Feed area */}
-      <main className="flex-1 pt-16 pb-16 md:pb-0 overflow-hidden">
+        {/* Feed area */}
+        <main className="flex-1 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <Skeleton className="h-full w-full" />
