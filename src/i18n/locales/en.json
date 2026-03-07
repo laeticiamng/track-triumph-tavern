@@ -134,6 +134,7 @@
     "faq": "FAQ",
     "articles": "Articles",
     "about": "About",
+    "contactPage": "Contact",
     "legal": "Legal",
     "legalNotices": "Legal notices",
     "cgu": "Terms of Use",
@@ -498,7 +499,14 @@
     "changeAvatar": "Change avatar",
     "pending": "Pending",
     "approved": "Approved",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "deleteAccount": "Delete my account",
+    "deleteAccountDesc": "This action is irreversible. All your data (profile, submissions, votes, badges) will be permanently deleted.",
+    "deleteAccountBtn": "Delete my account",
+    "deleteConfirmTitle": "Permanently delete your account?",
+    "deleteConfirmDesc": "This action is irreversible. All your data will be deleted in accordance with GDPR Article 17 (right to erasure).",
+    "deleteConfirmBtn": "Yes, delete my account",
+    "deleteError": "Unable to delete account."
   },
   "explore": {
     "seoTitle": "Explore",
@@ -1277,5 +1285,24 @@
     "startVoting": "Start voting",
     "exploreTracks": "Explore tracks",
     "later": "Later"
+  },
+  "contact": {
+    "seoTitle": "Contact",
+    "seoDesc": "Contact the Weekly Music Awards team. Question, partnership or feedback.",
+    "title": "Contact us",
+    "subtitle": "A question, partnership, or feedback? We'd love to hear from you.",
+    "formTitle": "Send us a message",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "Subject of your message",
+    "message": "Message",
+    "messagePlaceholder": "Your message...",
+    "send": "Send",
+    "sent": "Message sent",
+    "sentDesc": "We'll get back to you as soon as possible.",
+    "directEmail": "Or email us directly at:"
   }
 }

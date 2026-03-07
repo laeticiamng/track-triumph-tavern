@@ -35,6 +35,7 @@ export function Footer() {
               <Link to="/faq" className="hover:text-foreground transition-colors">{t("footer.faq")}</Link>
               <Link to="/articles" className="hover:text-foreground transition-colors">{t("footer.articles")}</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">{t("footer.about")}</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
             </nav>
           </div>
 

@@ -66,15 +66,13 @@ export function VoteFeed({
   return (
     <div
       ref={containerRef}
-      className="h-full overflow-y-auto snap-y snap-mandatory scrollbar-hide"
-      style={{ scrollSnapType: "y mandatory" }}
+      className="h-full overflow-y-auto scrollbar-hide"
     >
       {submissions.map((sub, i) => (
         <div
           key={sub.id}
           data-index={i}
-          className="h-full snap-start"
-          style={{ scrollSnapAlign: "start" }}
+          className="min-h-[75vh]"
         >
           <VoteCard
             submission={sub}

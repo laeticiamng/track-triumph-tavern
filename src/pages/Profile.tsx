@@ -15,7 +15,18 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2 } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
@@ -45,6 +56,7 @@ const Profile = () => {
   const [portalLoading, setPortalLoading] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [bannerUploading, setBannerUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
@@ -180,6 +192,26 @@ const Profile = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("delete-account");
+      if (error) throw error;
+      const result = typeof data === "string" ? JSON.parse(data) : data;
+      if (result.error) throw new Error(result.error);
+      await signOut();
+      navigate("/");
+    } catch (err) {
+      toast({
+        title: t("errors.error"),
+        description: err instanceof Error ? err.message : t("profilePage.deleteError"),
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const addSocialLink = (platform: string) => {
@@ -489,6 +521,38 @@ const Profile = () => {
                 ))}
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Delete Account — GDPR Article 17 */}
+        <Card className="mt-8 border-destructive/30">
+          <CardHeader>
+            <CardTitle className="font-display text-xl flex items-center gap-2 text-destructive">
+              <Trash2 className="h-5 w-5" /> {t("profilePage.deleteAccount")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">{t("profilePage.deleteAccountDesc")}</p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={deleting}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {deleting ? "..." : t("profilePage.deleteAccountBtn")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t("profilePage.deleteConfirmTitle")}</AlertDialogTitle>
+                  <AlertDialogDescription>{t("profilePage.deleteConfirmDesc")}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    {t("profilePage.deleteConfirmBtn")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </CardContent>
         </Card>
       </div>

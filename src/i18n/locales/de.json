@@ -134,6 +134,7 @@
     "faq": "FAQ",
     "articles": "Artikel",
     "about": "Über uns",
+    "contactPage": "Kontakt",
     "legal": "Rechtliches",
     "legalNotices": "Impressum",
     "cgu": "AGB",
@@ -498,7 +499,14 @@
     "changeAvatar": "Avatar ändern",
     "pending": "Ausstehend",
     "approved": "Genehmigt",
-    "rejected": "Abgelehnt"
+    "rejected": "Abgelehnt",
+    "deleteAccount": "Mein Konto löschen",
+    "deleteAccountDesc": "Diese Aktion ist unwiderruflich. Alle Ihre Daten (Profil, Einreichungen, Stimmen, Abzeichen) werden dauerhaft gelöscht.",
+    "deleteAccountBtn": "Mein Konto löschen",
+    "deleteConfirmTitle": "Konto dauerhaft löschen?",
+    "deleteConfirmDesc": "Diese Aktion ist unwiderruflich. Alle Ihre Daten werden gemäß DSGVO Artikel 17 (Recht auf Löschung) gelöscht.",
+    "deleteConfirmBtn": "Ja, mein Konto löschen",
+    "deleteError": "Konto konnte nicht gelöscht werden."
   },
   "explore": {
     "seoTitle": "Entdecken",
@@ -1277,5 +1285,24 @@
     "startVoting": "Abstimmung starten",
     "exploreTracks": "Tracks erkunden",
     "later": "Später"
+  },
+  "contact": {
+    "seoTitle": "Kontakt",
+    "seoDesc": "Kontaktieren Sie das Weekly Music Awards Team. Frage, Partnerschaft oder Feedback.",
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Eine Frage, Partnerschaft oder Feedback? Wir freuen uns auf den Austausch.",
+    "formTitle": "Senden Sie uns eine Nachricht",
+    "name": "Name",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "sie@beispiel.com",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Betreff Ihrer Nachricht",
+    "message": "Nachricht",
+    "messagePlaceholder": "Ihre Nachricht...",
+    "send": "Senden",
+    "sent": "Nachricht gesendet",
+    "sentDesc": "Wir melden uns so schnell wie möglich.",
+    "directEmail": "Oder schreiben Sie uns direkt an:"
   }
 }
