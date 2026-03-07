@@ -1,21 +1,24 @@
 import { z } from "zod";
+import i18n from "@/i18n";
+
+const t = (key: string) => i18n.t(key);
 
 export const loginSchema = z.object({
-  email: z.string().trim().email({ message: "Adresse email invalide" }).max(255),
+  email: z.string().trim().email({ message: "Invalid email" }).max(255),
   password: z.string()
-    .min(8, { message: "Min. 8 caractères" })
+    .min(8, { message: "Min. 8 characters" })
     .max(128)
-    .regex(/[a-z]/, { message: "Au moins une minuscule" })
-    .regex(/[A-Z]/, { message: "Au moins une majuscule" })
-    .regex(/[0-9]/, { message: "Au moins un chiffre" }),
+    .regex(/[a-z]/, { message: "At least one lowercase" })
+    .regex(/[A-Z]/, { message: "At least one uppercase" })
+    .regex(/[0-9]/, { message: "At least one digit" }),
 });
 
 export const signupSchema = loginSchema.extend({
-  displayName: z.string().trim().max(50, { message: "Max. 50 caractères" }).optional(),
+  displayName: z.string().trim().max(50, { message: "Max. 50 characters" }).optional(),
 });
 
 export const resetSchema = z.object({
-  email: z.string().trim().email({ message: "Adresse email invalide" }).max(255),
+  email: z.string().trim().email({ message: "Invalid email" }).max(255),
 });
 
 export type LoginValues = z.infer<typeof loginSchema>;

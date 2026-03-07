@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS idx_weeks_single_active ON public.weeks (is_active) WHERE is_active = true;
