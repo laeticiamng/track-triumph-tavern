@@ -1,7 +1,4 @@
 import { z } from "zod";
-import i18n from "@/i18n";
-
-const t = (key: string) => i18n.t(key);
 
 export const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email" }).max(255),

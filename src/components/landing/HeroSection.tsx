@@ -26,7 +26,7 @@ export function HeroSection() {
       .from("weeks")
       .select("title, week_number, season_id, voting_close_at, id, seasons(name)")
       .eq("is_active", true)
-      .single()
+      .maybeSingle()
     ).then(async ({ data }) => {
         if (data) {
           const season = (data as { seasons?: { name: string } | null }).seasons?.name || `${t("hero.season")} 1`;

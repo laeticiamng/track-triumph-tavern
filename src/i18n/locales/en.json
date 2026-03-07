@@ -564,7 +564,9 @@
     "declarationsRequired": "Declarations required",
     "mustAcceptConditions": "You must accept the conditions.",
     "submissionSent": "Submission sent!",
-    "submissionSentDesc": "It will be reviewed by the moderation team."
+    "submissionSentDesc": "It will be reviewed by the moderation team.",
+    "play": "Play",
+    "pause": "Pause"
   },
   "stats": {
     "seoTitle": "Statistics",
