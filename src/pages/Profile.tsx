@@ -15,7 +15,18 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2 } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { SUBSCRIPTION_TIERS } from "@/lib/subscription-tiers";
 import { VoteStatsChart } from "@/components/profile/VoteStatsChart";
 import { StreakBadge } from "@/components/gamification/StreakBadge";
@@ -180,6 +191,27 @@ const Profile = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const [deleting, setDeleting] = useState(false);
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("delete-account");
+      if (error) throw error;
+      const result = typeof data === "string" ? JSON.parse(data) : data;
+      if (result.error) throw new Error(result.error);
+      await signOut();
+      navigate("/");
+    } catch (err) {
+      toast({
+        title: t("errors.error"),
+        description: err instanceof Error ? err.message : t("profilePage.deleteError"),
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const addSocialLink = (platform: string) => {

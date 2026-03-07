@@ -45,6 +45,7 @@ const Badges = lazy(() => import("./pages/Badges"));
 const Following = lazy(() => import("./pages/Following"));
 const Articles = lazy(() => import("./pages/Articles"));
 const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
+const Contact = lazy(() => import("./pages/Contact"));
 const Sitemap = lazy(() => import("./components/seo/Sitemap"));
 
 function PageLoader() {
@@ -104,6 +105,7 @@ const App = () => (
             <Route path="/following" element={<Following />} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/stats/artist/:id" element={<ArtistStats />} />
             <Route path="/sitemap.xml" element={<Sitemap />} />
