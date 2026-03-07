@@ -33,7 +33,7 @@ const Badges = () => {
 
   useEffect(() => {
     Promise.all([
-      supabase.from("weeks").select("*").eq("is_active", true).single(),
+      supabase.from("weeks").select("*").eq("is_active", true).maybeSingle(),
       supabase.from("weekly_badges").select("*").order("created_at", { ascending: false }).limit(50),
     ]).then(async ([weekRes, badgesRes]) => {
       setActiveWeek(weekRes.data || null);

@@ -53,7 +53,7 @@ const Stats = () => {
           .from("weeks")
           .select("id, title, voting_close_at")
           .eq("is_active", true)
-          .single();
+          .maybeSingle();
 
         if (!week) {
           return;
