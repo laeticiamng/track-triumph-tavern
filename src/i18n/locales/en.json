@@ -498,7 +498,14 @@
     "changeAvatar": "Change avatar",
     "pending": "Pending",
     "approved": "Approved",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "deleteAccount": "Delete my account",
+    "deleteAccountDesc": "This action is irreversible. All your data (profile, submissions, votes, badges) will be permanently deleted.",
+    "deleteAccountBtn": "Delete my account",
+    "deleteConfirmTitle": "Permanently delete your account?",
+    "deleteConfirmDesc": "This action is irreversible. All your data will be deleted in accordance with GDPR Article 17 (right to erasure).",
+    "deleteConfirmBtn": "Yes, delete my account",
+    "deleteError": "Unable to delete account."
   },
   "explore": {
     "seoTitle": "Explore",

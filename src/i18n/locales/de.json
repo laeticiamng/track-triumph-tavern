@@ -498,7 +498,14 @@
     "changeAvatar": "Avatar ändern",
     "pending": "Ausstehend",
     "approved": "Genehmigt",
-    "rejected": "Abgelehnt"
+    "rejected": "Abgelehnt",
+    "deleteAccount": "Mein Konto löschen",
+    "deleteAccountDesc": "Diese Aktion ist unwiderruflich. Alle Ihre Daten (Profil, Einreichungen, Stimmen, Abzeichen) werden dauerhaft gelöscht.",
+    "deleteAccountBtn": "Mein Konto löschen",
+    "deleteConfirmTitle": "Konto dauerhaft löschen?",
+    "deleteConfirmDesc": "Diese Aktion ist unwiderruflich. Alle Ihre Daten werden gemäß DSGVO Artikel 17 (Recht auf Löschung) gelöscht.",
+    "deleteConfirmBtn": "Ja, mein Konto löschen",
+    "deleteError": "Konto konnte nicht gelöscht werden."
   },
   "explore": {
     "seoTitle": "Entdecken",
