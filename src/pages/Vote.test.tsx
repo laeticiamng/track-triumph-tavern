@@ -112,10 +112,9 @@ describe("Vote page", () => {
     expect(screen.getByText("votePage.all")).toBeInTheDocument();
   });
 
-  it("shows empty state when no submissions", async () => {
+  it("shows login prompt when not authenticated and no submissions", async () => {
     renderVote();
-    // Should show empty state since mock returns no data
-    expect(await screen.findByText("votePage.contestStartsSoon")).toBeInTheDocument();
+    expect(await screen.findByText("votePage.loginToVote")).toBeInTheDocument();
   });
 
   it("shows join contest CTA in empty state", async () => {
@@ -123,8 +122,8 @@ describe("Vote page", () => {
     expect(await screen.findByText("votePage.joinContest")).toBeInTheDocument();
   });
 
-  it("shows how it works link in empty state", async () => {
+  it("shows browse tracks link in empty state for non-auth users", async () => {
     renderVote();
-    expect(await screen.findByText("votePage.howItWorks")).toBeInTheDocument();
+    expect(await screen.findByText("votePage.browseFirst")).toBeInTheDocument();
   });
 });
