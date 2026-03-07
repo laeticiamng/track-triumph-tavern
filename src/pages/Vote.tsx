@@ -259,7 +259,6 @@ const Vote = () => {
             <div className="w-full max-w-lg mt-6">
               <ArtistSuggestions />
             </div>
-            </div>
           </div>
         ) : (
           <VoteFeed
