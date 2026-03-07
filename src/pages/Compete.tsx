@@ -142,7 +142,7 @@ const Compete = () => {
       .from("weeks")
       .select("id, title, submission_open_at, submission_close_at")
       .eq("is_active", true)
-      .single()
+      .maybeSingle()
     ).then(({ data }) => {
         setActiveWeek(data as ActiveWeek | null);
         setWeekLoading(false);
@@ -471,7 +471,7 @@ const Compete = () => {
                             className="gap-2"
                           >
                             {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                            {previewPlaying ? "Pause" : "▶"}
+                            {previewPlaying ? t("compete.pause") : t("compete.play")}
                           </Button>
                         </>
                       )}

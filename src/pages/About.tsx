@@ -158,7 +158,7 @@ const About = () => {
                 </Link>
               </Button>
               <Button variant="outline" asChild>
-                <a href="mailto:contact@emotionscare.com">
+                <a href="mailto:contact@weeklymusicawards.com">
                   {t("aboutPage.contactUs")}
                 </a>
               </Button>

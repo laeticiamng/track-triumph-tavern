@@ -52,7 +52,7 @@ const Vote = () => {
   // Load active week + categories
   useEffect(() => {
     Promise.all([
-      supabase.from("weeks").select("*").eq("is_active", true).single(),
+      supabase.from("weeks").select("*").eq("is_active", true).maybeSingle(),
       supabase.from("categories").select("*").order("sort_order"),
     ]).then(([weekRes, catRes]) => {
       if (weekRes.data) {

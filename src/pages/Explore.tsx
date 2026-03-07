@@ -42,7 +42,7 @@ const Explore = () => {
       .from("weeks")
       .select("*")
       .eq("is_active", true)
-      .single()
+      .maybeSingle()
     ).then(({ data }) => {
         if (data) {
           setActiveWeek(data);
