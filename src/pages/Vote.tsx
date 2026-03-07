@@ -12,6 +12,8 @@ import { ArtistSuggestions } from "@/components/social/ArtistSuggestions";
 import { SEOHead, eventJsonLd } from "@/components/seo/SEOHead";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { OfflineBanner } from "@/components/pwa/OfflineBanner";
+import WelcomeDialog from "@/components/onboarding/WelcomeDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Music, Sparkles } from "lucide-react";
 import { BadgeProgress } from "@/components/gamification/BadgeProgress";
