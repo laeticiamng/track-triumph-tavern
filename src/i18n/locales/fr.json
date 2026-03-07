@@ -150,7 +150,6 @@
   },
   "auth": {
     "email": "Email",
-    "email": "Email",
     "password": "Mot de passe",
     "artistName": "Nom d'artiste",
     "artistNamePlaceholder": "Votre nom d'artiste",
