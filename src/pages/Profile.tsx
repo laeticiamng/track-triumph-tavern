@@ -523,6 +523,38 @@ const Profile = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Delete Account — GDPR Article 17 */}
+        <Card className="mt-8 border-destructive/30">
+          <CardHeader>
+            <CardTitle className="font-display text-xl flex items-center gap-2 text-destructive">
+              <Trash2 className="h-5 w-5" /> {t("profilePage.deleteAccount")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">{t("profilePage.deleteAccountDesc")}</p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={deleting}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {deleting ? "..." : t("profilePage.deleteAccountBtn")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t("profilePage.deleteConfirmTitle")}</AlertDialogTitle>
+                  <AlertDialogDescription>{t("profilePage.deleteConfirmDesc")}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    {t("profilePage.deleteConfirmBtn")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </CardContent>
+        </Card>
       </div>
       <Footer />
     </Layout>
