@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Instagram, Music, Youtube } from "lucide-react";
+import { Music } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 // Social links removed until official accounts are created — empty links hurt credibility
