@@ -75,6 +75,7 @@ export function StickyMobileCTA() {
               size="lg"
               className="w-full font-semibold text-base shadow-md"
               asChild
+              disabled={clicked}
               onClick={handleClick}
             >
               <Link to="/auth?tab=signup">
