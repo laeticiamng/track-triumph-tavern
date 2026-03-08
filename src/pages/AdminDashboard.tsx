@@ -183,7 +183,7 @@ const AdminDashboard = () => {
 
   const createWeek = async () => {
     setCreatingWeek(true);
-    const { data: season } = await supabase.from("seasons").select("id").eq("is_active", true).single();
+    const { data: season } = await supabase.from("seasons").select("id").eq("is_active", true).maybeSingle();
     if (!season) {
       toast({ title: t("admin.error"), description: t("admin.noActiveSeason"), variant: "destructive" });
       setCreatingWeek(false);
