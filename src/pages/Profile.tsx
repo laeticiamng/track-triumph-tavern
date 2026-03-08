@@ -33,6 +33,8 @@ import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgeShowcase } from "@/components/gamification/BadgeShowcase";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
+import { useActiveWeek } from "@/hooks/use-active-week";
+import { isVotingOpen } from "@/lib/vote-utils";
 // WelcomeDialog is rendered in Layout.tsx — no need to import here
 
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
