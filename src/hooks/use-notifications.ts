@@ -29,7 +29,7 @@ export function useNotifications() {
     }
 
     const { data } = await supabase
-      .from("notifications" as any)
+      .from("notifications")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
