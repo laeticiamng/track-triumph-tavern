@@ -54,8 +54,7 @@ describe("Header", () => {
 
   it("renders desktop nav items", () => {
     renderHeader();
-    expect(screen.getByText("nav.explore")).toBeInTheDocument();
-    expect(screen.getByText("nav.vote")).toBeInTheDocument();
+    expect(screen.getByText("nav.discover")).toBeInTheDocument();
     expect(screen.getByText("nav.submit")).toBeInTheDocument();
     expect(screen.getByText("nav.results")).toBeInTheDocument();
     expect(screen.getByText("nav.pricing")).toBeInTheDocument();
