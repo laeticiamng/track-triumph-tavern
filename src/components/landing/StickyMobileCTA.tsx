@@ -50,6 +50,8 @@ export function StickyMobileCTA() {
   if (!shouldShow || authLoading) return null;
 
   const handleClick = () => {
+    if (clicked) return;
+    setClicked(true);
     trackEvent("page_view" as any, {
       path: location.pathname,
       component: "sticky_cta",
