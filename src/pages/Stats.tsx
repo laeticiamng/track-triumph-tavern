@@ -162,6 +162,19 @@ const Stats = () => {
           </div>
         ) : (
           <div className="space-y-8">
+            {/* Voting open notice */}
+            {votingOpen && (
+              <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 flex items-start gap-3">
+                <Heart className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-medium">{t("stats.votingInProgress", "Voting is in progress")}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t("stats.votesHiddenExplanation", "Vote counts and rankings are hidden until voting closes to ensure fair results. Come back after the voting period to see the full statistics!")}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* KPI Cards */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0 }}>
