@@ -260,7 +260,7 @@ const Profile = () => {
         </div>
 
         {/* Subscription Card */}
-        <Card className="mb-8 border-primary/20">
+        <Card className="mb-8 card-elevated border-primary/20">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
               {tier === "elite" ? <Crown className="h-5 w-5 text-yellow-500" /> :
