@@ -138,12 +138,22 @@ const About = () => {
             </div>
           </motion.div>
 
+          {/* Éditeur */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="mt-10 text-center text-xs text-muted-foreground"
+          >
+            <p>{t("aboutPage.editedBy")} <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445)</p>
+          </motion.div>
+
           {/* Contact + CTA */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-14 card-elevated p-8 text-center"
+            className="mt-8 card-elevated p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">{t("aboutPage.contactTitle")}</h2>
             <p className="mt-2 text-muted-foreground">

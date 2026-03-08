@@ -270,8 +270,8 @@ const Profile = () => {
               {tier === "elite" ? <Crown className="h-5 w-5 text-yellow-500" /> :
                tier === "pro" ? <Star className="h-5 w-5 text-primary" /> :
                <CreditCard className="h-5 w-5" />}
-              Plan {currentPlan.name}
-              {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€/{t("pricing.perMonth").replace("/", "")}</span>}
+              {currentPlan.name}
+              {subscribed && <span className="text-sm font-normal text-muted-foreground">— {currentPlan.price}€{t("pricing.perMonth")}</span>}
             </CardTitle>
             {subscribed ? (
               <Badge className="bg-green-600 text-white">{t("profilePage.active")}</Badge>
