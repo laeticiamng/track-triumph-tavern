@@ -77,7 +77,7 @@ export default function Following() {
   const handleUnfollow = async (followId: string, artistName: string) => {
     setUnfollowingId(followId);
     try {
-      await supabase.from("follows" as any).delete().eq("id", followId);
+      await supabase.from("follows").delete().eq("id", followId);
       setArtists((prev) => prev.filter((a) => a.id !== followId));
       toast.success(t("following.unfollowed", { name: artistName || "Artiste" }));
     } catch {
