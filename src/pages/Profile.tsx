@@ -331,7 +331,7 @@ const Profile = () => {
 
         {/* Banner Upload (Elite only) */}
         {tier === "elite" && (
-          <Card className="mb-8">
+          <Card className="mb-8 card-elevated">
             <CardHeader>
               <CardTitle className="font-display text-xl flex items-center gap-2">
                 <ImagePlus className="h-5 w-5" /> {t("profilePage.profileBanner")}
