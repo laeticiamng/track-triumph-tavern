@@ -56,8 +56,15 @@ const Explore = () => {
       });
   }, []);
 
+  // Resolve slug to category ID
+  const activeCategoryId = activeCategorySlug === "all"
+    ? "all"
+    : categories.find((c) => c.slug === activeCategorySlug)?.id || null;
+
   useEffect(() => {
     if (!activeWeek) return;
+    // Wait until categories are loaded to resolve slug
+    if (activeCategorySlug !== "all" && categories.length === 0) return;
     setLoading(true);
     let query = supabase
       .from("submissions")
@@ -66,8 +73,8 @@ const Explore = () => {
       .eq("week_id", activeWeek.id)
       .order("created_at", { ascending: false });
 
-    if (activeCategory !== "all") {
-      query = query.eq("category_id", activeCategory);
+    if (activeCategoryId && activeCategoryId !== "all") {
+      query = query.eq("category_id", activeCategoryId);
     }
 
     Promise.resolve(query).then(({ data }) => {
@@ -77,7 +84,7 @@ const Explore = () => {
       setSubmissions([]);
       setLoading(false);
     });
-  }, [activeCategory, activeWeek]);
+  }, [activeCategorySlug, activeCategoryId, activeWeek, categories]);
 
   const filtered = submissions.filter((s) =>
     !search || s.title.toLowerCase().includes(search.toLowerCase()) || s.artist_name.toLowerCase().includes(search.toLowerCase())
