@@ -47,7 +47,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
       }
 
       const season = (week as { seasons?: { name: string } | null }).seasons?.name || `${t("hero.season")} 1`;
-      setWeekTitle(`${season} — ${week.title || `Semaine ${week.week_number}`}`);
+      setWeekTitle(`${season} — ${t("hallOfFame.weekLabel", { number: week.week_number })}`);
 
       const { data: winners } = await supabase
         .from("winners")

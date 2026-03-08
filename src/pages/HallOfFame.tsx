@@ -38,7 +38,7 @@ const medalConfig = [
 
 const HallOfFame = () => {
   const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
+  const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
   const [results, setResults] = useState<WeekResult[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -148,7 +148,7 @@ const HallOfFame = () => {
                           <Link
                             key={w.id}
                             to={`/submissions/${w.submission_id}`}
-                            className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/50"
+                            className="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-accent/50"
                           >
                             <div className="flex h-10 w-10 items-center justify-center">
                               <Icon className={`h-6 w-6 ${medal?.color || "text-muted-foreground"}`} />

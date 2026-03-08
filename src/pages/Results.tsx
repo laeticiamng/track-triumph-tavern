@@ -21,7 +21,7 @@ const Results = () => {
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
+  const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
 
   useEffect(() => {
     const load = async () => {
