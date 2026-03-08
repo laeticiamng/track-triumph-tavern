@@ -68,8 +68,8 @@ export const SUBSCRIPTION_TIERS = {
     name: "Elite",
     tagline: "pricing.eliteTagline",
     price: 19.99,
-    price_id: "price_1SxwC1DFa5Y9NR1I0VRck1kX",
-    product_id: "prod_Tvnn1RBP7qVms7",
+    price_id: "price_1T8k86DFa5Y9NR1IPEgdLB0P",
+    product_id: "prod_U6y4DZWCM4jaZ3",
     featureKeys: [
       "pricing.eliteFeature1",
       "pricing.eliteFeature2",
