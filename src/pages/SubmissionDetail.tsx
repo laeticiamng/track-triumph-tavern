@@ -30,6 +30,7 @@ const SubmissionDetail = () => {
   const [category, setCategory] = useState<{ name: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasVoted, setHasVoted] = useState(false);
+  const [votingCloseAt, setVotingCloseAt] = useState<string | null>(null);
 
   const voteState = useVoteState(submission?.week_id ?? null);
   const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
