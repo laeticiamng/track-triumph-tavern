@@ -140,6 +140,7 @@ const App = () => (
           </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
+      </SubscriptionProvider>
       </InstallPromptProvider>
       </AudioPlayerProvider>
     </QueryClientProvider>
