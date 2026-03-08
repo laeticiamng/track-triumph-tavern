@@ -56,8 +56,7 @@ const About = () => {
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
               <strong>{t("aboutPage.intro")}</strong>{" "}
-              {t("aboutPage.introDesc")}{" "}
-              {t("aboutPage.editedBy")} <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445).
+              {t("aboutPage.introDesc")}
             </p>
           </motion.div>
 
