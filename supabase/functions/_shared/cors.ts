@@ -1,16 +1,28 @@
 const ALLOWED_ORIGINS = [
   "https://weeklymusicawards.com",
   "https://www.weeklymusicawards.com",
+  "https://track-triumph-tavern.lovable.app",
 ];
 
-// In development, also allow localhost
+// In development / preview, also allow Lovable preview domains and localhost
 if (Deno.env.get("ENVIRONMENT") !== "production") {
-  ALLOWED_ORIGINS.push("http://localhost:5173", "http://localhost:8080");
+  ALLOWED_ORIGINS.push(
+    "http://localhost:5173",
+    "http://localhost:8080",
+  );
 }
 
 export function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("Origin") || "";
-  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
+  // Allow any *.lovableproject.com or *.lovable.app preview origin
+  const isLovablePreview =
+    origin.endsWith(".lovableproject.com") ||
+    origin.endsWith(".lovable.app");
+
+  const allowed = ALLOWED_ORIGINS.includes(origin) || isLovablePreview
+    ? origin
+    : ALLOWED_ORIGINS[0];
 
   return {
     "Access-Control-Allow-Origin": allowed,

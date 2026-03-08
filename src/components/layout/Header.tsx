@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Heart, Users, Download } from "lucide-react";
+import { Music, Trophy, Search, User, Menu, X, Shield, CreditCard, Users, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
