@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Upload, Headphones, Trophy } from "lucide-react";
+import { UserPlus, Headphones, Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.15 } } };
