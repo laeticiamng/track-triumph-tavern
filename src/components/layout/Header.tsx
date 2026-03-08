@@ -90,8 +90,6 @@ export function Header() {
           {user && <NotificationBell />}
           {user ? (
             <>
-              <BadgePills />
-              <StreakBadge compact showRecord />
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/following" className="flex items-center gap-2">
                   <Users className="h-4 w-4" /> {t("nav.following", "Abonnements")}

@@ -22,6 +22,7 @@ export function Footer() {
             <p className="mt-3 text-xs text-muted-foreground leading-relaxed max-w-xs">
               {t("footer.tagline")}
             </p>
+
           </div>
 
           {/* Navigation */}
