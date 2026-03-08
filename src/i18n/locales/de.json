@@ -1312,6 +1312,8 @@
     "send": "Senden",
     "sent": "Nachricht gesendet",
     "sentDesc": "Wir melden uns so schnell wie möglich.",
+    "mailtoOpened": "Ihre E-Mail-App wird geöffnet",
+    "mailtoOpenedDesc": "Senden Sie die E-Mail aus Ihrer Mail-App ab.",
     "directEmail": "Oder schreiben Sie uns direkt an:"
   },
   "stickyCta": {
