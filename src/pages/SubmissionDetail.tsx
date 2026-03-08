@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
