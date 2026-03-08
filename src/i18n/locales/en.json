@@ -766,7 +766,8 @@
     "voteSingular": "vote",
     "votePlural": "votes",
     "hallOfFameCta": "Want to revisit previous winners?",
-    "hallOfFameLink": "View Hall of Fame →"
+    "hallOfFameLink": "View Hall of Fame →",
+    "noActiveWeek": "No active contest this week"
   },
   "submissionDetail": {
     "notFound": "Submission not found",
