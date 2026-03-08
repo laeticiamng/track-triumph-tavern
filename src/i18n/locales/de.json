@@ -1311,10 +1311,10 @@
     "message": "Nachricht",
     "messagePlaceholder": "Ihre Nachricht...",
     "send": "Senden",
-    "sent": "Nachricht gesendet",
+    "sent": "Nachricht gesendet!",
     "sentDesc": "Wir melden uns so schnell wie möglich.",
-    "mailtoOpened": "Ihre E-Mail-App wird geöffnet",
-    "mailtoOpenedDesc": "Senden Sie die E-Mail aus Ihrer Mail-App ab.",
+    "sendAnother": "Weitere Nachricht senden",
+    "sendError": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "directEmail": "Oder schreiben Sie uns direkt an:"
   },
   "stickyCta": {
