@@ -385,7 +385,7 @@ const Profile = () => {
                   <AvatarImage src={profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-lg font-bold">{(profile?.display_name || "?")[0]}</AvatarFallback>
                 </Avatar>
-                {canEditProfile && (
+                {true && (
                   <>
                     <button
                       onClick={() => avatarInputRef.current?.click()}
