@@ -422,7 +422,7 @@ const Profile = () => {
                 </div>
 
                 {/* Social Links (Pro/Elite only) */}
-                {canEditProfile && (
+                {canEditSocial && (
                   <div className="space-y-2">
                     <Label>{t("profilePage.socialLinks")}</Label>
                     {Object.entries(socialLinks).map(([platform, url]) => (
