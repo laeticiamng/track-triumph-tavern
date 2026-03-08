@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import type { SubscriptionTier } from "@/lib/subscription-tiers";
@@ -10,7 +10,19 @@ interface SubscriptionState {
   loading: boolean;
 }
 
-export function useSubscription() {
+interface SubscriptionContextType extends SubscriptionState {
+  refresh: () => Promise<void>;
+}
+
+const SubscriptionContext = createContext<SubscriptionContextType>({
+  tier: "free",
+  subscribed: false,
+  subscriptionEnd: null,
+  loading: true,
+  refresh: async () => {},
+});
+
+export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const { user, session } = useAuth();
   const [state, setState] = useState<SubscriptionState>({
     tier: "free",
@@ -38,7 +50,7 @@ export function useSubscription() {
         loading: false,
       });
     } catch {
-      // Silently fall back to free tier on edge function failure (e.g. network issues in preview)
+      // Silently fall back to free tier on edge function failure
       setState((prev) => ({ ...prev, loading: false }));
     }
   }, [user, session]);
@@ -47,12 +59,20 @@ export function useSubscription() {
     checkSubscription();
   }, [checkSubscription]);
 
-  // Auto-refresh every 5 minutes (reduced from 60s to lower Stripe API costs)
+  // Auto-refresh every 5 minutes
   useEffect(() => {
     if (!user) return;
     const interval = setInterval(checkSubscription, 300_000);
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 
-  return { ...state, refresh: checkSubscription };
+  return (
+    <SubscriptionContext.Provider value={{ ...state, refresh: checkSubscription }}>
+      {children}
+    </SubscriptionContext.Provider>
+  );
+}
+
+export function useSubscription() {
+  return useContext(SubscriptionContext);
 }
