@@ -234,7 +234,8 @@ const Profile = () => {
   );
 
   const currentPlan = SUBSCRIPTION_TIERS[tier];
-  const canEditProfile = tier !== "free";
+    const canEditProfile = true; // All users can edit basic profile info
+    const canEditSocial = tier !== "free"; // Social links require paid plan
   const statusColor: Record<string, string> = {
     pending: "bg-yellow-500/10 text-yellow-500",
     approved: "bg-green-500/10 text-green-500",
@@ -384,7 +385,7 @@ const Profile = () => {
                   <AvatarImage src={profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-lg font-bold">{(profile?.display_name || "?")[0]}</AvatarFallback>
                 </Avatar>
-                {canEditProfile && (
+                {true && (
                   <>
                     <button
                       onClick={() => avatarInputRef.current?.click()}
@@ -401,7 +402,7 @@ const Profile = () => {
               <div>
                 <p className="font-medium">{profile?.display_name || t("profilePage.notDefined")}</p>
                 <p className="text-xs text-muted-foreground">{user.email}</p>
-                {!canEditProfile && (
+                {!canEditSocial && (
                   <p className="text-xs text-muted-foreground mt-1">
                     <Link to="/pricing" className="text-primary hover:underline">{t("profilePage.upgradeForProfile")}</Link>
                   </p>
@@ -421,7 +422,7 @@ const Profile = () => {
                 </div>
 
                 {/* Social Links (Pro/Elite only) */}
-                {canEditProfile && (
+                {canEditSocial && (
                   <div className="space-y-2">
                     <Label>{t("profilePage.socialLinks")}</Label>
                     {Object.entries(socialLinks).map(([platform, url]) => (

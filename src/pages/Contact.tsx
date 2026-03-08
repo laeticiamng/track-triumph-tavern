@@ -28,12 +28,12 @@ const Contact = () => {
 
     setSending(true);
     try {
-      const { error } = await supabase.from("contact_messages" as any).insert({
+      const { error } = await supabase.from("contact_messages").insert({
         name: name.trim(),
         email: email.trim(),
         subject: subject.trim() || null,
         message: message.trim(),
-      } as any);
+      });
 
       if (error) throw error;
 
