@@ -69,7 +69,7 @@ const Stats = () => {
           { count: profileCount },
         ] = await Promise.all([
           supabase
-            .from("submissions")
+            .from("submissions_public")
             .select("id, title, artist_name, cover_image_url, vote_count, category_id")
             .eq("week_id", week.id)
             .eq("status", "approved")

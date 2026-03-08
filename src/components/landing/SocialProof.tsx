@@ -60,18 +60,32 @@ export function SocialProof() {
   useEffect(() => {
     Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("submissions").select("id, vote_count").eq("status", "approved"),
+      supabase.from("submissions").select("id", { count: "exact", head: true }).eq("status", "approved"),
       supabase.from("weeks").select("voting_close_at").eq("is_active", true).maybeSingle(),
-    ]).then(([profiles, submissions, activeWeek]) => {
+    ]).then(async ([profiles, submissionsCount, activeWeek]) => {
       const votingCloseAt = activeWeek.data?.voting_close_at;
       const votingOpen = votingCloseAt ? new Date(votingCloseAt) > new Date() : false;
-      const totalVotes = votingOpen ? 0 : (submissions.data || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
-      const trackCount = submissions.data?.length || 0;
-      setStats([
+      const trackCount = submissionsCount.count || 0;
+
+      // Only fetch vote totals when voting is closed (avoids leaking data in network)
+      let totalVotes = 0;
+      if (!votingOpen) {
+        const { data: subs } = await supabase
+          .from("submissions_public")
+          .select("vote_count")
+          .eq("status", "approved");
+        totalVotes = (subs || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
+      }
+
+      const displayStats: Stat[] = [
         { icon: Users, labelKey: "socialProof.registeredArtists", value: profiles.count || 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/10" },
-        { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/10" },
         { icon: Music, labelKey: "socialProof.submittedTracks", value: trackCount, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/10" },
-      ]);
+      ];
+      // Only show votes stat when voting is closed and there are votes
+      if (!votingOpen && totalVotes > 0) {
+        displayStats.splice(1, 0, { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/10" });
+      }
+      setStats(displayStats);
     }).catch(() => {});
   }, []);
 
