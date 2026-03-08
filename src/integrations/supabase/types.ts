@@ -613,6 +613,39 @@ export type Database = {
           },
         ]
       }
+      webhook_events: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_type: string
+          id: string
+          payload: Json | null
+          processed_at: string | null
+          status: string
+          stripe_event_id: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string | null
+          status?: string
+          stripe_event_id: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string | null
+          status?: string
+          stripe_event_id?: string
+        }
+        Relationships: []
+      }
       weekly_badges: {
         Row: {
           badge_type: string
