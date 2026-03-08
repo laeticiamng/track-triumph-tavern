@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trophy, Clock, Crown, Medal, DollarSign, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ConfettiCelebration } from "@/components/effects/ConfettiCelebration";
 import type { Tables } from "@/integrations/supabase/types";
 
 const Results = () => {
@@ -178,15 +179,7 @@ const Results = () => {
                 transition={{ duration: 0.5 }}
               >
                 <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
-                  {[...Array(6)].map((_, i) => (
-                    <motion.span
-                      key={i}
-                      className="absolute h-2 w-2 rounded-full bg-yellow-400/60"
-                      style={{ top: `${15 + Math.random() * 30}%`, left: `${5 + Math.random() * 90}%` }}
-                      animate={{ y: [0, -12, 0], opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
-                      transition={{ duration: 2 + Math.random() * 1.5, repeat: Infinity, delay: Math.random() * 2 }}
-                    />
-                  ))}
+                  <ConfettiCelebration count={25} />
                   <CardHeader>
                     <CardTitle className="font-display flex items-center gap-2 text-xl">
                       <Crown className="h-6 w-6 text-yellow-500" />
