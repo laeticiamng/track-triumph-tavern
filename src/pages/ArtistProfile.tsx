@@ -49,7 +49,7 @@ const ArtistProfile = () => {
             .from("weeks")
             .select("voting_close_at")
             .eq("is_active", true)
-            .single();
+            .maybeSingle();
           if (activeWeek) setVotingCloseAt(activeWeek.voting_close_at);
           try {
             const { data: { session } } = await supabase.auth.getSession();
