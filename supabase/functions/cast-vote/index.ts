@@ -3,8 +3,8 @@ import Stripe from "https://esm.sh/stripe@18.5.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
 const PRODUCT_IDS = {
-  pro: "prod_TvnnCLdThflvd5",
-  elite: "prod_Tvnn1RBP7qVms7",
+  pro: "prod_U6y4cllNm98nSu",
+  elite: "prod_U6y4DZWCM4jaZ3",
 };
 
 const FREE_VOTE_LIMIT = 5;

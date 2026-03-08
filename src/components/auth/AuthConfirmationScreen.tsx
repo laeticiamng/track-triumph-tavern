@@ -25,7 +25,9 @@ const AuthConfirmationScreen = ({ email, onBack }: Props) => {
     <div className="text-center space-y-4 py-4">
       <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
       <h3 className="font-display text-lg font-semibold">{t("auth.signupSuccess")}</h3>
-      <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("auth.confirmEmailDesc", { email }) }} />
+      <p className="text-sm text-muted-foreground">
+        {t("auth.confirmEmailDesc", { email })}
+      </p>
       <div className="flex flex-col gap-2 pt-2">
         <Button variant="outline" onClick={handleResend} disabled={resending}>
           <RefreshCw className={`mr-2 h-4 w-4 ${resending ? "animate-spin" : ""}`} />
