@@ -66,7 +66,7 @@ export function AnalyticsTab() {
       const pageViews = events.filter((e) => e.event_name === "page_view");
       const pageCounts: Record<string, number> = {};
       pageViews.forEach((e) => {
-        const path = (e.properties as any)?.path || "/";
+        const path = (e.properties as Record<string, unknown>)?.path as string || "/";
         pageCounts[path] = (pageCounts[path] || 0) + 1;
       });
       const sortedPages = Object.entries(pageCounts)
