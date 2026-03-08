@@ -619,8 +619,10 @@ export type Database = {
           error_message: string | null
           event_type: string
           id: string
+          next_retry_at: string | null
           payload: Json | null
           processed_at: string | null
+          retry_count: number
           status: string
           stripe_event_id: string
         }
@@ -629,8 +631,10 @@ export type Database = {
           error_message?: string | null
           event_type: string
           id?: string
+          next_retry_at?: string | null
           payload?: Json | null
           processed_at?: string | null
+          retry_count?: number
           status?: string
           stripe_event_id: string
         }
@@ -639,8 +643,10 @@ export type Database = {
           error_message?: string | null
           event_type?: string
           id?: string
+          next_retry_at?: string | null
           payload?: Json | null
           processed_at?: string | null
+          retry_count?: number
           status?: string
           stripe_event_id?: string
         }
