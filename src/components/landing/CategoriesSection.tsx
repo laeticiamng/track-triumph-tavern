@@ -25,7 +25,7 @@ const defaultMeta = { icon: Music, gradient: "from-primary/10 to-primary/5", ico
 
 export function CategoriesSection() {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>(fallbackCategories);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
 
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("id, name, slug").order("sort_order")).then(({ data }) => {
