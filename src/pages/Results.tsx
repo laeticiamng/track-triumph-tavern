@@ -179,6 +179,7 @@ const Results = () => {
                 transition={{ duration: 0.5 }}
               >
                 <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5">
+                  <ConfettiCelebration count={25} />
                   {[...Array(6)].map((_, i) => (
                     <motion.span
                       key={i}
