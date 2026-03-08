@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, MessageSquare } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Mail, Send, MessageSquare, CheckCircle } from "lucide-react";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -19,18 +20,34 @@ const Contact = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
 
     setSending(true);
-    const mailtoUrl = `mailto:contact@weeklymusicawards.com?subject=${encodeURIComponent(subject || "Contact WMA")}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
-    window.location.href = mailtoUrl;
-    
-    // Don't show "sent" toast — mailto opens email client, user sends manually
-    toast({ title: t("contact.mailtoOpened"), description: t("contact.mailtoOpenedDesc") });
-    setSending(false);
+    try {
+      const { error } = await supabase.from("contact_messages" as any).insert({
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim() || null,
+        message: message.trim(),
+      } as any);
+
+      if (error) throw error;
+
+      setSent(true);
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+      toast({ title: t("contact.sent", "Message sent!"), description: t("contact.sentDesc", "We'll get back to you as soon as possible.") });
+    } catch {
+      toast({ title: t("errors.error"), description: t("contact.sendError", "Failed to send message. Please try again."), variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -59,69 +76,86 @@ const Contact = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="name">{t("contact.name")}</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t("contact.namePlaceholder")}
-                    required
-                    maxLength={100}
-                  />
+            {sent ? (
+              <div className="flex flex-col items-center py-8 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 mb-4">
+                  <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">{t("contact.email")}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t("contact.emailPlaceholder")}
-                    required
-                  />
+                <h3 className="font-display text-xl font-semibold">{t("contact.sent", "Message sent!")}</h3>
+                <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+                  {t("contact.sentDesc", "We'll get back to you as soon as possible.")}
+                </p>
+                <Button className="mt-6" variant="outline" onClick={() => setSent(false)}>
+                  {t("contact.sendAnother", "Send another message")}
+                </Button>
+              </div>
+            ) : (
+              <>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">{t("contact.name")}</Label>
+                      <Input
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder={t("contact.namePlaceholder")}
+                        required
+                        maxLength={100}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">{t("contact.email")}</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={t("contact.emailPlaceholder")}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="subject">{t("contact.subject")}</Label>
+                    <Input
+                      id="subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder={t("contact.subjectPlaceholder")}
+                      maxLength={200}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message">{t("contact.message")}</Label>
+                    <Textarea
+                      id="message"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder={t("contact.messagePlaceholder")}
+                      rows={5}
+                      required
+                      maxLength={2000}
+                    />
+                    <p className="text-xs text-muted-foreground text-right">{message.length}/2000</p>
+                  </div>
+
+                  <Button type="submit" disabled={sending} className="w-full">
+                    <Send className="mr-2 h-4 w-4" />
+                    {sending ? "..." : t("contact.send")}
+                  </Button>
+                </form>
+
+                <div className="mt-6 pt-6 border-t border-border text-center">
+                  <p className="text-sm text-muted-foreground">{t("contact.directEmail")}</p>
+                  <a href="mailto:contact@weeklymusicawards.com" className="text-sm text-primary hover:underline">
+                    contact@weeklymusicawards.com
+                  </a>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">{t("contact.subject")}</Label>
-                <Input
-                  id="subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  placeholder={t("contact.subjectPlaceholder")}
-                  maxLength={200}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message">{t("contact.message")}</Label>
-                <Textarea
-                  id="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder={t("contact.messagePlaceholder")}
-                  rows={5}
-                  required
-                  maxLength={2000}
-                />
-                <p className="text-xs text-muted-foreground text-right">{message.length}/2000</p>
-              </div>
-
-              <Button type="submit" disabled={sending} className="w-full">
-                <Send className="mr-2 h-4 w-4" />
-                {sending ? "..." : t("contact.send")}
-              </Button>
-            </form>
-
-            <div className="mt-6 pt-6 border-t border-border text-center">
-              <p className="text-sm text-muted-foreground">{t("contact.directEmail")}</p>
-              <a href="mailto:contact@weeklymusicawards.com" className="text-sm text-primary hover:underline">
-                contact@weeklymusicawards.com
-              </a>
-            </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

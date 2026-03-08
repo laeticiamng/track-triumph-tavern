@@ -31,7 +31,7 @@ const Explore = () => {
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [noActiveWeek, setNoActiveWeek] = useState(false);
 
-  const activeCategory = searchParams.get("category") || "all";
+  const activeCategorySlug = searchParams.get("category") || "all";
 
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("*").order("sort_order")).then(({ data }) => {
@@ -56,8 +56,15 @@ const Explore = () => {
       });
   }, []);
 
+  // Resolve slug to category ID
+  const activeCategoryId = activeCategorySlug === "all"
+    ? "all"
+    : categories.find((c) => c.slug === activeCategorySlug)?.id || null;
+
   useEffect(() => {
     if (!activeWeek) return;
+    // Wait until categories are loaded to resolve slug
+    if (activeCategorySlug !== "all" && categories.length === 0) return;
     setLoading(true);
     let query = supabase
       .from("submissions")
@@ -66,8 +73,8 @@ const Explore = () => {
       .eq("week_id", activeWeek.id)
       .order("created_at", { ascending: false });
 
-    if (activeCategory !== "all") {
-      query = query.eq("category_id", activeCategory);
+    if (activeCategoryId && activeCategoryId !== "all") {
+      query = query.eq("category_id", activeCategoryId);
     }
 
     Promise.resolve(query).then(({ data }) => {
@@ -77,7 +84,7 @@ const Explore = () => {
       setSubmissions([]);
       setLoading(false);
     });
-  }, [activeCategory, activeWeek]);
+  }, [activeCategorySlug, activeCategoryId, activeWeek, categories]);
 
   const filtered = submissions.filter((s) =>
     !search || s.title.toLowerCase().includes(search.toLowerCase()) || s.artist_name.toLowerCase().includes(search.toLowerCase())
@@ -125,7 +132,7 @@ const Explore = () => {
             <button
               onClick={() => setSearchParams({})}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                activeCategory === "all"
+                activeCategorySlug === "all"
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
@@ -135,9 +142,9 @@ const Explore = () => {
             {categories.map((cat) => (
               <div key={cat.id} className="flex items-center gap-1">
                 <button
-                  onClick={() => setSearchParams({ category: cat.id })}
+                  onClick={() => setSearchParams({ category: cat.slug })}
                   className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                    activeCategory === cat.id
+                    activeCategorySlug === cat.slug
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary text-secondary-foreground hover:bg-accent"
                   }`}
@@ -180,7 +187,7 @@ const Explore = () => {
           ) : filtered.length === 0 ? (
             <EmptyExploreState
               noActiveWeek={noActiveWeek}
-              hasFilter={activeCategory !== "all"}
+              hasFilter={activeCategorySlug !== "all"}
               votingCloseAt={activeWeek?.voting_close_at || null}
             />
           ) : (
