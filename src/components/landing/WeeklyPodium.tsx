@@ -39,7 +39,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
         .not("results_published_at", "is", null)
         .order("results_published_at", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (!week) {
         setLoading(false);
