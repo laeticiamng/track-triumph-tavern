@@ -260,7 +260,7 @@ const Profile = () => {
         </div>
 
         {/* Subscription Card */}
-        <Card className="mb-8 border-primary/20">
+        <Card className="mb-8 card-elevated border-primary/20">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
               {tier === "elite" ? <Crown className="h-5 w-5 text-yellow-500" /> :
@@ -297,15 +297,15 @@ const Profile = () => {
 
         {/* Stats */}
         <div className="mb-8 grid grid-cols-3 gap-4">
-          <Card className="text-center p-4">
+          <Card className="text-center p-4 card-elevated border-gradient-hover">
             <p className="font-display text-2xl font-bold">{submissions.length}</p>
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> {t("profilePage.submissions")}</p>
           </Card>
-          <Card className="text-center p-4">
+          <Card className="text-center p-4 card-elevated border-gradient-hover">
             <p className="font-display text-2xl font-bold">{voteCount}</p>
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
           </Card>
-          <Card className="text-center p-4">
+          <Card className="text-center p-4 card-elevated border-gradient-hover">
             <p className="font-display text-2xl font-bold">
               {submissions.reduce((sum, s) => sum + s.vote_count, 0)}
             </p>
@@ -331,7 +331,7 @@ const Profile = () => {
 
         {/* Banner Upload (Elite only) */}
         {tier === "elite" && (
-          <Card className="mb-8">
+          <Card className="mb-8 card-elevated">
             <CardHeader>
               <CardTitle className="font-display text-xl flex items-center gap-2">
                 <ImagePlus className="h-5 w-5" /> {t("profilePage.profileBanner")}
@@ -364,7 +364,7 @@ const Profile = () => {
         )}
 
         {/* Profile Info */}
-        <Card className="mb-8">
+        <Card className="mb-8 card-elevated">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
               <User className="h-5 w-5" /> {t("profilePage.info")}
@@ -485,7 +485,7 @@ const Profile = () => {
         </Card>
 
         {/* Submissions */}
-        <Card>
+        <Card className="card-elevated">
           <CardHeader>
             <CardTitle className="font-display text-xl flex items-center gap-2">
               <Music className="h-5 w-5" /> {t("profilePage.mySubmissions")}
@@ -525,7 +525,7 @@ const Profile = () => {
         </Card>
 
         {/* Delete Account — GDPR Article 17 */}
-        <Card className="mt-8 border-destructive/30">
+        <Card className="mt-8 card-elevated border-destructive/30">
           <CardHeader>
             <CardTitle className="font-display text-xl flex items-center gap-2 text-destructive">
               <Trash2 className="h-5 w-5" /> {t("profilePage.deleteAccount")}

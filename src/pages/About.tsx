@@ -66,7 +66,7 @@ const About = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-14 rounded-2xl border border-border bg-card p-8"
+            className="mt-14 card-elevated p-8"
           >
             <h2 className="font-display text-xl font-semibold flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
@@ -88,7 +88,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + 0.1 * i }}
-                className="rounded-2xl border border-border bg-card p-6"
+                className="card-elevated border-gradient-hover p-6"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                   <v.icon className="h-5 w-5 text-accent-foreground" />
@@ -144,7 +144,7 @@ const About = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
+            className="mt-14 card-elevated p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">{t("aboutPage.contactTitle")}</h2>
             <p className="mt-2 text-muted-foreground">

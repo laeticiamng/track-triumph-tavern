@@ -184,16 +184,18 @@ const Explore = () => {
               votingCloseAt={activeWeek?.voting_close_at || null}
             />
           ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-            >
-              {filtered.map((sub) => (
-                <Link
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((sub, index) => (
+                <motion.div
                   key={sub.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: index % 3 * 0.08 }}
+                >
+                <Link
                   to={`/submissions/${sub.id}`}
-                  className="group card-elevated border-gradient-hover overflow-hidden"
+                  className="group card-elevated border-gradient-hover overflow-hidden block"
                 >
                   <div className="relative aspect-square overflow-hidden">
                     <img
@@ -220,8 +222,9 @@ const Explore = () => {
                     </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
-            </motion.div>
+            </div>
           )}
 
           {/* Artist suggestions (logged in) + Popular artists (public) */}
