@@ -1312,6 +1312,8 @@
     "send": "Send",
     "sent": "Message sent",
     "sentDesc": "We'll get back to you as soon as possible.",
+    "mailtoOpened": "Your email app is opening",
+    "mailtoOpenedDesc": "Send the email from your mail app to complete.",
     "directEmail": "Or email us directly at:"
   },
   "stickyCta": {

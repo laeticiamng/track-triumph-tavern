@@ -31,7 +31,7 @@ export function CTASection() {
             <h2 className="font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">{t("cta.title")}</h2>
             <p className="mx-auto mt-4 max-w-md text-white/65">{t("cta.subtitle")}</p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button size="lg" className="bg-white text-foreground hover:bg-white/90 font-semibold px-8 shadow-lg" asChild>
+              <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 shadow-lg" asChild>
                 <Link to="/auth?tab=signup">
                   {t("cta.joinContest")}
                   <ArrowRight className="ml-2 h-4 w-4" />
