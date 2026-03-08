@@ -187,7 +187,7 @@ const Explore = () => {
           ) : filtered.length === 0 ? (
             <EmptyExploreState
               noActiveWeek={noActiveWeek}
-              hasFilter={activeCategory !== "all"}
+              hasFilter={activeCategorySlug !== "all"}
               votingCloseAt={activeWeek?.voting_close_at || null}
             />
           ) : (
