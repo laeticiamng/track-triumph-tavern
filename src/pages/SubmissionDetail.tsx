@@ -178,8 +178,8 @@ const SubmissionDetail = () => {
                 title={submission.title}
                 artist={submission.artist_name}
                 coverUrl={submission.cover_image_url}
-                previewStart={undefined}
-                previewEnd={undefined}
+                previewStart={submission.preview_start_sec ?? undefined}
+                previewEnd={submission.preview_end_sec ?? undefined}
               />
             </div>
 
