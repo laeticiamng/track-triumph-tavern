@@ -1,18 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import type { Tables } from "@/integrations/supabase/types";
 
-export interface Activity {
+export interface ActivityWithProfile {
   id: string;
   user_id: string;
   type: string;
   title: string;
   body: string | null;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   created_at: string;
-}
-
-export interface ActivityWithProfile extends Activity {
   display_name: string | null;
   avatar_url: string | null;
 }
@@ -31,11 +29,11 @@ export function useActivityFeed() {
 
     // Get followed user IDs
     const { data: followData } = await supabase
-      .from("follows" as any)
+      .from("follows")
       .select("following_id")
       .eq("follower_id", user.id);
 
-    const followedIds = (followData as any[] || []).map((f: any) => f.following_id as string);
+    const followedIds = (followData || []).map((f) => f.following_id);
 
     if (followedIds.length === 0) {
       setActivities([]);
@@ -45,22 +43,20 @@ export function useActivityFeed() {
 
     // Get activities from followed users
     const { data: activityData } = await supabase
-      .from("activities" as any)
+      .from("activities")
       .select("*")
       .in("user_id", followedIds)
       .order("created_at", { ascending: false })
       .limit(30);
 
-    if (!activityData || (activityData as any[]).length === 0) {
+    if (!activityData || activityData.length === 0) {
       setActivities([]);
       setLoading(false);
       return;
     }
 
-    const items = activityData as unknown as Activity[];
-
     // Get profiles for these users
-    const userIds = [...new Set(items.map((a) => a.user_id))];
+    const userIds = [...new Set(activityData.map((a) => a.user_id))];
     const { data: profiles } = await supabase
       .from("profiles")
       .select("id, display_name, avatar_url")
@@ -70,10 +66,11 @@ export function useActivityFeed() {
       (profiles || []).map((p) => [p.id, p])
     );
 
-    const enriched: ActivityWithProfile[] = items.map((a) => {
+    const enriched: ActivityWithProfile[] = activityData.map((a) => {
       const profile = profileMap.get(a.user_id);
       return {
         ...a,
+        metadata: (a.metadata as Record<string, unknown>) || {},
         display_name: profile?.display_name || null,
         avatar_url: profile?.avatar_url || null,
       };
@@ -97,7 +94,6 @@ export function useActivityFeed() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "activities" },
         () => {
-          // Refetch on new activity
           fetchFeed();
         }
       )
