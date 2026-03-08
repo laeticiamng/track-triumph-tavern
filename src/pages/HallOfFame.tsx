@@ -38,7 +38,7 @@ const medalConfig = [
 
 const HallOfFame = () => {
   const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
+  const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
   const [results, setResults] = useState<WeekResult[]>([]);
   const [loading, setLoading] = useState(true);
 
