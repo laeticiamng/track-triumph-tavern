@@ -1304,5 +1304,10 @@
     "sent": "Message sent",
     "sentDesc": "We'll get back to you as soon as possible.",
     "directEmail": "Or email us directly at:"
+  },
+  "stickyCta": {
+    "joinNow": "Join the contest",
+    "freeVoting": "100% free voting",
+    "noCard": "No credit card required"
   }
 }
