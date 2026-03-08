@@ -506,7 +506,13 @@
     "deleteConfirmTitle": "Konto dauerhaft löschen?",
     "deleteConfirmDesc": "Diese Aktion ist unwiderruflich. Alle Ihre Daten werden gemäß DSGVO Artikel 17 (Recht auf Löschung) gelöscht.",
     "deleteConfirmBtn": "Ja, mein Konto löschen",
-    "deleteError": "Konto konnte nicht gelöscht werden."
+    "deleteError": "Konto konnte nicht gelöscht werden.",
+    "exportData": "Meine Daten exportieren",
+    "exportDataDesc": "Laden Sie eine Kopie aller Ihrer persönlichen Daten im JSON-Format herunter, gemäß DSGVO Artikel 20 (Recht auf Datenübertragbarkeit).",
+    "exportDataBtn": "Meine Daten herunterladen",
+    "exportSuccess": "Export abgeschlossen ✓",
+    "exportSuccessDesc": "Ihre Datendatei wurde heruntergeladen.",
+    "exportError": "Daten konnten nicht exportiert werden."
   },
   "explore": {
     "seoTitle": "Entdecken",
