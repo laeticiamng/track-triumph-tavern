@@ -88,7 +88,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + 0.1 * i }}
-                className="rounded-2xl border border-border bg-card p-6"
+                className="card-elevated border-gradient-hover p-6"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                   <v.icon className="h-5 w-5 text-accent-foreground" />
