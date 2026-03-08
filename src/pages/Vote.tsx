@@ -54,6 +54,8 @@ const Vote = () => {
   const [showRecsOnly, setShowRecsOnly] = useState(false);
 
   const voteState = useVoteState(activeWeekId);
+  const { tier: subTier } = useSubscription();
+  const showChatbot = subTier === "pro" || subTier === "elite";
 
   // Load active week + categories
   useEffect(() => {
