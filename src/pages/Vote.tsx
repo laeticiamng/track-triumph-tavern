@@ -15,7 +15,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { OfflineBanner } from "@/components/pwa/OfflineBanner";
 import WelcomeDialog from "@/components/onboarding/WelcomeDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Music, Sparkles } from "lucide-react";
+import { Music, Sparkles, Heart } from "lucide-react";
 import { BadgeProgress } from "@/components/gamification/BadgeProgress";
 import { Link } from "react-router-dom";
 import type { Tables } from "@/integrations/supabase/types";
