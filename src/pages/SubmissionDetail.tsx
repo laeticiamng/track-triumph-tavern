@@ -45,7 +45,7 @@ const SubmissionDetail = () => {
         const [{ data: prof }, { data: cat }, { data: week }] = await Promise.all([
           supabase.from("profiles").select("display_name, avatar_url").eq("id", sub.user_id).single(),
           supabase.from("categories").select("name").eq("id", sub.category_id).single(),
-          supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).single(),
+          supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).maybeSingle(),
         ]);
         setProfile(prof);
         setCategory(cat);
