@@ -601,7 +601,9 @@
     "mostVotedCategory": "Catégorie la plus votée",
     "topThree": "Top 3 du moment",
     "votesByCategory": "Votes par catégorie",
-    "votes": "votes"
+    "votes": "votes",
+    "votingInProgress": "Le vote est en cours",
+    "votesHiddenExplanation": "Les compteurs de votes et le classement sont masqués jusqu'à la clôture du vote pour garantir des résultats équitables. Revenez après la période de vote pour voir les statistiques complètes !"
   },
   "aboutPage": {
     "seoTitle": "À propos",
