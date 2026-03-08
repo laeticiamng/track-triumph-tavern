@@ -66,7 +66,7 @@ const About = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-14 rounded-2xl border border-border bg-card p-8"
+            className="mt-14 card-elevated p-8"
           >
             <h2 className="font-display text-xl font-semibold flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
