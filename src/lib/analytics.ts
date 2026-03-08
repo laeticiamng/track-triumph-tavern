@@ -56,7 +56,7 @@ export async function trackEvent(
     await supabase.from("analytics_events").insert([{
       user_id: userId ?? undefined,
       event_name: eventName,
-      properties: properties ?? {},
+      properties: (properties ?? {}) as Record<string, string | number | boolean | null>,
     }]);
   } catch {
     // Fire-and-forget — never block UI
