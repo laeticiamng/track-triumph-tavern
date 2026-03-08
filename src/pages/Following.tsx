@@ -51,7 +51,7 @@ export default function Following() {
       .select("id, display_name, avatar_url, bio")
       .in("id", followingIds);
 
-    const merged: FollowedArtist[] = (follows as any[]).map((f: any) => {
+    const merged: FollowedArtist[] = follows.map((f) => {
       const profile = profiles?.find((p) => p.id === f.following_id);
       return {
         id: f.id,
