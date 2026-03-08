@@ -134,6 +134,7 @@
     "faq": "FAQ",
     "articles": "Artikel",
     "about": "Über uns",
+    "stats": "Statistiken",
     "contactPage": "Kontakt",
     "legal": "Rechtliches",
     "legalNotices": "Impressum",
@@ -600,7 +601,9 @@
     "mostVotedCategory": "Meistgewählte Kategorie",
     "topThree": "Aktuelle Top 3",
     "votesByCategory": "Stimmen nach Kategorie",
-    "votes": "Stimmen"
+    "votes": "Stimmen",
+    "votingInProgress": "Die Abstimmung läuft",
+    "votesHiddenExplanation": "Die Stimmenzahlen und Ranglisten sind bis zum Ende der Abstimmung verborgen, um faire Ergebnisse zu gewährleisten. Kommen Sie nach der Abstimmungsperiode zurück, um die vollständigen Statistiken zu sehen!"
   },
   "aboutPage": {
     "seoTitle": "Über uns",
@@ -1310,10 +1313,10 @@
     "message": "Nachricht",
     "messagePlaceholder": "Ihre Nachricht...",
     "send": "Senden",
-    "sent": "Nachricht gesendet",
+    "sent": "Nachricht gesendet!",
     "sentDesc": "Wir melden uns so schnell wie möglich.",
-    "mailtoOpened": "Ihre E-Mail-App wird geöffnet",
-    "mailtoOpenedDesc": "Senden Sie die E-Mail aus Ihrer Mail-App ab.",
+    "sendAnother": "Weitere Nachricht senden",
+    "sendError": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "directEmail": "Oder schreiben Sie uns direkt an:"
   },
   "stickyCta": {

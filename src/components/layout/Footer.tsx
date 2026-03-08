@@ -35,6 +35,7 @@ export function Footer() {
               <Link to="/faq" className="hover:text-foreground transition-colors">{t("footer.faq")}</Link>
               <Link to="/articles" className="hover:text-foreground transition-colors">{t("footer.articles")}</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">{t("footer.about")}</Link>
+              <Link to="/stats" className="hover:text-foreground transition-colors">{t("footer.stats", "Statistiques")}</Link>
               <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
             </nav>
           </div>
@@ -65,9 +66,9 @@ export function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t("footer.contactText")}
             </p>
-            <a href="mailto:contact@weeklymusicawards.com" className="mt-2 inline-block text-sm text-primary hover:underline">
-              contact@weeklymusicawards.com
-            </a>
+            <Link to="/contact" className="mt-2 inline-block text-sm text-primary hover:underline">
+              {t("footer.contactPage")}
+            </Link>
           </div>
         </div>
 

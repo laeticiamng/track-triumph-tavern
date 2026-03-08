@@ -134,6 +134,7 @@
     "faq": "FAQ",
     "articles": "Articles",
     "about": "About",
+    "stats": "Statistics",
     "contactPage": "Contact",
     "legal": "Legal",
     "legalNotices": "Legal notices",
@@ -600,7 +601,9 @@
     "mostVotedCategory": "Most voted category",
     "topThree": "Current Top 3",
     "votesByCategory": "Votes by category",
-    "votes": "votes"
+    "votes": "votes",
+    "votingInProgress": "Voting is in progress",
+    "votesHiddenExplanation": "Vote counts and rankings are hidden until voting closes to ensure fair results. Come back after the voting period to see the full statistics!"
   },
   "aboutPage": {
     "seoTitle": "About",
@@ -1310,10 +1313,10 @@
     "message": "Message",
     "messagePlaceholder": "Your message...",
     "send": "Send",
-    "sent": "Message sent",
+    "sent": "Message sent!",
     "sentDesc": "We'll get back to you as soon as possible.",
-    "mailtoOpened": "Your email app is opening",
-    "mailtoOpenedDesc": "Send the email from your mail app to complete.",
+    "sendAnother": "Send another message",
+    "sendError": "Failed to send message. Please try again.",
     "directEmail": "Or email us directly at:"
   },
   "stickyCta": {

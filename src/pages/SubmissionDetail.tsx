@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { maskVoteCount } from "@/lib/vote-utils";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -29,6 +30,7 @@ const SubmissionDetail = () => {
   const [category, setCategory] = useState<{ name: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasVoted, setHasVoted] = useState(false);
+  const [votingCloseAt, setVotingCloseAt] = useState<string | null>(null);
 
   const voteState = useVoteState(submission?.week_id ?? null);
   const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
@@ -40,12 +42,14 @@ const SubmissionDetail = () => {
       const { data: sub } = await supabase.from("submissions").select("*").eq("id", id).single();
       if (sub) {
         setSubmission(sub);
-        const [{ data: prof }, { data: cat }] = await Promise.all([
+        const [{ data: prof }, { data: cat }, { data: week }] = await Promise.all([
           supabase.from("profiles").select("display_name, avatar_url").eq("id", sub.user_id).single(),
           supabase.from("categories").select("name").eq("id", sub.category_id).single(),
+          supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).single(),
         ]);
         setProfile(prof);
         setCategory(cat);
+        if (week) setVotingCloseAt(week.voting_close_at);
 
         if (user) {
           const { data: existingVote } = await supabase
@@ -195,7 +199,7 @@ const SubmissionDetail = () => {
             <div className="mt-8">
               {isOwnSubmission ? (
                 <div className="rounded-xl bg-secondary/50 p-4 text-center">
-                  <p className="text-3xl font-display font-bold">{submission.vote_count}</p>
+                  <p className="text-3xl font-display font-bold">{maskVoteCount(submission.vote_count, votingCloseAt)}</p>
                   <p className="text-sm text-muted-foreground">{t("submissionDetail.votesReceived")}</p>
                 </div>
               ) : (
@@ -210,7 +214,7 @@ const SubmissionDetail = () => {
                     commentsMax={voteState.commentsMax}
                   />
                   <p className="text-center text-sm text-muted-foreground">
-                    {submission.vote_count} {voteLabel(submission.vote_count)}
+                    {maskVoteCount(submission.vote_count, votingCloseAt)} {voteLabel(maskVoteCount(submission.vote_count, votingCloseAt))}
                   </p>
                 </div>
               )}
