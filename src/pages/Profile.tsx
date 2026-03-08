@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2, Download } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
