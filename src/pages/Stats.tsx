@@ -61,18 +61,12 @@ const Stats = () => {
 
         setWeekTitle(week.title || t("stats.currentWeek"));
 
-        // Fetch all data in parallel
+        // Fetch submissions and categories (publicly accessible)
         const [
-          { count: totalVotes },
           { data: submissions },
           { data: categories },
-          { data: voters },
+          { count: profileCount },
         ] = await Promise.all([
-          supabase
-            .from("votes")
-            .select("id", { count: "exact", head: true })
-            .eq("week_id", week.id)
-            .eq("is_valid", true),
           supabase
             .from("submissions")
             .select("id, title, artist_name, cover_image_url, vote_count, category_id")
@@ -81,10 +75,8 @@ const Stats = () => {
             .order("vote_count", { ascending: false }),
           supabase.from("categories").select("id, name").order("sort_order"),
           supabase
-            .from("votes")
-            .select("user_id")
-            .eq("week_id", week.id)
-            .eq("is_valid", true),
+            .from("profiles")
+            .select("id", { count: "exact", head: true }),
         ]);
 
         const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
