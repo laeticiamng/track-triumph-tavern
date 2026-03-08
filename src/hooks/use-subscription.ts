@@ -37,8 +37,8 @@ export function useSubscription() {
         subscriptionEnd: result.subscription_end || null,
         loading: false,
       });
-    } catch (err) {
-      console.error("check-subscription error:", err);
+    } catch {
+      // Silently fall back to free tier on edge function failure (e.g. network issues in preview)
       setState((prev) => ({ ...prev, loading: false }));
     }
   }, [user, session]);

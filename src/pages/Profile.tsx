@@ -33,6 +33,8 @@ import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgeShowcase } from "@/components/gamification/BadgeShowcase";
 import { AIVoteSummary } from "@/components/ai/AIVoteSummary";
 import type { Tables } from "@/integrations/supabase/types";
+import { useActiveWeek } from "@/hooks/use-active-week";
+import { isVotingOpen } from "@/lib/vote-utils";
 // WelcomeDialog is rendered in Layout.tsx — no need to import here
 
 const SOCIAL_PLATFORMS = ["Instagram", "Spotify", "SoundCloud", "YouTube", "TikTok"];
@@ -307,12 +309,8 @@ const Profile = () => {
             <p className="font-display text-2xl font-bold">{voteCount}</p>
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
           </Card>
-          <Card className="text-center p-4 card-elevated border-gradient-hover">
-            <p className="font-display text-2xl font-bold">
-              {submissions.reduce((sum, s) => sum + s.vote_count, 0)}
-            </p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><BarChart3 className="h-3 w-3" /> {t("profilePage.votesReceived")}</p>
-          </Card>
+          <VotesReceivedCard submissions={submissions} />
+
         </div>
 
         {/* Vote Streak */}
@@ -385,19 +383,15 @@ const Profile = () => {
                   <AvatarImage src={profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-lg font-bold">{(profile?.display_name || "?")[0]}</AvatarFallback>
                 </Avatar>
-                {true && (
-                  <>
-                    <button
-                      onClick={() => avatarInputRef.current?.click()}
-                      disabled={avatarUploading}
-                      className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
-                      aria-label={t("profilePage.changeAvatar")}
-                    >
-                      <Camera className="h-3 w-3" />
-                    </button>
-                    <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
-                  </>
-                )}
+                <button
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+                  aria-label={t("profilePage.changeAvatar")}
+                >
+                  <Camera className="h-3 w-3" />
+                </button>
+                <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
               </div>
               <div>
                 <p className="font-medium">{profile?.display_name || t("profilePage.notDefined")}</p>
@@ -604,5 +598,21 @@ const Profile = () => {
     </Layout>
   );
 };
+
+function VotesReceivedCard({ submissions }: { submissions: Tables<"submissions">[] }) {
+  const { t } = useTranslation();
+  const { week } = useActiveWeek();
+  const votingOpen = isVotingOpen(week?.voting_close_at);
+  const total = votingOpen ? 0 : submissions.reduce((sum, s) => sum + s.vote_count, 0);
+
+  return (
+    <Card className="text-center p-4 card-elevated border-gradient-hover">
+      <p className="font-display text-2xl font-bold">{total}</p>
+      <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+        <BarChart3 className="h-3 w-3" /> {t("profilePage.votesReceived")}
+      </p>
+    </Card>
+  );
+}
 
 export default Profile;
