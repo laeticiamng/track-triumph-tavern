@@ -15,14 +15,14 @@ export function useFollow(targetUserId: string | undefined) {
     const load = async () => {
       // Follower count
       const { count: followers } = await supabase
-        .from("follows" as any)
+        .from("follows")
         .select("*", { count: "exact", head: true })
         .eq("following_id", targetUserId);
       setFollowerCount(followers || 0);
 
       // Following count
       const { count: following } = await supabase
-        .from("follows" as any)
+        .from("follows")
         .select("*", { count: "exact", head: true })
         .eq("follower_id", targetUserId);
       setFollowingCount(following || 0);
@@ -30,7 +30,7 @@ export function useFollow(targetUserId: string | undefined) {
       // Is current user following?
       if (user && user.id !== targetUserId) {
         const { data } = await supabase
-          .from("follows" as any)
+          .from("follows")
           .select("id")
           .eq("follower_id", user.id)
           .eq("following_id", targetUserId)
@@ -49,7 +49,7 @@ export function useFollow(targetUserId: string | undefined) {
     try {
       if (isFollowing) {
         await supabase
-          .from("follows" as any)
+          .from("follows")
           .delete()
           .eq("follower_id", user.id)
           .eq("following_id", targetUserId);
@@ -57,8 +57,8 @@ export function useFollow(targetUserId: string | undefined) {
         setFollowerCount((c) => Math.max(0, c - 1));
       } else {
         await supabase
-          .from("follows" as any)
-          .insert({ follower_id: user.id, following_id: targetUserId } as any);
+          .from("follows")
+          .insert({ follower_id: user.id, following_id: targetUserId });
         setIsFollowing(true);
         setFollowerCount((c) => c + 1);
       }
