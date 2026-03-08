@@ -222,7 +222,7 @@ const Explore = () => {
                   </div>
                   <div className="p-3 space-y-2">
                     <AudioPlayer src={sub.audio_excerpt_url} compact />
-                    <div className="flex items-center justify-between" onClick={(e) => e.preventDefault()}>
+                    <div className="flex items-center justify-between" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Heart className="h-3 w-3" /> {maskVoteCount(sub.vote_count, activeWeek?.voting_close_at)}
                       </span>
