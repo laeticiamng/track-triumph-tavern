@@ -47,10 +47,10 @@ export function useSubscription() {
     checkSubscription();
   }, [checkSubscription]);
 
-  // Auto-refresh every 60s
+  // Auto-refresh every 5 minutes (reduced from 60s to lower Stripe API costs)
   useEffect(() => {
     if (!user) return;
-    const interval = setInterval(checkSubscription, 60_000);
+    const interval = setInterval(checkSubscription, 300_000);
     return () => clearInterval(interval);
   }, [user, checkSubscription]);
 

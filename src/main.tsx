@@ -3,6 +3,14 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import "./i18n";
+import i18n from "./i18n";
+
+// Sync html lang attribute with i18n language
+const updateHtmlLang = () => {
+  document.documentElement.lang = i18n.language?.substring(0, 2) || "fr";
+};
+updateHtmlLang();
+i18n.on("languageChanged", updateHtmlLang);
 
 // Register Service Worker
 if ("serviceWorker" in navigator) {

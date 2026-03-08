@@ -12,11 +12,27 @@ let lastPageViewPath: string | null = null;
 let lastPageViewTs = 0;
 const DEDUP_INTERVAL_MS = 3000;
 
+const CONSENT_KEY = "wma-cookie-consent";
+
+function hasAnalyticsConsent(): boolean {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return false;
+    const prefs = JSON.parse(raw);
+    return prefs.analytics === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function trackEvent(
   eventName: EventName,
   properties?: Record<string, unknown>
 ) {
   try {
+    // Only track if user consented to analytics cookies
+    if (!hasAnalyticsConsent()) return;
+
     // Deduplicate page_view: ignore if same path within 3s
     if (eventName === "page_view") {
       const path = (properties?.path as string) ?? "";
