@@ -30,13 +30,10 @@ export function Footer() {
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.navigation")}</h4>
             <nav aria-label={t("a11y.footerNavigation")} className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/explore" className="hover:text-foreground transition-colors">{t("footer.explore")}</Link>
-              <Link to="/scoring-method" className="hover:text-foreground transition-colors">{t("footer.ranking")}</Link>
-              <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">{t("footer.hallOfFame")}</Link>
               <Link to="/pricing" className="hover:text-foreground transition-colors">{t("footer.subscriptions")}</Link>
+              <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">{t("footer.hallOfFame")}</Link>
               <Link to="/faq" className="hover:text-foreground transition-colors">{t("footer.faq")}</Link>
-              <Link to="/articles" className="hover:text-foreground transition-colors">{t("footer.articles")}</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">{t("footer.about")}</Link>
-              <Link to="/stats" className="hover:text-foreground transition-colors">{t("footer.stats", "Statistiques")}</Link>
               <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
             </nav>
           </div>

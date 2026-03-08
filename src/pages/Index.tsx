@@ -4,8 +4,7 @@ import { SEOHead, homePageJsonLd } from "@/components/seo/SEOHead";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
-import { WhyUs } from "@/components/landing/WhyUs";
-import { ArtistBenefits } from "@/components/landing/ArtistBenefits";
+import { WhyParticipate } from "@/components/landing/WhyParticipate";
 import { CategoriesSection } from "@/components/landing/CategoriesSection";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { FAQ } from "@/components/landing/FAQ";
@@ -24,8 +23,7 @@ const Index = () => {
       <ActivityFeed />
       <HowItWorks />
       <WeeklyPodium />
-      <WhyUs />
-      <ArtistBenefits />
+      <WhyParticipate />
       <CategoriesSection />
       <SocialProof />
       <FAQ />

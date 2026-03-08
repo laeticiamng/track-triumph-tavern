@@ -44,6 +44,23 @@
     "free": "Free",
     "pro": "Pro"
   },
+  "whyParticipate": {
+    "badge": "Why participate",
+    "title": "What Weekly Music Awards brings you",
+    "subtitle": "A contest designed to highlight talent, not wallets.",
+    "prize": "Up to €200 per week",
+    "prizeDesc": "The podium is rewarded every week: €200, €100, and €50 for the top three, funded by our sponsors.",
+    "merit": "100% meritocratic",
+    "meritDesc": "Rankings are based solely on community votes. No payment influences results.",
+    "antiFraud": "AI anti-fraud",
+    "antiFraudDesc": "Every vote is analyzed by our AI system to ensure contest integrity.",
+    "feedback": "Detailed feedback",
+    "feedbackDesc": "Each vote rates your track on 3 criteria: emotion, originality, and production.",
+    "visibility": "Guaranteed visibility",
+    "visibilityDesc": "Winners are featured on the homepage and Explore page.",
+    "badges": "Badges & rankings",
+    "badgesDesc": "Display your results and badges on your artist profile to build credibility."
+  },
   "whyUs": {
     "badge": "Our commitments",
     "title": "Why",
