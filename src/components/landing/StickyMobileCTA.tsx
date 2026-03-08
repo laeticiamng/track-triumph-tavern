@@ -15,10 +15,11 @@ export function StickyMobileCTA() {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const [visible, setVisible] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const impressionTracked = useRef(false);
 
   // Hide on certain pages and for logged-in users
-  const hiddenPaths = ["/auth", "/pricing", "/profile"];
+  const hiddenPaths = ["/auth", "/pricing", "/profile", "/compete", "/submit", "/checkout"];
   const isHiddenPage = hiddenPaths.some((p) => location.pathname.startsWith(p));
   const shouldShow = !isHiddenPage && !user;
 
