@@ -20,8 +20,7 @@ export function Header() {
   const { canInstall, install } = useInstallPrompt();
 
   const navItems = [
-    { label: t("nav.explore"), href: "/explore", icon: Search },
-    { label: t("nav.vote"), href: "/vote", icon: Heart },
+    { label: t("nav.discover"), href: "/explore", icon: Search },
     { label: t("nav.submit"), href: "/compete", icon: Music },
     { label: t("nav.results"), href: "/results", icon: Trophy },
     { label: t("nav.pricing"), href: "/pricing", icon: CreditCard },
