@@ -158,13 +158,15 @@ const Vote = () => {
             </div>
           )}
 
-          <VoteQuotaBar
-            voteCount={voteState.voteCount}
-            remainingVotes={voteState.remainingVotes}
-            tier={voteState.tier}
-          />
+          {user && (
+            <VoteQuotaBar
+              voteCount={voteState.voteCount}
+              remainingVotes={voteState.remainingVotes}
+              tier={voteState.tier}
+            />
+          )}
 
-          <StreakBadge showRecord />
+          {user && <StreakBadge showRecord />}
 
           {/* Category vote progress */}
           {user && categories.length > 0 && voteState.votedCategories.size > 0 && (
