@@ -156,8 +156,8 @@ export function ArtistSuggestions() {
     setFollowLoadingId(artistId);
     try {
       await supabase
-        .from("follows" as any)
-        .insert({ follower_id: user.id, following_id: artistId } as any);
+        .from("follows")
+        .insert({ follower_id: user.id, following_id: artistId });
 
       setFollowingIds((prev) => new Set([...prev, artistId]));
       setSuggestions((prev) => prev.filter((a) => a.id !== artistId));
