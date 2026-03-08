@@ -66,9 +66,9 @@ const HallOfFame = () => {
         .limit(500);
 
       const winnersMap = new Map<string, WinnerWithSubmission[]>();
-      for (const w of (allWinners ?? []) as (typeof allWinners extends (infer T)[] | null ? T : never)[]) {
+      for (const w of (allWinners ?? []) as WinnerWithSubmission[]) {
         const list = winnersMap.get(w.week_id) || [];
-        list.push(w as WinnerWithSubmission);
+        list.push(w);
         winnersMap.set(w.week_id, list);
       }
 
