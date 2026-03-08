@@ -364,7 +364,7 @@ const Profile = () => {
         )}
 
         {/* Profile Info */}
-        <Card className="mb-8">
+        <Card className="mb-8 card-elevated">
           <CardHeader className="flex-row items-center justify-between">
             <CardTitle className="font-display text-xl flex items-center gap-2">
               <User className="h-5 w-5" /> {t("profilePage.info")}

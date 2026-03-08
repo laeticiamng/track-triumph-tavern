@@ -144,7 +144,7 @@ const About = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
+            className="mt-14 card-elevated p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">{t("aboutPage.contactTitle")}</h2>
             <p className="mt-2 text-muted-foreground">
