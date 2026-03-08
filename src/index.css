@@ -64,59 +64,59 @@
   }
 
   .dark {
-    --background: 240 5% 16%;
-    --foreground: 0 0% 96%;
+    --background: 240 8% 12%;
+    --foreground: 240 10% 95%;
 
-    --card: 240 5% 19%;
-    --card-foreground: 0 0% 96%;
+    --card: 240 7% 15%;
+    --card-foreground: 240 10% 95%;
 
-    --popover: 240 5% 19%;
-    --popover-foreground: 0 0% 96%;
+    --popover: 240 7% 15%;
+    --popover-foreground: 240 10% 95%;
 
-    --primary: 263 70% 62%;
+    --primary: 263 72% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 263 80% 72%;
+    --primary-glow: 270 85% 72%;
 
-    --secondary: 240 4% 24%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 240 6% 20%;
+    --secondary-foreground: 240 8% 90%;
 
-    --muted: 240 4% 24%;
-    --muted-foreground: 240 4% 64%;
+    --muted: 240 6% 20%;
+    --muted-foreground: 240 5% 58%;
 
-    --accent: 263 20% 28%;
-    --accent-foreground: 263 70% 82%;
+    --accent: 263 18% 24%;
+    --accent-foreground: 263 65% 82%;
 
-    --destructive: 0 72% 45%;
+    --destructive: 0 68% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 142 72% 45%;
+    --success: 142 68% 42%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 55%;
+    --warning: 38 88% 52%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 240 4% 28%;
-    --input: 240 4% 28%;
-    --ring: 263 70% 62%;
+    --border: 240 6% 22%;
+    --input: 240 6% 22%;
+    --ring: 263 72% 65%;
 
-    --sidebar-background: 240 5% 18%;
-    --sidebar-foreground: 0 0% 94%;
-    --sidebar-primary: 263 70% 62%;
+    --sidebar-background: 240 8% 13%;
+    --sidebar-foreground: 240 8% 92%;
+    --sidebar-primary: 263 72% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 263 20% 28%;
-    --sidebar-accent-foreground: 263 70% 82%;
-    --sidebar-border: 240 4% 28%;
-    --sidebar-ring: 263 70% 62%;
+    --sidebar-accent: 263 18% 24%;
+    --sidebar-accent-foreground: 263 65% 82%;
+    --sidebar-border: 240 6% 22%;
+    --sidebar-ring: 263 72% 65%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(263, 70%, 62%), hsl(290, 80%, 65%));
-    --gradient-hero: linear-gradient(180deg, hsl(240, 5%, 16%) 0%, hsl(263, 30%, 22%) 50%, hsl(263, 20%, 18%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(38, 92%, 55%), hsl(16, 90%, 60%));
-    --gradient-cool: linear-gradient(135deg, hsl(200, 90%, 55%), hsl(263, 70%, 62%));
-    --gradient-fresh: linear-gradient(135deg, hsl(142, 72%, 45%), hsl(180, 70%, 50%));
-    --shadow-soft: 0 2px 15px -3px hsl(263 70% 62% / 0.15);
-    --shadow-glow: 0 0 40px -10px hsl(263 70% 62% / 0.4);
-    --shadow-warm: 0 0 40px -10px hsl(38 92% 55% / 0.3);
-    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.2), 0 4px 16px -4px hsl(263 60% 60% / 0.15);
+    --gradient-primary: linear-gradient(135deg, hsl(263, 72%, 65%), hsl(290, 82%, 68%));
+    --gradient-hero: linear-gradient(180deg, hsl(240, 8%, 12%) 0%, hsl(263, 25%, 18%) 50%, hsl(280, 18%, 14%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(38, 88%, 52%), hsl(16, 85%, 58%));
+    --gradient-cool: linear-gradient(135deg, hsl(200, 88%, 52%), hsl(263, 72%, 65%));
+    --gradient-fresh: linear-gradient(135deg, hsl(142, 68%, 42%), hsl(180, 68%, 48%));
+    --shadow-soft: 0 2px 20px -4px hsl(263 72% 65% / 0.12), 0 1px 6px -1px hsl(0 0% 0% / 0.2);
+    --shadow-glow: 0 0 60px -12px hsl(263 72% 65% / 0.35);
+    --shadow-warm: 0 0 50px -10px hsl(38 88% 52% / 0.25);
+    --shadow-card: 0 1px 4px 0 hsl(0 0% 0% / 0.25), 0 6px 20px -4px hsl(263 60% 65% / 0.12);
   }
 }
 
@@ -285,7 +285,14 @@
 .theme-transition *,
 .theme-transition *::before,
 .theme-transition *::after {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    fill 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    stroke 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Accessibility: respect reduced motion preferences */
