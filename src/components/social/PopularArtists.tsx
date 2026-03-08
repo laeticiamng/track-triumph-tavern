@@ -45,8 +45,8 @@ export function PopularArtists() {
           const entry = userMap.get(sub.user_id)!;
           entry.count++;
           // Keep first artist_name found as fallback for display_name
-          if (!entry.artistName && (sub as any).artist_name) {
-            entry.artistName = (sub as any).artist_name;
+          if (!entry.artistName && sub.artist_name) {
+            entry.artistName = sub.artist_name;
           }
           entry.categories.set(sub.category_id!, (entry.categories.get(sub.category_id!) || 0) + 1);
         }
