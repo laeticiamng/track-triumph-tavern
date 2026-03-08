@@ -81,8 +81,8 @@ const Stats = () => {
 
         const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
 
-        // Count distinct voters
-        const uniqueVoters = new Set(voters?.map((v) => v.user_id) ?? []);
+        // Compute total votes from submission vote_count (publicly accessible)
+        const totalVotesFromSubmissions = (submissions ?? []).reduce((sum, s) => sum + s.vote_count, 0);
 
         // Votes per category
         const votingStillOpen = isVotingOpen(week.voting_close_at);
