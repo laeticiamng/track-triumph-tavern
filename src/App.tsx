@@ -9,6 +9,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { InstallPromptProvider } from "@/hooks/use-install-prompt";
+import { SubscriptionProvider } from "@/hooks/use-subscription";
 import { Loader2 } from "lucide-react";
 
 // Eagerly load the landing page for fast first paint
