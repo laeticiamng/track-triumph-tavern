@@ -82,8 +82,9 @@ const Stats = () => {
 
         const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
 
-        // Compute total votes from submission vote_count (publicly accessible)
-        const totalVotesFromSubmissions = (submissions ?? []).reduce((sum, s) => sum + s.vote_count, 0);
+        // Compute total votes — mask if voting still open
+        const votingStillOpenCheck = isVotingOpen(week.voting_close_at);
+        const totalVotesFromSubmissions = votingStillOpenCheck ? 0 : (submissions ?? []).reduce((sum, s) => sum + s.vote_count, 0);
 
         // Votes per category
         const votingStillOpen = isVotingOpen(week.voting_close_at);
