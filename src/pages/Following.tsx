@@ -34,7 +34,7 @@ export default function Following() {
     setLoading(true);
 
     const { data: follows } = await supabase
-      .from("follows" as any)
+      .from("follows")
       .select("id, following_id")
       .eq("follower_id", user.id);
 
@@ -44,14 +44,14 @@ export default function Following() {
       return;
     }
 
-    const followingIds = (follows as any[]).map((f: any) => f.following_id);
+    const followingIds = follows.map((f) => f.following_id);
 
     const { data: profiles } = await supabase
       .from("profiles")
       .select("id, display_name, avatar_url, bio")
       .in("id", followingIds);
 
-    const merged: FollowedArtist[] = (follows as any[]).map((f: any) => {
+    const merged: FollowedArtist[] = follows.map((f) => {
       const profile = profiles?.find((p) => p.id === f.following_id);
       return {
         id: f.id,
@@ -77,7 +77,7 @@ export default function Following() {
   const handleUnfollow = async (followId: string, artistName: string) => {
     setUnfollowingId(followId);
     try {
-      await supabase.from("follows" as any).delete().eq("id", followId);
+      await supabase.from("follows").delete().eq("id", followId);
       setArtists((prev) => prev.filter((a) => a.id !== followId));
       toast.success(t("following.unfollowed", { name: artistName || "Artiste" }));
     } catch {

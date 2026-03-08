@@ -161,6 +161,12 @@ export function Header() {
                 </Link>
               )}
               <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
+                {canInstall && (
+                  <Button variant="outline" onClick={() => { install(); setMobileOpen(false); }} className="gap-1.5 border-primary/30 text-primary">
+                    <Download className="mr-1 h-4 w-4" />
+                    {t("pwa.installButton", "Installer")}
+                  </Button>
+                )}
                 {user ? (
                   <>
                     <Button variant="outline" asChild>

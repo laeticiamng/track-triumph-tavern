@@ -18,6 +18,7 @@ interface WinnerWithSubmission {
   vote_count: number;
   weighted_score: number | null;
   submission_id: string;
+  week_id: string;
   submissions: {
     title: string;
     artist_name: string;
@@ -55,17 +56,26 @@ const HallOfFame = () => {
         return;
       }
 
-      const weekResults: WeekResult[] = [];
-      for (const week of weeks) {
-        const { data: winners } = await supabase
-          .from("winners")
-          .select("id, rank, vote_count, weighted_score, submission_id, submissions(title, artist_name, cover_image_url)")
-          .eq("week_id", week.id)
-          .order("rank")
-          .limit(3);
+      // Batch: fetch all winners for all published weeks in one query
+      const weekIds = weeks.map((w) => w.id);
+      const { data: allWinners } = await supabase
+        .from("winners")
+        .select("id, rank, vote_count, weighted_score, submission_id, week_id, submissions(title, artist_name, cover_image_url)")
+        .in("week_id", weekIds)
+        .order("rank")
+        .limit(500);
 
-        weekResults.push({ week, winners: (winners ?? []) as WinnerWithSubmission[] });
+      const winnersMap = new Map<string, WinnerWithSubmission[]>();
+      for (const w of (allWinners ?? []) as WinnerWithSubmission[]) {
+        const list = winnersMap.get(w.week_id) || [];
+        list.push(w);
+        winnersMap.set(w.week_id, list);
       }
+
+      const weekResults: WeekResult[] = weeks.map((week) => ({
+        week,
+        winners: (winnersMap.get(week.id) || []).slice(0, 3),
+      }));
 
       setResults(weekResults);
       setLoading(false);
