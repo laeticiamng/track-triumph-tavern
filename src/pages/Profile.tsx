@@ -402,7 +402,7 @@ const Profile = () => {
               <div>
                 <p className="font-medium">{profile?.display_name || t("profilePage.notDefined")}</p>
                 <p className="text-xs text-muted-foreground">{user.email}</p>
-                {!canEditProfile && (
+                {!canEditSocial && (
                   <p className="text-xs text-muted-foreground mt-1">
                     <Link to="/pricing" className="text-primary hover:underline">{t("profilePage.upgradeForProfile")}</Link>
                   </p>
