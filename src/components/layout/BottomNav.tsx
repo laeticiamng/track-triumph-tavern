@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, Heart, Trophy, User } from "lucide-react";
+import { Home, Search, Music, Trophy, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -10,8 +10,8 @@ export function BottomNav() {
 
   const items = [
     { label: t("nav.home"), href: "/", icon: Home },
-    { label: t("nav.explore"), href: "/explore", icon: Search },
-    { label: t("nav.vote"), href: "/vote", icon: Heart },
+    { label: t("nav.discover"), href: "/explore", icon: Search },
+    { label: t("nav.submit"), href: "/compete", icon: Music },
     { label: t("nav.results"), href: "/results", icon: Trophy },
     { label: user ? t("nav.profile") : t("nav.login"), href: user ? "/profile" : "/auth", icon: User },
   ];
