@@ -42,12 +42,14 @@ const SubmissionDetail = () => {
       const { data: sub } = await supabase.from("submissions").select("*").eq("id", id).single();
       if (sub) {
         setSubmission(sub);
-        const [{ data: prof }, { data: cat }] = await Promise.all([
+        const [{ data: prof }, { data: cat }, { data: week }] = await Promise.all([
           supabase.from("profiles").select("display_name, avatar_url").eq("id", sub.user_id).single(),
           supabase.from("categories").select("name").eq("id", sub.category_id).single(),
+          supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).single(),
         ]);
         setProfile(prof);
         setCategory(cat);
+        if (week) setVotingCloseAt(week.voting_close_at);
 
         if (user) {
           const { data: existingVote } = await supabase
