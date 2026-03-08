@@ -601,7 +601,9 @@
     "mostVotedCategory": "Most voted category",
     "topThree": "Current Top 3",
     "votesByCategory": "Votes by category",
-    "votes": "votes"
+    "votes": "votes",
+    "votingInProgress": "Voting is in progress",
+    "votesHiddenExplanation": "Vote counts and rankings are hidden until voting closes to ensure fair results. Come back after the voting period to see the full statistics!"
   },
   "aboutPage": {
     "seoTitle": "About",
