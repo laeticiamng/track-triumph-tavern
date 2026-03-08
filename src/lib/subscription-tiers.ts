@@ -34,8 +34,8 @@ export const SUBSCRIPTION_TIERS = {
     name: "Pro",
     tagline: "pricing.proTagline",
     price: 9.99,
-    price_id: "price_1SxwC0DFa5Y9NR1IzyElGuxb",
-    product_id: "prod_TvnnCLdThflvd5",
+    price_id: "price_1T8k86DFa5Y9NR1IPzfZhZrx",
+    product_id: "prod_U6y4cllNm98nSu",
     featureKeys: [
       "pricing.proFeature1",
       "pricing.proFeature2",
