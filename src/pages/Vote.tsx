@@ -134,6 +134,24 @@ const Vote = () => {
       <div className="flex-1 pt-16 pb-16 md:pb-0 overflow-y-auto flex flex-col">
         {/* Sticky controls */}
         <div className="sticky top-0 z-40 px-4 pt-3 pb-2 space-y-2 bg-background/95 backdrop-blur-sm">
+          {/* Auth prompt banner for visitors */}
+          {!user && (
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
+              <div className="flex items-center gap-2 text-sm">
+                <Heart className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-foreground">
+                  {t("votePage.loginBanner", "Sign in to vote for your favorite tracks")}
+                </span>
+              </div>
+              <Link
+                to="/auth?tab=signup&redirect=/vote"
+                className="flex-shrink-0 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                {t("votePage.signUpFree", "Sign up free")}
+              </Link>
+            </div>
+          )}
+
           <VoteQuotaBar
             voteCount={voteState.voteCount}
             remainingVotes={voteState.remainingVotes}
