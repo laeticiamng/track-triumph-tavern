@@ -34,7 +34,7 @@ export default function Following() {
     setLoading(true);
 
     const { data: follows } = await supabase
-      .from("follows" as any)
+      .from("follows")
       .select("id, following_id")
       .eq("follower_id", user.id);
 
@@ -44,7 +44,7 @@ export default function Following() {
       return;
     }
 
-    const followingIds = (follows as any[]).map((f: any) => f.following_id);
+    const followingIds = follows.map((f) => f.following_id);
 
     const { data: profiles } = await supabase
       .from("profiles")
