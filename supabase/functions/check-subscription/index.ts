@@ -67,10 +67,10 @@ serve(async (req) => {
     const subscriptionEnd = new Date(sub.current_period_end * 1000).toISOString();
     logStep("Active subscription found", { productId, subscriptionEnd });
 
-    // Map product to tier
+    // Map product to tier — must match subscription-tiers.ts
     const TIERS: Record<string, string> = {
-      "prod_TvnnCLdThflvd5": "pro",
-      "prod_Tvnn1RBP7qVms7": "elite",
+      "prod_U6y4cllNm98nSu": "pro",
+      "prod_U6y4DZWCM4jaZ3": "elite",
     };
     const tier = TIERS[productId] || "pro";
 
