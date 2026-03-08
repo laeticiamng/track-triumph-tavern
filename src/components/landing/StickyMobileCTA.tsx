@@ -21,7 +21,7 @@ const StickyContent = forwardRef<HTMLDivElement, {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 100, opacity: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed bottom-20 left-0 right-0 z-40 md:hidden pb-[env(safe-area-inset-bottom)]"
+      className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom))] left-0 right-0 z-40 md:hidden"
     >
       <div className="mx-4 rounded-2xl border border-border bg-card/95 backdrop-blur-lg shadow-xl p-3">
         <Button

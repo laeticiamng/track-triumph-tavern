@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Heart, Music, ArrowRight, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, Heart, Music, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 
 interface Stat {
   icon: React.ElementType;
@@ -91,6 +89,9 @@ export function SocialProof() {
 
   const hasData = stats.some((s) => s.value > 0);
 
+  // Don't render section at all if no data — avoids "Lancement imminent" with 0 stats
+  if (!hasData) return null;
+
   return (
     <section className="py-24 md:py-32 relative overflow-hidden">
       <div className="section-divider mb-24" />
@@ -98,38 +99,27 @@ export function SocialProof() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-4 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 mb-4">
             <TrendingUp className="h-3 w-3" />
-            {hasData ? t("socialProof.growing") : t("socialProof.launchSoon")}
+            {t("socialProof.growing")}
           </span>
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
-            {hasData ? t("socialProof.communityNumbers") : t("socialProof.launchSoon")}
+            {t("socialProof.communityNumbers")}
           </h2>
           <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
-            {hasData ? t("socialProof.joinGrowing") : t("socialProof.beFirst")}
+            {t("socialProof.joinGrowing")}
           </p>
         </motion.div>
 
-        {hasData ? (
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-5 sm:grid-cols-3 max-w-3xl mx-auto">
-            {stats.map((stat) => (
-              <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-8 text-center">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
-                  <stat.icon className="h-5 w-5" />
-                </div>
-                <AnimatedCounter value={stat.value} />
-                <span className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</span>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-5 sm:grid-cols-3 max-w-3xl mx-auto">
+          {stats.map((stat) => (
+            <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-8 text-center">
+              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
+                <stat.icon className="h-5 w-5" />
               </div>
-            ))}
-          </motion.div>
-        ) : (
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-10 flex flex-col items-center">
-            <Button size="lg" className="bg-gradient-primary hover:opacity-90 transition-opacity" asChild>
-              <Link to="/auth?tab=signup">
-                {t("socialProof.joinContest")}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </motion.div>
-        )}
+              <AnimatedCounter value={stat.value} />
+              <span className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</span>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
