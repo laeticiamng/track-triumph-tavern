@@ -305,7 +305,7 @@ const Profile = () => {
             <p className="font-display text-2xl font-bold">{voteCount}</p>
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
           </Card>
-          <Card className="text-center p-4">
+          <Card className="text-center p-4 card-elevated border-gradient-hover">
             <p className="font-display text-2xl font-bold">
               {submissions.reduce((sum, s) => sum + s.vote_count, 0)}
             </p>
