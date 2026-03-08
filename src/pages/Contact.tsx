@@ -25,15 +25,11 @@ const Contact = () => {
     if (!name.trim() || !email.trim() || !message.trim()) return;
 
     setSending(true);
-    // For now, open mailto — in production, hook to an edge function
     const mailtoUrl = `mailto:contact@weeklymusicawards.com?subject=${encodeURIComponent(subject || "Contact WMA")}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
-    window.open(mailtoUrl, "_blank");
+    window.location.href = mailtoUrl;
     
-    toast({ title: t("contact.sent"), description: t("contact.sentDesc") });
-    setName("");
-    setEmail("");
-    setSubject("");
-    setMessage("");
+    // Don't show "sent" toast — mailto opens email client, user sends manually
+    toast({ title: t("contact.mailtoOpened"), description: t("contact.mailtoOpenedDesc") });
     setSending(false);
   };
 
