@@ -97,8 +97,8 @@ export function useNotifications() {
   const markAllAsRead = useCallback(async () => {
     if (!user) return;
     await supabase
-      .from("notifications" as any)
-      .update({ read_at: new Date().toISOString() } as any)
+      .from("notifications")
+      .update({ read_at: new Date().toISOString() })
       .eq("user_id", user.id)
       .is("read_at", null);
 
