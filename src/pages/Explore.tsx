@@ -115,7 +115,7 @@ const Explore = () => {
       query = query.eq("category_id", activeCategoryId);
     }
 
-    query.then(async ({ data }) => {
+    Promise.resolve(query).then(async ({ data }) => {
       const subs = data || [];
       setSubmissions(subs);
 
