@@ -86,6 +86,7 @@ const Stats = () => {
 
         // Votes per category
         const votingStillOpen = isVotingOpen(week.voting_close_at);
+        setVotingOpen(votingStillOpen);
         const catVoteCounts = new Map<string, number>();
         submissions?.forEach((s) => {
           const count = votingStillOpen ? 0 : s.vote_count;

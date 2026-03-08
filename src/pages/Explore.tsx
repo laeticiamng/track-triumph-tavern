@@ -31,7 +31,7 @@ const Explore = () => {
   const [activeWeek, setActiveWeek] = useState<Tables<"weeks"> | null>(null);
   const [noActiveWeek, setNoActiveWeek] = useState(false);
 
-  const activeCategory = searchParams.get("category") || "all";
+  const activeCategorySlug = searchParams.get("category") || "all";
 
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("*").order("sort_order")).then(({ data }) => {
