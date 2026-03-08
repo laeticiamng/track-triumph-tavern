@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, MessageSquare } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Mail, Send, MessageSquare, CheckCircle } from "lucide-react";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -19,18 +20,34 @@ const Contact = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
 
     setSending(true);
-    const mailtoUrl = `mailto:contact@weeklymusicawards.com?subject=${encodeURIComponent(subject || "Contact WMA")}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
-    window.location.href = mailtoUrl;
-    
-    // Don't show "sent" toast — mailto opens email client, user sends manually
-    toast({ title: t("contact.mailtoOpened"), description: t("contact.mailtoOpenedDesc") });
-    setSending(false);
+    try {
+      const { error } = await supabase.from("contact_messages" as any).insert({
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim() || null,
+        message: message.trim(),
+      } as any);
+
+      if (error) throw error;
+
+      setSent(true);
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+      toast({ title: t("contact.sent", "Message sent!"), description: t("contact.sentDesc", "We'll get back to you as soon as possible.") });
+    } catch {
+      toast({ title: t("errors.error"), description: t("contact.sendError", "Failed to send message. Please try again."), variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
