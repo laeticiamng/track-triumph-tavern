@@ -214,7 +214,7 @@ const SubmissionDetail = () => {
                     commentsMax={voteState.commentsMax}
                   />
                   <p className="text-center text-sm text-muted-foreground">
-                    {submission.vote_count} {voteLabel(submission.vote_count)}
+                    {maskVoteCount(submission.vote_count, votingCloseAt)} {voteLabel(maskVoteCount(submission.vote_count, votingCloseAt))}
                   </p>
                 </div>
               )}
