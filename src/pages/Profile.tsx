@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import { User, Music, LogOut, Edit2, Save, Crown, Star, CreditCard, BarChart3, Heart, Camera, ExternalLink, Plus, X, ImagePlus, Loader2, Trash2, Download } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -57,6 +57,7 @@ const Profile = () => {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [bannerUploading, setBannerUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
@@ -521,6 +522,48 @@ const Profile = () => {
                 ))}
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* GDPR Data Export — Article 20 */}
+        <Card className="mt-8 card-elevated">
+          <CardHeader>
+            <CardTitle className="font-display text-xl flex items-center gap-2">
+              <Download className="h-5 w-5" /> {t("profilePage.exportData")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">{t("profilePage.exportDataDesc")}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={exporting}
+              onClick={async () => {
+                setExporting(true);
+                try {
+                  const { data, error } = await supabase.functions.invoke("export-data");
+                  if (error) throw error;
+                  const result = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+                  const blob = new Blob([result], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `wma-export-${new Date().toISOString().slice(0, 10)}.json`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast({ title: t("profilePage.exportSuccess"), description: t("profilePage.exportSuccessDesc") });
+                } catch {
+                  toast({ title: t("errors.error"), description: t("profilePage.exportError"), variant: "destructive" });
+                } finally {
+                  setExporting(false);
+                }
+              }}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              {exporting ? "..." : t("profilePage.exportDataBtn")}
+            </Button>
           </CardContent>
         </Card>
 

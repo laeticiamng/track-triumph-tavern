@@ -506,7 +506,13 @@
     "deleteConfirmTitle": "Permanently delete your account?",
     "deleteConfirmDesc": "This action is irreversible. All your data will be deleted in accordance with GDPR Article 17 (right to erasure).",
     "deleteConfirmBtn": "Yes, delete my account",
-    "deleteError": "Unable to delete account."
+    "deleteError": "Unable to delete account.",
+    "exportData": "Export my data",
+    "exportDataDesc": "Download a copy of all your personal data in JSON format, in accordance with GDPR Article 20 (right to data portability).",
+    "exportDataBtn": "Download my data",
+    "exportSuccess": "Export complete ✓",
+    "exportSuccessDesc": "Your data file has been downloaded.",
+    "exportError": "Unable to export data."
   },
   "explore": {
     "seoTitle": "Explore",

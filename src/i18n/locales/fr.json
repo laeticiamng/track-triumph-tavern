@@ -506,7 +506,13 @@
     "deleteConfirmTitle": "Supprimer définitivement votre compte ?",
     "deleteConfirmDesc": "Cette action est irréversible. Toutes vos données seront supprimées conformément au RGPD article 17 (droit à l'effacement).",
     "deleteConfirmBtn": "Oui, supprimer mon compte",
-    "deleteError": "Impossible de supprimer le compte."
+    "deleteError": "Impossible de supprimer le compte.",
+    "exportData": "Exporter mes données",
+    "exportDataDesc": "Téléchargez une copie de toutes vos données personnelles au format JSON, conformément au RGPD article 20 (droit à la portabilité).",
+    "exportDataBtn": "Télécharger mes données",
+    "exportSuccess": "Export terminé ✓",
+    "exportSuccessDesc": "Votre fichier de données a été téléchargé.",
+    "exportError": "Impossible d'exporter les données."
   },
   "explore": {
     "seoTitle": "Explorer",
