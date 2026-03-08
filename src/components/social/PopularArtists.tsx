@@ -26,7 +26,7 @@ export function PopularArtists() {
         // Get approved submissions with their categories
         const { data: submissions } = await supabase
           .from("submissions_public")
-          .select("user_id, category_id")
+          .select("user_id, category_id, artist_name")
           .eq("status", "approved")
           .limit(500);
 
