@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
-  Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, ArrowLeft, ArrowRight,
+  Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, ArrowLeft, ArrowRight, BookOpen,
   Users, ExternalLink, Quote, Tag, Palette, ChevronLeft, ChevronRight, SlidersHorizontal, Target,
 } from "lucide-react";
 
