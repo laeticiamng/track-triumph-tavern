@@ -52,13 +52,12 @@ function AnimatedCounter({ value }: { value: number }) {
 export function SocialProof() {
   const { t } = useTranslation();
   const [stats, setStats] = useState<Stat[]>([
-    { icon: Users, labelKey: "socialProof.registeredArtists", value: 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/15" },
-    { icon: Heart, labelKey: "socialProof.recordedVotes", value: 0, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/15" },
-    { icon: Music, labelKey: "socialProof.submittedTracks", value: 0, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/15" },
+    { icon: Users, labelKey: "socialProof.registeredArtists", value: 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/10" },
+    { icon: Heart, labelKey: "socialProof.recordedVotes", value: 0, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/10" },
+    { icon: Music, labelKey: "socialProof.submittedTracks", value: 0, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/10" },
   ]);
 
   useEffect(() => {
-    // Use approved submissions to derive counts — votes table has RLS restricting anonymous access
     Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
       supabase.from("submissions").select("id, vote_count").eq("status", "approved"),
@@ -66,9 +65,9 @@ export function SocialProof() {
       const totalVotes = (submissions.data || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
       const trackCount = submissions.data?.length || 0;
       setStats([
-        { icon: Users, labelKey: "socialProof.registeredArtists", value: profiles.count || 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/15" },
-        { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/15" },
-        { icon: Music, labelKey: "socialProof.submittedTracks", value: trackCount, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/15" },
+        { icon: Users, labelKey: "socialProof.registeredArtists", value: profiles.count || 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/10" },
+        { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/10" },
+        { icon: Music, labelKey: "socialProof.submittedTracks", value: trackCount, color: "text-blue-600 dark:text-blue-400", iconBg: "bg-blue-500/10" },
       ]);
     }).catch(() => {});
   }, []);
@@ -77,13 +76,11 @@ export function SocialProof() {
 
   return (
     <section className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-transparent" />
-      <div className="absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-rose-500/5 blur-[100px]" />
-
+      <div className="section-divider mb-24" />
       <div className="container relative">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
-          <span className="inline-block rounded-full bg-rose-500/10 px-4 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 mb-4">
-            <TrendingUp className="inline h-3 w-3 mr-1" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-4 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 mb-4">
+            <TrendingUp className="h-3 w-3" />
             {hasData ? t("socialProof.growing") : t("socialProof.launchSoon")}
           </span>
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
@@ -95,11 +92,11 @@ export function SocialProof() {
         </motion.div>
 
         {hasData ? (
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-6 sm:grid-cols-3 max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-5 sm:grid-cols-3 max-w-3xl mx-auto">
             {stats.map((stat) => (
-              <div key={stat.labelKey} className="group flex flex-col items-center rounded-2xl border border-border bg-card p-8 text-center shadow-card transition-all hover:shadow-lg hover:-translate-y-1">
-                <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${stat.iconBg} ${stat.color} transition-transform group-hover:scale-110`}>
-                  <stat.icon className="h-6 w-6" />
+              <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-8 text-center">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
+                  <stat.icon className="h-5 w-5" />
                 </div>
                 <AnimatedCounter value={stat.value} />
                 <span className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</span>
