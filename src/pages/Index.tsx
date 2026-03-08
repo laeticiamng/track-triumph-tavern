@@ -11,6 +11,7 @@ import { SocialProof } from "@/components/landing/SocialProof";
 import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
 import { ActivityFeed } from "@/components/social/ActivityFeed";
+import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
 
 const Index = () => {
   return (
@@ -29,6 +30,7 @@ const Index = () => {
       <SocialProof />
       <FAQ />
       <CTASection />
+      <StickyMobileCTA />
       <Footer />
     </Layout>
   );
