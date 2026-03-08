@@ -182,9 +182,10 @@ const Pricing = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.03, transition: { duration: 0.25, ease: "easeOut" } }}
                   >
                     <Card
-                      className={`relative flex flex-col h-full card-elevated border-gradient-hover bg-gradient-to-br ${config.gradient} ${
+                      className={`relative flex flex-col h-full card-elevated border-gradient-hover bg-gradient-to-br ${config.gradient} transition-shadow duration-300 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.25)] ${
                         isPopular
                           ? "border-primary shadow-lg md:scale-[1.03]"
                           : ""
