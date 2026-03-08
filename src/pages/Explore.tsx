@@ -132,7 +132,7 @@ const Explore = () => {
             <button
               onClick={() => setSearchParams({})}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                activeCategory === "all"
+                activeCategorySlug === "all"
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
               }`}
@@ -142,9 +142,9 @@ const Explore = () => {
             {categories.map((cat) => (
               <div key={cat.id} className="flex items-center gap-1">
                 <button
-                  onClick={() => setSearchParams({ category: cat.id })}
+                  onClick={() => setSearchParams({ category: cat.slug })}
                   className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                    activeCategory === cat.id
+                    activeCategorySlug === cat.slug
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary text-secondary-foreground hover:bg-accent"
                   }`}
