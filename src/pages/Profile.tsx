@@ -63,8 +63,8 @@ const Profile = () => {
 
   const getLocale = () => {
     const lang = i18n.language;
-    if (lang === "de") return "de-DE";
-    if (lang === "en") return "en-GB";
+    if (lang.startsWith("de")) return "de-DE";
+    if (lang.startsWith("en")) return "en-GB";
     return "fr-FR";
   };
 
