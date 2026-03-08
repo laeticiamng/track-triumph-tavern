@@ -383,19 +383,15 @@ const Profile = () => {
                   <AvatarImage src={profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-lg font-bold">{(profile?.display_name || "?")[0]}</AvatarFallback>
                 </Avatar>
-                {true && (
-                  <>
-                    <button
-                      onClick={() => avatarInputRef.current?.click()}
-                      disabled={avatarUploading}
-                      className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
-                      aria-label={t("profilePage.changeAvatar")}
-                    >
-                      <Camera className="h-3 w-3" />
-                    </button>
-                    <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
-                  </>
-                )}
+                <button
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5 text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+                  aria-label={t("profilePage.changeAvatar")}
+                >
+                  <Camera className="h-3 w-3" />
+                </button>
+                <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
               </div>
               <div>
                 <p className="font-medium">{profile?.display_name || t("profilePage.notDefined")}</p>
