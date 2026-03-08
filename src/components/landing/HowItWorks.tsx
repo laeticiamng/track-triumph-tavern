@@ -10,7 +10,7 @@ export function HowItWorks() {
 
   const steps = [
     {
-      icon: Upload, title: t("howItWorks.step1Title"), description: t("howItWorks.step1Desc"),
+      icon: UserPlus, title: t("howItWorks.step1Title"), description: t("howItWorks.step1Desc"),
       badge: t("howItWorks.free"),
       iconBg: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     },
