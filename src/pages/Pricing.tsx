@@ -184,10 +184,10 @@ const Pricing = () => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <Card
-                      className={`relative flex flex-col h-full bg-gradient-to-br ${config.gradient} transition-all hover:shadow-lg ${
+                      className={`relative flex flex-col h-full card-elevated border-gradient-hover bg-gradient-to-br ${config.gradient} ${
                         isPopular
                           ? "border-primary shadow-lg md:scale-[1.03]"
-                          : "border-border"
+                          : ""
                       } ${isCurrentPlan ? "ring-2 ring-primary" : ""}`}
                     >
                       {isPopular && (
