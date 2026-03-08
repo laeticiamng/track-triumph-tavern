@@ -660,6 +660,7 @@
     "resultsPublished": "Résultats publiés le",
     "noSubmissionsWeek": "Aucune soumission cette semaine.",
     "weekLabel": "Semaine {{number}}",
+    "seasonWeekLabel": "Saison {{season}} — Semaine {{week}}",
     "voteSingular": "vote",
     "votePlural": "votes",
     "rank1": "1er",
@@ -779,7 +780,9 @@
     "howItWorks": "Comment ça marche ?",
     "loginToVote": "Connectez-vous pour voter",
     "loginToVoteDesc": "Créez un compte gratuit pour écouter, découvrir et voter pour vos morceaux préférés chaque semaine.",
-    "browseFirst": "Parcourir les morceaux"
+    "browseFirst": "Parcourir les morceaux",
+    "loginBanner": "Connectez-vous pour voter pour vos morceaux préférés",
+    "signUpFree": "S'inscrire gratuitement"
   },
   "categoryDetail": {
     "notFound": "Catégorie introuvable",

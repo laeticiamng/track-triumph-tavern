@@ -660,6 +660,7 @@
     "resultsPublished": "Results published on",
     "noSubmissionsWeek": "No submissions this week.",
     "weekLabel": "Week {{number}}",
+    "seasonWeekLabel": "Season {{season}} — Week {{week}}",
     "voteSingular": "vote",
     "votePlural": "votes",
     "rank1": "1st",
@@ -779,7 +780,9 @@
     "howItWorks": "How does it work?",
     "loginToVote": "Sign in to start voting",
     "loginToVoteDesc": "Create a free account to listen, discover, and vote for your favorite tracks every week.",
-    "browseFirst": "Browse tracks first"
+    "browseFirst": "Browse tracks first",
+    "loginBanner": "Sign in to vote for your favorite tracks",
+    "signUpFree": "Sign up free"
   },
   "categoryDetail": {
     "notFound": "Category not found",

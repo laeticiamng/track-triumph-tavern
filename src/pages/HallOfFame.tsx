@@ -125,7 +125,7 @@ const HallOfFame = () => {
                 <div key={week.id} className="rounded-2xl border border-border bg-card p-5">
                   <div className="mb-4">
                     <h2 className="font-display text-lg font-semibold">
-                      {week.title || t("hallOfFame.weekLabel", { number: week.week_number })}
+                      {t("hallOfFame.seasonWeekLabel", { season: week.week_number <= 52 ? 1 : Math.ceil(week.week_number / 52), week: week.week_number })}
                     </h2>
                    <p className="text-xs text-muted-foreground">
                       {t("hallOfFame.resultsPublished")}{" "}

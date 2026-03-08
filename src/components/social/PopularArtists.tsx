@@ -26,7 +26,7 @@ export function PopularArtists() {
         // Get approved submissions with their categories
         const { data: submissions } = await supabase
           .from("submissions_public")
-          .select("user_id, category_id")
+          .select("user_id, category_id, artist_name")
           .eq("status", "approved")
           .limit(500);
 
@@ -35,15 +35,19 @@ export function PopularArtists() {
           return;
         }
 
-        // Count submissions per user and find their top category
-        const userMap = new Map<string, { count: number; categories: Map<string, number> }>();
+        // Count submissions per user and find their top category + artist_name fallback
+        const userMap = new Map<string, { count: number; categories: Map<string, number>; artistName: string | null }>();
         for (const sub of submissions) {
           if (!sub.user_id) continue;
           if (!userMap.has(sub.user_id)) {
-            userMap.set(sub.user_id, { count: 0, categories: new Map() });
+            userMap.set(sub.user_id, { count: 0, categories: new Map(), artistName: null });
           }
           const entry = userMap.get(sub.user_id)!;
           entry.count++;
+          // Keep first artist_name found as fallback for display_name
+          if (!entry.artistName && (sub as any).artist_name) {
+            entry.artistName = (sub as any).artist_name;
+          }
           entry.categories.set(sub.category_id!, (entry.categories.get(sub.category_id!) || 0) + 1);
         }
 
@@ -90,7 +94,7 @@ export function PopularArtists() {
           }
           return {
             id: uid,
-            display_name: profile?.display_name || null,
+            display_name: profile?.display_name || entry.artistName || null,
             avatar_url: profile?.avatar_url || null,
             submission_count: entry.count,
             category_name: catNameMap.get(topCatId) || "",
