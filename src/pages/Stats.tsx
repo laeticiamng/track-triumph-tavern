@@ -44,6 +44,7 @@ const Stats = () => {
   const [stats, setStats] = useState<WeekStats | null>(null);
   const [weekTitle, setWeekTitle] = useState("");
   const [loading, setLoading] = useState(true);
+  const [votingOpen, setVotingOpen] = useState(false);
 
   useEffect(() => {
     const load = async () => {
