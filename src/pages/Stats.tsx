@@ -132,7 +132,7 @@ const Stats = () => {
     load();
   }, []);
 
-  const podiumEmojis = ["1", "2", "3"];
+  const podiumEmojis = ["🥇", "🥈", "🥉"];
 
   return (
     <Layout>

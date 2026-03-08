@@ -31,7 +31,7 @@ const SubmissionDetail = () => {
   const [hasVoted, setHasVoted] = useState(false);
 
   const voteState = useVoteState(submission?.week_id ?? null);
-  const dateLocale = i18n.language === "de" ? "de-DE" : i18n.language === "en" ? "en-GB" : "fr-FR";
+  const dateLocale = i18n.language.startsWith("de") ? "de-DE" : i18n.language.startsWith("en") ? "en-GB" : "fr-FR";
 
   useEffect(() => {
     if (!id) return;

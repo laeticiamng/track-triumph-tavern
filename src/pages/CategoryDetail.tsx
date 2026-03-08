@@ -230,7 +230,7 @@ const CategoryDetail = () => {
             <p className="text-muted-foreground mb-5">{t("categoryDetail.productionTipsDesc")}</p>
             <div className="grid gap-4 sm:grid-cols-2">
               {(category.production_tips as ProductionTip[]).map((tip) => (
-                <div key={tip.label} className={`rounded-xl border border-border p-5 ${tip.label === "Conseil" ? "sm:col-span-2 bg-primary/5" : "bg-card"}`}>
+                <div key={tip.label} className={`rounded-xl border border-border p-5 ${tip.label.toLowerCase() === "conseil" || tip.label.toLowerCase() === "tip" || tip.label.toLowerCase() === "tipp" ? "sm:col-span-2 bg-primary/5" : "bg-card"}`}>
                   <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1">{tip.label}</p>
                   <p className="text-foreground leading-relaxed">{tip.value}</p>
                 </div>
