@@ -55,17 +55,7 @@ export function WhyEliteSection() {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-8 text-center"
-        >
-          <p className="text-sm text-muted-foreground italic">
-            {t("pricing.whyEliteTestimonial")}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">{t("pricing.whyEliteTestimonialAuthor")}</p>
-        </motion.div>
+        {/* Testimonial removed — no real testimonial available yet */}
       </div>
     </section>
   );
