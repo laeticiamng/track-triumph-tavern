@@ -1313,10 +1313,10 @@
     "message": "Message",
     "messagePlaceholder": "Votre message...",
     "send": "Envoyer",
-    "sent": "Message envoyé",
+    "sent": "Message envoyé !",
     "sentDesc": "Nous vous répondrons dans les plus brefs délais.",
-    "mailtoOpened": "Votre messagerie s'ouvre",
-    "mailtoOpenedDesc": "Envoyez l'e-mail depuis votre application de messagerie pour finaliser.",
+    "sendAnother": "Envoyer un autre message",
+    "sendError": "Impossible d'envoyer le message. Veuillez réessayer.",
     "directEmail": "Ou écrivez-nous directement à :"
   },
   "stickyCta": {
