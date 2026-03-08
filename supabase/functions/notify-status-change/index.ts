@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
 function escapeHtml(str: string): string {
@@ -39,17 +39,9 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const supabaseUser = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    // Verify admin role
-    const {
-      data: { user },
-      error: authError,
-    } = await supabaseUser.auth.getUser();
+    // Verify caller is admin
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
     if (authError || !user) return jsonResponse({ error: "Non authentifie" }, 401);
 
     const { data: roles } = await supabaseAdmin
@@ -84,98 +76,50 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: "Soumission introuvable" }, 404);
     }
 
-    // Get artist's email
-    const { data: artistUser } = await supabaseAdmin.auth.admin.getUserById(
-      submission.user_id
-    );
+    // Build notification title/body based on status
+    let notifTitle: string;
+    let notifBody: string;
 
-    if (!artistUser?.user?.email) {
-      return jsonResponse({ error: "Email artiste introuvable" }, 404);
-    }
-
-    const email = artistUser.user.email;
-    const safeArtistName = escapeHtml(submission.artist_name);
-    const safeTrackTitle = escapeHtml(submission.title);
-    const safeReason = reason ? escapeHtml(reason) : "";
-
-    // Build email content based on status
-    let subject: string;
-    let htmlBody: string;
+    const safeTitle = escapeHtml(submission.title);
 
     switch (new_status) {
       case "approved":
-        subject = `Votre morceau "${submission.title}" est approuve !`;
-        htmlBody = `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #10b981;">Felicitations ${safeArtistName} !</h2>
-            <p>Votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> a ete approuvee par notre equipe de moderation.</p>
-            <p>Votre morceau est maintenant visible par la communaute et peut recevoir des votes.</p>
-            <a href="https://weeklymusicawards.com/explore"
-               style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; margin-top: 16px;">
-              Voir le concours
-            </a>
-            <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">
-              Bonne chance pour cette semaine !<br>
-              L'equipe Weekly Music Awards
-            </p>
-          </div>`;
+        notifTitle = `Morceau approuvé !`;
+        notifBody = `Votre soumission "${safeTitle}" a été approuvée. Elle est maintenant visible par la communauté.`;
         break;
-
       case "rejected":
-        subject = `Mise a jour sur "${submission.title}"`;
-        htmlBody = `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Bonjour ${safeArtistName},</h2>
-            <p>Apres examen par notre equipe, votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> n'a pas pu etre approuvee cette fois-ci.</p>
-            ${safeReason ? `<p><strong>Motif :</strong> ${safeReason}</p>` : ""}
-            <p>Vous pouvez soumettre un nouveau morceau la semaine prochaine. N'hesitez pas a consulter nos regles de soumission.</p>
-            <a href="https://weeklymusicawards.com/contest-rules"
-               style="display: inline-block; padding: 12px 24px; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; margin-top: 16px;">
-              Regles du concours
-            </a>
-            <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">
-              A bientot,<br>
-              L'equipe Weekly Music Awards
-            </p>
-          </div>`;
+        notifTitle = `Soumission non retenue`;
+        notifBody = reason
+          ? `Votre soumission "${safeTitle}" n'a pas été approuvée. Motif : ${escapeHtml(reason)}`
+          : `Votre soumission "${safeTitle}" n'a pas été approuvée cette fois-ci.`;
         break;
-
       default:
-        subject = `Votre soumission "${submission.title}" est en attente de moderation`;
-        htmlBody = `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Bonjour ${safeArtistName},</h2>
-            <p>Votre soumission <strong>&laquo;${safeTrackTitle}&raquo;</strong> est en cours de moderation. Nous vous tiendrons informe de la suite.</p>
-            <p style="color: #6b7280; font-size: 14px; margin-top: 24px;">
-              L'equipe Weekly Music Awards
-            </p>
-          </div>`;
+        notifTitle = `Soumission en attente`;
+        notifBody = `Votre soumission "${safeTitle}" est en cours de modération.`;
         break;
     }
 
-    // TODO: integrate a transactional email service (Resend, SendGrid, etc.)
-    console.log(`[NOTIFY] ${new_status} — user: ${submission.user_id}, track: ${submission.title}`);
-
-    // Store notification record for the user (can be displayed in-app)
-    await supabaseAdmin.from("vote_events").insert({
-      vote_id: null,
+    // Store in-app notification (notifications table, not vote_events)
+    await supabaseAdmin.from("notifications").insert({
       user_id: submission.user_id,
-      event_type: `submission_${new_status}`,
+      type: `submission_${new_status}`,
+      title: notifTitle,
+      body: notifBody,
       metadata: {
         submission_id,
         track_title: submission.title,
         artist_name: submission.artist_name,
         reason: reason || null,
-        notified_email: email,
-        subject,
       },
     });
+
+    // TODO: integrate a transactional email service (Resend, SendGrid, etc.)
+    console.log(`[NOTIFY] ${new_status} — user: ${submission.user_id}, track: ${submission.title}`);
 
     return jsonResponse({
       success: true,
       notified: submission.user_id,
       status: new_status,
-      subject,
     });
   } catch (err) {
     console.error("notify-status-change error:", err);
