@@ -23,8 +23,7 @@ const Index = () => {
       <ActivityFeed />
       <HowItWorks />
       <WeeklyPodium />
-      <WhyUs />
-      <ArtistBenefits />
+      <WhyParticipate />
       <CategoriesSection />
       <SocialProof />
       <FAQ />

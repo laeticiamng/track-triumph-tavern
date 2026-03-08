@@ -153,10 +153,10 @@ const Explore = () => {
                 </button>
                 <Link
                   to={`/categories/${cat.slug}`}
-                  className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                  className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:text-primary hover:bg-accent transition-colors"
                   title={t("explore.learnMoreAbout", { name: cat.name })}
                 >
-                  ℹ️
+                  <Search className="h-3 w-3" />
                 </Link>
               </div>
             ))}
