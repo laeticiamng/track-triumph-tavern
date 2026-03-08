@@ -184,14 +184,22 @@ const Explore = () => {
               votingCloseAt={activeWeek?.voting_close_at || null}
             />
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((sub, index) => (
+            <motion.div
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.07 } },
+              }}
+            >
+              {filtered.map((sub) => (
                 <motion.div
                   key={sub.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.4, delay: index % 3 * 0.08 }}
+                  variants={{
+                    hidden: { opacity: 0, y: 24, scale: 0.97 },
+                    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+                  }}
                 >
                 <Link
                   to={`/submissions/${sub.id}`}
@@ -224,7 +232,7 @@ const Explore = () => {
                 </Link>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Artist suggestions (logged in) + Popular artists (public) */}
