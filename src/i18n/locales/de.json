@@ -780,7 +780,9 @@
     "howItWorks": "Wie funktioniert es?",
     "loginToVote": "Anmelden zum Abstimmen",
     "loginToVoteDesc": "Erstellen Sie ein kostenloses Konto, um jede Woche Ihre Lieblings-Tracks zu hören, zu entdecken und abzustimmen.",
-    "browseFirst": "Tracks zuerst durchsuchen"
+    "browseFirst": "Tracks zuerst durchsuchen",
+    "loginBanner": "Melden Sie sich an, um für Ihre Lieblingstracks zu stimmen",
+    "signUpFree": "Kostenlos registrieren"
   },
   "categoryDetail": {
     "notFound": "Kategorie nicht gefunden",
