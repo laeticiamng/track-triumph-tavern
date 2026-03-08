@@ -193,7 +193,7 @@ const Explore = () => {
                 <Link
                   key={sub.id}
                   to={`/submissions/${sub.id}`}
-                  className="group rounded-2xl border border-border bg-card overflow-hidden transition-all hover:shadow-soft hover:border-primary/20"
+                  className="group card-elevated border-gradient-hover overflow-hidden"
                 >
                   <div className="relative aspect-square overflow-hidden">
                     <img
