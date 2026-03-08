@@ -44,6 +44,23 @@
     "free": "Gratuit",
     "pro": "Pro"
   },
+  "whyParticipate": {
+    "badge": "Pourquoi participer",
+    "title": "Ce que Weekly Music Awards vous apporte",
+    "subtitle": "Un concours conçu pour mettre en avant le talent, pas le portefeuille.",
+    "prize": "Jusqu'à 200 € par semaine",
+    "prizeDesc": "Le podium est récompensé chaque semaine : 200 €, 100 € et 50 € pour les trois premiers, financés par nos sponsors.",
+    "merit": "100 % méritocratique",
+    "meritDesc": "Le classement repose uniquement sur les votes de la communauté. Aucun paiement n'influence les résultats.",
+    "antiFraud": "Anti-fraude IA",
+    "antiFraudDesc": "Chaque vote est analysé par notre système d'intelligence artificielle pour garantir l'intégrité du concours.",
+    "feedback": "Feedback détaillé",
+    "feedbackDesc": "Chaque vote évalue votre morceau sur 3 critères : émotion, originalité et production.",
+    "visibility": "Visibilité garantie",
+    "visibilityDesc": "Les gagnants sont mis en avant sur la page d'accueil et la page Explorer.",
+    "badges": "Badges & classements",
+    "badgesDesc": "Affichez vos résultats et vos badges sur votre profil artiste pour crédibiliser votre parcours."
+  },
   "whyUs": {
     "badge": "Nos engagements",
     "title": "Pourquoi",
