@@ -50,7 +50,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const selectTheme = useCallback((mode: ThemeMode) => {
     document.documentElement.classList.add("theme-transition");
     setTheme(mode);
-    setTimeout(() => document.documentElement.classList.remove("theme-transition"), 400);
+    setTimeout(() => document.documentElement.classList.remove("theme-transition"), 700);
   }, []);
 
   const ActiveIcon = THEMES.find((t) => t.value === theme)!.icon;
