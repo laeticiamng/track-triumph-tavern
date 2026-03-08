@@ -7,7 +7,6 @@ import { WeeklyPodium } from "@/components/landing/WeeklyPodium";
 import { WhyParticipate } from "@/components/landing/WhyParticipate";
 import { CategoriesSection } from "@/components/landing/CategoriesSection";
 import { SocialProof } from "@/components/landing/SocialProof";
-import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
 import { ActivityFeed } from "@/components/social/ActivityFeed";
 import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
@@ -26,7 +25,6 @@ const Index = () => {
       <WhyParticipate />
       <CategoriesSection />
       <SocialProof />
-      <FAQ />
       <CTASection />
       <StickyMobileCTA />
       <Footer />
