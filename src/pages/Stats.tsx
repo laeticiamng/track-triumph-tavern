@@ -69,7 +69,7 @@ const Stats = () => {
           { count: profileCount },
         ] = await Promise.all([
           supabase
-            .from("submissions")
+            .from("submissions_public")
             .select("id, title, artist_name, cover_image_url, vote_count, category_id")
             .eq("week_id", week.id)
             .eq("status", "approved")
@@ -82,18 +82,16 @@ const Stats = () => {
 
         const catMap = new Map(categories?.map((c) => [c.id, c.name]) ?? []);
 
-        // Compute total votes — mask if voting still open
-        const votingStillOpenCheck = isVotingOpen(week.voting_close_at);
-        const totalVotesFromSubmissions = votingStillOpenCheck ? 0 : (submissions ?? []).reduce((sum, s) => sum + s.vote_count, 0);
-
-        // Votes per category
+        // submissions_public view already masks vote_count during active voting
         const votingStillOpen = isVotingOpen(week.voting_close_at);
         setVotingOpen(votingStillOpen);
+        const totalVotesFromSubmissions = (submissions ?? []).reduce((sum, s) => sum + (s.vote_count ?? 0), 0);
+
+        // Votes per category
         const catVoteCounts = new Map<string, number>();
         submissions?.forEach((s) => {
-          const count = votingStillOpen ? 0 : s.vote_count;
-          const current = catVoteCounts.get(s.category_id) || 0;
-          catVoteCounts.set(s.category_id, current + count);
+          const current = catVoteCounts.get(s.category_id!) || 0;
+          catVoteCounts.set(s.category_id!, current + (s.vote_count ?? 0));
         });
 
         const categoriesData = (categories ?? [])
@@ -105,9 +103,12 @@ const Stats = () => {
 
         // Top 3 tracks
         const topTracks = (submissions ?? []).slice(0, 3).map((s) => ({
-          ...s,
-          vote_count: votingStillOpen ? 0 : s.vote_count,
-          category_name: catMap.get(s.category_id) || "",
+          id: s.id!,
+          title: s.title!,
+          artist_name: s.artist_name!,
+          cover_image_url: s.cover_image_url!,
+          vote_count: s.vote_count ?? 0,
+          category_name: catMap.get(s.category_id!) || "",
         }));
 
         setStats({
