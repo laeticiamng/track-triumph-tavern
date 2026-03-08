@@ -18,6 +18,7 @@ interface WinnerWithSubmission {
   vote_count: number;
   weighted_score: number | null;
   submission_id: string;
+  week_id: string;
   submissions: {
     title: string;
     artist_name: string;
