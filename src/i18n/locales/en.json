@@ -660,6 +660,7 @@
     "resultsPublished": "Results published on",
     "noSubmissionsWeek": "No submissions this week.",
     "weekLabel": "Week {{number}}",
+    "seasonWeekLabel": "Season {{season}} — Week {{week}}",
     "voteSingular": "vote",
     "votePlural": "votes",
     "rank1": "1st",
