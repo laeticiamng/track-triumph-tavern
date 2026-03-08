@@ -69,7 +69,7 @@ export function StickyMobileCTA() {
   useEffect(() => {
     if (visible && !impressionTracked.current) {
       impressionTracked.current = true;
-      trackEvent("page_view" as any, {
+      trackEvent("page_view", {
         path: location.pathname,
         component: "sticky_cta",
         event_sub: "cta_join_impression",
