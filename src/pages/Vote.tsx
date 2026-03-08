@@ -295,7 +295,10 @@ const Vote = () => {
         </main>
       </div>
 
+      <PersistentAudioPlayer />
       <BottomNav />
+      <InstallPrompt />
+      {showChatbot && <AIChatbot />}
     </div>
   );
 };
