@@ -297,7 +297,7 @@ const Profile = () => {
 
         {/* Stats */}
         <div className="mb-8 grid grid-cols-3 gap-4">
-          <Card className="text-center p-4">
+          <Card className="text-center p-4 card-elevated border-gradient-hover">
             <p className="font-display text-2xl font-bold">{submissions.length}</p>
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> {t("profilePage.submissions")}</p>
           </Card>
