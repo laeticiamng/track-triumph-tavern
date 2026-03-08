@@ -94,7 +94,7 @@ export function PopularArtists() {
           }
           return {
             id: uid,
-            display_name: profile?.display_name || null,
+            display_name: profile?.display_name || entry.artistName || null,
             avatar_url: profile?.avatar_url || null,
             submission_count: entry.count,
             category_name: catNameMap.get(topCatId) || "",
