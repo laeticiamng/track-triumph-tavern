@@ -61,8 +61,11 @@ export function SocialProof() {
     Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
       supabase.from("submissions").select("id, vote_count").eq("status", "approved"),
-    ]).then(([profiles, submissions]) => {
-      const totalVotes = (submissions.data || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
+      supabase.from("weeks").select("voting_close_at").eq("is_active", true).maybeSingle(),
+    ]).then(([profiles, submissions, activeWeek]) => {
+      const votingCloseAt = activeWeek.data?.voting_close_at;
+      const votingOpen = votingCloseAt ? new Date(votingCloseAt) > new Date() : false;
+      const totalVotes = votingOpen ? 0 : (submissions.data || []).reduce((sum, s) => sum + (s.vote_count || 0), 0);
       const trackCount = submissions.data?.length || 0;
       setStats([
         { icon: Users, labelKey: "socialProof.registeredArtists", value: profiles.count || 0, color: "text-violet-600 dark:text-violet-400", iconBg: "bg-violet-500/10" },
