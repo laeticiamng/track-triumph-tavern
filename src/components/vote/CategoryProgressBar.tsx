@@ -13,7 +13,7 @@ export function CategoryProgressBar({ categories, votedCategories }: CategoryPro
   if (total === 0) return null;
 
   return (
-    <div className="glass rounded-2xl px-4 py-3 space-y-2">
+    <div className="card-elevated px-4 py-3 space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-foreground">{t("progress.progress", { voted, total })}</span>
         <span className="text-xs text-muted-foreground">{Math.round(pct)}%</span>

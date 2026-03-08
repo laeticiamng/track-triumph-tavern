@@ -44,7 +44,7 @@ export function WhyEliteSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
-              className="rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-5 hover:shadow-md transition-shadow"
+              className="card-elevated border-gradient-hover border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-5"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 mb-3">
                 {b.icon}

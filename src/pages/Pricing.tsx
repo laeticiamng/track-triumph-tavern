@@ -325,7 +325,7 @@ const Pricing = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="overflow-x-auto rounded-2xl border border-border"
+            className="overflow-x-auto card-elevated"
           >
             <table className="w-full text-sm">
               <thead>

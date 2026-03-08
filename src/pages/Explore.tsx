@@ -157,7 +157,7 @@ const Explore = () => {
 
           {/* Vote CTA banner when content exists */}
           {!loading && filtered.length > 0 && (
-            <div className="mb-6 flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
+            <div className="mb-6 flex items-center justify-between card-elevated px-4 py-3 border-primary/20 bg-primary/5">
               <p className="text-sm text-muted-foreground">
                 {t("explore.readyToVote")} <span className="font-medium text-foreground">{t("explore.goToVotePage")}</span>
               </p>
