@@ -485,7 +485,7 @@ const Profile = () => {
         </Card>
 
         {/* Submissions */}
-        <Card>
+        <Card className="card-elevated">
           <CardHeader>
             <CardTitle className="font-display text-xl flex items-center gap-2">
               <Music className="h-5 w-5" /> {t("profilePage.mySubmissions")}
