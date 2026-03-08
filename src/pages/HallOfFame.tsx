@@ -146,9 +146,9 @@ const HallOfFame = () => {
                         const Icon = medal?.icon || Medal;
                         return (
                           <Link
-149:                             key={w.id}
-150:                             to={`/submissions/${w.submission_id}`}
-151:                             className="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-accent/50"
+                            key={w.id}
+                            to={`/submissions/${w.submission_id}`}
+                            className="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-accent/50"
                           >
                             <div className="flex h-10 w-10 items-center justify-center">
                               <Icon className={`h-6 w-6 ${medal?.color || "text-muted-foreground"}`} />
