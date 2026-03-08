@@ -1,31 +1,61 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { trackEvent } from "@/lib/analytics";
+
+// Extend analytics event types
+type CTAEvent = "cta_join_impression" | "cta_join_click";
 
 export function StickyMobileCTA() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const [visible, setVisible] = useState(false);
+  const impressionTracked = useRef(false);
 
-  // Only show on homepage
-  const isHome = location.pathname === "/";
+  // Hide on certain pages and for logged-in users
+  const hiddenPaths = ["/auth", "/pricing", "/profile"];
+  const isHiddenPage = hiddenPaths.some((p) => location.pathname.startsWith(p));
+  const shouldShow = !isHiddenPage && !user;
 
   useEffect(() => {
-    if (!isHome) return;
+    if (!shouldShow) return;
 
     const handleScroll = () => {
-      // Show after scrolling past the hero (~85vh)
       setVisible(window.scrollY > window.innerHeight * 0.7);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome]);
+  }, [shouldShow]);
 
-  if (!isHome) return null;
+  // Track impression once when CTA becomes visible
+  useEffect(() => {
+    if (visible && !impressionTracked.current) {
+      impressionTracked.current = true;
+      trackEvent("page_view" as any, {
+        path: location.pathname,
+        component: "sticky_cta",
+        event_sub: "cta_join_impression",
+        language: i18n.language,
+      });
+    }
+  }, [visible, location.pathname, i18n.language]);
+
+  if (!shouldShow || authLoading) return null;
+
+  const handleClick = () => {
+    trackEvent("page_view" as any, {
+      path: location.pathname,
+      component: "sticky_cta",
+      event_sub: "cta_join_click",
+      language: i18n.language,
+    });
+  };
 
   return (
     <AnimatePresence>
@@ -42,6 +72,7 @@ export function StickyMobileCTA() {
               size="lg"
               className="w-full font-semibold text-base shadow-md"
               asChild
+              onClick={handleClick}
             >
               <Link to="/auth?tab=signup">
                 {t("stickyCta.joinNow")}

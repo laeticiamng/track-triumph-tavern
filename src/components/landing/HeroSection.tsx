@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, CheckCircle, Headphones, Music, Mic2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -52,15 +52,28 @@ export function HeroSection() {
     ? { label: t("hero.discoverContest"), href: "/explore" }
     : { label: t("hero.joinContest"), href: "/auth?tab=signup" };
 
-  return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-hero opacity-90" />
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
 
-      {/* Animated orbs */}
+  const orbY1 = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const orbY2 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const orbY3 = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
+
+  return (
+    <section ref={sectionRef} className="relative overflow-hidden">
+      <motion.div className="absolute inset-0 bg-gradient-hero opacity-90" style={{ y: bgY }} />
+
+      {/* Animated orbs with parallax */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-[120px]" animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.35, 0.2] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
-        <motion.div className="absolute bottom-1/4 right-1/4 h-56 w-56 rounded-full bg-pink-500/15 blur-[100px]" animate={{ scale: [1.1, 0.9, 1.1], opacity: [0.15, 0.3, 0.15] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }} />
-        <motion.div className="absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400/10 blur-[80px]" animate={{ scale: [0.9, 1.15, 0.9], opacity: [0.1, 0.25, 0.1] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }} />
+        <motion.div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-[120px]" style={{ y: orbY1 }} animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.35, 0.2] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
+        <motion.div className="absolute bottom-1/4 right-1/4 h-56 w-56 rounded-full bg-pink-500/15 blur-[100px]" style={{ y: orbY2 }} animate={{ scale: [1.1, 0.9, 1.1], opacity: [0.15, 0.3, 0.15] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }} />
+        <motion.div className="absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400/10 blur-[80px]" style={{ y: orbY3 }} animate={{ scale: [0.9, 1.15, 0.9], opacity: [0.1, 0.25, 0.1] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }} />
       </div>
 
       {/* Floating music icons */}
@@ -72,7 +85,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center px-6 pt-32 pb-24 text-center">
+      <motion.div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center px-6 pt-32 pb-24 text-center" style={{ y: contentY, opacity: contentOpacity }}>
         {/* Live badge */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="mb-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-medium text-white backdrop-blur-sm">
@@ -134,7 +147,7 @@ export function HeroSection() {
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }} className="mt-5 text-xs text-white/55">
           {t("hero.meritocratic")}
         </motion.p>
-      </div>
+      </motion.div>
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
     </section>
