@@ -766,7 +766,8 @@
     "voteSingular": "vote",
     "votePlural": "votes",
     "hallOfFameCta": "Envie de revoir les palmarès précédents ?",
-    "hallOfFameLink": "Voir le Palmarès →"
+    "hallOfFameLink": "Voir le Palmarès →",
+    "noActiveWeek": "Aucun concours actif cette semaine"
   },
   "submissionDetail": {
     "notFound": "Soumission introuvable",

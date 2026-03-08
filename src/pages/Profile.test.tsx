@@ -26,28 +26,32 @@ vi.mock("@/hooks/use-subscription", () => ({
   useSubscription: () => ({ tier: "free", subscribed: false, subscriptionEnd: null, loading: false }),
 }));
 
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: {
-    from: (table: string) => ({
-      select: (...args: unknown[]) => ({
-        eq: () => ({
-          single: () => Promise.resolve({
-            data: table === "profiles"
-              ? { id: "user-123", display_name: "TestUser", avatar_url: null, bio: null, social_links: {}, banner_url: null, created_at: "", updated_at: "" }
-              : null,
-          }),
-          order: () => Promise.resolve({ data: [] }),
-        }),
+vi.mock("@/integrations/supabase/client", () => {
+  const profileData = { id: "user-123", display_name: "TestUser", avatar_url: null, bio: null, social_links: {}, banner_url: null, created_at: "", updated_at: "" };
+  const chainable = (resolveData: unknown = null) => {
+    const obj: Record<string, unknown> = {
+      eq: () => obj,
+      order: () => Promise.resolve({ data: [] }),
+      single: () => Promise.resolve({ data: resolveData }),
+      maybeSingle: () => Promise.resolve({ data: resolveData }),
+      in: () => obj,
+    };
+    return obj;
+  };
+  return {
+    supabase: {
+      from: (table: string) => ({
+        select: (..._args: unknown[]) => chainable(table === "profiles" ? profileData : table === "weeks" ? null : null),
       }),
-    }),
-    auth: {
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }),
-      getSession: () => Promise.resolve({ data: { session: {} } }),
+      auth: {
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }),
+        getSession: () => Promise.resolve({ data: { session: {} } }),
+      },
+      storage: { from: () => ({ upload: vi.fn(), getPublicUrl: () => ({ data: { publicUrl: "" } }) }) },
+      functions: { invoke: vi.fn() },
     },
-    storage: { from: () => ({ upload: vi.fn(), getPublicUrl: () => ({ data: { publicUrl: "" } }) }) },
-    functions: { invoke: vi.fn() },
-  },
-}));
+  };
+});
 
 vi.mock("@/hooks/use-toast", () => ({
   useToast: () => ({ toast: vi.fn() }),

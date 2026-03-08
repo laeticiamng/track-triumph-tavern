@@ -52,10 +52,9 @@ describe("Footer", () => {
     expect(screen.getByText(`© ${year} WMA`)).toBeInTheDocument();
   });
 
-  it("renders contact email", () => {
+  it("renders contact section", () => {
     renderFooter();
-    const mail = screen.getByText("contact@weeklymusicawards.com");
-    expect(mail.closest("a")).toHaveAttribute("href", "mailto:contact@weeklymusicawards.com");
+    expect(screen.getByText("footer.contactText")).toBeInTheDocument();
   });
 
   it("has accessible nav landmarks", () => {

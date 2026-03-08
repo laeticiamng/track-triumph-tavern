@@ -766,7 +766,8 @@
     "voteSingular": "Stimme",
     "votePlural": "Stimmen",
     "hallOfFameCta": "Möchten Sie frühere Gewinner nochmal sehen?",
-    "hallOfFameLink": "Bestenliste ansehen →"
+    "hallOfFameLink": "Bestenliste ansehen →",
+    "noActiveWeek": "Kein aktiver Wettbewerb diese Woche"
   },
   "submissionDetail": {
     "notFound": "Einreichung nicht gefunden",
