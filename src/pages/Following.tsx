@@ -182,6 +182,7 @@ export default function Following() {
 
         <ArtistSuggestions />
       </div>
+      <Footer />
     </Layout>
   );
 }
