@@ -222,8 +222,9 @@ const Explore = () => {
                     </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
-            </motion.div>
+            </div>
           )}
 
           {/* Artist suggestions (logged in) + Popular artists (public) */}

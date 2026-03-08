@@ -525,7 +525,7 @@ const Profile = () => {
         </Card>
 
         {/* Delete Account — GDPR Article 17 */}
-        <Card className="mt-8 border-destructive/30">
+        <Card className="mt-8 card-elevated border-destructive/30">
           <CardHeader>
             <CardTitle className="font-display text-xl flex items-center gap-2 text-destructive">
               <Trash2 className="h-5 w-5" /> {t("profilePage.deleteAccount")}
