@@ -29,7 +29,7 @@ export function useNotifications() {
     }
 
     const { data } = await supabase
-      .from("notifications" as any)
+      .from("notifications")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
@@ -80,8 +80,8 @@ export function useNotifications() {
     async (id: string) => {
       if (!user) return;
       await supabase
-        .from("notifications" as any)
-        .update({ read_at: new Date().toISOString() } as any)
+        .from("notifications")
+        .update({ read_at: new Date().toISOString() })
         .eq("id", id)
         .eq("user_id", user.id);
 
@@ -97,8 +97,8 @@ export function useNotifications() {
   const markAllAsRead = useCallback(async () => {
     if (!user) return;
     await supabase
-      .from("notifications" as any)
-      .update({ read_at: new Date().toISOString() } as any)
+      .from("notifications")
+      .update({ read_at: new Date().toISOString() })
       .eq("user_id", user.id)
       .is("read_at", null);
 

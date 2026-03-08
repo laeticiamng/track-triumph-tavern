@@ -94,8 +94,9 @@ export function NotificationBell() {
 
   const handleNotificationClick = (n: Notification) => {
     const routeFn = ROUTE_MAP[n.type];
+    const meta = (n.metadata as Record<string, unknown>) || {};
     if (routeFn) {
-      navigate(routeFn(n.metadata));
+      navigate(routeFn(meta));
     }
     setOpen(false);
   };

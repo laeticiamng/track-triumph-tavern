@@ -49,12 +49,12 @@ export function ArtistSuggestions() {
 
       // 2. Get users the current user already follows
       const { data: follows } = await supabase
-        .from("follows" as any)
+        .from("follows")
         .select("following_id")
         .eq("follower_id", user.id);
 
       const alreadyFollowing = new Set(
-        (follows as any[] || []).map((f: any) => f.following_id)
+        (follows || []).map((f) => f.following_id)
       );
       alreadyFollowing.add(user.id); // exclude self
       setFollowingIds(alreadyFollowing);
@@ -156,8 +156,8 @@ export function ArtistSuggestions() {
     setFollowLoadingId(artistId);
     try {
       await supabase
-        .from("follows" as any)
-        .insert({ follower_id: user.id, following_id: artistId } as any);
+        .from("follows")
+        .insert({ follower_id: user.id, following_id: artistId });
 
       setFollowingIds((prev) => new Set([...prev, artistId]));
       setSuggestions((prev) => prev.filter((a) => a.id !== artistId));

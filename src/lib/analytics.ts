@@ -53,11 +53,11 @@ export async function trackEvent(
     const { data: { session } } = await supabase.auth.getSession();
     const userId = session?.user?.id ?? null;
 
-    await supabase.from("analytics_events" as any).insert({
-      user_id: userId,
+    await supabase.from("analytics_events").insert([{
+      user_id: userId ?? undefined,
       event_name: eventName,
-      properties: properties ?? {},
-    });
+      properties: (properties ?? {}) as Record<string, string | number | boolean | null>,
+    }]);
   } catch {
     // Fire-and-forget — never block UI
   }
