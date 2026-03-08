@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Heart, Music, ArrowRight, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, Heart, Music, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 
 interface Stat {
   icon: React.ElementType;
