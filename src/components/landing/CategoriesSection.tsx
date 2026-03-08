@@ -1,39 +1,31 @@
 import { motion } from "framer-motion";
-import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen } from "lucide-react";
+import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen, Disc3, Headphones, Radio, Palmtree, Drum } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 
 const categoryMeta: Record<string, { icon: React.ElementType; gradient: string; iconBg: string }> = {
+  // Real DB slugs
+  "rap-trap": { icon: Mic2, gradient: "from-violet-500/20 to-purple-500/20", iconBg: "bg-violet-500/15 text-violet-600 dark:text-violet-400" },
   pop: { icon: Music, gradient: "from-pink-500/20 to-rose-500/20", iconBg: "bg-pink-500/15 text-pink-600 dark:text-pink-400" },
-  rock: { icon: Guitar, gradient: "from-orange-500/20 to-red-500/20", iconBg: "bg-orange-500/15 text-orange-600 dark:text-orange-400" },
-  "hip-hop": { icon: Mic2, gradient: "from-violet-500/20 to-purple-500/20", iconBg: "bg-violet-500/15 text-violet-600 dark:text-violet-400" },
-  electro: { icon: Zap, gradient: "from-cyan-500/20 to-blue-500/20", iconBg: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400" },
+  afro: { icon: Drum, gradient: "from-emerald-500/20 to-teal-500/20", iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" },
+  electronic: { icon: Zap, gradient: "from-cyan-500/20 to-blue-500/20", iconBg: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400" },
   rnb: { icon: Heart, gradient: "from-red-500/20 to-pink-500/20", iconBg: "bg-red-500/15 text-red-600 dark:text-red-400" },
+  lofi: { icon: Headphones, gradient: "from-indigo-500/20 to-slate-500/20", iconBg: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400" },
+  "rock-indie": { icon: Guitar, gradient: "from-orange-500/20 to-red-500/20", iconBg: "bg-orange-500/15 text-orange-600 dark:text-orange-400" },
+  open: { icon: Waves, gradient: "from-amber-500/20 to-yellow-500/20", iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400" },
+  dj: { icon: Disc3, gradient: "from-fuchsia-500/20 to-pink-500/20", iconBg: "bg-fuchsia-500/15 text-fuchsia-600 dark:text-fuchsia-400" },
+  reggae: { icon: Palmtree, gradient: "from-green-500/20 to-lime-500/20", iconBg: "bg-green-500/15 text-green-600 dark:text-green-400" },
+  country: { icon: Radio, gradient: "from-yellow-500/20 to-amber-500/20", iconBg: "bg-yellow-500/15 text-yellow-600 dark:text-yellow-400" },
   jazz: { icon: Music2, gradient: "from-blue-500/20 to-indigo-500/20", iconBg: "bg-blue-500/15 text-blue-600 dark:text-blue-400" },
-  classique: { icon: BookOpen, gradient: "from-amber-500/20 to-yellow-500/20", iconBg: "bg-amber-500/15 text-amber-600 dark:text-amber-400" },
-  world: { icon: Globe, gradient: "from-emerald-500/20 to-teal-500/20", iconBg: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" },
-  autres: { icon: Waves, gradient: "from-indigo-500/20 to-violet-500/20", iconBg: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400" },
 };
 
 const defaultMeta = { icon: Music, gradient: "from-primary/10 to-primary/5", iconBg: "bg-primary/15 text-primary" };
 
-const fallbackCategories: { id: string; name: string; slug: string }[] = [
-  { id: "fb-pop", name: "Pop", slug: "pop" },
-  { id: "fb-rock", name: "Rock", slug: "rock" },
-  { id: "fb-hiphop", name: "Hip-Hop / Rap", slug: "hip-hop" },
-  { id: "fb-electro", name: "Electro", slug: "electro" },
-  { id: "fb-rnb", name: "R&B", slug: "rnb" },
-  { id: "fb-jazz", name: "Jazz", slug: "jazz" },
-  { id: "fb-classique", name: "Classique", slug: "classique" },
-  { id: "fb-world", name: "World / Afro", slug: "world" },
-  { id: "fb-autres", name: "Autres", slug: "autres" },
-];
-
 export function CategoriesSection() {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>(fallbackCategories);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
 
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("id, name, slug").order("sort_order")).then(({ data }) => {
