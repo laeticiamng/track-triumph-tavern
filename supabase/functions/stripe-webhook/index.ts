@@ -127,9 +127,12 @@ serve(async (req) => {
     const msg = error instanceof Error ? error.message : String(error);
     logStep("Processing error", { error: msg });
 
+    // Schedule first retry in 2 minutes (exponential backoff: 2^1 * 60s)
+    const nextRetry = new Date(Date.now() + 2 * 60 * 1000).toISOString();
+
     await supabase
       .from("webhook_events" as any)
-      .update({ status: "failed", error_message: msg })
+      .update({ status: "failed", error_message: msg, next_retry_at: nextRetry })
       .eq("stripe_event_id", event.id);
 
     return new Response(JSON.stringify({ error: msg }), {
