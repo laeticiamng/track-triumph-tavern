@@ -234,7 +234,8 @@ const Profile = () => {
   );
 
   const currentPlan = SUBSCRIPTION_TIERS[tier];
-  const canEditProfile = tier !== "free";
+    const canEditProfile = true; // All users can edit basic profile info
+    const canEditSocial = tier !== "free"; // Social links require paid plan
   const statusColor: Record<string, string> = {
     pending: "bg-yellow-500/10 text-yellow-500",
     approved: "bg-green-500/10 text-green-500",
