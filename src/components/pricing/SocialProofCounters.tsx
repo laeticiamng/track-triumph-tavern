@@ -55,7 +55,7 @@ export function SocialProofCounters() {
           {stats.map((s) => (
             <div
               key={s.label}
-              className="flex flex-col items-center rounded-xl border border-border bg-card p-4 text-center"
+              className="flex flex-col items-center card-elevated border-gradient-hover p-4 text-center"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary mb-2">
                 {s.icon}

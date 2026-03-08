@@ -32,9 +32,9 @@ export function PricingFAQ() {
           </h2>
         </motion.div>
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full space-y-3">
           {faqKeys.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`}>
+            <AccordionItem key={i} value={`faq-${i}`} className="card-elevated border-gradient-hover px-4">
               <AccordionTrigger className="text-left text-sm font-semibold">
                 {t(faq.qKey)}
               </AccordionTrigger>
