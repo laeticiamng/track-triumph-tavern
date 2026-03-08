@@ -147,7 +147,7 @@ export function HeroSection() {
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }} className="mt-5 text-xs text-white/55">
           {t("hero.meritocratic")}
         </motion.p>
-      </div>
+      </motion.div>
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
     </section>
