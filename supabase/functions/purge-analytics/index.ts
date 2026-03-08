@@ -6,10 +6,27 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   try {
+    // Require service role key or admin auth for this sensitive operation
+    const authHeader = req.headers.get("Authorization");
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      serviceKey
     );
+
+    // If called with a bearer token, verify it's an admin
+    if (authHeader && !authHeader.includes(serviceKey)) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user }, error } = await supabase.auth.getUser(token);
+      if (error || !user) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: cors });
+      }
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin");
+      if (!roles || roles.length === 0) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: cors });
+      }
+    }
 
     // Delete analytics events older than 90 days
     const cutoff = new Date();
