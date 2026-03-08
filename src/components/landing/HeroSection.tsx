@@ -85,7 +85,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center px-6 pt-32 pb-24 text-center">
+      <motion.div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center px-6 pt-32 pb-24 text-center" style={{ y: contentY, opacity: contentOpacity }}>
         {/* Live badge */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="mb-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-medium text-white backdrop-blur-sm">
