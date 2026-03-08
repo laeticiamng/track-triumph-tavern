@@ -553,7 +553,11 @@
     "weekEndsIn": "Week ends in",
     "joinContest": "Join the contest",
     "learnMoreLink": "Learn more",
-    "learnMoreAbout": "Learn more about {{name}}"
+    "learnMoreAbout": "Learn more about {{name}}",
+    "modeListen": "Listen",
+    "modeVote": "Vote",
+    "emptyStateDesc": "The next contest is coming soon! In the meantime, explore the music categories and prepare your track.",
+    "upcomingCategories": "Upcoming categories"
   },
   "compete": {
     "seoTitle": "Submit",

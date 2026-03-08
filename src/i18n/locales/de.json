@@ -553,7 +553,11 @@
     "weekEndsIn": "Woche endet in",
     "joinContest": "Am Wettbewerb teilnehmen",
     "learnMoreLink": "Mehr erfahren",
-    "learnMoreAbout": "Mehr erfahren über {{name}}"
+    "learnMoreAbout": "Mehr erfahren über {{name}}",
+    "modeListen": "Anhören",
+    "modeVote": "Abstimmen",
+    "emptyStateDesc": "Der nächste Wettbewerb kommt bald! Entdecken Sie in der Zwischenzeit die Musikkategorien und bereiten Sie Ihren Track vor.",
+    "upcomingCategories": "Kommende Kategorien"
   },
   "compete": {
     "seoTitle": "Einreichen",

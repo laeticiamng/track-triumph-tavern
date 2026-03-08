@@ -553,7 +553,11 @@
     "weekEndsIn": "La semaine se termine dans",
     "joinContest": "Rejoindre le concours",
     "learnMoreLink": "En savoir plus",
-    "learnMoreAbout": "En savoir plus sur {{name}}"
+    "learnMoreAbout": "En savoir plus sur {{name}}",
+    "modeListen": "Écouter",
+    "modeVote": "Voter",
+    "emptyStateDesc": "Le prochain concours arrive bientôt ! En attendant, explorez les catégories musicales et préparez votre morceau.",
+    "upcomingCategories": "Catégories à venir"
   },
   "compete": {
     "seoTitle": "Soumettre",
