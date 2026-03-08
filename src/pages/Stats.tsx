@@ -108,8 +108,8 @@ const Stats = () => {
         }));
 
         setStats({
-          totalVotes: totalVotes || 0,
-          totalParticipants: uniqueVoters.size,
+          totalVotes: totalVotesFromSubmissions,
+          totalParticipants: profileCount || 0,
           totalSubmissions: submissions?.length || 0,
           categoriesData,
           topTracks,
