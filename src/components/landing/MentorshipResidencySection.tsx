@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Video, Users, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 export function MentorshipResidencySection() {
   const { t } = useTranslation();
