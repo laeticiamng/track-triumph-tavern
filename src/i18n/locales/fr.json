@@ -1342,7 +1342,9 @@
     "sentDesc": "Nous vous répondrons dans les plus brefs délais.",
     "sendAnother": "Envoyer un autre message",
     "sendError": "Impossible d'envoyer le message. Veuillez réessayer.",
-    "directEmail": "Ou écrivez-nous directement à :"
+    "directEmail": "Ou écrivez-nous directement à :",
+    "hours": "Lun - Ven : 9h00 - 18h00",
+    "responseTime": "Réponse sous 24-48h ouvrées"
   },
   "stickyCta": {
     "joinNow": "Rejoindre le concours",
