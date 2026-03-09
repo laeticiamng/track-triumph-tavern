@@ -119,7 +119,7 @@
     "q3": "How are scores calculated?",
     "a3": "Each vote evaluates three criteria: originality, production, and emotion. The weighted average gives the final score. Our AI anti-fraud system ensures the integrity of every vote.",
     "q4": "What are the rewards?",
-    "a4": "Every week, a sponsored prize pool rewards the top 3: 🥇 €200 for 1st, 🥈 €100 for 2nd, and 🥉 €50 for 3rd. Rewards are funded by sponsors, never by participants.",
+    "a4": "Every week, a community prize pool rewards the top 3: 🥇 €200 for 1st, 🥈 €100 for 2nd, and 🥉 €50 for 3rd. Rewards are funded by Pro and Elite subscriptions, never by contest participants.",
     "q5": "How does anti-fraud work?",
     "a5": "Our AI analyzes every vote in real time: detecting suspicious accounts, vote bursts, and abnormal behavior. Fraudulent votes are automatically invalidated.",
     "q6": "Can I submit multiple tracks?",
