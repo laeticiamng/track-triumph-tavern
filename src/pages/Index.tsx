@@ -12,6 +12,7 @@ import { ActivityFeed } from "@/components/social/ActivityFeed";
 import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
 import { SocialMissionSection } from "@/components/landing/SocialMissionSection";
 import { MentorshipResidencySection } from "@/components/landing/MentorshipResidencySection";
+import { ProgramsOverview } from "@/components/landing/ProgramsOverview";
 
 const Index = () => {
   return (
@@ -24,10 +25,11 @@ const Index = () => {
       <ActivityFeed />
       <HowItWorks />
       <WeeklyPodium />
-      <WhyParticipate />
-      <CategoriesSection />
       <SocialMissionSection />
       <MentorshipResidencySection />
+      <WhyParticipate />
+      <CategoriesSection />
+      <ProgramsOverview />
       <SocialProof />
       <CTASection />
       <StickyMobileCTA />
