@@ -1391,7 +1391,8 @@
       "residencyTitle": "Virtuelle Residenz",
       "residencyDesc": "6 Wochen kollaboratives Schaffen: 5 Künstler aus 5 EU-Ländern schaffen gemeinsam einen Track für ein europäisches Kulturereignis.",
       "residencyCta": "Programm entdecken"
-    }
+    },
+    "comingSoon": "Diese Programme sind in Entwicklung und werden bald verfügbar sein."
   },
   "culturalExchange": {
     "badge": "Kulturaustausch",
