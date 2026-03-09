@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 
 export function SocialMissionSection() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const animProps = shouldReduceMotion ? {} : { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
   const pillars = [
     {
