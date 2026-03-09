@@ -38,6 +38,17 @@ export function Footer() {
             </nav>
           </div>
 
+          {/* Programs */}
+          <div>
+            <h4 className="font-display text-sm font-semibold mb-3">{t("footer.programs")}</h4>
+            <nav aria-label={t("footer.programs")} className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/cultural-exchange" className="hover:text-foreground transition-colors">{t("footer.culturalExchange")}</Link>
+              <Link to="/mentor-match" className="hover:text-foreground transition-colors">{t("footer.mentorMatch")}</Link>
+              <Link to="/virtual-residency" className="hover:text-foreground transition-colors">{t("footer.virtualResidency")}</Link>
+              <Link to="/impact" className="hover:text-foreground transition-colors">{t("footer.impact")}</Link>
+            </nav>
+          </div>
+
           {/* Legal */}
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.legal")}</h4>
