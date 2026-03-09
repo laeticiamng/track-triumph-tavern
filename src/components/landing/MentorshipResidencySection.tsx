@@ -11,7 +11,7 @@ export function MentorshipResidencySection() {
     {
       icon: Video,
       badgeKey: "mentorship.programs.mentorBadge",
-      title: "Mentor Match",
+      titleKey: "mentorship.programs.mentorTitle",
       descKey: "mentorship.programs.mentorDesc",
       ctaKey: "mentorship.programs.mentorCta",
       link: "/mentor-match",
@@ -22,7 +22,7 @@ export function MentorshipResidencySection() {
     {
       icon: MapPin,
       badgeKey: "mentorship.programs.residencyBadge",
-      title: "Virtual Residency",
+      titleKey: "mentorship.programs.residencyTitle",
       descKey: "mentorship.programs.residencyDesc",
       ctaKey: "mentorship.programs.residencyCta",
       link: "/virtual-residency",
@@ -60,7 +60,7 @@ export function MentorshipResidencySection() {
             const Icon = p.icon;
             return (
               <motion.div
-                key={p.title}
+                key={p.titleKey}
                 initial={{ opacity: 0, x: i === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -71,7 +71,7 @@ export function MentorshipResidencySection() {
                   <Icon className="h-3.5 w-3.5" />
                   {t(p.badgeKey)}
                 </span>
-                <h3 className="font-display text-2xl font-bold mb-3">{p.title}</h3>
+                <h3 className="font-display text-2xl font-bold mb-3">{t(p.titleKey)}</h3>
                 <p className="text-muted-foreground leading-relaxed flex-1">{t(p.descKey)}</p>
                 <Button asChild variant="outline" className="mt-6 w-fit group">
                   <Link to={p.link}>

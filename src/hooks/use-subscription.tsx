@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import type { SubscriptionTier } from "@/lib/subscription-tiers";
@@ -31,15 +31,24 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     loading: true,
   });
 
-  const checkSubscription = useCallback(async () => {
+  const lastFetchRef = useRef(0);
+
+  const checkSubscription = useCallback(async (force = false) => {
     if (!user || !session) {
       setState({ tier: "free", subscribed: false, subscriptionEnd: null, loading: false });
+      return;
+    }
+
+    // Stale time: skip if fetched less than 2 minutes ago (unless forced)
+    const now = Date.now();
+    if (!force && now - lastFetchRef.current < 120_000) {
       return;
     }
 
     try {
       const { data, error } = await supabase.functions.invoke("check-subscription");
       if (error) throw error;
+      lastFetchRef.current = Date.now();
 
       const result = typeof data === "string" ? JSON.parse(data) : data;
 

@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { BarChart3, Users, Globe, Accessibility, TrendingUp, MapPin, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -15,15 +15,15 @@ const kpis = [
   { labelKey: "impact.kpi.inclusionArtists", value: "184", changeKey: "+45%", icon: Accessibility },
 ];
 
-const geoData = [
-  { country: "France", count: 580 },
-  { country: "Allemagne", count: 340 },
-  { country: "Espagne", count: 290 },
-  { country: "Italie", count: 260 },
-  { country: "Pologne", count: 180 },
-  { country: "Pays-Bas", count: 150 },
-  { country: "Belgique", count: 130 },
-  { country: "Portugal", count: 110 },
+const geoDataKeys = [
+  { countryKey: "impact.geo.france", count: 580 },
+  { countryKey: "impact.geo.germany", count: 340 },
+  { countryKey: "impact.geo.spain", count: 290 },
+  { countryKey: "impact.geo.italy", count: 260 },
+  { countryKey: "impact.geo.poland", count: 180 },
+  { countryKey: "impact.geo.netherlands", count: 150 },
+  { countryKey: "impact.geo.belgium", count: 130 },
+  { countryKey: "impact.geo.portugal", count: 110 },
 ];
 
 const diversityData = [
@@ -35,6 +35,9 @@ const diversityData = [
 
 const ImpactDashboard = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const anim = shouldReduceMotion ? { initial: {}, animate: {} } : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
+  const geoData = geoDataKeys.map((g) => ({ country: t(g.countryKey), count: g.count }));
 
   return (
     <Layout>

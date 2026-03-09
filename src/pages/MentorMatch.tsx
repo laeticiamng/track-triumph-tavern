@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Video, Clock, Star, Users, MessageSquare, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ const mentors = [
 
 const MentorMatch = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const steps = [
     { icon: Users, titleKey: "mentorMatch.steps.choose", descKey: "mentorMatch.steps.chooseDesc" },
@@ -42,7 +43,7 @@ const MentorMatch = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-4">
               <Video className="h-3.5 w-3.5" />
-              Mentor Match
+              {t("mentorMatch.badge")}
             </span>
             <h1 className="font-display text-4xl font-bold sm:text-5xl mb-4">
               {t("mentorMatch.titlePrefix")} <span className="text-primary">{t("mentorMatch.titleHighlight")}</span>
