@@ -1399,16 +1399,22 @@
       "authenticity": "Kulturelle Authentizität",
       "creativity": "Kreativität in der Fusion"
     },
-    "months": { "jan": "Januar", "feb": "Februar", "mar": "März", "apr": "April", "may": "Mai", "jun": "Juni" },
-    "traditions": { "flamenco": "Flamenco", "balkans": "Balkan-Rhythmen", "celtic": "Keltischer Folk", "fado": "Fado", "chanson": "Französisches Chanson", "polka": "Polka / Folklore" },
-    "countries": { "spain": "Spanien 🇪🇸", "balkans": "Balkan 🇷🇸🇧🇬", "celtic": "Irland 🇮🇪 / Schottland 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "portugal": "Portugal 🇵🇹", "france": "Frankreich 🇫🇷", "central": "Mitteleuropa 🇵🇱🇨🇿" },
+    "months": { "jan": "Januar", "feb": "Februar", "mar": "März", "apr": "April", "may": "Mai", "jun": "Juni", "jul": "Juli", "aug": "August", "sep": "September", "oct": "Oktober", "nov": "November", "dec": "Dezember" },
+    "traditions": { "flamenco": "Flamenco", "balkans": "Balkan-Rhythmen", "celtic": "Keltischer Folk", "fado": "Fado", "chanson": "Französisches Chanson", "polka": "Polka / Folklore", "tarantella": "Tarantella", "joik": "Joik / Nordischer Folk", "rebetiko": "Rebetiko", "klezmer": "Klezmer", "schlager": "Schlager / Volksmusik", "carols": "Traditionelle Weihnachtslieder" },
+    "countries": { "spain": "Spanien 🇪🇸", "balkans": "Balkan 🇷🇸🇧🇬", "celtic": "Irland 🇮🇪 / Schottland 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "portugal": "Portugal 🇵🇹", "france": "Frankreich 🇫🇷", "central": "Mitteleuropa 🇵🇱🇨🇿", "italy": "Italien 🇮🇹", "nordic": "Skandinavien 🇳🇴🇸🇪🇫🇮", "greece": "Griechenland 🇬🇷", "ashkenazi": "Osteuropa", "germany": "Deutschland 🇩🇪 / Österreich 🇦🇹", "europe": "Ganz Europa 🇪🇺" },
     "desc": {
       "flamenco": "Leidenschaft, Palmas und Gitarre — bringen Sie die Essenz des Flamenco in Ihre Produktion.",
       "balkans": "Asymmetrische Takte, Blechbläser und wilde Energie — der Balkan lädt zur Party ein.",
       "celtic": "Geige, Tin Whistle und melancholische Melodien — keltische Magie in Ihren Beats.",
       "fado": "Saudade und portugiesische Gitarre — die rohe Emotion des Fado trifft moderne Produktion.",
       "chanson": "Poetischer Text und raffinierte Melodie — die Tradition von Brel, Piaf und Barbara.",
-      "polka": "Akkordeon und Tanzrhythmen — die fröhliche Energie Mitteleuropas."
+      "polka": "Akkordeon und Tanzrhythmen — die fröhliche Energie Mitteleuropas.",
+      "tarantella": "Tamburin und wilder Tanz — Süditalien pulsiert durch Ihre Produktionen.",
+      "joik": "Uralter samischer Gesang und nordische Landschaften — eine einzigartige Spiritualität in der Musik.",
+      "rebetiko": "Bouzouki und urbane Melancholie — der griechische Blues in Ihren Arrangements.",
+      "klezmer": "Klarinette, Geige und Freude — die Musiktradition Osteuropas feiert das Leben.",
+      "schlager": "Eingängige sentimentale Melodien — das Volksherz Deutschlands und Österreichs.",
+      "carols": "Weihnachtliche Gesangstraditionen aus ganz Europa — von Gospel bis sakralem Chorgesang."
     },
     "cta": "Am Monatswettbewerb teilnehmen"
   },
