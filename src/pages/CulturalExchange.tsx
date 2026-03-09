@@ -32,6 +32,7 @@ const criteria = [
 
 const CulturalExchange = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <Layout>

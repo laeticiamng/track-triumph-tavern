@@ -20,19 +20,28 @@ export function SEOHead({
   type = "website",
   jsonLd,
 }: SEOHeadProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const defaultTitle = t("seo.defaultTitle");
   const defaultDescription = t("seo.defaultDescription");
   const resolvedDescription = description || defaultDescription;
   const fullTitle = title ? `${title} | Weekly Music Awards` : defaultTitle;
   const fullUrl = url ? `${BASE_URL}${url}` : BASE_URL;
   const resolvedImage = image || `${BASE_URL}/og-image.png`;
+  const currentLang = i18n.language?.substring(0, 2) || "fr";
+  const pathPart = url || "/";
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={resolvedDescription} />
       <link rel="canonical" href={fullUrl} />
+      <html lang={currentLang} />
+
+      {/* hreflang */}
+      <link rel="alternate" hrefLang="fr" href={`${BASE_URL}${pathPart}`} />
+      <link rel="alternate" hrefLang="en" href={`${BASE_URL}${pathPart}`} />
+      <link rel="alternate" hrefLang="de" href={`${BASE_URL}${pathPart}`} />
+      <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}${pathPart}`} />
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
@@ -40,6 +49,7 @@ export function SEOHead({
       <meta property="og:type" content={type} />
       <meta property="og:url" content={fullUrl} />
       <meta property="og:image" content={resolvedImage} />
+      <meta property="og:locale" content={currentLang === "de" ? "de_DE" : currentLang === "en" ? "en_GB" : "fr_FR"} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />

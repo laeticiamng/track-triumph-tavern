@@ -35,6 +35,9 @@ const diversityData = [
 
 const ImpactDashboard = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const anim = shouldReduceMotion ? { initial: {}, animate: {} } : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
+  const geoData = geoDataKeys.map((g) => ({ country: t(g.countryKey), count: g.count }));
 
   return (
     <Layout>

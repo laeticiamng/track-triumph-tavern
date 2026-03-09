@@ -35,7 +35,7 @@ const VirtualResidency = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 mb-4">
               <MapPin className="h-3.5 w-3.5" />
-              Virtual Residency
+              {t("virtualResidency.badge")}
             </span>
             <h1 className="font-display text-4xl font-bold sm:text-5xl mb-4">
               {t("virtualResidency.titlePrefix")} <span className="text-primary">{t("virtualResidency.titleHighlight")}</span>
