@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen, Disc3, Headphones, Radio, Palmtree, Drum } from "lucide-react";
+import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen, Disc3, Headphones, Radio, Palmtree, Drum, Accessibility } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,7 @@ const categoryMeta: Record<string, { icon: React.ElementType; gradient: string; 
   reggae: { icon: Palmtree, gradient: "from-green-500/20 to-lime-500/20", iconBg: "bg-green-500/15 text-green-600 dark:text-green-400" },
   country: { icon: Radio, gradient: "from-yellow-500/20 to-amber-500/20", iconBg: "bg-yellow-500/15 text-yellow-600 dark:text-yellow-400" },
   jazz: { icon: Music2, gradient: "from-blue-500/20 to-indigo-500/20", iconBg: "bg-blue-500/15 text-blue-600 dark:text-blue-400" },
+  inclusion: { icon: Heart, gradient: "from-rose-500/20 to-pink-500/20", iconBg: "bg-rose-500/15 text-rose-600 dark:text-rose-400" },
 };
 
 const defaultMeta = { icon: Music, gradient: "from-primary/10 to-primary/5", iconBg: "bg-primary/15 text-primary" };

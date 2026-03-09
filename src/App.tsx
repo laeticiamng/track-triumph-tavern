@@ -47,6 +47,10 @@ const Following = lazy(() => import("./pages/Following"));
 const Articles = lazy(() => import("./pages/Articles"));
 const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
+const CulturalExchange = lazy(() => import("./pages/CulturalExchange"));
+const MentorMatch = lazy(() => import("./pages/MentorMatch"));
+const VirtualResidency = lazy(() => import("./pages/VirtualResidency"));
+const ImpactDashboard = lazy(() => import("./pages/ImpactDashboard"));
 const Sitemap = lazy(() => import("./components/seo/Sitemap"));
 
 function PageLoader() {
@@ -108,6 +112,10 @@ const App = () => (
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cultural-exchange" element={<CulturalExchange />} />
+            <Route path="/mentor-match" element={<MentorMatch />} />
+            <Route path="/virtual-residency" element={<VirtualResidency />} />
+            <Route path="/impact" element={<ImpactDashboard />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/stats/artist/:id" element={<ArtistStats />} />
             <Route path="/sitemap.xml" element={<Sitemap />} />

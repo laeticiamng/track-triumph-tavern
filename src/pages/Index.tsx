@@ -10,6 +10,8 @@ import { SocialProof } from "@/components/landing/SocialProof";
 import { CTASection } from "@/components/landing/CTASection";
 import { ActivityFeed } from "@/components/social/ActivityFeed";
 import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
+import { SocialMissionSection } from "@/components/landing/SocialMissionSection";
+import { MentorshipResidencySection } from "@/components/landing/MentorshipResidencySection";
 
 const Index = () => {
   return (
@@ -24,6 +26,8 @@ const Index = () => {
       <WeeklyPodium />
       <WhyParticipate />
       <CategoriesSection />
+      <SocialMissionSection />
+      <MentorshipResidencySection />
       <SocialProof />
       <CTASection />
       <StickyMobileCTA />
