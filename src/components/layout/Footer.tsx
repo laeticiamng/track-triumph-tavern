@@ -73,8 +73,15 @@ export function Footer() {
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.contact")}</h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {t("footer.contactText")}
+              EMOTIONSCARE SASU<br />
+              80000 Amiens, France
             </p>
+            <a href="mailto:contact@emotionscare.com" className="mt-2 inline-block text-sm text-primary hover:underline">
+              contact@emotionscare.com
+            </a>
+            <div className="mt-2 flex gap-3 text-xs text-muted-foreground">
+              <a href="https://www.linkedin.com/company/emotionscare/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">LinkedIn</a>
+            </div>
             <Link to="/contact" className="mt-2 inline-block text-sm text-primary hover:underline">
               {t("footer.contactPage")}
             </Link>

@@ -18,8 +18,11 @@ const MentionsLegales = () => {
           <ul className="list-none space-y-1 pl-0">
             <li><strong>Raison sociale :</strong> EMOTIONSCARE SASU</li>
             <li><strong>SIREN :</strong> 944 505 445</li>
+            <li><strong>Siège social :</strong> 80000 Amiens, France</li>
+            <li><strong>Dirigeante :</strong> <a href="https://www.linkedin.com/in/laeticiamotongane/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Motongane Laeticia</a></li>
             <li><strong>E-mail :</strong> <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></li>
             <li><strong>DPO :</strong> <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a></li>
+            <li><strong>LinkedIn :</strong> <a href="https://www.linkedin.com/company/emotionscare/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">EMOTIONSCARE SASU</a></li>
           </ul>
 
           <h2 className="text-foreground font-display">2. Hébergement</h2>
