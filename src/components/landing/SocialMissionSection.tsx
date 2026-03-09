@@ -95,6 +95,12 @@ export function SocialMissionSection() {
               {t("socialMission.ctaImpact")}
             </Link>
           </Button>
+          <Button asChild variant="secondary" size="lg">
+            <Link to="/categories/inclusion">
+              <Accessibility className="mr-2 h-4 w-4" />
+              {t("socialMission.ctaInclusion")}
+            </Link>
+          </Button>
         </motion.div>
       </div>
     </section>
