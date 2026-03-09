@@ -33,6 +33,8 @@ const criteria = [
 const CulturalExchange = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const fade = shouldReduceMotion ? {} : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
+  const fadeOnly = shouldReduceMotion ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 } };
 
   return (
     <Layout>
@@ -45,7 +47,7 @@ const CulturalExchange = () => {
       <section className="py-20 md:py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-amber-500/5" />
         <div className="container relative max-w-5xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
+          <motion.div {...fade} className="text-center mb-16">
             <span className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 mb-4">
               <Globe className="h-3.5 w-3.5" />
               {t("culturalExchange.badge")}
@@ -59,7 +61,7 @@ const CulturalExchange = () => {
           </motion.div>
 
           {/* Criteria */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="grid grid-cols-3 gap-4 mb-16 max-w-xl mx-auto">
+          <motion.div {...fadeOnly} transition={shouldReduceMotion ? undefined : { delay: 0.2 }} className="grid grid-cols-3 gap-4 mb-16 max-w-xl mx-auto">
             {criteria.map((c) => {
               const Icon = c.icon;
               return (
@@ -77,9 +79,8 @@ const CulturalExchange = () => {
             {themes.map((th, i) => (
               <motion.div
                 key={th.monthKey}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * i }}
+                {...fade}
+                transition={shouldReduceMotion ? undefined : { delay: 0.1 * i }}
               >
                 <Card className="h-full hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">

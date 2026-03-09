@@ -13,6 +13,7 @@ const countries = ["🇫🇷", "🇩🇪", "🇮🇹", "🇪🇸", "🇵🇱", "
 const VirtualResidency = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const fade = shouldReduceMotion ? {} : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
   const timeline = [
     { weekKey: "virtualResidency.timeline.week1", titleKey: "virtualResidency.timeline.title1", descKey: "virtualResidency.timeline.desc1" },
@@ -32,7 +33,7 @@ const VirtualResidency = () => {
       <section className="py-20 md:py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-purple-500/5" />
         <div className="container relative max-w-5xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+          <motion.div {...fade} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 mb-4">
               <MapPin className="h-3.5 w-3.5" />
               {t("virtualResidency.badge")}
@@ -48,9 +49,8 @@ const VirtualResidency = () => {
               {countries.map((flag, i) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.05 * i, type: "spring" }}
+                  {...(shouldReduceMotion ? {} : { initial: { opacity: 0, scale: 0 }, animate: { opacity: 1, scale: 1 } })}
+                  transition={shouldReduceMotion ? undefined : { delay: 0.05 * i, type: "spring" }}
                 >
                   {flag}
                 </motion.span>
@@ -70,9 +70,8 @@ const VirtualResidency = () => {
             {timeline.map((tl, i) => (
               <motion.div
                 key={tl.weekKey}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15 * i }}
+                {...(shouldReduceMotion ? {} : { initial: { opacity: 0, x: -20 }, animate: { opacity: 1, x: 0 } })}
+                transition={shouldReduceMotion ? undefined : { delay: 0.15 * i }}
               >
                 <Card>
                   <CardContent className="p-6 flex gap-5 items-start">

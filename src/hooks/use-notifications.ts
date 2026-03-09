@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -13,34 +13,77 @@ export interface Notification {
   created_at: string;
 }
 
+// Shared singleton state to prevent duplicate fetches across multiple hook instances
+let sharedNotifications: Notification[] = [];
+let sharedUnreadCount = 0;
+let sharedLoading = true;
+let lastFetchTime = 0;
+let fetchPromise: Promise<void> | null = null;
+let subscribers = new Set<() => void>();
+let realtimeChannel: ReturnType<typeof supabase.channel> | null = null;
+let realtimeUserId: string | null = null;
+
+function notifySubscribers() {
+  subscribers.forEach((cb) => cb());
+}
+
 export function useNotifications() {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [, forceUpdate] = useState(0);
+  const rerender = useCallback(() => forceUpdate((n) => n + 1), []);
 
-  // Fetch notifications
+  // Subscribe to shared state changes
+  useEffect(() => {
+    subscribers.add(rerender);
+    return () => {
+      subscribers.delete(rerender);
+    };
+  }, [rerender]);
+
+  // Fetch notifications (with dedup via staleTime)
   const fetchNotifications = useCallback(async () => {
     if (!user) {
-      setNotifications([]);
-      setUnreadCount(0);
-      setLoading(false);
+      sharedNotifications = [];
+      sharedUnreadCount = 0;
+      sharedLoading = false;
+      notifySubscribers();
       return;
     }
 
-    const { data } = await supabase
-      .from("notifications")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(50);
-
-    if (data) {
-      const items = data as unknown as Notification[];
-      setNotifications(items);
-      setUnreadCount(items.filter((n) => !n.read_at).length);
+    // Dedup: skip if fetched less than 5s ago
+    const now = Date.now();
+    if (now - lastFetchTime < 5_000) {
+      sharedLoading = false;
+      notifySubscribers();
+      return;
     }
-    setLoading(false);
+
+    // Dedup: reuse in-flight request
+    if (fetchPromise) return fetchPromise;
+
+    fetchPromise = (async () => {
+      try {
+        const { data } = await supabase
+          .from("notifications")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (data) {
+          const items = data as unknown as Notification[];
+          sharedNotifications = items;
+          sharedUnreadCount = items.filter((n) => !n.read_at).length;
+        }
+        lastFetchTime = Date.now();
+      } finally {
+        sharedLoading = false;
+        fetchPromise = null;
+        notifySubscribers();
+      }
+    })();
+
+    return fetchPromise;
   }, [user]);
 
   // Initial fetch
@@ -48,11 +91,27 @@ export function useNotifications() {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  // Realtime subscription
+  // Realtime subscription (singleton - only one channel regardless of hook instances)
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      if (realtimeChannel) {
+        supabase.removeChannel(realtimeChannel);
+        realtimeChannel = null;
+        realtimeUserId = null;
+      }
+      return;
+    }
 
-    const channel = supabase
+    // Already subscribed for this user
+    if (realtimeUserId === user.id && realtimeChannel) return;
+
+    // Clean up old channel
+    if (realtimeChannel) {
+      supabase.removeChannel(realtimeChannel);
+    }
+
+    realtimeUserId = user.id;
+    realtimeChannel = supabase
       .channel("notifications-realtime")
       .on(
         "postgres_changes",
@@ -64,14 +123,20 @@ export function useNotifications() {
         },
         (payload) => {
           const newNotif = payload.new as unknown as Notification;
-          setNotifications((prev) => [newNotif, ...prev].slice(0, 50));
-          setUnreadCount((prev) => prev + 1);
+          sharedNotifications = [newNotif, ...sharedNotifications].slice(0, 50);
+          sharedUnreadCount += 1;
+          notifySubscribers();
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      // Only clean up if this is the last subscriber
+      if (subscribers.size <= 1 && realtimeChannel) {
+        supabase.removeChannel(realtimeChannel);
+        realtimeChannel = null;
+        realtimeUserId = null;
+      }
     };
   }, [user]);
 
@@ -85,10 +150,11 @@ export function useNotifications() {
         .eq("id", id)
         .eq("user_id", user.id);
 
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, read_at: new Date().toISOString() } : n))
+      sharedNotifications = sharedNotifications.map((n) =>
+        n.id === id ? { ...n, read_at: new Date().toISOString() } : n
       );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
+      sharedUnreadCount = Math.max(0, sharedUnreadCount - 1);
+      notifySubscribers();
     },
     [user]
   );
@@ -102,11 +168,20 @@ export function useNotifications() {
       .eq("user_id", user.id)
       .is("read_at", null);
 
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, read_at: n.read_at || new Date().toISOString() }))
-    );
-    setUnreadCount(0);
+    sharedNotifications = sharedNotifications.map((n) => ({
+      ...n,
+      read_at: n.read_at || new Date().toISOString(),
+    }));
+    sharedUnreadCount = 0;
+    notifySubscribers();
   }, [user]);
 
-  return { notifications, unreadCount, loading, markAsRead, markAllAsRead, refetch: fetchNotifications };
+  return {
+    notifications: sharedNotifications,
+    unreadCount: sharedUnreadCount,
+    loading: sharedLoading,
+    markAsRead,
+    markAllAsRead,
+    refetch: fetchNotifications,
+  };
 }
