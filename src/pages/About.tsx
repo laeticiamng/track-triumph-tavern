@@ -145,7 +145,12 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.55 }}
             className="mt-10 text-center text-xs text-muted-foreground"
           >
-            <p>{t("aboutPage.editedBy")} <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445)</p>
+            <p>{t("aboutPage.editedBy")} <strong>EMOTIONSCARE SASU</strong> (SIREN 944 505 445) — 80000 Amiens, France</p>
+            <p className="mt-1">
+              <a href="https://www.linkedin.com/company/emotionscare/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>
+              {" · "}
+              <a href="mailto:contact@emotionscare.com" className="text-primary hover:underline">contact@emotionscare.com</a>
+            </p>
           </motion.div>
 
           {/* Contact + CTA */}

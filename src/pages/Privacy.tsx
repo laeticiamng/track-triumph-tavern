@@ -39,7 +39,7 @@ const Privacy = () => {
           <ul>
             <li><strong>Supabase</strong> — hébergement et base de données.</li>
             <li><strong>Stripe</strong> — traitement des paiements.</li>
-            <li><strong>Vercel</strong> — hébergement front-end.</li>
+            <li><strong>Lovable / Netlify</strong> — hébergement front-end.</li>
           </ul>
           <p>Chaque sous-traitant est lié par un accord de traitement des données (DPA) garantissant un niveau de protection conforme au RGPD.</p>
 
