@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-12">
       <div className="container">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2">
@@ -35,17 +35,6 @@ export function Footer() {
               <Link to="/faq" className="hover:text-foreground transition-colors">{t("footer.faq")}</Link>
               <Link to="/about" className="hover:text-foreground transition-colors">{t("footer.about")}</Link>
               <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
-            </nav>
-          </div>
-
-          {/* Programs */}
-          <div>
-            <h4 className="font-display text-sm font-semibold mb-3">{t("footer2.programs")}</h4>
-            <nav aria-label={t("footer2.programs")} className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/cultural-exchange" className="hover:text-foreground transition-colors">{t("footer2.culturalExchange")}</Link>
-              <Link to="/mentor-match" className="hover:text-foreground transition-colors">{t("footer2.mentorMatch")}</Link>
-              <Link to="/virtual-residency" className="hover:text-foreground transition-colors">{t("footer2.virtualResidency")}</Link>
-              <Link to="/impact" className="hover:text-foreground transition-colors">{t("footer2.impact")}</Link>
             </nav>
           </div>
 

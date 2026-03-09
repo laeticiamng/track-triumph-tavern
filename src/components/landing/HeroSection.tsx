@@ -115,7 +115,7 @@ export function HeroSection() {
             { label: t("hero.badgeFreeVote"), color: "text-green-300" },
             { label: t("hero.badgeAntiFraud"), color: "text-amber-300" },
             { label: t("hero.badgePrize"), color: "text-pink-300" },
-            { label: t("hero.badgeInclusion"), color: "text-blue-300" },
+            { label: t("hero.badgeOpenToAll"), color: "text-blue-300" },
           ].map((badge) => (
             <span key={badge.label} className="inline-flex items-center gap-1.5 text-white/80">
               <CheckCircle className={`h-4 w-4 ${badge.color}`} />

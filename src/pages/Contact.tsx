@@ -149,7 +149,7 @@ const Contact = () => {
                 </form>
 
                 <div className="mt-6 pt-6 border-t border-border space-y-4">
-                  <div className="text-center">
+                <div className="text-center">
                     <p className="text-sm text-muted-foreground">{t("contact.directEmail")}</p>
                     <a href="mailto:contact@emotionscare.com" className="text-sm text-primary hover:underline">
                       contact@emotionscare.com
@@ -158,11 +158,9 @@ const Contact = () => {
                   <div className="text-center text-sm text-muted-foreground space-y-1">
                     <p><strong>EMOTIONSCARE SASU</strong> — SIREN 944 505 445</p>
                     <p>80000 Amiens, France</p>
-                    <p>Lun - Ven : 9h00 - 18h00 · Réponse sous 24-48h ouvrées</p>
+                    <p>{t("contact.hours")} · {t("contact.responseTime")}</p>
                     <div className="flex items-center justify-center gap-3 mt-2">
-                      <a href="https://www.linkedin.com/in/laeticiamotongane/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">LinkedIn (Dirigeante)</a>
-                      <span className="text-border">·</span>
-                      <a href="https://www.linkedin.com/company/emotionscare/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">LinkedIn (Entreprise)</a>
+                      <a href="https://www.linkedin.com/company/emotionscare/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">LinkedIn</a>
                     </div>
                   </div>
                 </div>

@@ -8,11 +8,9 @@ import { WhyParticipate } from "@/components/landing/WhyParticipate";
 import { CategoriesSection } from "@/components/landing/CategoriesSection";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { CTASection } from "@/components/landing/CTASection";
-import { ActivityFeed } from "@/components/social/ActivityFeed";
 import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
 import { SocialMissionSection } from "@/components/landing/SocialMissionSection";
 import { MentorshipResidencySection } from "@/components/landing/MentorshipResidencySection";
-import { ProgramsOverview } from "@/components/landing/ProgramsOverview";
 
 const Index = () => {
   return (
@@ -22,14 +20,12 @@ const Index = () => {
         jsonLd={homePageJsonLd}
       />
       <HeroSection />
-      <ActivityFeed />
       <HowItWorks />
       <WeeklyPodium />
+      <CategoriesSection />
+      <WhyParticipate />
       <SocialMissionSection />
       <MentorshipResidencySection />
-      <WhyParticipate />
-      <CategoriesSection />
-      <ProgramsOverview />
       <SocialProof />
       <CTASection />
       <StickyMobileCTA />
