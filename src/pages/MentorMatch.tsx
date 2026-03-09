@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { Footer } from "@/components/layout/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Video, Clock, Star, Users, MessageSquare, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
