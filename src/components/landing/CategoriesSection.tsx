@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen, Disc3, Headphones, Radio, Palmtree, Drum } from "lucide-react";
+import { Mic2, Waves, Globe, Zap, Heart, Guitar, Music, Music2, BookOpen, Disc3, Headphones, Radio, Palmtree, Drum, Accessibility } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
