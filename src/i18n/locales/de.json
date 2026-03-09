@@ -1346,5 +1346,136 @@
     "joinNow": "Dem Wettbewerb beitreten",
     "freeVoting": "100% kostenlose Abstimmung",
     "noCard": "Keine Kreditkarte erforderlich"
+  },
+  "footer2": {
+    "programs": "Programme",
+    "culturalExchange": "Kulturaustausch",
+    "mentorMatch": "Mentor Match",
+    "virtualResidency": "Virtuelle Residenz",
+    "impact": "Impact-Dashboard"
+  },
+  "socialMission": {
+    "badge": "Soziale Mission",
+    "titlePrefix": "Musik als Mittel zur ",
+    "titleHighlight": "Inklusion",
+    "subtitle": "Track Triumph setzt sich für kulturelle Vielfalt und Chancengleichheit in der europäischen Musikproduktion ein.",
+    "pillars": {
+      "inclusionTitle": "Inclusion Tracks",
+      "inclusionDesc": "Eine Kategorie für junge Menschen aus benachteiligten Verhältnissen, Künstler mit Behinderungen und unterrepräsentierte Gemeinschaften.",
+      "exchangeTitle": "Europäischer Kulturaustausch",
+      "exchangeDesc": "Monatliche Themenwettbewerbe: Flamenco, Balkan-Rhythmen, keltischer Folk… Musikalische Qualität + kulturelle Authentizität.",
+      "impactTitle": "Preis für soziale Wirkung",
+      "impactDesc": "Ein spezieller Preis für den Künstler, dessen Weg und Musik Inklusion und Vielfalt am besten verkörpern."
+    },
+    "ctaExchange": "Kulturaustausch entdecken",
+    "ctaImpact": "Impact-Dashboard"
+  },
+  "mentorship": {
+    "badge": "Begleitprogramme",
+    "titlePrefix": "Gemeinsam wachsen, über",
+    "titleHighlight": "Grenzen",
+    "subtitle": "Individuelles Mentoring und virtuelle Residenzen, um aufstrebende Talente in ganz Europa zu verbinden.",
+    "programs": {
+      "mentorBadge": "Mentoring",
+      "mentorDesc": "Erfahrene europäische Musiker begleiten Sie: 30-minütige Videositzungen, persönliches Feedback und Karriereberatung.",
+      "mentorCta": "Mentor finden",
+      "residencyBadge": "Residenz",
+      "residencyDesc": "6 Wochen kollaboratives Schaffen: 5 Künstler aus 5 EU-Ländern schaffen gemeinsam einen Track für ein europäisches Kulturereignis.",
+      "residencyCta": "Programm entdecken"
+    }
+  },
+  "culturalExchange": {
+    "badge": "Kulturaustausch",
+    "seo": {
+      "title": "Europäischer Kulturaustausch — Track Triumph",
+      "description": "Monatliche Themenwettbewerbe zur Feier europäischer Musiktraditionen. Flamenco, Balkan, Keltisch und mehr."
+    },
+    "titlePrefix": "Ein Kontinent, tausend",
+    "titleHighlight": "Traditionen",
+    "subtitle": "Jeden Monat wird eine europäische Musiktradition zum Leitfaden des Wettbewerbs. Verschmelzen Sie Ihren Stil mit einem einzigartigen kulturellen Erbe.",
+    "criteria": {
+      "quality": "Musikalische Qualität",
+      "authenticity": "Kulturelle Authentizität",
+      "creativity": "Kreativität in der Fusion"
+    },
+    "months": { "jan": "Januar", "feb": "Februar", "mar": "März", "apr": "April", "may": "Mai", "jun": "Juni" },
+    "traditions": { "flamenco": "Flamenco", "balkans": "Balkan-Rhythmen", "celtic": "Keltischer Folk", "fado": "Fado", "chanson": "Französisches Chanson", "polka": "Polka / Folklore" },
+    "countries": { "spain": "Spanien 🇪🇸", "balkans": "Balkan 🇷🇸🇧🇬", "celtic": "Irland 🇮🇪 / Schottland 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "portugal": "Portugal 🇵🇹", "france": "Frankreich 🇫🇷", "central": "Mitteleuropa 🇵🇱🇨🇿" },
+    "desc": {
+      "flamenco": "Leidenschaft, Palmas und Gitarre — bringen Sie die Essenz des Flamenco in Ihre Produktion.",
+      "balkans": "Asymmetrische Takte, Blechbläser und wilde Energie — der Balkan lädt zur Party ein.",
+      "celtic": "Geige, Tin Whistle und melancholische Melodien — keltische Magie in Ihren Beats.",
+      "fado": "Saudade und portugiesische Gitarre — die rohe Emotion des Fado trifft moderne Produktion.",
+      "chanson": "Poetischer Text und raffinierte Melodie — die Tradition von Brel, Piaf und Barbara.",
+      "polka": "Akkordeon und Tanzrhythmen — die fröhliche Energie Mitteleuropas."
+    },
+    "cta": "Am Monatswettbewerb teilnehmen"
+  },
+  "mentorMatch": {
+    "seo": {
+      "title": "Mentor Match — Track Triumph",
+      "description": "Europäisches Mentoring-Programm. Erfahrene Musiker begleiten Sie in 30-minütigen Videositzungen."
+    },
+    "titlePrefix": "Lernen Sie von den",
+    "titleHighlight": "Besten",
+    "subtitle": "Erfahrene europäische Musiker teilen ihr Fachwissen in individuellen 30-minütigen Videositzungen.",
+    "comingSoon": "Programm in Vorbereitung — die Anmeldung wird bald eröffnet. Die unten gezeigten Mentoren sind illustrative Beispiele.",
+    "ourMentors": "Unsere Mentoren",
+    "requestSession": "Sitzung anfragen (demnächst)",
+    "steps": {
+      "choose": "Wählen Sie einen Mentor",
+      "chooseDesc": "Durchsuchen Sie Profile nach Genre und Zielen.",
+      "book": "Buchen Sie eine Sitzung",
+      "bookDesc": "30-Minuten-Slots, flexibel über Zeitzonen.",
+      "exchange": "Austausch per Video",
+      "exchangeDesc": "Persönliches Feedback zu Ihrer Produktion, Stimme oder Komposition.",
+      "progress": "Fortschritt",
+      "progressDesc": "Erhalten Sie einen Sitzungsbericht und Übungsempfehlungen."
+    },
+    "mentors": {
+      "elena": "Elena Vasquez", "elenaCountry": "Spanien 🇪🇸", "elenaSpeciality": "Flamenco / Fusion",
+      "lars": "Lars Eriksson", "larsCountry": "Schweden 🇸🇪", "larsSpeciality": "Electronic / Ambient",
+      "chiara": "Chiara Bianchi", "chiaraCountry": "Italien 🇮🇹", "chiaraSpeciality": "Jazz / Neo-Soul",
+      "tomasz": "Tomasz Nowak", "tomaszCountry": "Polen 🇵🇱", "tomaszSpeciality": "Hip-Hop / Produktion",
+      "marie": "Marie Dupont", "marieCountry": "Frankreich 🇫🇷", "marieSpeciality": "Chanson / Pop",
+      "dimitris": "Dimitris Papadopoulos", "dimitrisCountry": "Griechenland 🇬🇷", "dimitrisSpeciality": "Weltmusik / Rebetiko"
+    }
+  },
+  "virtualResidency": {
+    "seo": {
+      "title": "Virtual Residency — Track Triumph",
+      "description": "Europäische virtuelle Residenz: 6 Wochen kollaboratives Schaffen zwischen 5 Künstlern aus 5 EU-Ländern."
+    },
+    "titlePrefix": "5 Länder, 5 Künstler, 1",
+    "titleHighlight": "Track",
+    "subtitle": "Eine 6-wöchige virtuelle kreative Residenz, in der Talente aus ganz Europa zusammenarbeiten, um einen Track für ein europäisches Kulturereignis zu produzieren.",
+    "comingSoon": "Programm in Vorbereitung — Bewerbungen für die erste Kohorte werden bald eröffnet.",
+    "apply": "Für die nächste Kohorte bewerben (demnächst)",
+    "timeline": {
+      "week1": "Woche 1", "title1": "Kennenlernen & Inspiration", "desc1": "Die 5 Künstler lernen sich kennen, teilen ihre Einflüsse und wählen eine kreative Richtung.",
+      "week2": "Woche 2-3", "title2": "Erkundung & Skizzen", "desc2": "Jeder trägt musikalische Elemente aus seiner kulturellen Tradition bei.",
+      "week3": "Woche 4-5", "title3": "Kollaborative Produktion", "desc3": "Online-Co-Creation-Sessions, kollektives Mischen und Arrangements.",
+      "week4": "Woche 6", "title4": "Präsentation", "desc4": "Der gemeinsam erstellte Track wird bei einem europäischen Online-Kulturereignis präsentiert."
+    }
+  },
+  "impact": {
+    "badge": "Impact-Dashboard",
+    "seo": {
+      "title": "Impact-Dashboard — Track Triumph",
+      "description": "Soziale Wirkungsmetriken: Community-Engagement, geografische und demografische Vielfalt der Teilnehmer."
+    },
+    "titlePrefix": "Unser",
+    "titleHighlight": "Impact",
+    "titleSuffix": "in Zahlen",
+    "subtitle": "Aggregierte Daten für unsere institutionellen Partner: Kommunen, Kulturvereine und Stiftungen.",
+    "demoWarning": "Demodaten — Diese Zahlen sind illustrativ und werden durch echte Plattformdaten ersetzt.",
+    "geoTitle": "Geografische Verteilung",
+    "diversityTitle": "Demografische Vielfalt",
+    "kpi": {
+      "activeCreators": "Aktive Kreative",
+      "firstTimeCreators": "Erstmals Kreative",
+      "countriesRepresented": "Vertretene Länder",
+      "inclusionArtists": "Inklusions-Künstler"
+    }
   }
 }

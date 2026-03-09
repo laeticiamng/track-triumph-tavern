@@ -26,6 +26,7 @@ export function SEOHead({
   const resolvedDescription = description || defaultDescription;
   const fullTitle = title ? `${title} | Weekly Music Awards` : defaultTitle;
   const fullUrl = url ? `${BASE_URL}${url}` : BASE_URL;
+  const resolvedImage = image || `${BASE_URL}/og-image.png`;
 
   return (
     <Helmet>
@@ -38,13 +39,13 @@ export function SEOHead({
       <meta property="og:description" content={resolvedDescription} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={fullUrl} />
-      {image && <meta property="og:image" content={image} />}
+      <meta property="og:image" content={resolvedImage} />
 
       {/* Twitter */}
-      <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={resolvedDescription} />
-      {image && <meta name="twitter:image" content={image} />}
+      <meta name="twitter:image" content={resolvedImage} />
 
       {/* JSON-LD */}
       {jsonLd && (
