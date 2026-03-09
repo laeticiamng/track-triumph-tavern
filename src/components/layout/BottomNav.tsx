@@ -11,7 +11,7 @@ export function BottomNav() {
   const items = [
     { label: t("nav.home"), href: "/", icon: Home },
     { label: t("nav.discover"), href: "/explore", icon: Search },
-    { label: t("nav.submit"), href: "/compete", icon: Music },
+    { label: t("nav.vote"), href: "/vote", icon: Music },
     { label: t("nav.results"), href: "/results", icon: Trophy },
     { label: user ? t("nav.profile") : t("nav.login"), href: user ? "/profile" : "/auth", icon: User },
   ];

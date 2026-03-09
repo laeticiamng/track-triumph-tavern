@@ -87,10 +87,10 @@ export function SocialProof() {
     }).catch(() => {});
   }, []);
 
-  const hasData = stats.some((s) => s.value > 0);
+  const totalValue = stats.reduce((sum, s) => sum + s.value, 0);
 
-  // Don't render section at all if no data — avoids "Lancement imminent" with 0 stats
-  if (!hasData) return null;
+  // Don't render if total stats < 10 — low numbers are counter-productive
+  if (totalValue < 10) return null;
 
   return (
     <section className="py-24 md:py-32 relative overflow-hidden">
