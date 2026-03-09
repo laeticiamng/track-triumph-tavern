@@ -119,7 +119,7 @@
     "q3": "Comment les notes sont-elles calculées ?",
     "a3": "Chaque vote évalue trois critères : originalité, production et émotion. La moyenne pondérée des trois donne le score final. Notre système anti-fraude IA garantit l'intégrité de chaque vote.",
     "q4": "Quelles sont les récompenses ?",
-    "a4": "Chaque semaine, une cagnotte sponsorisée récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont financées par nos sponsors, jamais par les participants.",
+    "a4": "Chaque semaine, une cagnotte communautaire récompense les 3 premiers du podium : 🥇 200 € pour le 1er, 🥈 100 € pour le 2e et 🥉 50 € pour le 3e. Les récompenses sont financées par les abonnements Pro et Elite, jamais par les participants au concours.",
     "q5": "Comment fonctionne l'anti-fraude ?",
     "a5": "Notre intelligence artificielle analyse chaque vote en temps réel : détection de comptes suspects, rafales de votes, comportements anormaux. Les votes frauduleux sont automatiquement invalidés.",
     "q6": "Puis-je soumettre plusieurs morceaux ?",
