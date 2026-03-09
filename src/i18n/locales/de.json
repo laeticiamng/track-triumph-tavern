@@ -1487,6 +1487,16 @@
       "firstTimeCreators": "Erstmals Kreative",
       "countriesRepresented": "Vertretene Länder",
       "inclusionArtists": "Inklusions-Künstler"
+    },
+    "geo": {
+      "france": "Frankreich",
+      "germany": "Deutschland",
+      "spain": "Spanien",
+      "italy": "Italien",
+      "poland": "Polen",
+      "netherlands": "Niederlande",
+      "belgium": "Belgien",
+      "portugal": "Portugal"
     }
   }
 }
