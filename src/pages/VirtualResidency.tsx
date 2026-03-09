@@ -12,6 +12,7 @@ const countries = ["🇫🇷", "🇩🇪", "🇮🇹", "🇪🇸", "🇵🇱", "
 
 const VirtualResidency = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const timeline = [
     { weekKey: "virtualResidency.timeline.week1", titleKey: "virtualResidency.timeline.title1", descKey: "virtualResidency.timeline.desc1" },
