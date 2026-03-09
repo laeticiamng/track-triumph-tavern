@@ -20,6 +20,7 @@ const mentors = [
 
 const MentorMatch = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const steps = [
     { icon: Users, titleKey: "mentorMatch.steps.choose", descKey: "mentorMatch.steps.chooseDesc" },
