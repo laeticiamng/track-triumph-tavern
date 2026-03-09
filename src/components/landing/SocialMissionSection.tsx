@@ -1,7 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Heart, Globe, Award, Accessibility, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Heart, Globe, Award, Accessibility } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export function SocialMissionSection() {
