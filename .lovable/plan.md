@@ -1,62 +1,32 @@
 
 
-# Plan: Make all 5 social features clearly visible from the homepage
+## Plan: Sélecteur de thème 3 options (clair / sombre / système)
 
-## Current State
-The homepage already includes `SocialMissionSection` (covers Inclusion Tracks, Cultural Exchange, Impact Dashboard) and `MentorshipResidencySection` (covers Mentor Match, Virtual Residency). These are placed after `CategoriesSection`, relatively far down the page. The hero section mentions nothing about the social/inclusion angle.
+Remplacer le toggle binaire par un sélecteur cyclique à 3 états : `light` → `dark` → `system` → `light`.
 
-## Problem
-1. **Hero section** only talks about "100% community-driven contest" and prizes — no mention of social mission, inclusion or European cultural exchange.
-2. **No quick-access preview** — the 5 programs are buried below the fold in 2 dense sections. A first-time visitor scrolling fast could miss them entirely.
-3. **Trust badges** in the hero only mention "free voting", "anti-fraud", "€200/week" — nothing about inclusion or cultural diversity.
-4. **"How it works"** doesn't mention the social programs at all.
-5. **Section ordering** places Social Mission and Mentorship after Categories, which feels like an afterthought rather than a core differentiator.
+### Changements
 
-## Plan
+**`src/components/ThemeToggle.tsx`**
+- Remplacer l'état `isDark: boolean` par `theme: "light" | "dark" | "system"`
+- En mode `system`, écouter `window.matchMedia("(prefers-color-scheme: dark)")` pour appliquer la classe `dark` automatiquement
+- Au clic, cycler entre les 3 modes avec la transition CSS existante
+- Icones : Sun (light), Moon (dark), Monitor (system) — `Monitor` vient de lucide-react
+- `localStorage.setItem("theme", theme)` pour persister le choix
+- Ajouter un `useEffect` avec `matchMedia.addEventListener("change", ...)` pour le mode system
 
-### 1. Update Hero section to reflect the social positioning
-- Add a 4th trust badge: "European Inclusion" or "Inclusion & Diversity" with a Heart/Globe icon
-- Update `hero.subtitle` to mention social inclusion angle (e.g., "Submit your music, celebrate European diversity, get community votes and win up to €200 every week.")
-- Add i18n keys in FR/EN/DE
+**`src/i18n/locales/fr.json`**, **`en.json`**, **`de.json`**
+- Ajouter les clés `theme.light`, `theme.dark`, `theme.system` pour les aria-labels
 
-### 2. Add a new "5 Programs at a glance" quick-nav strip
-Create a new lightweight component `ProgramsOverview` placed right after `WhyParticipate` (before `CategoriesSection`). This is a compact horizontal strip with 5 icon cards linking to each program:
-- Inclusion Tracks → `/categories/inclusion`
-- Cultural Exchange → `/cultural-exchange`
-- Mentor Match → `/mentor-match`
-- Virtual Residency → `/virtual-residency`
-- Impact Dashboard → `/impact`
+### Logique
 
-Each card: icon + short label + one-line description. Clean, compact, clickable. Not a full section — just a quick-nav bridge to make the programs immediately scannable.
+```text
+Click cycle:  light → dark → system → light → ...
 
-### 3. Reorder homepage sections
-Move `SocialMissionSection` and `MentorshipResidencySection` **higher** — right after `WeeklyPodium`, before `WhyParticipate`. This positions the social angle as a key differentiator early on.
+system mode:
+  - Read prefers-color-scheme
+  - Listen for OS changes
+  - Apply dark/light accordingly
+```
 
-New order:
-1. Hero
-2. ActivityFeed
-3. HowItWorks
-4. WeeklyPodium
-5. **SocialMissionSection** (moved up)
-6. **MentorshipResidencySection** (moved up)
-7. WhyParticipate
-8. CategoriesSection
-9. **ProgramsOverview** (new compact strip)
-10. SocialProof
-11. CTASection
-12. StickyMobileCTA
-13. Footer
-
-### 4. i18n additions
-Add keys in FR/EN/DE for:
-- Updated hero subtitle and new trust badge
-- `programsOverview` section: title, subtitle, 5 card labels + descriptions
-
-### Files to modify
-- `src/pages/Index.tsx` — reorder sections + add ProgramsOverview import
-- `src/components/landing/HeroSection.tsx` — add 4th trust badge, update subtitle reference
-- `src/components/landing/ProgramsOverview.tsx` — **new file**, compact 5-program strip
-- `src/i18n/locales/fr.json` — new keys
-- `src/i18n/locales/en.json` — new keys
-- `src/i18n/locales/de.json` — new keys
+Pas de changement de base de données ni de CSS supplémentaire — la transition `.theme-transition` existante couvre déjà le changement.
 

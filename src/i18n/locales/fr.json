@@ -22,6 +22,7 @@
     "badgeFreeVote": "Vote 100% gratuit",
     "badgeAntiFraud": "Anti-fraude IA",
     "badgePrize": "200 € / semaine",
+    "badgeInclusion": "Inclusion européenne",
     "discoverContest": "Découvrir le concours",
     "joinContest": "Rejoindre le concours",
     "createAccount": "Créer mon compte",
@@ -1498,6 +1499,19 @@
       "netherlands": "Pays-Bas",
       "belgium": "Belgique",
       "portugal": "Portugal"
-    }
+  },
+  "programsOverview": {
+    "title": "Nos 5 programmes engagés",
+    "subtitle": "Bien plus qu'un concours : une plateforme au service de l'inclusion et de la diversité culturelle européenne.",
+    "inclusionTitle": "Inclusion Tracks",
+    "inclusionDesc": "Catégorie dédiée aux artistes issus de milieux sous-représentés, avec Prix Impact Social.",
+    "exchangeTitle": "Échange Culturel",
+    "exchangeDesc": "Compétitions mensuelles thématiques intégrant les traditions musicales européennes.",
+    "mentorTitle": "Mentor Match",
+    "mentorDesc": "Sessions de mentorat vidéo avec des musiciens européens confirmés.",
+    "residencyTitle": "Résidence Virtuelle",
+    "residencyDesc": "Collaboration créative de 6 semaines entre 5 artistes de 5 pays de l'UE.",
+    "impactTitle": "Impact Dashboard",
+    "impactDesc": "Métriques d'engagement communautaire pour les partenaires institutionnels."
   }
 }

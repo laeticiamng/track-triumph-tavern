@@ -22,6 +22,7 @@
     "badgeFreeVote": "100% kostenlose Abstimmung",
     "badgeAntiFraud": "KI-Anti-Betrug",
     "badgePrize": "200 € / Woche",
+    "badgeInclusion": "Europäische Inklusion",
     "discoverContest": "Wettbewerb entdecken",
     "joinContest": "Am Wettbewerb teilnehmen",
     "createAccount": "Konto erstellen",
@@ -1498,6 +1499,19 @@
       "netherlands": "Niederlande",
       "belgium": "Belgien",
       "portugal": "Portugal"
-    }
+  },
+  "programsOverview": {
+    "title": "Unsere 5 engagierten Programme",
+    "subtitle": "Mehr als ein Wettbewerb: eine Plattform für Inklusion und europäische kulturelle Vielfalt.",
+    "inclusionTitle": "Inklusions-Tracks",
+    "inclusionDesc": "Kategorie für Künstler aus unterrepräsentierten Gemeinschaften, mit Sozialpreis.",
+    "exchangeTitle": "Kulturaustausch",
+    "exchangeDesc": "Monatliche Themenwettbewerbe mit europäischen Musiktraditionen.",
+    "mentorTitle": "Mentor Match",
+    "mentorDesc": "Video-Mentoring-Sitzungen mit etablierten europäischen Musikern.",
+    "residencyTitle": "Virtuelle Residenz",
+    "residencyDesc": "6-wöchige kreative Zusammenarbeit zwischen 5 Künstlern aus 5 EU-Ländern.",
+    "impactTitle": "Impact Dashboard",
+    "impactDesc": "Community-Engagement-Metriken für institutionelle Partner."
   }
 }
