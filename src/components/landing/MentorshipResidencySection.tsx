@@ -11,7 +11,7 @@ export function MentorshipResidencySection() {
     {
       icon: Video,
       badgeKey: "mentorship.programs.mentorBadge",
-      title: "Mentor Match",
+      titleKey: "mentorship.programs.mentorTitle",
       descKey: "mentorship.programs.mentorDesc",
       ctaKey: "mentorship.programs.mentorCta",
       link: "/mentor-match",
@@ -22,7 +22,7 @@ export function MentorshipResidencySection() {
     {
       icon: MapPin,
       badgeKey: "mentorship.programs.residencyBadge",
-      title: "Virtual Residency",
+      titleKey: "mentorship.programs.residencyTitle",
       descKey: "mentorship.programs.residencyDesc",
       ctaKey: "mentorship.programs.residencyCta",
       link: "/virtual-residency",
