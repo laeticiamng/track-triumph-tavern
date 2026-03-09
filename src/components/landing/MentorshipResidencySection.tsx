@@ -60,7 +60,7 @@ export function MentorshipResidencySection() {
             const Icon = p.icon;
             return (
               <motion.div
-                key={p.title}
+                key={p.titleKey}
                 initial={{ opacity: 0, x: i === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
