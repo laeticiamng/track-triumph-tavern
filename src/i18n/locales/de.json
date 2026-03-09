@@ -43,7 +43,7 @@
     "step2Title": "Hören & Abstimmen",
     "step2Desc": "Entdecken Sie die Einreichungen der Woche und stimmen Sie für Ihre Favoriten in jeder Kategorie.",
     "step3Title": "Einreichen & aufs Podium",
-    "step3Desc": "Mit einem Pro-Abo reichen Sie Ihre Tracks ein und zielen auf das Podium. Bis zu 200 € zu gewinnen.",
+    "step3Desc": "Werden Sie Pro, um Ihre Tracks einzureichen und das Podium anzustreben. Bis zu 200 € jede Woche zu gewinnen.",
     "free": "Kostenlos",
     "pro": "Pro"
   },
@@ -376,6 +376,7 @@
     "noInfluence": "Abonnements beeinflussen das Ranking nicht — nur Stimmen zählen",
     "manageSubscription": "Mein Abo verwalten",
     "mostPopular": "Am beliebtesten",
+    "recommended": "Empfohlen",
     "yourPlan": "Ihr Plan",
     "free": "Kostenlos",
     "perMonth": "/Monat",
@@ -654,7 +655,7 @@
     "betaOpen": "Start — März 2026",
     "betaOpenDesc": "Die Plattform ist live: Reichen Sie Ihre Tracks ein, stimmen Sie ab und entdecken Sie die Talente der Woche.",
     "season1": "Saison 1 — Frühling 2026",
-    "season1Desc": "Aktiver Preispool jede Woche, vollständiges Ranking und erste Sponsoren.",
+    "season1Desc": "Aktiver Preispool jede Woche, vollständiges Ranking und erste Partner.",
     "growth": "Wachstum — Sommer 2026",
     "growthDesc": "Neue Genres, Live-Events, Label-Partnerschaften und Künstler-Coaching.",
     "international": "Internationalisierung — Herbst 2026",
@@ -1373,7 +1374,8 @@
     },
     "ctaExchange": "Kulturaustausch entdecken",
     "ctaImpact": "Impact-Dashboard",
-    "ctaInclusion": "Inclusion Tracks"
+    "ctaInclusion": "Inclusion Tracks",
+    "comingSoon": "Diese Programme sind in Entwicklung und werden bald verfügbar sein."
   },
   "mentorship": {
     "badge": "Begleitprogramme",
@@ -1389,7 +1391,8 @@
       "residencyTitle": "Virtuelle Residenz",
       "residencyDesc": "6 Wochen kollaboratives Schaffen: 5 Künstler aus 5 EU-Ländern schaffen gemeinsam einen Track für ein europäisches Kulturereignis.",
       "residencyCta": "Programm entdecken"
-    }
+    },
+    "comingSoon": "Diese Programme sind in Entwicklung und werden bald verfügbar sein."
   },
   "culturalExchange": {
     "badge": "Kulturaustausch",

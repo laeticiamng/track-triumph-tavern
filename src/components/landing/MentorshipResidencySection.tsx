@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-import { Video, Users, MapPin, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Video, Users, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export function MentorshipResidencySection() {
@@ -73,12 +71,9 @@ export function MentorshipResidencySection() {
                 </span>
                 <h3 className="font-display text-2xl font-bold mb-3">{t(p.titleKey)}</h3>
                 <p className="text-muted-foreground leading-relaxed flex-1">{t(p.descKey)}</p>
-                <Button asChild variant="outline" className="mt-6 w-fit group">
-                  <Link to={p.link}>
-                    {t(p.ctaKey)}
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
+                <span className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground w-fit">
+                  {t("mentorship.comingSoon")}
+                </span>
               </motion.div>
             );
           })}

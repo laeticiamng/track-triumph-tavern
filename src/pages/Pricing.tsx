@@ -191,9 +191,9 @@ const Pricing = () => {
                           : ""
                       } ${isCurrentPlan ? "ring-2 ring-primary" : ""}`}
                     >
-                      {isPopular && (
+                      {isPopular && !isCurrentPlan && (
                         <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-primary text-white border-0 px-4 py-1">
-                          {t("pricing.mostPopular")}
+                          {t("pricing.recommended")}
                         </Badge>
                       )}
                       {isCurrentPlan && (

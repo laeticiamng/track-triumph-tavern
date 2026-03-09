@@ -1,7 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { Heart, Globe, Award, Accessibility, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Heart, Globe, Award, Accessibility } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export function SocialMissionSection() {
@@ -83,26 +81,11 @@ export function SocialMissionSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 flex flex-wrap justify-center gap-4"
+          className="mt-8 text-center"
         >
-          <Button asChild size="lg">
-            <Link to="/cultural-exchange">
-              <Globe className="mr-2 h-4 w-4" />
-              {t("socialMission.ctaExchange")}
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link to="/impact">
-              <Sparkles className="mr-2 h-4 w-4" />
-              {t("socialMission.ctaImpact")}
-            </Link>
-          </Button>
-          <Button asChild variant="secondary" size="lg">
-            <Link to="/categories/inclusion">
-              <Accessibility className="mr-2 h-4 w-4" />
-              {t("socialMission.ctaInclusion")}
-            </Link>
-          </Button>
+          <p className="text-sm text-muted-foreground italic">
+            {t("socialMission.comingSoon")}
+          </p>
         </motion.div>
       </div>
     </section>

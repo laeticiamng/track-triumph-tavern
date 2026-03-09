@@ -44,7 +44,7 @@ export function CookieConsent() {
   return (
     <AnimatePresence>
       {show && (
-        <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-20 left-4 right-4 z-[60] mx-auto max-w-lg rounded-2xl border border-border bg-card p-5 shadow-lg md:bottom-6">
+        <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-4 left-4 right-4 z-[60] mx-auto max-w-lg rounded-2xl border border-border bg-card p-5 shadow-lg md:bottom-6 mb-[env(safe-area-inset-bottom)] md:mb-0" style={{ bottom: "max(1rem, calc(4.5rem + env(safe-area-inset-bottom)))" }}>
           <p className="text-sm leading-relaxed text-foreground">
             {t("cookies.message")}{" "}
             <Link to="/cookies" className="text-primary hover:underline">{t("cookies.learnMore")}</Link>
