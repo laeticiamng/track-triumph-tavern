@@ -1342,7 +1342,9 @@
     "sentDesc": "Wir melden uns so schnell wie möglich.",
     "sendAnother": "Weitere Nachricht senden",
     "sendError": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
-    "directEmail": "Oder schreiben Sie uns direkt an:"
+    "directEmail": "Oder schreiben Sie uns direkt an:",
+    "hours": "Mo - Fr: 9:00 - 18:00 (MEZ)",
+    "responseTime": "Antwort innerhalb von 24-48 Geschäftsstunden"
   },
   "stickyCta": {
     "joinNow": "Dem Wettbewerb beitreten",
