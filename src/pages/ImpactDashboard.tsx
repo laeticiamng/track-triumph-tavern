@@ -36,7 +36,8 @@ const diversityData = [
 const ImpactDashboard = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const anim = shouldReduceMotion ? { initial: {}, animate: {} } : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
+  const fade = shouldReduceMotion ? {} : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
+  const fadeOnly = shouldReduceMotion ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 } };
   const geoData = geoDataKeys.map((g) => ({ country: t(g.countryKey), count: g.count }));
 
   return (
@@ -49,7 +50,7 @@ const ImpactDashboard = () => {
 
       <section className="py-20 md:py-28">
         <div className="container max-w-6xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+          <motion.div {...fade} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400 mb-4">
               <BarChart3 className="h-3.5 w-3.5" />
               {t("impact.badge")}
@@ -74,7 +75,7 @@ const ImpactDashboard = () => {
             {kpis.map((k, i) => {
               const Icon = k.icon;
               return (
-                <motion.div key={k.labelKey} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 * i }}>
+                <motion.div key={k.labelKey} {...fade} transition={shouldReduceMotion ? undefined : { delay: 0.08 * i }}>
                   <Card>
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-3">
@@ -92,7 +93,7 @@ const ImpactDashboard = () => {
 
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Geographic reach */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+            <motion.div {...fadeOnly} transition={shouldReduceMotion ? undefined : { delay: 0.3 }}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
@@ -117,7 +118,7 @@ const ImpactDashboard = () => {
             </motion.div>
 
             {/* Demographics */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+            <motion.div {...fadeOnly} transition={shouldReduceMotion ? undefined : { delay: 0.4 }}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
