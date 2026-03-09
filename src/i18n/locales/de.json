@@ -1378,9 +1378,11 @@
     "subtitle": "Individuelles Mentoring und virtuelle Residenzen, um aufstrebende Talente in ganz Europa zu verbinden.",
     "programs": {
       "mentorBadge": "Mentoring",
+      "mentorTitle": "Mentor Match",
       "mentorDesc": "Erfahrene europäische Musiker begleiten Sie: 30-minütige Videositzungen, persönliches Feedback und Karriereberatung.",
       "mentorCta": "Mentor finden",
       "residencyBadge": "Residenz",
+      "residencyTitle": "Virtuelle Residenz",
       "residencyDesc": "6 Wochen kollaboratives Schaffen: 5 Künstler aus 5 EU-Ländern schaffen gemeinsam einen Track für ein europäisches Kulturereignis.",
       "residencyCta": "Programm entdecken"
     }
