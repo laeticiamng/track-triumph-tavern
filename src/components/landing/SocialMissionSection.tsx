@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Heart, Globe, Award, Accessibility, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 
 export function SocialMissionSection() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const animProps = shouldReduceMotion ? {} : { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } };
 
   const pillars = [
     {
@@ -93,6 +95,12 @@ export function SocialMissionSection() {
             <Link to="/impact">
               <Sparkles className="mr-2 h-4 w-4" />
               {t("socialMission.ctaImpact")}
+            </Link>
+          </Button>
+          <Button asChild variant="secondary" size="lg">
+            <Link to="/categories/inclusion">
+              <Accessibility className="mr-2 h-4 w-4" />
+              {t("socialMission.ctaInclusion")}
             </Link>
           </Button>
         </motion.div>

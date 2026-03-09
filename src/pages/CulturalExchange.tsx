@@ -16,6 +16,12 @@ const themes = [
   { monthKey: "culturalExchange.months.apr", traditionKey: "culturalExchange.traditions.fado", countryKey: "culturalExchange.countries.portugal", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400", descKey: "culturalExchange.desc.fado" },
   { monthKey: "culturalExchange.months.may", traditionKey: "culturalExchange.traditions.chanson", countryKey: "culturalExchange.countries.france", color: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400", descKey: "culturalExchange.desc.chanson" },
   { monthKey: "culturalExchange.months.jun", traditionKey: "culturalExchange.traditions.polka", countryKey: "culturalExchange.countries.central", color: "bg-amber-500/10 text-amber-600 dark:text-amber-400", descKey: "culturalExchange.desc.polka" },
+  { monthKey: "culturalExchange.months.jul", traditionKey: "culturalExchange.traditions.tarantella", countryKey: "culturalExchange.countries.italy", color: "bg-rose-500/10 text-rose-600 dark:text-rose-400", descKey: "culturalExchange.desc.tarantella" },
+  { monthKey: "culturalExchange.months.aug", traditionKey: "culturalExchange.traditions.joik", countryKey: "culturalExchange.countries.nordic", color: "bg-sky-500/10 text-sky-600 dark:text-sky-400", descKey: "culturalExchange.desc.joik" },
+  { monthKey: "culturalExchange.months.sep", traditionKey: "culturalExchange.traditions.rebetiko", countryKey: "culturalExchange.countries.greece", color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400", descKey: "culturalExchange.desc.rebetiko" },
+  { monthKey: "culturalExchange.months.oct", traditionKey: "culturalExchange.traditions.klezmer", countryKey: "culturalExchange.countries.ashkenazi", color: "bg-violet-500/10 text-violet-600 dark:text-violet-400", descKey: "culturalExchange.desc.klezmer" },
+  { monthKey: "culturalExchange.months.nov", traditionKey: "culturalExchange.traditions.schlager", countryKey: "culturalExchange.countries.germany", color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400", descKey: "culturalExchange.desc.schlager" },
+  { monthKey: "culturalExchange.months.dec", traditionKey: "culturalExchange.traditions.carols", countryKey: "culturalExchange.countries.europe", color: "bg-teal-500/10 text-teal-600 dark:text-teal-400", descKey: "culturalExchange.desc.carols" },
 ];
 
 const criteria = [

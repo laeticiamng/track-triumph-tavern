@@ -1368,7 +1368,8 @@
       "impactDesc": "Un prix dédié récompensant l'artiste dont le parcours et la musique incarnent le mieux l'inclusion et la diversité."
     },
     "ctaExchange": "Explorer les échanges culturels",
-    "ctaImpact": "Tableau d'impact"
+    "ctaImpact": "Tableau d'impact",
+    "ctaInclusion": "Inclusion Tracks"
   },
   "mentorship": {
     "badge": "Programmes d'accompagnement",
@@ -1398,16 +1399,22 @@
       "authenticity": "Authenticité culturelle",
       "creativity": "Créativité dans la fusion"
     },
-    "months": { "jan": "Janvier", "feb": "Février", "mar": "Mars", "apr": "Avril", "may": "Mai", "jun": "Juin" },
-    "traditions": { "flamenco": "Flamenco", "balkans": "Rythmes Balkans", "celtic": "Folk Celtique", "fado": "Fado", "chanson": "Chanson française", "polka": "Polka / Folklore" },
-    "countries": { "spain": "Espagne 🇪🇸", "balkans": "Balkans 🇷🇸🇧🇬", "celtic": "Irlande 🇮🇪 / Écosse 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "portugal": "Portugal 🇵🇹", "france": "France 🇫🇷", "central": "Europe Centrale 🇵🇱🇨🇿" },
+    "months": { "jan": "Janvier", "feb": "Février", "mar": "Mars", "apr": "Avril", "may": "Mai", "jun": "Juin", "jul": "Juillet", "aug": "Août", "sep": "Septembre", "oct": "Octobre", "nov": "Novembre", "dec": "Décembre" },
+    "traditions": { "flamenco": "Flamenco", "balkans": "Rythmes Balkans", "celtic": "Folk Celtique", "fado": "Fado", "chanson": "Chanson française", "polka": "Polka / Folklore", "tarantella": "Tarentelle", "joik": "Joik / Folk Nordique", "rebetiko": "Rebetiko", "klezmer": "Klezmer", "schlager": "Schlager / Volksmusik", "carols": "Chants traditionnels de Noël" },
+    "countries": { "spain": "Espagne 🇪🇸", "balkans": "Balkans 🇷🇸🇧🇬", "celtic": "Irlande 🇮🇪 / Écosse 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "portugal": "Portugal 🇵🇹", "france": "France 🇫🇷", "central": "Europe Centrale 🇵🇱🇨🇿", "italy": "Italie 🇮🇹", "nordic": "Scandinavie 🇳🇴🇸🇪🇫🇮", "greece": "Grèce 🇬🇷", "ashkenazi": "Europe de l'Est", "germany": "Allemagne 🇩🇪 / Autriche 🇦🇹", "europe": "Toute l'Europe 🇪🇺" },
     "desc": {
       "flamenco": "Passion, palmas et guitare — intégrez l'essence du flamenco dans votre production.",
       "balkans": "Mesures asymétriques, cuivres et énergie folle — les Balkans invitent à la fête.",
       "celtic": "Violon, tin whistle et mélodies mélancoliques — la magie celte dans vos beats.",
       "fado": "Saudade et guitare portugaise — l'émotion brute du fado rencontre la production moderne.",
       "chanson": "Texte poétique et mélodie raffinée — la tradition de Brel, Piaf et Barbara.",
-      "polka": "Accordéon et rythmes de danse — l'énergie joyeuse d'Europe centrale."
+      "polka": "Accordéon et rythmes de danse — l'énergie joyeuse d'Europe centrale.",
+      "tarantella": "Tambourin et danse effrénée — le sud de l'Italie pulse dans vos productions.",
+      "joik": "Chant ancestral sami et paysages nordiques — une spiritualité unique en musique.",
+      "rebetiko": "Bouzouki et mélancolie urbaine — le blues grec dans vos arrangements.",
+      "klezmer": "Clarinette, violon et joie — la tradition musicale d'Europe de l'Est célèbre la vie.",
+      "schlager": "Mélodies entraînantes et sentimentales — le cœur populaire de l'Allemagne et l'Autriche.",
+      "carols": "Traditions vocales de Noël de toute l'Europe — du gospel au chant choral sacré."
     },
     "cta": "Participer au concours du mois"
   },
