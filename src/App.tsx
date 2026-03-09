@@ -112,6 +112,10 @@ const App = () => (
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cultural-exchange" element={<CulturalExchange />} />
+            <Route path="/mentor-match" element={<MentorMatch />} />
+            <Route path="/virtual-residency" element={<VirtualResidency />} />
+            <Route path="/impact" element={<ImpactDashboard />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/stats/artist/:id" element={<ArtistStats />} />
             <Route path="/sitemap.xml" element={<Sitemap />} />

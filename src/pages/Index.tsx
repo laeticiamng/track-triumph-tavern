@@ -26,6 +26,8 @@ const Index = () => {
       <WeeklyPodium />
       <WhyParticipate />
       <CategoriesSection />
+      <SocialMissionSection />
+      <MentorshipResidencySection />
       <SocialProof />
       <CTASection />
       <StickyMobileCTA />
