@@ -1485,6 +1485,22 @@
       "firstTimeCreators": "Primo-créateurs",
       "countriesRepresented": "Pays représentés",
       "inclusionArtists": "Artistes Inclusion"
+    },
+    "geo": {
+      "france": "France",
+      "germany": "Allemagne",
+      "spain": "Espagne",
+      "italy": "Italie",
+      "poland": "Pologne",
+      "netherlands": "Pays-Bas",
+      "belgium": "Belgique",
+      "portugal": "Portugal"
     }
+  },
+  "mentorMatch2": {
+    "badge": "Mentor Match"
+  },
+  "virtualResidency2": {
+    "badge": "Résidence Virtuelle"
   }
 }
