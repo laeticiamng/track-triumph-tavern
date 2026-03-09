@@ -1342,7 +1342,9 @@
     "sentDesc": "We'll get back to you as soon as possible.",
     "sendAnother": "Send another message",
     "sendError": "Failed to send message. Please try again.",
-    "directEmail": "Or email us directly at:"
+    "directEmail": "Or email us directly at:",
+    "hours": "Mon - Fri: 9am - 6pm (CET)",
+    "responseTime": "Response within 24-48 business hours"
   },
   "stickyCta": {
     "joinNow": "Join the contest",
