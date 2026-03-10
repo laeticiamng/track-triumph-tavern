@@ -31,7 +31,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <Header />
       <OfflineBanner />
       {user && <WelcomeDialog userId={user.id} />}
-      <main id="main-content" className="pt-16 pb-20 md:pb-0">{children}</main>
+      <main id="main-content" className="pt-14 sm:pt-16 pb-20 md:pb-0">{children}</main>
       <PersistentAudioPlayer />
       <BottomNav />
       <InstallPrompt />

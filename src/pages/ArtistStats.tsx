@@ -157,10 +157,10 @@ const ArtistStats = () => {
           image: data.avatarUrl || undefined,
         })}
       />
-      <div className="container max-w-2xl py-8">
+      <div className="container max-w-2xl py-6 sm:py-8 px-4 sm:px-6">
         <Link
           to={`/artist/${id}`}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5"
         >
           <ArrowLeft className="h-4 w-4" /> {t("artistStats.backToProfile")}
         </Link>
@@ -178,11 +178,11 @@ const ArtistStats = () => {
         </div>
 
         {/* KPI Cards */}
-        <div className="mb-8 grid grid-cols-3 gap-4">
-          <Card className="text-center p-4">
+        <div className="mb-8 grid grid-cols-3 gap-2 sm:gap-4">
+          <Card className="text-center p-3 sm:p-4">
             <Music className="h-4 w-4 mx-auto mb-1 text-primary" />
-            <p className="font-display text-2xl font-bold">{data.totalSubmissions}</p>
-            <p className="text-xs text-muted-foreground">{t("artistStats.submissions")}</p>
+            <p className="font-display text-xl sm:text-2xl font-bold">{data.totalSubmissions}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">{t("artistStats.submissions")}</p>
           </Card>
           <Card className="text-center p-4">
             <Heart className="h-4 w-4 mx-auto mb-1 text-primary" />

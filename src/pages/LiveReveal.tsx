@@ -212,7 +212,7 @@ function CategoryReveal({
                 >
                   <Link
                     to={`/submissions/${w.submission_id}`}
-                    className={`flex items-center gap-4 px-6 py-4 transition-colors hover:bg-accent/30 border-b border-border/50 last:border-0 ${
+                    className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-6 py-3 sm:py-4 transition-colors hover:bg-accent/30 border-b border-border/50 last:border-0 ${
                       i === 0 ? "bg-primary/5" : ""
                     }`}
                   >
@@ -415,7 +415,7 @@ const LiveReveal = () => {
         <CountdownOverlay count={3} onComplete={onCountdownComplete} />
       )}
 
-      <div className="container py-8">
+      <div className="container py-6 sm:py-8 px-4 sm:px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -429,7 +429,7 @@ const LiveReveal = () => {
           >
             <Trophy className="h-10 w-10 text-primary-foreground" />
           </motion.div>
-          <h1 className="font-display text-4xl font-black sm:text-5xl">
+          <h1 className="font-display text-3xl font-black sm:text-4xl md:text-5xl">
             <span className="text-gradient">
               {t("reveal.title", "Reveal des résultats")}
             </span>
@@ -592,21 +592,21 @@ const LiveReveal = () => {
 
                       <Link
                         to={`/submissions/${grandWinner.submission_id}`}
-                        className="mt-6 flex items-center gap-5 rounded-2xl p-4 transition-colors hover:bg-accent/30"
+                        className="mt-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-5 rounded-2xl p-4 transition-colors hover:bg-accent/30"
                       >
                         <motion.img
                           src={grandWinner.submissions?.cover_image_url}
                           alt={grandWinner.submissions?.title || ""}
-                          className="h-24 w-24 rounded-2xl object-cover shadow-glow"
+                          className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl object-cover shadow-glow"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.8, type: "spring" }}
                         />
-                        <div className="text-left">
-                          <p className="font-display text-2xl font-bold">
+                        <div className="text-center sm:text-left">
+                          <p className="font-display text-xl sm:text-2xl font-bold">
                             {grandWinner.submissions?.title}
                           </p>
-                          <p className="text-lg text-muted-foreground">
+                          <p className="text-base sm:text-lg text-muted-foreground">
                             {grandWinner.submissions?.artist_name}
                           </p>
                           <div className="mt-2 flex gap-2">

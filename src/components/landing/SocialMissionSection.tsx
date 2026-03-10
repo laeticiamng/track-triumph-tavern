@@ -32,7 +32,7 @@ export function SocialMissionSection() {
   ];
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 via-transparent to-blue-500/5" />
       <div className="container relative">
         <motion.div
@@ -54,7 +54,7 @@ export function SocialMissionSection() {
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 sm:mt-14 grid gap-4 sm:gap-6 md:grid-cols-3 px-4 sm:px-0">
           {pillars.map((p, i) => {
             const Icon = p.icon;
             return (
@@ -64,7 +64,7 @@ export function SocialMissionSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.12 }}
-                className={`rounded-2xl border border-border bg-gradient-to-br ${p.gradient} p-7 transition-all hover:shadow-lg hover:-translate-y-1`}
+                className={`rounded-2xl border border-border bg-gradient-to-br ${p.gradient} p-5 sm:p-7 transition-all hover:shadow-lg hover:-translate-y-1`}
               >
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${p.iconBg} mb-4`}>
                   <Icon className="h-6 w-6" />

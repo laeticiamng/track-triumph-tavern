@@ -119,12 +119,12 @@ const SubmissionDetail = () => {
           description: submission.description || undefined,
         }}
       />
-      <div className="container py-8">
-        <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <div className="container py-6 sm:py-8 px-4 sm:px-6">
+        <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5">
           <ArrowLeft className="h-4 w-4" /> {t("submissionDetail.back")}
         </Link>
 
-        <div className="grid gap-8 md:grid-cols-[1fr_1.2fr]">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-[1fr_1.2fr]">
           {/* Cover */}
           <div className="overflow-hidden rounded-2xl">
             <img
@@ -148,7 +148,7 @@ const SubmissionDetail = () => {
               </span>
             </div>
 
-            <h1 className="font-display text-3xl font-bold sm:text-4xl">{submission.title}</h1>
+            <h1 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl">{submission.title}</h1>
 
             <Link to={`/artist/${submission.user_id}`} className="mt-3 flex items-center gap-3 group">
               {profile?.avatar_url && (

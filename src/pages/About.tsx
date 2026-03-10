@@ -38,8 +38,8 @@ const About = () => {
           ]),
         ]}
       />
-      <section className="py-16 md:py-24">
-        <div className="container max-w-3xl">
+      <section className="py-10 sm:py-16 md:py-24">
+        <div className="container max-w-3xl px-4 sm:px-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -51,7 +51,7 @@ const About = () => {
               <Rocket className="h-3.5 w-3.5" />
               {t("aboutPage.teamBadge")}
             </span>
-            <h1 className="font-display text-3xl font-bold sm:text-5xl">
+            <h1 className="font-display text-2xl font-bold sm:text-3xl md:text-5xl">
               {t("aboutPage.title")}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
@@ -65,7 +65,7 @@ const About = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-14 card-elevated p-8"
+            className="mt-10 sm:mt-14 card-elevated p-5 sm:p-8"
           >
             <h2 className="font-display text-xl font-semibold flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
@@ -80,7 +80,7 @@ const About = () => {
           </motion.div>
 
           {/* Nos valeurs */}
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <div className="mt-10 sm:mt-14 grid gap-4 sm:gap-6 sm:grid-cols-2">
             {values.map((v, i) => (
               <motion.div
                 key={v.titleKey}
@@ -158,7 +158,7 @@ const About = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-8 card-elevated p-8 text-center"
+            className="mt-8 card-elevated p-5 sm:p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">{t("aboutPage.contactTitle")}</h2>
             <p className="mt-2 text-muted-foreground">

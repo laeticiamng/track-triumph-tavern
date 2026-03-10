@@ -30,15 +30,15 @@ const VirtualResidency = () => {
         url="/virtual-residency"
       />
 
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="py-12 sm:py-20 md:py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-purple-500/5" />
-        <div className="container relative max-w-5xl">
+        <div className="container relative max-w-5xl px-4 sm:px-6">
           <motion.div {...fade} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 mb-4">
               <MapPin className="h-3.5 w-3.5" />
               {t("virtualResidency.badge")}
             </span>
-            <h1 className="font-display text-4xl font-bold sm:text-5xl mb-4">
+            <h1 className="font-display text-2xl font-bold sm:text-4xl md:text-5xl mb-4">
               {t("virtualResidency.titlePrefix")} <span className="text-primary">{t("virtualResidency.titleHighlight")}</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">

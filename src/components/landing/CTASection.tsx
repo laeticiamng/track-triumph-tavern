@@ -8,9 +8,9 @@ export function CTASection() {
   const { t } = useTranslation();
 
   return (
-    <section className="py-24 md:py-32">
-      <div className="container">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative overflow-hidden rounded-3xl bg-gradient-hero noise-overlay p-10 text-center sm:p-16">
+    <section className="py-16 sm:py-24 md:py-32">
+      <div className="container px-4 sm:px-6">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-hero noise-overlay p-6 sm:p-10 text-center md:p-16">
           {/* Subtle animated glow */}
           <div className="absolute inset-0 pointer-events-none">
             <motion.div className="absolute top-0 right-1/4 h-64 w-64 rounded-full bg-white/5 blur-[80px]" animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.1, 0.05] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
@@ -30,14 +30,14 @@ export function CTASection() {
 
             <h2 className="font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">{t("cta.title")}</h2>
             <p className="mx-auto mt-4 max-w-md text-white/65">{t("cta.subtitle")}</p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 shadow-lg" asChild>
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 shadow-lg w-full sm:w-auto" asChild>
                 <Link to="/auth?tab=signup">
                   {t("cta.joinContest")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm" asChild>
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto" asChild>
                 <Link to="/pricing">{t("cta.viewPlans")}</Link>
               </Button>
             </div>

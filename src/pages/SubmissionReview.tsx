@@ -140,10 +140,10 @@ const SubmissionReview = () => {
         description={t("submissionReview.seoDesc")}
         url="/submit/review"
       />
-      <div className="container max-w-2xl py-8">
+      <div className="container max-w-2xl py-6 sm:py-8 px-4 sm:px-6">
         <Link
           to="/compete"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5"
         >
           <ArrowLeft className="h-4 w-4" /> {t("submissionReview.newSubmission")}
         </Link>

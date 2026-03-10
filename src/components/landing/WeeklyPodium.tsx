@@ -131,7 +131,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
 
   return (
     <section className="py-16 md:py-24">
-      <div className="container px-6">
+      <div className="container px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
           )}
         </motion.div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-4 sm:px-0">
           {[entries.find((e) => e.rank === 2), entries.find((e) => e.rank === 1), entries.find((e) => e.rank === 3)]
             .filter(Boolean)
             .map((entry, i) => {
@@ -164,13 +164,13 @@ export function WeeklyPodium({ compact = false }: { compact?: boolean }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15 }}
+                  className={`w-full ${isFirst ? "sm:w-[260px]" : "sm:w-[220px]"} max-w-[280px]`}
                 >
                   <Link
                     to={`/submissions/${e.submission_id}`}
                     className={`group block rounded-2xl border bg-card overflow-hidden transition-all hover:shadow-soft hover:border-primary/20 ${
                       isFirst ? "sm:scale-110 border-primary/30 shadow-soft" : "border-border"
                     }`}
-                    style={{ width: isFirst ? 260 : 220 }}
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <img

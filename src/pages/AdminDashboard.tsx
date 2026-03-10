@@ -270,10 +270,10 @@ const AdminDashboard = () => {
   return (
     <Layout>
       <SEOHead title={t("admin.seoTitle")} description={t("admin.seoDesc")} url="/admin" />
-      <div className="container py-8">
-        <div className="mb-8 flex items-center gap-3">
+      <div className="container py-6 sm:py-8 px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8 flex items-center gap-3">
           <Shield className="h-6 w-6 text-primary" />
-          <h1 className="font-display text-3xl font-bold">{t("admin.dashboard")}</h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">{t("admin.dashboard")}</h1>
         </div>
 
         {/* Stats Overview */}
@@ -297,12 +297,12 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs defaultValue={defaultTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="moderation">{t("admin.tabModeration")}</TabsTrigger>
-            <TabsTrigger value="weeks">{t("admin.tabWeeks")}</TabsTrigger>
-            <TabsTrigger value="rewards">{t("admin.tabRewards")}</TabsTrigger>
-            <TabsTrigger value="fraud">{t("admin.tabFraud")}</TabsTrigger>
-            <TabsTrigger value="analytics">{t("admin.tabAnalytics")}</TabsTrigger>
+          <TabsList className="flex w-full overflow-x-auto scrollbar-hide">
+            <TabsTrigger value="moderation" className="flex-1 min-w-0 text-xs sm:text-sm whitespace-nowrap">{t("admin.tabModeration")}</TabsTrigger>
+            <TabsTrigger value="weeks" className="flex-1 min-w-0 text-xs sm:text-sm whitespace-nowrap">{t("admin.tabWeeks")}</TabsTrigger>
+            <TabsTrigger value="rewards" className="flex-1 min-w-0 text-xs sm:text-sm whitespace-nowrap">{t("admin.tabRewards")}</TabsTrigger>
+            <TabsTrigger value="fraud" className="flex-1 min-w-0 text-xs sm:text-sm whitespace-nowrap">{t("admin.tabFraud")}</TabsTrigger>
+            <TabsTrigger value="analytics" className="flex-1 min-w-0 text-xs sm:text-sm whitespace-nowrap">{t("admin.tabAnalytics")}</TabsTrigger>
           </TabsList>
 
           {/* Moderation Tab */}
@@ -362,7 +362,7 @@ const AdminDashboard = () => {
                 <CardTitle className="text-lg">{t("admin.createWeek")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>{t("admin.weekTitle")}</Label>
                     <Input value={newWeekTitle} onChange={(e) => setNewWeekTitle(e.target.value)} placeholder={t("admin.weekTitlePlaceholder")} />
@@ -372,7 +372,7 @@ const AdminDashboard = () => {
                     <Input type="number" value={newWeekNumber} onChange={(e) => setNewWeekNumber(e.target.value)} placeholder="2" min="1" />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>{t("admin.subOpen")}</Label>
                     <Input type="datetime-local" value={newWeekSubOpen} onChange={(e) => setNewWeekSubOpen(e.target.value)} />
@@ -382,7 +382,7 @@ const AdminDashboard = () => {
                     <Input type="datetime-local" value={newWeekSubClose} onChange={(e) => setNewWeekSubClose(e.target.value)} />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>{t("admin.voteOpen")}</Label>
                     <Input type="datetime-local" value={newWeekVoteOpen} onChange={(e) => setNewWeekVoteOpen(e.target.value)} />
@@ -402,19 +402,19 @@ const AdminDashboard = () => {
               {weeks.map((w) => (
                 <Card key={w.id}>
                   <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{w.title || t("admin.weekLabel", { number: w.week_number })}</h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-semibold truncate">{w.title || t("admin.weekLabel", { number: w.week_number })}</h3>
                           {w.is_active && <Badge className="bg-green-600 text-white">{t("admin.active")}</Badge>}
                           {w.results_published_at && <Badge variant="secondary">{t("admin.resultsPublished")}</Badge>}
                         </div>
-                        <div className="mt-1 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                        <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap gap-1 sm:gap-3 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {t("admin.submissionsLabel")}: {new Date(w.submission_open_at).toLocaleDateString()} → {new Date(w.submission_close_at).toLocaleDateString()}</span>
                           <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {t("admin.votesLabel")}: {new Date(w.voting_open_at).toLocaleDateString()} → {new Date(w.voting_close_at).toLocaleDateString()}</span>
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-shrink-0">
                         {!w.is_active && (
                           <Button size="sm" variant="outline" onClick={() => activateWeek(w.id)}>
                             {t("admin.activate")}
@@ -492,7 +492,7 @@ const AdminDashboard = () => {
                     ))}
                   </select>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>{t("admin.currentBudget")}</Label>
                     <Input type="number" value={rpCurrent} onChange={(e) => setRpCurrent(e.target.value)} placeholder="0" />
@@ -502,7 +502,7 @@ const AdminDashboard = () => {
                     <Input type="number" value={rpMinimum} onChange={(e) => setRpMinimum(e.target.value)} placeholder="0" />
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <Label>{t("admin.top1")}</Label>
                     <Input type="number" value={rpTop1} onChange={(e) => setRpTop1(e.target.value)} placeholder="0" />

@@ -172,13 +172,13 @@ const Explore = () => {
         url="/explore"
         jsonLd={activeWeek ? eventJsonLd(activeWeek) : undefined}
       />
-      <section className="py-8 md:py-12">
-        <div className="container">
+      <section className="py-6 sm:py-8 md:py-12">
+        <div className="container px-4 sm:px-6">
           {/* Header + mode toggle */}
           <div className="mb-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h1 className="font-display text-3xl font-bold sm:text-4xl">
+                <h1 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl">
                   {t("explore.title")}
                 </h1>
                 <p className="mt-1 text-muted-foreground">{t("explore.subtitle")}</p>
@@ -277,10 +277,10 @@ const Explore = () => {
           )}
 
           {/* Category filters */}
-          <div className="mb-6 flex flex-wrap gap-2">
+          <div className="mb-6 flex flex-wrap gap-1.5 sm:gap-2 overflow-x-auto scrollbar-hide pb-1">
             <button
               onClick={() => { setSearchParams(mode === "vote" ? { mode: "vote" } : {}); setShowRecsOnly(false); }}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                 activeCategorySlug === "all" && !showRecsOnly
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -291,7 +291,7 @@ const Explore = () => {
             {mode === "vote" && recommendedIds.length > 0 && (
               <button
                 onClick={() => setShowRecsOnly(!showRecsOnly)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors flex items-center gap-1 ${
+                className={`rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-colors flex items-center gap-1 whitespace-nowrap ${
                   showRecsOnly
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -309,7 +309,7 @@ const Explore = () => {
                   setSearchParams(params);
                   setShowRecsOnly(false);
                 }}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                   activeCategorySlug === cat.slug
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -498,7 +498,7 @@ function EngagingEmptyState({
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             {t("explore.upcomingCategories")}
           </h4>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 px-4 sm:px-0">
             {categories.map((cat) => (
               <Link
                 key={cat.id}

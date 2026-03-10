@@ -45,7 +45,7 @@ const AuthLoginForm = ({ onSubmit, loading, onForgotPassword }: AuthLoginFormPro
               </div>
             </FormControl>
             <FormMessage />
-            <button type="button" onClick={onForgotPassword} className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <button type="button" onClick={onForgotPassword} className="text-xs text-muted-foreground hover:text-primary transition-colors py-1.5 min-h-[2.75rem] inline-flex items-center">
               {t("auth.forgotPassword")}
             </button>
           </FormItem>

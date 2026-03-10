@@ -48,14 +48,14 @@ const ImpactDashboard = () => {
         url="/impact"
       />
 
-      <section className="py-20 md:py-28">
-        <div className="container max-w-6xl">
+      <section className="py-12 sm:py-20 md:py-28">
+        <div className="container max-w-6xl px-4 sm:px-6">
           <motion.div {...fade} className="text-center mb-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400 mb-4">
               <BarChart3 className="h-3.5 w-3.5" />
               {t("impact.badge")}
             </span>
-            <h1 className="font-display text-4xl font-bold sm:text-5xl mb-4">
+            <h1 className="font-display text-2xl font-bold sm:text-4xl md:text-5xl mb-4">
               {t("impact.titlePrefix")} <span className="text-primary">{t("impact.titleHighlight")}</span> {t("impact.titleSuffix")}
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -103,10 +103,10 @@ const ImpactDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={geoData} layout="vertical" margin={{ left: 20 }}>
+                    <BarChart data={geoData} layout="vertical" margin={{ left: 10, right: 10 }}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis type="number" className="text-xs" />
-                      <YAxis dataKey="country" type="category" className="text-xs" width={80} />
+                      <XAxis type="number" className="text-xs" fontSize={10} />
+                      <YAxis dataKey="country" type="category" className="text-xs" width={65} fontSize={10} />
                       <Tooltip
                         contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
                       />
@@ -133,11 +133,12 @@ const ImpactDashboard = () => {
                         data={diversityData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
+                        innerRadius={50}
+                        outerRadius={85}
                         paddingAngle={4}
                         dataKey="value"
                         label={({ name, value }) => `${name}: ${value}%`}
+                        fontSize={11}
                       >
                         {diversityData.map((entry, idx) => (
                           <Cell key={idx} fill={entry.color} />

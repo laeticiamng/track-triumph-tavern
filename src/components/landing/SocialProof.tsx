@@ -41,7 +41,7 @@ function AnimatedCounter({ value }: { value: number }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="mt-4 font-display text-4xl font-bold tabular-nums">
+    <span ref={ref} className="mt-4 font-display text-3xl sm:text-4xl font-bold tabular-nums">
       {display.toLocaleString()}
     </span>
   );
@@ -93,8 +93,8 @@ export function SocialProof() {
   if (totalValue < 10) return null;
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
-      <div className="section-divider mb-24" />
+    <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
+      <div className="section-divider mb-12 sm:mb-24" />
       <div className="container relative">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-4 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 mb-4">
@@ -109,9 +109,9 @@ export function SocialProof() {
           </p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-12 grid gap-5 sm:grid-cols-3 max-w-3xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 sm:mt-12 grid gap-4 sm:gap-5 grid-cols-2 sm:grid-cols-3 max-w-3xl mx-auto px-4 sm:px-0">
           {stats.map((stat) => (
-            <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-8 text-center">
+            <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-5 sm:p-8 text-center last:odd:col-span-2 sm:last:odd:col-span-1">
               <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
                 <stat.icon className="h-5 w-5" />
               </div>

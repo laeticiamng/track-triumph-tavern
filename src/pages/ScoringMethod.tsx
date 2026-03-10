@@ -141,7 +141,7 @@ const ScoringMethod = () => {
         url="/scoring-method"
         jsonLd={pageJsonLd}
       />
-      <article className="container max-w-3xl py-10 md:py-16">
+      <article className="container max-w-3xl py-8 sm:py-10 md:py-16 px-4 sm:px-6">
         {/* Breadcrumb nav */}
         <nav aria-label="Breadcrumb">
           <Link

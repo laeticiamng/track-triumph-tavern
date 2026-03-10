@@ -72,7 +72,7 @@ export function VoteFeed({
         <div
           key={sub.id}
           data-index={i}
-          className="min-h-[75vh]"
+          className="min-h-[70vh] sm:min-h-[75vh]"
         >
           <VoteCard
             submission={sub}

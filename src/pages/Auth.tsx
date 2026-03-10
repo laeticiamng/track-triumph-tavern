@@ -81,10 +81,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 sm:py-4">
       <SEOHead title={t("auth.seoTitle")} description={t("auth.seoDesc")} url="/auth" />
       <div className="w-full max-w-md">
-        <Link to="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <Link to="/" className="mb-6 sm:mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2">
           <ArrowLeft className="h-4 w-4" /> {t("auth.backToHome")}
         </Link>
 

@@ -27,8 +27,8 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-24 md:py-32 relative">
-      <div className="section-divider mb-24" />
+    <section className="py-16 sm:py-24 md:py-32 relative">
+      <div className="section-divider mb-12 sm:mb-24" />
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
           <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary mb-4">{t("howItWorks.badge")}</span>
@@ -36,9 +36,9 @@ export function HowItWorks() {
           <p className="mt-4 text-muted-foreground max-w-md mx-auto">{t("howItWorks.subtitle")}</p>
         </motion.div>
 
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mt-16 grid gap-6 md:grid-cols-3">
+        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mt-10 sm:mt-16 grid gap-6 md:grid-cols-3 px-4 sm:px-0">
           {steps.map((step, i) => (
-            <motion.div key={i} variants={itemVariants} className="card-elevated border-gradient-hover relative flex flex-col items-center text-center p-8">
+            <motion.div key={i} variants={itemVariants} className="card-elevated border-gradient-hover relative flex flex-col items-center text-center p-6 sm:p-8">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-card border border-border font-display text-sm font-bold shadow-sm">{i + 1}</div>
               {i < steps.length - 1 && <div className="absolute -right-3 top-1/2 hidden md:block w-6 h-px bg-border z-10" />}
               <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${step.iconBg} mt-2`}><step.icon className="h-6 w-6" /></div>

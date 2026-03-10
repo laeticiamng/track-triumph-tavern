@@ -137,9 +137,9 @@ const Stats = () => {
         description={t("stats.seoDesc")}
         url="/stats"
       />
-      <div className="container py-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("stats.title")}</h1>
+      <div className="container py-6 sm:py-8 px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl">{t("stats.title")}</h1>
           <p className="mt-2 text-muted-foreground">{weekTitle} — {t("stats.realTimeData")}</p>
         </div>
 
@@ -241,24 +241,29 @@ const Stats = () => {
                               : "bg-secondary/50"
                           }`}
                         >
-                          <span className="font-display text-2xl font-bold text-muted-foreground w-8 text-center">
+                          <span className="font-display text-xl sm:text-2xl font-bold text-muted-foreground w-7 sm:w-8 text-center shrink-0">
                             {podiumEmojis[i]}
                           </span>
                           <img
                             src={track.cover_image_url}
                             alt={t("results.coverAlt", { title: track.title })}
-                            className="h-12 w-12 rounded-lg object-cover"
+                            className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-cover shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium truncate">{track.title}</p>
-                            <p className="text-sm text-muted-foreground">{track.artist_name}</p>
+                            <p className="font-medium truncate text-sm sm:text-base">{track.title}</p>
+                            <p className="text-xs sm:text-sm text-muted-foreground truncate">{track.artist_name}</p>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="hidden sm:flex items-center gap-2">
                             <Badge variant="outline" className="text-xs">
                               {track.category_name}
                             </Badge>
                             <Badge className="bg-primary/10 text-primary font-display">
                               {track.vote_count} {t("stats.votes")}
+                            </Badge>
+                          </div>
+                          <div className="flex sm:hidden">
+                            <Badge className="bg-primary/10 text-primary font-display text-[10px] shrink-0">
+                              {track.vote_count}
                             </Badge>
                           </div>
                         </Link>
@@ -280,16 +285,17 @@ const Stats = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-64">
+                    <div className="h-64 sm:h-72 -mx-2 sm:mx-0">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={stats.categoriesData} layout="vertical" margin={{ left: 100 }}>
-                          <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                        <BarChart data={stats.categoriesData} layout="vertical" margin={{ left: 10, right: 10 }}>
+                          <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={11} />
                           <YAxis
                             dataKey="name"
                             type="category"
                             stroke="hsl(var(--muted-foreground))"
-                            fontSize={11}
-                            width={90}
+                            fontSize={10}
+                            width={70}
+                            tick={{ fontSize: 10 }}
                           />
                           <Tooltip
                             contentStyle={{

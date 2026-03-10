@@ -35,7 +35,7 @@ export function CategoriesSection() {
   }, []);
 
   return (
-    <section id="categories" className="py-24 md:py-32 relative overflow-hidden">
+    <section id="categories" className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 to-transparent" />
 
@@ -63,7 +63,7 @@ export function CategoriesSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 md:gap-4"
+          className="mt-8 sm:mt-12 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-3 md:gap-4 px-4 sm:px-0"
         >
           {categories.map((cat, i) => {
             const meta = categoryMeta[cat.slug] || defaultMeta;
@@ -78,12 +78,12 @@ export function CategoriesSection() {
               >
                 <Link
                   to={`/categories/${cat.slug}`}
-                  className={`group flex flex-col items-center gap-3 rounded-2xl border border-border bg-gradient-to-br ${meta.gradient} p-5 transition-all hover:scale-[1.04] hover:shadow-lg hover:-translate-y-1 cursor-pointer`}
+                  className={`group flex flex-col items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border bg-gradient-to-br ${meta.gradient} p-3.5 sm:p-5 transition-all hover:scale-[1.04] hover:shadow-lg hover:-translate-y-1 cursor-pointer`}
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${meta.iconBg} transition-transform group-hover:scale-110`}>
-                    <Icon className="h-6 w-6" />
+                  <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl ${meta.iconBg} transition-transform group-hover:scale-110`}>
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <span className="text-sm font-medium">{cat.name}</span>
+                  <span className="text-xs sm:text-sm font-medium text-center leading-tight">{cat.name}</span>
                 </Link>
               </motion.div>
             );

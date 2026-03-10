@@ -40,13 +40,13 @@ export function Header() {
   }, [user]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 glass pt-[env(safe-area-inset-top,0px)]">
+      <div className="container flex h-14 sm:h-16 items-center justify-between px-3 sm:px-4 lg:px-6">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
             <Music className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-lg font-bold tracking-tight">
+          <span className="font-display text-base sm:text-lg font-bold tracking-tight truncate max-w-[160px] sm:max-w-none">
             Weekly Music Awards
           </span>
         </Link>
@@ -115,7 +115,7 @@ export function Header() {
           <LanguageSwitcher compact />
           {user && <NotificationBell />}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent transition-colors"
+            className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-accent active:bg-accent/80 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? t("header.closeMenu") : t("header.openMenu")}
           >
@@ -130,7 +130,7 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-border md:hidden glass"
+            className="overflow-hidden overflow-y-auto max-h-[calc(100vh-4rem)] border-t border-border md:hidden glass"
           >
             <nav className="container flex flex-col gap-1 py-4">
               {navItems.map((item) => (

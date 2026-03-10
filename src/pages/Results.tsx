@@ -127,9 +127,9 @@ const Results = () => {
         description={t("results.seoDesc")}
         url="/results"
       />
-      <div className="container py-8">
-        <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">{t("results.title")}</h1>
+      <div className="container py-6 sm:py-8 px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl">{t("results.title")}</h1>
           <p className="mt-2 text-muted-foreground">
             {activeWeek ? `${t("hero.season")} 1 — ${t("hero.week")} ${activeWeek.week_number}` : ""} {activeWeek ? "—" : ""} {loading ? "…" : activeWeek ? (isResultsPublished ? t("results.published") : t("results.pending")) : t("results.noActiveWeek", "No active contest week")}
           </p>
@@ -187,15 +187,15 @@ const Results = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Link to={`/submissions/${grandWinner.submission_id}`} className="flex items-center gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-accent/30">
+                    <Link to={`/submissions/${grandWinner.submission_id}`} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-accent/30">
                       <img
                         src={grandWinner.submissions?.cover_image_url}
                         alt={t("results.coverAlt", { title: grandWinner.submissions?.title || "" })}
-                        className="h-20 w-20 rounded-xl object-cover"
+                        className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl object-cover shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-display text-xl font-bold truncate">{grandWinner.submissions?.title}</p>
-                        <p className="text-muted-foreground">{grandWinner.submissions?.artist_name}</p>
+                        <p className="font-display text-lg sm:text-xl font-bold truncate">{grandWinner.submissions?.title}</p>
+                        <p className="text-sm sm:text-base text-muted-foreground">{grandWinner.submissions?.artist_name}</p>
                         {(() => {
                           const reward = getRewardForWinner(grandWinner.id);
                           if (!reward) return null;
@@ -210,13 +210,13 @@ const Results = () => {
                           );
                         })()}
                       </div>
-                      <div className="flex flex-col items-end gap-1">
+                      <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
                         {grandWinner.weighted_score > 0 && (
-                          <Badge className="bg-primary/10 text-primary font-display text-sm">
+                          <Badge className="bg-primary/10 text-primary font-display text-xs sm:text-sm">
                             {Number(grandWinner.weighted_score).toFixed(1)}/5
                           </Badge>
                         )}
-                        <Badge className="bg-primary text-primary-foreground font-display text-lg px-4 py-1">
+                        <Badge className="bg-primary text-primary-foreground font-display text-sm sm:text-lg px-3 sm:px-4 py-0.5 sm:py-1">
                           {grandWinner.vote_count} {voteLabel(grandWinner.vote_count)}
                         </Badge>
                       </div>
@@ -254,19 +254,19 @@ const Results = () => {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: catIndex * 0.1 + i * 0.15 }}
-                                className={`flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-accent/30 ${
+                                className={`flex items-center gap-2 sm:gap-4 rounded-xl p-2.5 sm:p-3 transition-colors hover:bg-accent/30 ${
                                   i === 0
                                     ? "bg-primary/10 border border-primary/20"
                                     : "bg-secondary/50"
                                 }`}
                               >
-                                <span className="text-2xl">{podiumLabels[i]}</span>
-                                <img src={w.submissions?.cover_image_url} alt={t("results.coverAlt", { title: w.submissions?.title || "" })} className="h-12 w-12 rounded-lg object-cover" />
+                                <span className="text-xl sm:text-2xl shrink-0">{podiumLabels[i]}</span>
+                                <img src={w.submissions?.cover_image_url} alt={t("results.coverAlt", { title: w.submissions?.title || "" })} className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-cover shrink-0" />
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium truncate">{w.submissions?.title}</p>
-                                  <p className="text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
+                                  <p className="font-medium truncate text-sm sm:text-base">{w.submissions?.title}</p>
+                                  <p className="text-xs sm:text-sm text-muted-foreground truncate">{w.submissions?.artist_name}</p>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="hidden sm:flex items-center gap-2">
                                   {reward && reward.reward_type === "cash" && reward.amount_cents > 0 && (
                                     <Badge className="bg-green-600 text-white text-xs">
                                       {reward.amount_cents / 100}€
@@ -286,6 +286,9 @@ const Results = () => {
                                     {w.vote_count} {voteLabel(w.vote_count)}
                                   </Badge>
                                 </div>
+                                <Badge variant="secondary" className="font-display text-xs sm:hidden shrink-0">
+                                  {w.vote_count}
+                                </Badge>
                               </motion.div>
                             </Link>
                           );
