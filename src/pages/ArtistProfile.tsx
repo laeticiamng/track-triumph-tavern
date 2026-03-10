@@ -113,23 +113,23 @@ const ArtistProfile = () => {
           image: profile.avatar_url || undefined,
         })}
       />
-      <div className="container max-w-3xl py-8">
-        <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+      <div className="container max-w-3xl py-6 sm:py-8 px-4 sm:px-6">
+        <Link to="/explore" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground py-1.5">
           <ArrowLeft className="h-4 w-4" /> {t("artistProfile.back")}
         </Link>
 
         {/* Banner & Avatar */}
         <div className="relative mb-8">
           {profile.banner_url ? (
-            <img src={profile.banner_url} alt={t("artistProfile.bannerAlt", { name: artistName })} className="h-48 w-full rounded-2xl object-cover" />
+            <img src={profile.banner_url} alt={t("artistProfile.bannerAlt", { name: artistName })} className="h-32 sm:h-48 w-full rounded-2xl object-cover" />
           ) : (
-            <div className="h-48 w-full rounded-2xl bg-gradient-to-r from-primary/20 to-primary/5" />
+            <div className="h-32 sm:h-48 w-full rounded-2xl bg-gradient-to-r from-primary/20 to-primary/5" />
           )}
-          <div className="absolute -bottom-10 left-6 flex items-end gap-4">
+          <div className="absolute -bottom-10 left-4 sm:left-6 flex items-end gap-4">
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt={t("artistProfile.photoAlt", { name: artistName })} className="h-20 w-20 rounded-full border-4 border-background object-cover" />
+              <img src={profile.avatar_url} alt={t("artistProfile.photoAlt", { name: artistName })} className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-4 border-background object-cover" />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-background bg-secondary text-2xl font-bold">
+              <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border-4 border-background bg-secondary text-xl sm:text-2xl font-bold">
                 {artistName[0]}
               </div>
             )}
@@ -137,9 +137,9 @@ const ArtistProfile = () => {
         </div>
 
         <div className="mt-12">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <h1 className="font-display text-3xl font-bold">{artistName}</h1>
+          <div className="flex items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{artistName}</h1>
               {tier === "elite" && (
                 <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
                   <Crown className="h-3 w-3" /> Elite

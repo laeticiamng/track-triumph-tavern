@@ -325,14 +325,14 @@ const Compete = () => {
         description={t("compete.seoDesc")}
         url="/compete"
       />
-      <div className="container max-w-2xl py-8">
-        <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <div className="container max-w-2xl py-6 sm:py-8 px-4 sm:px-6">
+        <Link to="/" className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5">
           <ArrowLeft className="h-4 w-4" /> {t("common.back")}
         </Link>
 
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="font-display text-2xl">{t("compete.submitYourTrack")}</CardTitle>
+            <CardTitle className="font-display text-xl sm:text-2xl">{t("compete.submitYourTrack")}</CardTitle>
             <CardDescription>
               <span className="block font-medium text-foreground">{t("compete.yourMusicDeserves")}</span>
               {activeWeek && isInSubmissionPeriod
@@ -420,9 +420,9 @@ const Compete = () => {
 
                 <div className="space-y-2">
                   <Label>{t("compete.audioExcerpt")} *</Label>
-                  <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
+                  <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-4 sm:p-6 transition-colors hover:border-primary/50 hover:bg-accent/30 active:bg-accent/40 min-h-[5rem]">
                     <Music className="h-8 w-8 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-muted-foreground text-center break-all line-clamp-2">
                       {audioFile ? audioFile.name : t("compete.uploadAudio")}
                     </span>
                     <span className="text-xs text-muted-foreground/70">{t("compete.mp3WavOnly")}</span>
@@ -505,9 +505,9 @@ const Compete = () => {
 
                 <div className="space-y-2">
                   <Label>{t("compete.coverImage")} *</Label>
-                  <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-6 transition-colors hover:border-primary/50 hover:bg-accent/30">
+                  <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border p-4 sm:p-6 transition-colors hover:border-primary/50 hover:bg-accent/30 active:bg-accent/40 min-h-[5rem]">
                     <Image className="h-8 w-8 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-muted-foreground text-center break-all line-clamp-2">
                       {coverFile ? coverFile.name : t("compete.uploadCover")}
                     </span>
                     <input
@@ -531,7 +531,7 @@ const Compete = () => {
                   <Input id="external" type="url" value={externalUrl} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://open.spotify.com/..." />
                 </div>
 
-                <div className="space-y-3 rounded-xl bg-secondary/50 p-4">
+                <div className="space-y-3 rounded-xl bg-secondary/50 p-3 sm:p-4">
                   <div className="flex items-start gap-3">
                     <Checkbox id="rights" checked={rightsDeclaration} onCheckedChange={(c) => setRightsDeclaration(c === true)} />
                     <Label htmlFor="rights" className="text-sm leading-relaxed">

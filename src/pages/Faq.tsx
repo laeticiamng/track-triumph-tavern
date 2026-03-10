@@ -46,8 +46,8 @@ const Faq = () => {
           ]),
         ]}
       />
-      <section className="py-16 md:py-24">
-        <div className="container max-w-3xl">
+      <section className="py-10 sm:py-16 md:py-24">
+        <div className="container max-w-3xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const Faq = () => {
                     <AccordionItem
                       key={i}
                       value={`${si}-${i}`}
-                      className="rounded-xl border border-border bg-card px-6"
+                      className="rounded-xl border border-border bg-card px-4 sm:px-6"
                     >
                       <AccordionTrigger className="text-left font-display font-semibold hover:no-underline">
                         {faq.q}
@@ -97,7 +97,7 @@ const Faq = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-14 rounded-2xl border border-border bg-card p-8 text-center"
+            className="mt-10 sm:mt-14 rounded-2xl border border-border bg-card p-5 sm:p-8 text-center"
           >
             <h2 className="font-display text-xl font-semibold">
               {t("faqPage.noAnswer")}

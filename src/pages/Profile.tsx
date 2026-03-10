@@ -248,10 +248,10 @@ const Profile = () => {
     <Layout>
       <SEOHead title={t("profilePage.seoTitle")} description={t("profilePage.seoDesc")} url="/profile" />
       {/* WelcomeDialog is rendered in Layout.tsx */}
-      <div className="container max-w-2xl py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold">{t("profilePage.title")}</h1>
+      <div className="container max-w-2xl py-6 sm:py-8 px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{t("profilePage.title")}</h1>
             {tier === "elite" && (
               <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 gap-1">
                 <Crown className="h-3 w-3" /> Elite
@@ -300,14 +300,14 @@ const Profile = () => {
         </Card>
 
         {/* Stats */}
-        <div className="mb-8 grid grid-cols-3 gap-4">
-          <Card className="text-center p-4 card-elevated border-gradient-hover">
-            <p className="font-display text-2xl font-bold">{submissions.length}</p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> {t("profilePage.submissions")}</p>
+        <div className="mb-6 sm:mb-8 grid grid-cols-3 gap-2 sm:gap-4">
+          <Card className="text-center p-3 sm:p-4 card-elevated border-gradient-hover">
+            <p className="font-display text-xl sm:text-2xl font-bold">{submissions.length}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground flex items-center justify-center gap-1"><Music className="h-3 w-3" /> {t("profilePage.submissions")}</p>
           </Card>
-          <Card className="text-center p-4 card-elevated border-gradient-hover">
-            <p className="font-display text-2xl font-bold">{voteCount}</p>
-            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
+          <Card className="text-center p-3 sm:p-4 card-elevated border-gradient-hover">
+            <p className="font-display text-xl sm:text-2xl font-bold">{voteCount}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground flex items-center justify-center gap-1"><Heart className="h-3 w-3" /> {t("profilePage.votesGiven")}</p>
           </Card>
           <VotesReceivedCard submissions={submissions} />
 
@@ -606,9 +606,9 @@ function VotesReceivedCard({ submissions }: { submissions: Tables<"submissions">
   const total = votingOpen ? 0 : submissions.reduce((sum, s) => sum + s.vote_count, 0);
 
   return (
-    <Card className="text-center p-4 card-elevated border-gradient-hover">
-      <p className="font-display text-2xl font-bold">{total}</p>
-      <p className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+    <Card className="text-center p-3 sm:p-4 card-elevated border-gradient-hover">
+      <p className="font-display text-xl sm:text-2xl font-bold">{total}</p>
+      <p className="text-[10px] sm:text-xs text-muted-foreground flex items-center justify-center gap-1">
         <BarChart3 className="h-3 w-3" /> {t("profilePage.votesReceived")}
       </p>
     </Card>

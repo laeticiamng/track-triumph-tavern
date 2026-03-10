@@ -9,8 +9,8 @@ const Cookies = () => {
   return (
     <Layout>
       <SEOHead title={t("legal.cookiesTitle")} description={t("legal.cookiesSeoDesc")} url="/cookies" />
-      <div className="container max-w-3xl py-12">
-        <h1 className="font-display text-3xl font-bold mb-8">{t("legal.cookiesTitle")}</h1>
+      <div className="container max-w-3xl py-8 sm:py-12 px-4 sm:px-6">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">{t("legal.cookiesTitle")}</h1>
         <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-muted-foreground">
           <p><em>{t("legal.lastUpdated")}</em></p>
 

@@ -59,11 +59,11 @@ const AuthSignupForm = ({ onSubmit, loading }: AuthSignupFormProps) => {
             <FormMessage />
           </FormItem>
         )} />
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-xs text-muted-foreground text-center leading-relaxed">
           {t("auth.signupLegal1")}{" "}
-          <Link to="/terms" className="underline hover:text-primary">{t("auth.termsLink")}</Link>
+          <Link to="/terms" className="underline hover:text-primary py-0.5 inline-block">{t("auth.termsLink")}</Link>
           {" "}{t("auth.signupLegalAnd")}{" "}
-          <Link to="/privacy" className="underline hover:text-primary">{t("auth.privacyLink")}</Link>.
+          <Link to="/privacy" className="underline hover:text-primary py-0.5 inline-block">{t("auth.privacyLink")}</Link>.
         </p>
         <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90 transition-opacity" disabled={loading}>
           {loading ? t("auth.loading") : t("auth.signupButton")}

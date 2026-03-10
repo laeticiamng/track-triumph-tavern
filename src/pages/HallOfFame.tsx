@@ -158,27 +158,27 @@ const HallOfFame = () => {
                           <Link
                             key={w.id}
                             to={`/submissions/${w.submission_id}`}
-                            className="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-accent/50"
+                            className="flex items-center gap-2 sm:gap-3 rounded-xl p-2.5 sm:p-3 transition-colors hover:bg-accent/50"
                           >
-                            <div className="flex h-10 w-10 items-center justify-center">
-                              <Icon className={`h-6 w-6 ${medal?.color || "text-muted-foreground"}`} />
+                            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center shrink-0">
+                              <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${medal?.color || "text-muted-foreground"}`} />
                             </div>
                             <img
                               src={w.submissions?.cover_image_url}
                               alt={w.submissions?.title}
-                              className="h-12 w-12 rounded-lg object-cover"
+                              className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-cover shrink-0"
                             />
                             <div className="flex-1 min-w-0">
-                              <p className="truncate font-medium">{w.submissions?.title}</p>
-                              <p className="truncate text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
+                              <p className="truncate font-medium text-sm sm:text-base">{w.submissions?.title}</p>
+                              <p className="truncate text-xs sm:text-sm text-muted-foreground">{w.submissions?.artist_name}</p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                               {w.weighted_score != null && w.weighted_score > 0 && (
-                                <Badge className="bg-primary/10 text-primary text-xs font-display">
+                                <Badge className="bg-primary/10 text-primary text-[10px] sm:text-xs font-display hidden sm:inline-flex">
                                   {Number(w.weighted_score).toFixed(1)}/5
                                 </Badge>
                               )}
-                              <span className="text-sm font-semibold tabular-nums">
+                              <span className="text-xs sm:text-sm font-semibold tabular-nums whitespace-nowrap">
                                 {w.vote_count} {w.vote_count !== 1 ? t("hallOfFame.votePlural") : t("hallOfFame.voteSingular")}
                               </span>
                             </div>

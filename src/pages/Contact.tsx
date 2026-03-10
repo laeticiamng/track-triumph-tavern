@@ -57,8 +57,8 @@ const Contact = () => {
         description={t("contact.seoDesc")}
         url="/contact"
       />
-      <div className="container max-w-2xl py-12">
-        <div className="text-center mb-10">
+      <div className="container max-w-2xl py-8 sm:py-12 px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-10">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mx-auto mb-4">
             <MessageSquare className="h-8 w-8 text-primary" />
           </div>

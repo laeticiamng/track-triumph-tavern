@@ -85,7 +85,7 @@ export function HeroSection() {
         ))}
       </div>
 
-      <motion.div className="container relative z-10 flex min-h-[85vh] flex-col items-center justify-center px-6 pt-32 pb-24 text-center" style={{ y: contentY, opacity: contentOpacity }}>
+      <motion.div className="container relative z-10 flex min-h-[80vh] sm:min-h-[85vh] flex-col items-center justify-center px-4 sm:px-6 pt-24 sm:pt-32 pb-20 sm:pb-24 text-center" style={{ y: contentY, opacity: contentOpacity }}>
         {/* Live badge */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="mb-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-medium text-white backdrop-blur-sm">
@@ -110,7 +110,7 @@ export function HeroSection() {
         </motion.p>
 
         {/* Trust badges */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.25 }} className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.25 }} className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm">
           {[
             { label: t("hero.badgeFreeVote"), color: "text-green-300" },
             { label: t("hero.badgeAntiFraud"), color: "text-amber-300" },
@@ -126,19 +126,19 @@ export function HeroSection() {
 
         {/* Countdown */}
         {votingCloseAt && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="mt-8 rounded-2xl border border-white/10 bg-white/5 px-8 py-5 backdrop-blur-sm">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="mt-6 sm:mt-8 rounded-2xl border border-white/10 bg-white/5 px-4 sm:px-8 py-4 sm:py-5 backdrop-blur-sm w-full max-w-md sm:w-auto">
             <WeekCountdown targetDate={votingCloseAt} label={t("hero.voteEndIn")} variant="hero" className="text-white" />
           </motion.div>
         )}
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 text-base shadow-lg shadow-white/10" asChild>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="mt-8 sm:mt-10 flex flex-col gap-3 sm:flex-row w-full sm:w-auto px-2 sm:px-0">
+          <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 text-base shadow-lg shadow-white/10 w-full sm:w-auto" asChild>
             <Link to={primaryCTA.href}>
               {primaryCTA.label}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 backdrop-blur-sm" asChild>
+          <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto" asChild>
             <Link to={hasContent ? "/auth?tab=signup" : "/about"}>
               {hasContent ? t("hero.createAccount") : t("hero.learnMore")}
             </Link>

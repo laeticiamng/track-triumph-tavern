@@ -78,8 +78,8 @@ const Badges = () => {
         description={t("badgesPage.seoDesc")}
         url="/badges"
       />
-      <div className="container max-w-3xl py-8">
-        <div className="mb-8 flex items-center gap-3">
+      <div className="container max-w-3xl py-6 sm:py-8 px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/60">
             <Award className="h-6 w-6 text-primary-foreground" />
           </div>
@@ -90,9 +90,9 @@ const Badges = () => {
         </div>
 
         {/* Badge legend */}
-        <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mb-6 sm:mb-8 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
           {(Object.entries(BADGE_CONFIG) as [BadgeType, typeof BADGE_CONFIG[BadgeType]][]).map(([type, config]) => (
-            <Card key={type} className="text-center p-4">
+            <Card key={type} className="text-center p-3 sm:p-4">
               <div className={`mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${config.color} text-2xl shadow-lg`}>
                 {config.emoji}
               </div>

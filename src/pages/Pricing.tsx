@@ -130,7 +130,7 @@ const Pricing = () => {
       <SEOHead title={t("pricing.seoTitle")} description={t("pricing.seoDesc")} url="/pricing" />
 
       {/* Header */}
-      <section className="pt-12 pb-8 md:pt-20 md:pb-12 relative overflow-hidden">
+      <section className="pt-8 pb-6 sm:pt-12 sm:pb-8 md:pt-20 md:pb-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-accent/30 to-transparent" />
         <div className="absolute top-0 right-1/4 h-48 w-48 rounded-full bg-primary/5 blur-[100px]" />
 
@@ -139,7 +139,7 @@ const Pricing = () => {
             <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary mb-4">
               {t("pricing.badge")}
             </span>
-            <h1 className="font-display text-4xl font-bold sm:text-5xl">
+            <h1 className="font-display text-3xl font-bold sm:text-4xl md:text-5xl">
               {t("pricing.chooseYour")}{" "}
               <span className="text-gradient">{t("pricing.plan")}</span>
             </h1>
@@ -169,7 +169,7 @@ const Pricing = () => {
       {/* Pricing cards */}
       <section className="pb-16">
         <div className="container">
-          <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-3 max-w-5xl mx-auto px-2 sm:px-0">
             {(Object.entries(SUBSCRIPTION_TIERS) as [SubscriptionTier, typeof SUBSCRIPTION_TIERS[SubscriptionTier]][]).map(
               ([key, plan], index) => {
                 const isCurrentPlan = currentTier === key;
@@ -182,7 +182,7 @@ const Pricing = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.03, transition: { duration: 0.25, ease: "easeOut" } }}
+                    whileHover={{ scale: typeof window !== 'undefined' && window.innerWidth >= 768 ? 1.03 : 1, transition: { duration: 0.25, ease: "easeOut" } }}
                   >
                     <Card
                       className={`relative flex flex-col h-full card-elevated border-gradient-hover bg-gradient-to-br ${config.gradient} transition-shadow duration-300 hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.25)] ${
@@ -277,7 +277,7 @@ const Pricing = () => {
           </div>
 
           {/* Reassurance */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
+          <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground px-4 sm:px-0">
             <span className="inline-flex items-center gap-1.5">
               <Check className="h-4 w-4 text-success" />
               {t("pricing.noCommitment")}
@@ -326,25 +326,25 @@ const Pricing = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="overflow-x-auto card-elevated"
+            className="overflow-x-auto card-elevated -mx-4 sm:mx-0 rounded-none sm:rounded-lg"
           >
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm min-w-[480px]">
               <thead>
                 <tr className="border-b border-border bg-secondary/50">
-                  <th className="px-4 py-3 text-left font-display font-semibold">{t("pricing.feature")}</th>
-                  <th className="px-4 py-3 text-center font-display font-semibold">Free</th>
-                  <th className="px-4 py-3 text-center font-display font-semibold text-primary">Pro</th>
-                  <th className="px-4 py-3 text-center font-display font-semibold text-amber-600 dark:text-amber-400">Elite</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-display font-semibold">{t("pricing.feature")}</th>
+                  <th className="px-2 sm:px-4 py-3 text-center font-display font-semibold">Free</th>
+                  <th className="px-2 sm:px-4 py-3 text-center font-display font-semibold text-primary">Pro</th>
+                  <th className="px-2 sm:px-4 py-3 text-center font-display font-semibold text-amber-600 dark:text-amber-400">Elite</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonRowKeys.map((row, i) => (
                   <tr key={row.labelKey} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-card" : "bg-background"}`}>
-                    <td className="px-4 py-3 font-medium">{t(row.labelKey)}</td>
+                    <td className="px-3 sm:px-4 py-2.5 sm:py-3 font-medium">{t(row.labelKey)}</td>
                     {(["free", "pro", "elite"] as const).map((tier) => {
                       const val = row[tier];
                       return (
-                        <td key={tier} className="px-4 py-3 text-center">
+                        <td key={tier} className="px-2 sm:px-4 py-2.5 sm:py-3 text-center">
                           {val === true ? (
                             <Check className="mx-auto h-4 w-4 text-success" />
                           ) : val === false ? (

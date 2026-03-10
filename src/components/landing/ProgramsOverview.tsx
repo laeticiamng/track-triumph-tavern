@@ -28,7 +28,7 @@ export function ProgramsOverview() {
           <p className="mt-2 text-muted-foreground">{t("programsOverview.subtitle")}</p>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5 px-4 sm:px-0">
           {programs.map((p, i) => {
             const Icon = p.icon;
             return (
@@ -41,14 +41,16 @@ export function ProgramsOverview() {
               >
                 <Link
                   to={p.link}
-                  className="group flex flex-col items-center rounded-xl border border-border bg-card p-5 text-center transition-all hover:shadow-md hover:-translate-y-1"
+                  className="group flex flex-row sm:flex-col items-center sm:items-center gap-3 sm:gap-0 rounded-xl border border-border bg-card p-4 sm:p-5 text-left sm:text-center transition-all hover:shadow-md hover:-translate-y-1"
                 >
-                  <div className={`flex h-11 w-11 items-center justify-center rounded-lg ${p.accent} mb-3`}>
+                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${p.accent} sm:mb-3`}>
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-sm font-semibold leading-tight">{t(p.titleKey)}</h3>
-                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{t(p.descKey)}</p>
-                  <ArrowRight className="mt-3 h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                  <div className="flex-1 sm:flex sm:flex-col sm:items-center min-w-0">
+                    <h3 className="text-sm font-semibold leading-tight">{t(p.titleKey)}</h3>
+                    <p className="mt-1 sm:mt-1.5 text-xs text-muted-foreground leading-relaxed">{t(p.descKey)}</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 sm:mt-3 sm:h-3.5 sm:w-3.5 text-muted-foreground transition-transform group-hover:translate-x-1 shrink-0" />
                 </Link>
               </motion.div>
             );

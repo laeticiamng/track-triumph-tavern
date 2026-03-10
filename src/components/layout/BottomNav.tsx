@@ -17,22 +17,22 @@ export function BottomNav() {
   ];
 
   return (
-    <nav aria-label={t("a11y.mainNavigation")} className="fixed bottom-0 left-0 right-0 z-50 border-t border-border glass md:hidden pb-[env(safe-area-inset-bottom)]">
-      <div className="flex h-16 items-center justify-around px-2">
+    <nav aria-label={t("a11y.mainNavigation")} className="fixed bottom-0 left-0 right-0 z-50 border-t border-border glass md:hidden pb-[max(0.25rem,env(safe-area-inset-bottom,0px))]">
+      <div className="flex h-14 items-center justify-around px-1">
         {items.map((item) => {
           const active = item.href === "/" ? location.pathname === "/" : location.pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
               to={item.href}
-              className={`flex flex-col items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1.5 text-[11px] font-medium transition-colors min-w-[3rem] min-h-[2.75rem] active:bg-accent/50 ${
                 active
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <item.icon className={`h-5 w-5 ${active ? "text-primary" : ""}`} />
-              {item.label}
+              <span className="truncate max-w-[4rem]">{item.label}</span>
             </Link>
           );
         })}

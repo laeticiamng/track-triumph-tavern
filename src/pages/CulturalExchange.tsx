@@ -44,15 +44,15 @@ const CulturalExchange = () => {
         url="/cultural-exchange"
       />
 
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="py-12 sm:py-20 md:py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-amber-500/5" />
-        <div className="container relative max-w-5xl">
-          <motion.div {...fade} className="text-center mb-16">
+        <div className="container relative max-w-5xl px-4 sm:px-6">
+          <motion.div {...fade} className="text-center mb-10 sm:mb-16">
             <span className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 mb-4">
               <Globe className="h-3.5 w-3.5" />
               {t("culturalExchange.badge")}
             </span>
-            <h1 className="font-display text-4xl font-bold sm:text-5xl mb-4">
+            <h1 className="font-display text-2xl font-bold sm:text-4xl md:text-5xl mb-4">
               {t("culturalExchange.titlePrefix")} <span className="text-primary">{t("culturalExchange.titleHighlight")}</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -61,11 +61,11 @@ const CulturalExchange = () => {
           </motion.div>
 
           {/* Criteria */}
-          <motion.div {...fadeOnly} transition={shouldReduceMotion ? undefined : { delay: 0.2 }} className="grid grid-cols-3 gap-4 mb-16 max-w-xl mx-auto">
+          <motion.div {...fadeOnly} transition={shouldReduceMotion ? undefined : { delay: 0.2 }} className="grid grid-cols-3 gap-2 sm:gap-4 mb-10 sm:mb-16 max-w-xl mx-auto">
             {criteria.map((c) => {
               const Icon = c.icon;
               return (
-                <div key={c.labelKey} className="text-center rounded-xl border border-border p-4">
+                <div key={c.labelKey} className="text-center rounded-xl border border-border p-3 sm:p-4">
                   <Icon className="h-5 w-5 mx-auto mb-2 text-primary" />
                   <p className="text-sm font-semibold">{c.weight}</p>
                   <p className="text-xs text-muted-foreground">{t(c.labelKey)}</p>

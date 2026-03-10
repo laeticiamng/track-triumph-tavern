@@ -304,3 +304,59 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Mobile-optimized performance ── */
+@media (max-width: 640px) {
+  .glass {
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+  .glass-card {
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+  }
+  .noise-overlay::after {
+    opacity: 0.015;
+  }
+}
+
+/* ── Touch device optimizations ── */
+@media (hover: none) and (pointer: coarse) {
+  .card-elevated:hover {
+    transform: none;
+  }
+  .card-elevated:active {
+    transform: scale(0.98);
+    transition-duration: 0.1s;
+  }
+}
+
+/* ── iOS viewport fix: use dvh where supported ── */
+@supports (height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+}
+
+/* ── Ensure horizontal overflow prevention ── */
+html, body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── Improve tap highlight on mobile ── */
+@media (pointer: coarse) {
+  a, button, [role="button"], input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ── Safe area CSS variables ── */
+@supports (padding: env(safe-area-inset-top)) {
+  :root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+  }
+}

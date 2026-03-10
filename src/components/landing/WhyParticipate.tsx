@@ -18,7 +18,7 @@ export function WhyParticipate() {
   ];
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-accent/30 to-transparent" />
       <div className="container relative">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
@@ -27,9 +27,9 @@ export function WhyParticipate() {
           <p className="mt-4 text-muted-foreground max-w-lg mx-auto">{t("whyParticipate.subtitle")}</p>
         </motion.div>
 
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mt-10 sm:mt-16 grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-0">
           {items.map((item) => (
-            <motion.div key={item.title} variants={itemVariants} className="card-elevated border-gradient-hover group p-6">
+            <motion.div key={item.title} variants={itemVariants} className="card-elevated border-gradient-hover group p-5 sm:p-6">
               <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${item.iconBg} transition-transform duration-300 group-hover:scale-110`}>
                 <item.icon className="h-5 w-5" />
               </div>

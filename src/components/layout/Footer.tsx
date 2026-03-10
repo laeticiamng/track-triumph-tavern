@@ -8,9 +8,9 @@ export function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="border-t border-border py-12">
-      <div className="container">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t border-border py-8 sm:py-12">
+      <div className="container px-4 sm:px-6">
+        <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2">
@@ -28,26 +28,26 @@ export function Footer() {
           {/* Navigation */}
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.navigation")}</h4>
-            <nav aria-label={t("a11y.footerNavigation")} className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/explore" className="hover:text-foreground transition-colors">{t("footer.explore")}</Link>
-              <Link to="/pricing" className="hover:text-foreground transition-colors">{t("footer.subscriptions")}</Link>
-              <Link to="/hall-of-fame" className="hover:text-foreground transition-colors">{t("footer.hallOfFame")}</Link>
-              <Link to="/faq" className="hover:text-foreground transition-colors">{t("footer.faq")}</Link>
-              <Link to="/about" className="hover:text-foreground transition-colors">{t("footer.about")}</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
+            <nav aria-label={t("a11y.footerNavigation")} className="flex flex-col gap-1 text-sm text-muted-foreground">
+              <Link to="/explore" className="py-1.5 hover:text-foreground transition-colors">{t("footer.explore")}</Link>
+              <Link to="/pricing" className="py-1.5 hover:text-foreground transition-colors">{t("footer.subscriptions")}</Link>
+              <Link to="/hall-of-fame" className="py-1.5 hover:text-foreground transition-colors">{t("footer.hallOfFame")}</Link>
+              <Link to="/faq" className="py-1.5 hover:text-foreground transition-colors">{t("footer.faq")}</Link>
+              <Link to="/about" className="py-1.5 hover:text-foreground transition-colors">{t("footer.about")}</Link>
+              <Link to="/contact" className="py-1.5 hover:text-foreground transition-colors">{t("footer.contactPage")}</Link>
             </nav>
           </div>
 
           {/* Legal */}
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.legal")}</h4>
-            <nav aria-label={t("a11y.footerLegal")} className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/legal/mentions" className="hover:text-foreground transition-colors">{t("footer.legalNotices")}</Link>
-              <Link to="/terms" className="hover:text-foreground transition-colors">{t("footer.cgu")}</Link>
-              <Link to="/legal/cgv" className="hover:text-foreground transition-colors">{t("footer.cgv")}</Link>
-              <Link to="/privacy" className="hover:text-foreground transition-colors">{t("footer.privacy")}</Link>
-              <Link to="/contest-rules" className="hover:text-foreground transition-colors">{t("footer.rules")}</Link>
-              <Link to="/cookies" className="hover:text-foreground transition-colors">{t("footer.cookies")}</Link>
+            <nav aria-label={t("a11y.footerLegal")} className="flex flex-col gap-1 text-sm text-muted-foreground">
+              <Link to="/legal/mentions" className="py-1.5 hover:text-foreground transition-colors">{t("footer.legalNotices")}</Link>
+              <Link to="/terms" className="py-1.5 hover:text-foreground transition-colors">{t("footer.cgu")}</Link>
+              <Link to="/legal/cgv" className="py-1.5 hover:text-foreground transition-colors">{t("footer.cgv")}</Link>
+              <Link to="/privacy" className="py-1.5 hover:text-foreground transition-colors">{t("footer.privacy")}</Link>
+              <Link to="/contest-rules" className="py-1.5 hover:text-foreground transition-colors">{t("footer.rules")}</Link>
+              <Link to="/cookies" className="py-1.5 hover:text-foreground transition-colors">{t("footer.cookies")}</Link>
               <button
                 type="button"
                 onClick={() => (window as Window & { __reopenCookieBanner?: () => void }).__reopenCookieBanner?.()}

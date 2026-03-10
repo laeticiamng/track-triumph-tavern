@@ -31,7 +31,7 @@ export function MentorshipResidencySection() {
   ];
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
+    <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/30 to-transparent" />
       <div className="container relative">
         <motion.div
@@ -53,7 +53,7 @@ export function MentorshipResidencySection() {
           </p>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-5 sm:gap-8 md:grid-cols-2 px-4 sm:px-0">
           {programs.map((p, i) => {
             const Icon = p.icon;
             return (
@@ -63,13 +63,13 @@ export function MentorshipResidencySection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
-                className={`rounded-2xl border border-border bg-gradient-to-br ${p.gradient} p-8 flex flex-col`}
+                className={`rounded-2xl border border-border bg-gradient-to-br ${p.gradient} p-5 sm:p-8 flex flex-col`}
               >
                 <span className={`inline-flex items-center gap-2 rounded-full ${p.accentBg} px-3 py-1 text-xs font-semibold ${p.accent} mb-5 w-fit`}>
                   <Icon className="h-3.5 w-3.5" />
                   {t(p.badgeKey)}
                 </span>
-                <h3 className="font-display text-2xl font-bold mb-3">{t(p.titleKey)}</h3>
+                <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">{t(p.titleKey)}</h3>
                 <p className="text-muted-foreground leading-relaxed flex-1">{t(p.descKey)}</p>
                 <span className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground w-fit">
                   {t("mentorship.comingSoon")}

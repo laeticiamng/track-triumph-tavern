@@ -68,7 +68,7 @@ const ArticleDetail = () => {
         type="article"
         jsonLd={jsonLd}
       />
-      <article className="container max-w-3xl py-10 md:py-16">
+      <article className="container max-w-3xl py-8 sm:py-10 md:py-16 px-4 sm:px-6">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
           <Link

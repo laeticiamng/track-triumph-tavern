@@ -148,7 +148,7 @@ const CategoryDetail = () => {
         animate={{ opacity: 1 }}
         className={`bg-gradient-to-br ${gradient} border-b border-border`}
       >
-        <div className="container py-16 md:py-24">
+        <div className="container py-10 sm:py-16 md:py-24 px-4 sm:px-6">
           <Link
             to="/#categories"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -169,7 +169,7 @@ const CategoryDetail = () => {
         </div>
       </motion.section>
 
-      <div className="container py-12 space-y-16">
+      <div className="container py-8 sm:py-12 px-4 sm:px-6 space-y-10 sm:space-y-16">
         {/* Fun Fact */}
         {category.fun_fact && (
           <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>

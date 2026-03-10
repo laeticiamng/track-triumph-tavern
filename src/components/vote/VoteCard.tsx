@@ -51,10 +51,10 @@ function StarRating({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm w-[90px] flex items-center gap-1.5 text-white/80">
+    <div className="flex items-center gap-1.5 sm:gap-2">
+      <span className="text-sm w-[80px] sm:w-[90px] flex items-center gap-1 sm:gap-1.5 text-white/80">
         <span>{icon}</span>
-        <span className="text-xs font-medium">{label}</span>
+        <span className="text-[11px] sm:text-xs font-medium">{label}</span>
       </span>
       <div className="flex gap-0.5">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -63,7 +63,7 @@ function StarRating({
             type="button"
             onClick={() => onChange(star)}
             aria-label={t("vote.scoreLabel", { score: star })}
-            className="p-0.5 transition-transform active:scale-90"
+            className="p-1 sm:p-0.5 transition-transform active:scale-90 min-h-[2.75rem] min-w-[2rem] sm:min-h-0 sm:min-w-0 flex items-center justify-center"
           >
             <Star
               className={`h-5 w-5 transition-colors ${
@@ -250,7 +250,7 @@ export function VoteCard({
       </div>
 
       {/* Content overlay */}
-      <div className="relative z-10 flex flex-1 flex-col justify-end p-5 pb-6">
+      <div className="relative z-10 flex flex-1 flex-col justify-end p-4 pb-5 sm:p-5 sm:pb-6">
         {/* Category + tags */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <Badge className="bg-primary/90 text-primary-foreground text-xs border-0">
@@ -265,7 +265,7 @@ export function VoteCard({
 
         {/* Title + artist */}
         <Link to={`/submissions/${submission.id}`} className="hover:underline">
-          <h2 className="font-display text-2xl font-bold text-white leading-tight mb-1">
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-white leading-tight mb-1 line-clamp-2">
             {submission.title}
           </h2>
         </Link>

@@ -40,8 +40,8 @@ const Articles = () => {
         url="/articles"
         jsonLd={pageJsonLd}
       />
-      <section className="py-12 md:py-20">
-        <div className="container max-w-4xl">
+      <section className="py-8 sm:py-12 md:py-20">
+        <div className="container max-w-4xl px-4 sm:px-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
