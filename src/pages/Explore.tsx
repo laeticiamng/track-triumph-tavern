@@ -26,6 +26,7 @@ import { StreakBadge } from "@/components/gamification/StreakBadge";
 import { BadgeProgress } from "@/components/gamification/BadgeProgress";
 import { useSubscription } from "@/hooks/use-subscription";
 import { AIChatbot } from "@/components/ai/AIChatbot";
+import { PlatformPulse } from "@/components/explore/PlatformPulse";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Submission = Tables<"submissions">;
@@ -259,6 +260,8 @@ const Explore = () => {
               )}
             </div>
           )}
+
+          <PlatformPulse activeWeekId={activeWeek?.id || null} />
 
           {/* Podium (listen mode only) */}
           {mode === "listen" && <WeeklyPodium compact />}
