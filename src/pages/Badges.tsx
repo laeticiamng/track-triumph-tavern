@@ -60,7 +60,10 @@ const Badges = () => {
         setBadges(enriched);
       }
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch((err) => {
+      console.error("[Badges] Failed to load badges:", err instanceof Error ? err.message : err);
+      setLoading(false);
+    });
   }, []);
 
   // Group by week

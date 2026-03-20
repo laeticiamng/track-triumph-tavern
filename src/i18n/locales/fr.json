@@ -1036,7 +1036,8 @@
     "strengths": "Points forts",
     "improvements": "Axes d'amélioration",
     "overall": "Résumé",
-    "refresh": "Rafraîchir l'analyse"
+    "refresh": "Rafraîchir l'analyse",
+    "analysisFailed": "L'analyse a échoué. Veuillez réessayer."
   },
   "header": {
     "closeMenu": "Fermer le menu",
@@ -1209,7 +1210,8 @@
     "suggest": "Suggérer des tags avec l'IA",
     "addTags": "Ajouter {{count}} tag",
     "addTagsPlural": "Ajouter {{count}} tags",
-    "ignore": "Ignorer"
+    "ignore": "Ignorer",
+    "suggestFailed": "Échec de la suggestion de tags. Veuillez réessayer."
   },
   "aiFeedback": {
     "locked": "Le feedback IA est réservé aux abonnés Elite",
@@ -1345,7 +1347,8 @@
     "sendError": "Impossible d'envoyer le message. Veuillez réessayer.",
     "directEmail": "Ou écrivez-nous directement à :",
     "hours": "Lun - Ven : 9h00 - 18h00",
-    "responseTime": "Réponse sous 24-48h ouvrées"
+    "responseTime": "Réponse sous 24-48h ouvrées",
+    "emailInvalid": "Veuillez entrer une adresse email valide"
   },
   "stickyCta": {
     "joinNow": "Rejoindre le concours",

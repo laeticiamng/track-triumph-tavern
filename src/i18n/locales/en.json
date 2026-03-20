@@ -1036,7 +1036,8 @@
     "strengths": "Strengths",
     "improvements": "Areas for improvement",
     "overall": "Summary",
-    "refresh": "Refresh analysis"
+    "refresh": "Refresh analysis",
+    "analysisFailed": "Analysis failed. Please try again."
   },
   "header": {
     "closeMenu": "Close menu",
@@ -1209,7 +1210,8 @@
     "suggest": "Suggest tags with AI",
     "addTags": "Add {{count}} tag",
     "addTagsPlural": "Add {{count}} tags",
-    "ignore": "Ignore"
+    "ignore": "Ignore",
+    "suggestFailed": "Tag suggestion failed. Please try again."
   },
   "aiFeedback": {
     "locked": "AI feedback is reserved for Elite subscribers",
@@ -1345,7 +1347,8 @@
     "sendError": "Failed to send message. Please try again.",
     "directEmail": "Or email us directly at:",
     "hours": "Mon - Fri: 9am - 6pm (CET)",
-    "responseTime": "Response within 24-48 business hours"
+    "responseTime": "Response within 24-48 business hours",
+    "emailInvalid": "Please enter a valid email address"
   },
   "stickyCta": {
     "joinNow": "Join the contest",

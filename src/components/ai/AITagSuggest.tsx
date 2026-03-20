@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Loader2, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AITagSuggestProps {
   title: string;
@@ -15,6 +16,7 @@ interface AITagSuggestProps {
 
 export function AITagSuggest({ title, description, category, currentTags, onAcceptTags }: AITagSuggestProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -33,12 +35,14 @@ export function AITagSuggest({ title, description, category, currentTags, onAcce
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.error) {
         console.error("AI tag error:", result.error);
+        toast({ title: t("errors.error"), description: t("aiTags.suggestFailed", "Tag suggestion failed. Please try again."), variant: "destructive" });
       } else {
         setSuggestions(result.tags || []);
         setSelected(new Set(result.tags || []));
       }
     } catch (err) {
       console.error("AI tag suggest error:", err);
+      toast({ title: t("errors.error"), description: t("aiTags.suggestFailed", "Tag suggestion failed. Please try again."), variant: "destructive" });
     } finally {
       setLoading(false);
     }

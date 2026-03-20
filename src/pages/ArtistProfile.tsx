@@ -60,8 +60,8 @@ const ArtistProfile = () => {
               const result = typeof tierData === "string" ? JSON.parse(tierData) : tierData;
               if (result?.tier) setTier(result.tier);
             }
-          } catch {
-            // Silently fail - default to "free"
+          } catch (err) {
+            console.error("[ArtistProfile] Failed to fetch tier:", err instanceof Error ? err.message : err);
           }
         }
       } catch (err) {

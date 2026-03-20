@@ -39,30 +39,35 @@ const SubmissionDetail = () => {
     if (!id) return;
 
     const load = async () => {
-      const { data: sub } = await supabase.from("submissions").select("*").eq("id", id).single();
-      if (sub) {
-        setSubmission(sub);
-        const [{ data: prof }, { data: cat }, { data: week }] = await Promise.all([
-          supabase.from("profiles").select("display_name, avatar_url").eq("id", sub.user_id).single(),
-          supabase.from("categories").select("name").eq("id", sub.category_id).single(),
-          supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).maybeSingle(),
-        ]);
-        setProfile(prof);
-        setCategory(cat);
-        if (week) setVotingCloseAt(week.voting_close_at);
+      try {
+        const { data: sub } = await supabase.from("submissions").select("*").eq("id", id).single();
+        if (sub) {
+          setSubmission(sub);
+          const [{ data: prof }, { data: cat }, { data: week }] = await Promise.all([
+            supabase.from("profiles").select("display_name, avatar_url").eq("id", sub.user_id).single(),
+            supabase.from("categories").select("name").eq("id", sub.category_id).single(),
+            supabase.from("weeks").select("voting_close_at").eq("id", sub.week_id).maybeSingle(),
+          ]);
+          setProfile(prof);
+          setCategory(cat);
+          if (week) setVotingCloseAt(week.voting_close_at);
 
-        if (user) {
-          const { data: existingVote } = await supabase
-            .from("votes")
-            .select("id")
-            .eq("user_id", user.id)
-            .eq("category_id", sub.category_id)
-            .eq("week_id", sub.week_id)
-            .maybeSingle();
-          setHasVoted(!!existingVote);
+          if (user) {
+            const { data: existingVote } = await supabase
+              .from("votes")
+              .select("id")
+              .eq("user_id", user.id)
+              .eq("category_id", sub.category_id)
+              .eq("week_id", sub.week_id)
+              .maybeSingle();
+            setHasVoted(!!existingVote);
+          }
         }
+      } catch (err) {
+        console.error("[SubmissionDetail] Failed to load submission:", err instanceof Error ? err.message : err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     load();
