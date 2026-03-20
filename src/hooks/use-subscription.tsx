@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { logger } from "@/lib/logger";
 import type { SubscriptionTier } from "@/lib/subscription-tiers";
 
 interface SubscriptionState {
@@ -46,11 +47,13 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      logger.api("check-subscription");
       const { data, error } = await supabase.functions.invoke("check-subscription");
       if (error) throw error;
       lastFetchRef.current = Date.now();
 
       const result = typeof data === "string" ? JSON.parse(data) : data;
+      logger.apiResponse("check-subscription", result);
 
       setState({
         tier: result.tier || "free",
@@ -58,8 +61,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         subscriptionEnd: result.subscription_end || null,
         loading: false,
       });
-    } catch {
-      // Silently fall back to free tier on edge function failure
+    } catch (err) {
+      logger.error("check-subscription", "Edge function failed, defaulting to free tier", err);
       setState((prev) => ({ ...prev, loading: false }));
     }
   }, [user, session]);

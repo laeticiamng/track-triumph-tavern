@@ -79,7 +79,9 @@ export function useBadgeProgress(weekId?: string | null) {
           categoryCount: categories.size,
         });
       })
-      .catch(() => {});
+      .catch((err: unknown) => {
+        console.error("[useBadgeProgress] Failed to load badge progress:", err instanceof Error ? err.message : err);
+      });
   }, [user, weekId]);
 
   return stats;

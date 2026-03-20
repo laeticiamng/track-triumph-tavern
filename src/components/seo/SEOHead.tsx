@@ -8,6 +8,8 @@ interface SEOHeadProps {
   image?: string;
   type?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Set true to add noindex,nofollow — use for auth, admin, profile pages */
+  noIndex?: boolean;
 }
 
 const BASE_URL = "https://weeklymusicawards.com";
@@ -19,6 +21,7 @@ export function SEOHead({
   image,
   type = "website",
   jsonLd,
+  noIndex = false,
 }: SEOHeadProps) {
   const { t, i18n } = useTranslation();
   const defaultTitle = t("seo.defaultTitle");
@@ -34,6 +37,7 @@ export function SEOHead({
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={resolvedDescription} />
+      {noIndex && <meta name="robots" content="noindex,nofollow" />}
       <link rel="canonical" href={fullUrl} />
       <html lang={currentLang} />
 

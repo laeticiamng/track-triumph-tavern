@@ -84,7 +84,9 @@ export function SocialProof() {
         displayStats.splice(1, 0, { icon: Heart, labelKey: "socialProof.recordedVotes", value: totalVotes, color: "text-rose-600 dark:text-rose-400", iconBg: "bg-rose-500/10" });
       }
       setStats(displayStats);
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      console.error("[SocialProof] Failed to load stats:", err instanceof Error ? err.message : err);
+    });
   }, []);
 
   const totalValue = stats.reduce((sum, s) => sum + s.value, 0);

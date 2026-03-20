@@ -31,7 +31,9 @@ export function CategoriesSection() {
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("id, name, slug").order("sort_order")).then(({ data }) => {
       if (data && data.length > 0) setCategories(data);
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      console.error("[CategoriesSection] Failed to load categories:", err instanceof Error ? err.message : err);
+    });
   }, []);
 
   return (

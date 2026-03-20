@@ -126,13 +126,17 @@ const Compete = () => {
       if (data?.display_name && !artistName) {
         setArtistName(data.display_name);
       }
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      console.error("[Compete] Failed to load profile:", err instanceof Error ? err.message : err);
+    });
   }, [user]);
 
   useEffect(() => {
     Promise.resolve(supabase.from("categories").select("*").order("sort_order")).then(({ data }) => {
       if (data) setCategories(data);
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      console.error("[Compete] Failed to load categories:", err instanceof Error ? err.message : err);
+    });
 
     Promise.resolve(supabase
       .from("weeks")
@@ -142,7 +146,8 @@ const Compete = () => {
     ).then(({ data }) => {
         setActiveWeek(data as ActiveWeek | null);
         setWeekLoading(false);
-      }).catch(() => {
+      }).catch((err: unknown) => {
+        console.error("[Compete] Failed to load active week:", err instanceof Error ? err.message : err);
         setWeekLoading(false);
       });
   }, []);
@@ -158,7 +163,9 @@ const Compete = () => {
       .limit(1)
     ).then(({ data }) => {
         setAlreadySubmitted((data?.length ?? 0) > 0);
-      }).catch(() => {});
+      }).catch((err: unknown) => {
+        console.error("[Compete] Failed to check existing submission:", err instanceof Error ? err.message : err);
+      });
   }, [user, activeWeek]);
 
   // Derived state

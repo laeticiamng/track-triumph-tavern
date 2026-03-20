@@ -45,7 +45,6 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [isAdmin, setIsAdmin] = useState(false);
   const defaultTab = pathTabMap[location.pathname] || "moderation";
 
   const [weeks, setWeeks] = useState<Week[]>([]);
@@ -54,6 +53,7 @@ const AdminDashboard = () => {
   const [voteStats, setVoteStats] = useState<{ total: number; suspicious: number }>({ total: 0, suspicious: 0 });
   const [rejectReasons, setRejectReasons] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // Reward pool form
   const [rpWeekId, setRpWeekId] = useState("");
@@ -75,20 +75,12 @@ const AdminDashboard = () => {
   const [newWeekVoteClose, setNewWeekVoteClose] = useState("");
   const [creatingWeek, setCreatingWeek] = useState(false);
 
+  // ProtectedRoute already handles auth + role check; just load data
   useEffect(() => {
-    if (!authLoading && !user) { navigate("/auth"); return; }
     if (user) {
-      Promise.resolve(supabase.from("user_roles").select("role").eq("user_id", user.id)).then(({ data }) => {
-        const roles = data?.map((r) => r.role) || [];
-        if (roles.includes("admin")) {
-          setIsAdmin(true);
-          loadData();
-        } else {
-          navigate("/");
-        }
-      }).catch(() => {});
+      loadData();
     }
-  }, [user, authLoading, navigate]);
+  }, [user]);
 
   const loadData = async () => {
     setLoading(true);
@@ -105,8 +97,10 @@ const AdminDashboard = () => {
       setSubmissions(s || []);
       setRewardPools(rp || []);
       setVoteStats({ total: totalV || 0, suspicious: suspV || 0 });
-    } catch (err) {
-      console.error("Error loading admin data:", err);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error loading admin data";
+      console.error("Error loading admin data:", message);
+      setLoadError(message);
     } finally {
       setLoading(false);
     }
@@ -250,10 +244,24 @@ const AdminDashboard = () => {
     URL.revokeObjectURL(url);
   };
 
-  if (authLoading || !isAdmin) return (
+  if (authLoading || loading) return (
     <div className="flex min-h-screen items-center justify-center">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </div>
+  );
+
+  if (loadError) return (
+    <Layout>
+      <div className="container py-12 text-center">
+        <Shield className="h-10 w-10 mx-auto text-destructive mb-4" />
+        <h2 className="font-display text-xl font-bold">{t("admin.error")}</h2>
+        <p className="mt-2 text-muted-foreground">{loadError}</p>
+        <Button className="mt-4" onClick={() => { setLoadError(null); loadData(); }}>
+          {t("errors.retry")}
+        </Button>
+      </div>
+      <Footer />
+    </Layout>
   );
 
   const pending = submissions.filter((s) => s.status === "pending");
@@ -269,7 +277,7 @@ const AdminDashboard = () => {
 
   return (
     <Layout>
-      <SEOHead title={t("admin.seoTitle")} description={t("admin.seoDesc")} url="/admin" />
+      <SEOHead title={t("admin.seoTitle")} description={t("admin.seoDesc")} url="/admin" noIndex />
       <div className="container py-6 sm:py-8 px-4 sm:px-6">
         <div className="mb-6 sm:mb-8 flex items-center gap-3">
           <Shield className="h-6 w-6 text-primary" />

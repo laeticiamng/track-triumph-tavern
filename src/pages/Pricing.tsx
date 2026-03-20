@@ -86,23 +86,31 @@ const Pricing = () => {
       return;
     }
 
+    // Prevent double-click / concurrent checkout
+    if (loadingTier) return;
+
     const plan = SUBSCRIPTION_TIERS[tier];
     if (!plan.price_id) return;
 
     setLoadingTier(tier);
     trackEvent("plan_upgrade_clicked", { tier, price_id: plan.price_id });
     try {
+      console.log("[Checkout] Creating session for:", tier, plan.price_id);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { price_id: plan.price_id },
       });
       if (error) throw error;
       const result = typeof data === "string" ? JSON.parse(data) : data;
+      console.log("[Checkout] Response:", result.url ? "URL received" : "No URL", result.error || "");
       if (result.error) {
         toast({ title: t("errors.error"), description: result.error, variant: "destructive" });
       } else if (result.url) {
         window.location.href = result.url;
+      } else {
+        toast({ title: t("errors.error"), description: t("pricing.checkoutError"), variant: "destructive" });
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("[Checkout] Error:", err instanceof Error ? err.message : err);
       toast({ title: t("errors.error"), description: t("pricing.checkoutError"), variant: "destructive" });
     } finally {
       setLoadingTier(null);

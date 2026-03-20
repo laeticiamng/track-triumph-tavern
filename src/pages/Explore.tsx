@@ -92,7 +92,8 @@ const Explore = () => {
       }
       if (catRes.data) setCategories(catRes.data);
       if (!weekRes.data) setLoading(false);
-    }).catch(() => {
+    }).catch((err: unknown) => {
+      console.error("[Explore] Failed to load week/categories:", err instanceof Error ? err.message : err);
       setNoActiveWeek(true);
       setLoading(false);
     });
@@ -147,7 +148,8 @@ const Explore = () => {
         setFeedSubmissions([]);
       }
       setLoading(false);
-    }).catch(() => {
+    }).catch((err: unknown) => {
+      console.error("[Explore] Failed to load submissions:", err instanceof Error ? err.message : err);
       setSubmissions([]);
       setFeedSubmissions([]);
       setLoading(false);
