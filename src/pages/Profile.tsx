@@ -77,11 +77,7 @@ const Profile = () => {
     }
   }, [searchParams, toast]);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?redirect=/profile");
-    }
-  }, [user, authLoading, navigate]);
+  // Auth redirect is handled by ProtectedRoute in App.tsx
 
   useEffect(() => {
     if (!user) return;
@@ -99,7 +95,9 @@ const Profile = () => {
       }
       setSubmissions(subs || []);
       setVoteCount(count || 0);
-    }).catch(() => {});
+    }).catch((err: unknown) => {
+      console.error("[Profile] Failed to load profile data:", err instanceof Error ? err.message : err);
+    });
   }, [user]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,7 +244,7 @@ const Profile = () => {
 
   return (
     <Layout>
-      <SEOHead title={t("profilePage.seoTitle")} description={t("profilePage.seoDesc")} url="/profile" />
+      <SEOHead title={t("profilePage.seoTitle")} description={t("profilePage.seoDesc")} url="/profile" noIndex />
       {/* WelcomeDialog is rendered in Layout.tsx */}
       <div className="container max-w-2xl py-6 sm:py-8 px-4 sm:px-6">
         <div className="mb-6 sm:mb-8 flex items-center justify-between gap-2">

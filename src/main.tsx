@@ -12,6 +12,15 @@ const updateHtmlLang = () => {
 updateHtmlLang();
 i18n.on("languageChanged", updateHtmlLang);
 
+// Global unhandled error listeners — catch anything the ErrorBoundary misses
+window.addEventListener("error", (event) => {
+  console.error("[GLOBAL ERROR]", event.error?.message || event.message, event.filename, event.lineno);
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+  console.error("[UNHANDLED PROMISE]", event.reason);
+});
+
 // Register Service Worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

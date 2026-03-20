@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Brain, Loader2, TrendingUp, Target, Lightbulb } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface VoteSummary {
   strengths: string;
@@ -17,6 +18,7 @@ interface AIVoteSummaryProps {
 
 export function AIVoteSummary({ tier }: AIVoteSummaryProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<VoteSummary | null>(null);
   const [stats, setStats] = useState<{ totalVotes: number; avgScores: Record<string, number> } | null>(null);
@@ -31,12 +33,14 @@ export function AIVoteSummary({ tier }: AIVoteSummaryProps) {
       const result = typeof data === "string" ? JSON.parse(data) : data;
       if (result.error) {
         console.error("AI summary error:", result.error);
+        toast({ title: t("errors.error"), description: t("aiSummary.analysisFailed", "Analysis failed. Please try again."), variant: "destructive" });
       } else {
         setSummary(result.summary);
         setStats(result.stats || null);
       }
     } catch (err) {
       console.error("AI vote summary error:", err);
+      toast({ title: t("errors.error"), description: t("aiSummary.analysisFailed", "Analysis failed. Please try again."), variant: "destructive" });
     } finally {
       setLoading(false);
     }

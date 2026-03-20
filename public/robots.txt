@@ -3,12 +3,18 @@ Allow: /
 Disallow: /admin
 Disallow: /auth
 Disallow: /profile
+Disallow: /submit/review
+Disallow: /badges
+Disallow: /following
 
 User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /auth
 Disallow: /profile
+Disallow: /submit/review
+Disallow: /badges
+Disallow: /following
 
 User-agent: Twitterbot
 Allow: /
@@ -21,5 +27,8 @@ Allow: /
 Disallow: /admin
 Disallow: /auth
 Disallow: /profile
+Disallow: /submit/review
+Disallow: /badges
+Disallow: /following
 
 Sitemap: https://weeklymusicawards.com/sitemap.xml

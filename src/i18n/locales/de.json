@@ -1036,7 +1036,8 @@
     "strengths": "Stärken",
     "improvements": "Verbesserungsbereiche",
     "overall": "Zusammenfassung",
-    "refresh": "Analyse aktualisieren"
+    "refresh": "Analyse aktualisieren",
+    "analysisFailed": "Analyse fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "header": {
     "closeMenu": "Menü schließen",
@@ -1209,7 +1210,8 @@
     "suggest": "Tags mit KI vorschlagen",
     "addTags": "{{count}} Tag hinzufügen",
     "addTagsPlural": "{{count}} Tags hinzufügen",
-    "ignore": "Ignorieren"
+    "ignore": "Ignorieren",
+    "suggestFailed": "Tag-Vorschlag fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "aiFeedback": {
     "locked": "KI-Feedback ist Elite-Abonnenten vorbehalten",
@@ -1345,7 +1347,8 @@
     "sendError": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
     "directEmail": "Oder schreiben Sie uns direkt an:",
     "hours": "Mo - Fr: 9:00 - 18:00 (MEZ)",
-    "responseTime": "Antwort innerhalb von 24-48 Geschäftsstunden"
+    "responseTime": "Antwort innerhalb von 24-48 Geschäftsstunden",
+    "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
   },
   "stickyCta": {
     "joinNow": "Dem Wettbewerb beitreten",

@@ -33,7 +33,14 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => { if (user) navigate(searchParams.get("redirect") || "/profile"); }, [user, navigate, searchParams]);
+  useEffect(() => {
+    if (user) {
+      const redirect = searchParams.get("redirect") || "/profile";
+      // Prevent open redirect — only allow relative paths starting with /
+      const safeRedirect = redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/profile";
+      navigate(safeRedirect);
+    }
+  }, [user, navigate, searchParams]);
 
   const handleLogin = async (values: LoginValues) => {
     setLoading(true);
@@ -82,7 +89,7 @@ const Auth = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 sm:py-4">
-      <SEOHead title={t("auth.seoTitle")} description={t("auth.seoDesc")} url="/auth" />
+      <SEOHead title={t("auth.seoTitle")} description={t("auth.seoDesc")} url="/auth" noIndex />
       <div className="w-full max-w-md">
         <Link to="/" className="mb-6 sm:mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2">
           <ArrowLeft className="h-4 w-4" /> {t("auth.backToHome")}

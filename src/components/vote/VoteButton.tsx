@@ -48,7 +48,9 @@ export function VoteButton({ submissionId, categoryId, onVoted, hasVoted = false
         if (data?.scoring_criteria) {
           setScoringCriteria(data.scoring_criteria as unknown as ScoringCriterion[]);
         }
-      }).catch(() => {});
+      }).catch((err: unknown) => {
+        console.error("[VoteButton] Failed to load scoring criteria:", err instanceof Error ? err.message : err);
+      });
   }, [categoryId]);
 
   if (!user) {

@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { InstallPromptProvider } from "@/hooks/use-install-prompt";
 import { SubscriptionProvider } from "@/hooks/use-subscription";
@@ -82,19 +83,19 @@ const App = () => (
             <Route path="/explore" element={<Explore />} />
             <Route path="/compete" element={<Compete />} />
             <Route path="/submit" element={<Compete />} />
-            <Route path="/submit/review" element={<SubmissionReview />} />
+            <Route path="/submit/review" element={<ProtectedRoute><SubmissionReview /></ProtectedRoute>} />
             <Route path="/submissions/:id" element={<SubmissionDetail />} />
             <Route path="/results" element={<Results />} />
             <Route path="/reveal" element={<LiveReveal />} />
             <Route path="/pricing" element={<Pricing />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/artist/:id" element={<ArtistProfile />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/moderation" element={<AdminDashboard />} />
-            <Route path="/admin/fraud" element={<AdminDashboard />} />
-            <Route path="/admin/weeks" element={<AdminDashboard />} />
-            <Route path="/admin/rewards" element={<AdminDashboard />} />
-            <Route path="/admin/analytics" element={<AdminDashboard />} />
+            <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/moderation" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/fraud" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/weeks" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/rewards" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/analytics" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contest-rules" element={<ContestRules />} />
@@ -107,8 +108,8 @@ const App = () => (
             <Route path="/faq" element={<Faq />} />
             <Route path="/categories/:slug" element={<CategoryDetail />} />
             <Route path="/vote" element={<Vote />} />
-            <Route path="/badges" element={<Badges />} />
-            <Route path="/following" element={<Following />} />
+            <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
+            <Route path="/following" element={<ProtectedRoute><Following /></ProtectedRoute>} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />

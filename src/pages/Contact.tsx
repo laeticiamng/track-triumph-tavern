@@ -113,6 +113,8 @@ const Contact = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={t("contact.emailPlaceholder")}
                         required
+                        pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                        title={t("contact.emailInvalid", "Please enter a valid email address")}
                       />
                     </div>
                   </div>

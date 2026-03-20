@@ -36,7 +36,9 @@ export function Header() {
         const roles = data?.map((r) => r.role) || [];
         setIsAdmin(roles.includes("admin") || roles.includes("moderator"));
       })
-      .catch(() => {});
+      .catch((err: unknown) => {
+        console.error("[Header] Failed to load user roles:", err instanceof Error ? err.message : err);
+      });
   }, [user]);
 
   return (

@@ -45,7 +45,10 @@ export function HeroSection() {
         } else {
           setHasContent(false);
         }
-      }).catch(() => {});
+      }).catch((err: unknown) => {
+        console.error("[HeroSection] Failed to load week data:", err instanceof Error ? err.message : err);
+        setHasContent(false);
+      });
   }, [t]);
 
   const primaryCTA = hasContent

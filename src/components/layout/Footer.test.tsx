@@ -54,7 +54,8 @@ describe("Footer", () => {
 
   it("renders contact section", () => {
     renderFooter();
-    expect(screen.getByText("footer.contactText")).toBeInTheDocument();
+    expect(screen.getByText("footer.contact")).toBeInTheDocument();
+    expect(screen.getByText("contact@emotionscare.com")).toBeInTheDocument();
   });
 
   it("has accessible nav landmarks", () => {
