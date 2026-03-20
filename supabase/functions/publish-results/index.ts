@@ -6,6 +6,29 @@ interface ScoringCriterion {
   weight: number;
 }
 
+interface UserRole {
+  role: string;
+}
+
+interface RankedSubmission {
+  id: string;
+  user_id: string;
+  category_id: string;
+  vote_count: number;
+  avgScore: number;
+}
+
+interface RewardInsertPayload {
+  winner_id: string;
+  week_id: string;
+  reward_type: string;
+  amount_cents: number;
+  label: string | null;
+  status: string;
+}
+
+type WeightMap = Record<string, { emotion: number; originality: number; production: number }>;
+
 function getWeights(criteria: ScoringCriterion[] | null): { emotion: number; originality: number; production: number } {
   const defaults = { emotion: 33, originality: 34, production: 33 };
   if (!criteria || !Array.isArray(criteria)) return defaults;
@@ -71,7 +94,7 @@ Deno.serve(async (req) => {
       .select("role")
       .eq("user_id", user.id);
 
-    if (!roles?.some((r: any) => r.role === "admin")) {
+    if (!roles?.some((r: UserRole) => r.role === "admin")) {
       return new Response(JSON.stringify({ error: "Accès refusé" }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -104,7 +127,7 @@ Deno.serve(async (req) => {
       .select("id, scoring_criteria")
       .order("sort_order");
 
-    const criteriaMap: Record<string, any> = {};
+    const criteriaMap: WeightMap = {};
     for (const cat of categories || []) {
       criteriaMap[cat.id] = getWeights(cat.scoring_criteria as ScoringCriterion[] | null);
     }
@@ -159,14 +182,14 @@ Deno.serve(async (req) => {
       : { 1: 0, 2: 0, 3: 0 };
 
     for (const cat of categories || []) {
-      const catSubs = (allSubs || [])
-        .filter((s: any) => s.category_id === cat.id)
-        .map((s: any) => {
+      const catSubs: RankedSubmission[] = (allSubs || [])
+        .filter((s) => s.category_id === cat.id)
+        .map((s) => {
           const acc = scoreAcc[s.id];
           const avgScore = acc ? acc.totalScore / acc.count : 0;
           return { ...s, avgScore };
         })
-        .sort((a: any, b: any) => b.avgScore - a.avgScore);
+        .sort((a, b) => b.avgScore - a.avgScore);
 
       const top3 = catSubs.slice(0, 3);
 
@@ -193,11 +216,11 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const rewardData: any = {
+        const rewardData: RewardInsertPayload = {
           winner_id: winner.id,
           week_id,
           reward_type: isCashMode ? "cash" : "fallback",
-          amount_cents: isCashMode ? (amountsByRank as any)[rank] || 0 : 0,
+          amount_cents: isCashMode ? amountsByRank[rank as 1 | 2 | 3] || 0 : 0,
           label: isCashMode ? null : (pool?.fallback_label || "Récompenses alternatives disponibles"),
           status: "pending",
         };

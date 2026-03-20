@@ -12,7 +12,6 @@ vi.mock("react-i18next", () => ({
 
 describe("Vote page", () => {
   it("redirects to /explore?mode=vote", () => {
-    let navigatedTo = "";
     render(
       <MemoryRouter initialEntries={["/vote"]}>
         <Routes>
