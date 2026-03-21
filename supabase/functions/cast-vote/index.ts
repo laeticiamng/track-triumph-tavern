@@ -1,6 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { createLogger } from "../_shared/logger.ts";
+
+const log = createLogger("cast-vote");
 
 const PRODUCT_IDS = {
   pro: "prod_U6y4cllNm98nSu",
@@ -31,7 +34,7 @@ async function getUserTier(email: string): Promise<"free" | "pro" | "elite"> {
     if (productId === PRODUCT_IDS.pro) return "pro";
     return "free";
   } catch (err) {
-    console.error("Stripe tier check error:", err);
+    log.error("Stripe tier check failed", { error: String(err) });
     return "free";
   }
 }
@@ -169,39 +172,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Rate limiting: max 50 votes per hour per user
-    const oneHourAgo = new Date(Date.now() - 3_600_000).toISOString();
-    const { count: hourlyVotes } = await supabaseAdmin
-      .from("votes")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .gte("created_at", oneHourAgo);
-
-    if ((hourlyVotes || 0) >= 50) {
-      return new Response(JSON.stringify({ error: "Limite de 50 votes par heure atteinte. Réessayez plus tard." }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Burst protection: max 5 votes per minute
-    const oneMinuteAgo = new Date(Date.now() - 60_000).toISOString();
-    const { count: burstCount } = await supabaseAdmin
-      .from("votes")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .gte("created_at", oneMinuteAgo);
-
-    if ((burstCount || 0) >= 5) {
-      return new Response(JSON.stringify({ error: "Trop de votes en peu de temps. Réessayez dans un instant." }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // FREE TIER: weekly vote quota (5 votes/week)
     const tier = await getUserTier(user.email!);
-    console.log(`User tier: ${tier} (user=${user.id})`);
+    log.info("User tier resolved", { tier, userId: user.id });
 
     if (tier === "free") {
       const { count: weeklyVotes } = await supabaseAdmin
@@ -231,7 +204,7 @@ Deno.serve(async (req) => {
         .not("comment", "is", null);
 
       if ((weeklyComments || 0) >= PRO_COMMENT_LIMIT) {
-        console.log(`Pro user ${user.id} reached comment limit (${PRO_COMMENT_LIMIT}/week), stripping comment`);
+        log.info("Pro comment limit reached, stripping comment", { userId: user.id, limit: PRO_COMMENT_LIMIT });
         comment = undefined;
       }
     }
@@ -313,7 +286,7 @@ Deno.serve(async (req) => {
           try {
             aiFraudResult = JSON.parse(cleaned);
           } catch {
-            console.error("AI fraud parse error:", cleaned);
+            log.error("AI fraud parse error", { raw: cleaned });
           }
 
           if (aiFraudResult && (aiFraudResult as { action?: string; risk_score?: number }).action === "block" && ((aiFraudResult as { risk_score?: number }).risk_score ?? 0) >= 70) {
@@ -321,38 +294,49 @@ Deno.serve(async (req) => {
           }
         }
       } catch (err) {
-        console.error("AI fraud check error:", err);
+        log.error("AI fraud check failed", { error: String(err) });
         // Fail-open: allow the vote if AI is unreachable
       }
     }
 
     if (aiBlocked) {
-      console.log(`Vote blocked by AI fraud detection for user=${user.id}`);
+      log.warn("Vote blocked by AI fraud detection", { userId: user.id });
       return new Response(JSON.stringify({ error: "Vote refusé par notre système anti-fraude." }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Insert vote
-    const { data: vote, error: voteError } = await supabaseAdmin
-      .from("votes")
-      .insert({
-        user_id: user.id,
-        submission_id: submission.id,
-        category_id: submission.category_id,
-        week_id: submission.week_id,
-        originality_score: originality_score ?? null,
-        production_score: production_score ?? null,
-        emotion_score: emotion_score ?? null,
-        comment: comment?.trim() || null,
-        is_valid: true,
-      })
-      .select("id")
-      .single();
+    // Atomic vote insertion with rate limiting (prevents race conditions)
+    const { data: voteId, error: voteError } = await supabaseAdmin.rpc(
+      "cast_vote_atomic",
+      {
+        _user_id: user.id,
+        _submission_id: submission.id,
+        _category_id: submission.category_id,
+        _week_id: submission.week_id,
+        _originality_score: originality_score ?? null,
+        _production_score: production_score ?? null,
+        _emotion_score: emotion_score ?? null,
+        _comment: comment?.trim() || null,
+      }
+    );
 
     if (voteError) {
-      console.error("Vote insert error:", voteError);
+      const msg = voteError.message || "";
+      if (msg.includes("RATE_LIMIT_HOURLY")) {
+        return new Response(JSON.stringify({ error: "Limite de 50 votes par heure atteinte. Réessayez plus tard." }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (msg.includes("RATE_LIMIT_BURST")) {
+        return new Response(JSON.stringify({ error: "Trop de votes en peu de temps. Réessayez dans un instant." }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      log.error("Vote insert failed", { error: voteError.message });
       return new Response(JSON.stringify({ error: "Erreur lors du vote" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -364,7 +348,7 @@ Deno.serve(async (req) => {
       metadata.ai_fraud = aiFraudResult;
     }
     await supabaseAdmin.from("vote_events").insert({
-      vote_id: vote.id,
+      vote_id: voteId,
       user_id: user.id,
       event_type: "cast",
       user_agent: userAgent,
@@ -372,30 +356,14 @@ Deno.serve(async (req) => {
       metadata,
     });
 
-    // Increment vote_count on submission
-    await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(async () => {
-      // Fallback: read current count and increment
-      const { data: current } = await supabaseAdmin
-        .from("submissions")
-        .select("vote_count")
-        .eq("id", submission.id)
-        .single();
-      if (current) {
-        await supabaseAdmin
-          .from("submissions")
-          .update({ vote_count: (current.vote_count || 0) + 1 })
-          .eq("id", submission.id);
-      }
-    });
-
-    console.log(`Vote cast: user=${user.id}, submission=${submission.id}, tier=${tier}`);
+    log.info("Vote cast", { userId: user.id, submissionId: submission.id, tier });
 
     return new Response(
-      JSON.stringify({ success: true, vote_id: vote.id }),
+      JSON.stringify({ success: true, vote_id: voteId }),
       { status: 201, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
-    console.error("cast-vote error:", err);
+    log.error("Unhandled error", { error: String(err) });
     return new Response(JSON.stringify({ error: "Erreur interne" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

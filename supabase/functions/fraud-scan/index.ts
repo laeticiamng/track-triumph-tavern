@@ -1,5 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { createLogger } from "../_shared/logger.ts";
+
+const log = createLogger("fraud-scan");
 
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -51,7 +54,7 @@ Deno.serve(async (req) => {
 
     if (!week_id) return jsonResponse({ error: "week_id requis" }, 400);
 
-    console.log(`fraud-scan: week=${week_id}, invalidate=${invalidate}, dry_run=${dry_run}`);
+    log.info("Scan started", { week_id, invalidate, dry_run });
 
     // ── Load vote events for the week (join votes) ──
     const { data: events, error: eventsError } = await supabaseAdmin
@@ -61,7 +64,7 @@ Deno.serve(async (req) => {
       .order("created_at", { ascending: true });
 
     if (eventsError) {
-      console.error("Error loading vote_events:", eventsError);
+      log.error("Failed to load vote_events", { error: eventsError.message });
       return jsonResponse({ error: "Erreur lors du chargement des événements" }, 500);
     }
 
@@ -72,7 +75,7 @@ Deno.serve(async (req) => {
       .eq("week_id", week_id);
 
     if (votesError) {
-      console.error("Error loading votes:", votesError);
+      log.error("Failed to load votes", { error: votesError.message });
       return jsonResponse({ error: "Erreur lors du chargement des votes" }, 500);
     }
 
@@ -250,7 +253,7 @@ Deno.serve(async (req) => {
         .in("id", ids);
 
       if (updateError) {
-        console.error("Error invalidating votes:", updateError);
+        log.error("Failed to invalidate votes", { error: updateError.message });
       } else {
         invalidatedCount = ids.length;
 
@@ -263,7 +266,7 @@ Deno.serve(async (req) => {
         }));
 
         await supabaseAdmin.from("vote_events").insert(invalidationEvents);
-        console.log(`Invalidated ${invalidatedCount} votes`);
+        log.info("Votes invalidated", { count: invalidatedCount });
       }
     }
 
@@ -277,7 +280,7 @@ Deno.serve(async (req) => {
       mode: dry_run ? "dry_run" : "live",
     };
 
-    console.log("fraud-scan summary:", JSON.stringify(summary));
+    log.info("Scan complete", summary);
 
     return jsonResponse({
       suspicious_users: suspiciousUsers,
@@ -286,7 +289,7 @@ Deno.serve(async (req) => {
       summary,
     });
   } catch (err) {
-    console.error("fraud-scan error:", err);
+    log.error("Unhandled error", { error: String(err) });
     return jsonResponse({ error: "Erreur interne" }, 500);
   }
 });

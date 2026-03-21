@@ -157,14 +157,14 @@ const ArticleDetail = () => {
               </h2>
               <div className="prose-custom space-y-3 text-muted-foreground leading-relaxed">
                 {section.content.split("\n\n").map((paragraph, pi) => (
-                  <p
-                    key={pi}
-                    dangerouslySetInnerHTML={{
-                      __html: paragraph
-                        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                        .replace(/\n/g, "<br />"),
-                    }}
-                  />
+                  <p key={pi}>
+                    {paragraph.split(/(\*\*.*?\*\*|\n)/g).map((segment, si) => {
+                      if (segment === "\n") return <br key={si} />;
+                      const boldMatch = segment.match(/^\*\*(.*)\*\*$/);
+                      if (boldMatch) return <strong key={si}>{boldMatch[1]}</strong>;
+                      return segment;
+                    })}
+                  </p>
                 ))}
               </div>
               {section.tip && (
