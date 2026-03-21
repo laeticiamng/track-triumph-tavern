@@ -1059,7 +1059,7 @@
     "followed": "Artiste suivi !",
     "errorFollow": "Erreur",
     "unfollowed": "Vous ne suivez plus {{name}}",
-    "errorUnfollow": "Erreur lors du unfollow"
+    "errorUnfollow": "Erreur lors du désabonnement"
   },
   "follow": {
     "follow": "Suivre",
