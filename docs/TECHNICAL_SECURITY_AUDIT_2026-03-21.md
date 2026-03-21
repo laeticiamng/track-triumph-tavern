@@ -287,19 +287,52 @@ Origines autorisées :
 | compute-badges | ✅ JWT | ❌ | ❌ | ✅ |
 | ai-* (5 fonctions) | ✅ JWT | ❌ | ❌ | Variable |
 
-### 5.1 Race Condition Potentielle
+### 5.1 Race Condition sur le Rate Limiting des Votes
 
-Dans `cast-vote/index.ts` lignes 376-389, la logique `increment_vote_count` :
+Dans `cast-vote/index.ts` lignes 172-200, les vérifications de rate limiting (hourly + burst) utilisent des COUNT queries sans verrouillage pessimiste :
+
+```typescript
+// Deux requêtes concurrentes peuvent lire le même count (49)
+// et toutes deux passer la vérification, résultant en 51 votes/heure
+const { count: hourlyVotes } = await supabaseAdmin
+  .from("votes")
+  .select("id", { count: "exact", head: true })
+  .eq("user_id", user.id)
+  .gte("created_at", oneHourAgo);
+```
+
+**Impact :** Un attaquant envoyant des requêtes simultanées peut dépasser les limites de 50/h et 5/min.
+
+**Recommandation :** Déplacer le rate limiting dans une fonction PostgreSQL atomique avec `SELECT ... FOR UPDATE` ou utiliser un verrou distribué (Redis/Upstash).
+
+### 5.2 Race Condition sur increment_vote_count
+
+Dans `cast-vote/index.ts` lignes 376-389, le fallback read-then-write n'est pas atomique :
+
 ```typescript
 await supabaseAdmin.rpc("increment_vote_count", { _submission_id: submission.id }).catch(async () => {
-  // Fallback: read current count and increment
   const { data: current } = await supabaseAdmin.from("submissions").select("vote_count")...
   await supabaseAdmin.from("submissions").update({ vote_count: (current.vote_count || 0) + 1 })...
 });
 ```
-Le fallback read-then-write n'est pas atomique et peut perdre des votes sous charge. La RPC `increment_vote_count` est probablement atomique (SQL `UPDATE SET vote_count = vote_count + 1`), donc le risque est limité au cas où la RPC échoue.
 
 **Recommandation :** Supprimer le fallback non-atomique ou le remplacer par un retry de la RPC.
+
+### 5.3 delete-account sans Transaction
+
+`delete-account/index.ts` effectue 15+ opérations DELETE séquentielles sans protection transactionnelle. Si une opération échoue à mi-chemin, les données deviennent incohérentes.
+
+**Recommandation :** Encapsuler dans une fonction PostgreSQL avec `BEGIN...COMMIT...ROLLBACK`.
+
+### 5.4 Origin non validé dans create-checkout
+
+```typescript
+const origin = req.headers.get("origin") || "http://localhost:3000";
+```
+
+L'origin est utilisé dans `success_url` et `cancel_url` de Stripe sans validation contre une whitelist. Risque de redirection vers un site malveillant.
+
+**Recommandation :** Valider l'origin contre `ALLOWED_ORIGINS` de la config CORS.
 
 ---
 
@@ -312,7 +345,23 @@ Le fallback read-then-write n'est pas atomique et peut perdre des votes sous cha
 - Radix UI (composants accessibles)
 - Tanstack React Query 5.83
 
-**Aucune dépendance à risque majeur identifiée.** Toutes les bibliothèques sont des projets maintenus et largement adoptés.
+### 6.1 Vulnérabilités npm audit
+
+**15 vulnérabilités détectées** (3 low, 5 moderate, 7 high) :
+
+| Sévérité | Package | Vulnérabilité | Fix |
+|----------|---------|---------------|-----|
+| **HIGH** | react-router-dom ≤6.30.2 | XSS via Open Redirects (GHSA-2w69-qvjg-hvjx) | `npm audit fix` → ≥6.31.0 |
+| **HIGH** | flatted ≤3.4.1 | DoS unbounded recursion + Prototype Pollution | `npm audit fix` → ≥3.5.0 |
+| **HIGH** | rollup 4.0-4.58 | Arbitrary File Write via Path Traversal | `npm audit fix` |
+| **HIGH** | glob 10.2-10.4.5 | Command injection via --cmd | `npm audit fix` |
+| **HIGH** | @tootallnate/once <3.0.1 | Incorrect Control Flow Scoping | `npm audit fix --force` (breaking) |
+| **MOD** | esbuild ≤0.24.2 | Dev server request interception | `npm audit fix` |
+| **MOD** | ajv <6.14.0 | ReDoS with `$data` option | `npm audit fix` |
+| **MOD** | js-yaml 4.0-4.1.0 | Prototype Pollution via merge | `npm audit fix` |
+| **MOD** | minimatch <3.0.5 | ReDoS vulnerability | `npm audit fix` |
+
+**Action immédiate :** Exécuter `npm audit fix` pour résoudre les 12 vulnérabilités non-breaking. Les 3 restantes nécessitent `--force` avec test de régression.
 
 **Recommandation :** Activer Dependabot ou Renovate pour le suivi des mises à jour de sécurité.
 
@@ -320,25 +369,28 @@ Le fallback read-then-write n'est pas atomique et peut perdre des votes sous cha
 
 ## 7. RECOMMANDATIONS PRIORISÉES
 
-### P0 — Critique (avant production)
+### P0 — Critique (cette semaine)
 
-1. **Ajouter des tests de sécurité** : Tests d'intégration pour `cast-vote` (rate limiting, self-voting, période fermée, scores invalides)
-2. **Sanitiser HTML dans ArticleDetail.tsx** : Utiliser DOMPurify pour le `dangerouslySetInnerHTML` sur du contenu potentiellement non contrôlé
+1. **`npm audit fix`** : Corriger les 15 vulnérabilités de dépendances (dont react-router XSS, rollup arbitrary file write)
+2. **Valider l'origin dans create-checkout** : Empêcher les redirections vers des domaines non autorisés
+3. **Sanitiser HTML dans ArticleDetail.tsx** : Utiliser DOMPurify pour le `dangerouslySetInnerHTML` sur du contenu potentiellement non contrôlé
 
 ### P1 — Important (sprint suivant)
 
-3. **Content-Security-Policy header** : Ajouter un CSP restrictif sur le frontend
-4. **Supprimer le fallback non-atomique** dans `cast-vote` pour `increment_vote_count`
-5. **Nettoyer les console.log** en production : Remplacer par un logger structuré avec niveaux (déjà un `logger` dans `src/lib/logger.ts`, l'utiliser partout)
-6. **Images lazy loading** : Ajouter `loading="lazy"` sur les `<img>` hors viewport
+4. **Rate limiting atomique** : Déplacer la vérification de quota dans une fonction PostgreSQL pour éviter les race conditions
+5. **Content-Security-Policy header** : Ajouter un CSP restrictif sur le frontend
+6. **Transaction sur delete-account** : Encapsuler les suppressions en cascade dans une transaction DB
+7. **Supprimer le fallback non-atomique** dans `cast-vote` pour `increment_vote_count`
+8. **Nettoyer les console.log** en production : Remplacer par le logger structuré existant (`src/lib/logger.ts`)
 
 ### P2 — Amélioration (backlog)
 
-7. **Strict-Transport-Security** : Configurer HSTS au niveau CDN/proxy
-8. **Étendre la couverture de tests** : Viser au minimum les pages critiques (vote, auth, checkout)
-9. **Responsive images** : Implémenter srcset pour optimiser le chargement mobile
-10. **Rate limiting sur AI endpoints** : Les 5 fonctions AI n'ont pas de rate limiting explicite
-11. **Monitoring/alerting** : Intégrer un service de monitoring pour les Edge Functions (temps de réponse, erreurs)
+9. **Ajouter des tests de sécurité** : Tests d'intégration pour `cast-vote` (rate limiting, self-voting, période fermée, scores invalides)
+10. **Strict-Transport-Security** : Configurer HSTS au niveau CDN/proxy
+11. **Étendre la couverture de tests** : Viser au minimum les pages critiques (vote, auth, checkout)
+12. **Rate limiting sur AI endpoints** : Les 5 fonctions AI n'ont pas de rate limiting explicite
+13. **Images lazy loading** : Ajouter `loading="lazy"` sur les `<img>` hors viewport
+14. **Monitoring/alerting** : Intégrer un service de monitoring pour les Edge Functions
 
 ---
 
