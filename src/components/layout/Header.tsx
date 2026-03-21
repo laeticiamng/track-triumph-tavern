@@ -48,7 +48,7 @@ export function Header() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
             <Music className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-base sm:text-lg font-bold tracking-tight truncate max-w-[160px] sm:max-w-none">
+          <span className="font-display text-base sm:text-lg font-bold tracking-tight truncate max-w-[200px] sm:max-w-none">
             Weekly Music Awards
           </span>
         </Link>

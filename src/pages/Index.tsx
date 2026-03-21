@@ -9,8 +9,7 @@ import { CategoriesSection } from "@/components/landing/CategoriesSection";
 import { SocialProof } from "@/components/landing/SocialProof";
 import { CTASection } from "@/components/landing/CTASection";
 import { StickyMobileCTA } from "@/components/landing/StickyMobileCTA";
-import { SocialMissionSection } from "@/components/landing/SocialMissionSection";
-import { MentorshipResidencySection } from "@/components/landing/MentorshipResidencySection";
+import { FAQ } from "@/components/landing/FAQ";
 
 const Index = () => {
   return (
@@ -21,12 +20,11 @@ const Index = () => {
       />
       <HeroSection />
       <HowItWorks />
-      <WeeklyPodium />
       <CategoriesSection />
+      <WeeklyPodium />
       <WhyParticipate />
-      <SocialMissionSection />
-      <MentorshipResidencySection />
       <SocialProof />
+      <FAQ />
       <CTASection />
       <StickyMobileCTA />
       <Footer />

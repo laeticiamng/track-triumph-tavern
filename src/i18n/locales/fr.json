@@ -23,7 +23,7 @@
     "badgeAntiFraud": "Anti-fraude IA",
     "badgePrize": "200 € / semaine",
     "badgeInclusion": "Inclusion européenne",
-    "badgeOpenToAll": "Ouvert à tous les artistes",
+    "badgeOpenToAll": "12 catégories musicales",
     "discoverContest": "Découvrir le concours",
     "joinContest": "Rejoindre le concours",
     "createAccount": "Créer mon compte",
@@ -128,9 +128,9 @@
   "cta": {
     "registrationsOpen": "Inscriptions ouvertes",
     "title": "Prêt à rejoindre le concours ?",
-    "subtitle": "Les premières semaines sont décisives — faites-vous un nom dès le début.",
+    "subtitle": "Inscription gratuite, sans carte bancaire. Commencez à voter dès maintenant.",
     "joinContest": "Rejoindre le concours",
-    "viewPlans": "Voir les abonnements",
+    "viewPlans": "Découvrir les avantages Pro",
     "signup30s": "Inscription en 30s",
     "noCommitment": "Sans engagement",
     "freeVote": "Vote gratuit"
@@ -1366,7 +1366,7 @@
     "badge": "Mission Sociale",
     "titlePrefix": "La musique comme vecteur d'",
     "titleHighlight": "inclusion",
-    "subtitle": "Track Triumph s'engage pour la diversité culturelle et l'égalité des chances dans la création musicale européenne.",
+    "subtitle": "Weekly Music Awards s'engage pour la diversité culturelle et l'égalité des chances dans la création musicale européenne.",
     "pillars": {
       "inclusionTitle": "Inclusion Tracks",
       "inclusionDesc": "Une catégorie dédiée aux jeunes de quartiers prioritaires, artistes en situation de handicap et communautés sous-représentées.",
@@ -1400,7 +1400,7 @@
   "culturalExchange": {
     "badge": "Échange Culturel",
     "seo": {
-      "title": "Échange Culturel Européen — Track Triumph",
+      "title": "Échange Culturel Européen — Weekly Music Awards",
       "description": "Compétitions mensuelles thématiques célébrant les traditions musicales européennes. Flamenco, Balkans, Celtique et plus."
     },
     "titlePrefix": "Un continent, mille",
@@ -1433,7 +1433,7 @@
   "mentorMatch": {
     "badge": "Mentor Match",
     "seo": {
-      "title": "Mentor Match — Track Triumph",
+      "title": "Mentor Match — Weekly Music Awards",
       "description": "Programme de mentorat européen. Des musiciens confirmés vous accompagnent par sessions vidéo de 30 minutes."
     },
     "titlePrefix": "Apprenez des",
@@ -1465,7 +1465,7 @@
   "virtualResidency": {
     "badge": "Résidence Virtuelle",
     "seo": {
-      "title": "Virtual Residency — Track Triumph",
+      "title": "Virtual Residency — Weekly Music Awards",
       "description": "Résidence virtuelle européenne : 6 semaines de création collaborative entre 5 artistes de 5 pays de l'UE."
     },
     "titlePrefix": "5 pays, 5 artistes, 1",
@@ -1483,7 +1483,7 @@
   "impact": {
     "badge": "Impact Dashboard",
     "seo": {
-      "title": "Impact Dashboard — Track Triumph",
+      "title": "Impact Dashboard — Weekly Music Awards",
       "description": "Métriques d'impact social : engagement communautaire, diversité géographique et démographique des participants."
     },
     "titlePrefix": "Notre",
