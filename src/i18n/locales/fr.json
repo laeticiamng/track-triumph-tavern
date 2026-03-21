@@ -15,10 +15,10 @@
   },
   "hero": {
     "contestLive": "Concours en cours",
-    "title1": "Le seul concours musical",
-    "titleHighlight": "100% communautaire",
-    "title2": "et méritocratique.",
-    "subtitle": "Soumettez votre musique, recevez des votes communautaires et gagnez jusqu'à 200 € chaque semaine. Pas de jury, pas de passe-droits.",
+    "title1": "Le concours musical où",
+    "titleHighlight": "c'est la communauté",
+    "title2": "qui décide.",
+    "subtitle": "Soumettez votre musique, recevez des votes sur 3 critères et gagnez jusqu'à 200 € chaque semaine. Pas de jury, pas de passe-droits.",
     "badgeFreeVote": "Vote 100% gratuit",
     "badgeAntiFraud": "Anti-fraude IA",
     "badgePrize": "200 € / semaine",
@@ -28,6 +28,7 @@
     "joinContest": "Rejoindre le concours",
     "createAccount": "Créer mon compte",
     "learnMore": "En savoir plus",
+    "howItWorks": "Comment ça marche",
     "meritocratic": "Le classement est 100 % basé sur le talent — aucun paiement n'influence les résultats",
     "voteEndIn": "Fin du vote dans",
     "weekOpen": "ouverte",
@@ -363,7 +364,7 @@
     "close": "Fermer"
   },
   "seo": {
-    "defaultTitle": "Weekly Music Awards — Le seul concours musical 100% communautaire et méritocratique",
+    "defaultTitle": "Weekly Music Awards — Le concours musical où c'est la communauté qui décide",
     "defaultDescription": "Weekly Music Awards est le concours musical hebdomadaire où la communauté écoute, vote et récompense les artistes indépendants. Soumettez votre musique, recevez des votes sur 3 critères (originalité, production, émotion) et gagnez jusqu'à 200 € chaque semaine."
   },
   "pricing": {
@@ -381,7 +382,7 @@
     "free": "Gratuit",
     "perMonth": "/mois",
     "currentPlan": "Plan actuel",
-    "upgrade": "Upgrader",
+    "upgrade": "Passer au plan supérieur",
     "startWinning": "Soumettre mon morceau",
     "createMyAccount": "Créer mon compte",
     "planFree": "Plan Free",
@@ -632,8 +633,8 @@
   },
   "aboutPage": {
     "seoTitle": "À propos",
-    "seoDesc": "Weekly Music Awards est le seul concours musical hebdomadaire 100% communautaire et méritocratique.",
-    "teamBadge": "Équipe de passionnés",
+    "seoDesc": "Weekly Music Awards est le concours musical hebdomadaire où c'est la communauté qui vote et récompense les artistes indépendants.",
+    "teamBadge": "Notre mission",
     "title": "À propos de Weekly Music Awards",
     "intro": "Le seul concours musical hebdomadaire où c'est la communauté qui décide du podium.",
     "introDesc": "Pas de jury opaque, pas de passe-droits : les artistes soumettent, la communauté écoute et vote sur 3 critères (originalité, production, émotion), et les gagnants remportent jusqu'à 200 € chaque semaine.",

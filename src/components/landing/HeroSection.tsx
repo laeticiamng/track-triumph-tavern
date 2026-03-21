@@ -142,9 +142,15 @@ export function HeroSection() {
             </Link>
           </Button>
           <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto" asChild>
-            <Link to={hasContent ? "/auth?tab=signup" : "/about"}>
-              {hasContent ? t("hero.createAccount") : t("hero.learnMore")}
-            </Link>
+            {hasContent ? (
+              <Link to="/auth?tab=signup">
+                {t("hero.createAccount")}
+              </Link>
+            ) : (
+              <a href="#how-it-works" onClick={(e) => { e.preventDefault(); document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" }); }}>
+                {t("hero.howItWorks")}
+              </a>
+            )}
           </Button>
         </motion.div>
 

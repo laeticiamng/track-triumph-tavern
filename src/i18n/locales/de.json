@@ -15,10 +15,10 @@
   },
   "hero": {
     "contestLive": "Wettbewerb läuft",
-    "title1": "Der einzige Musikwettbewerb",
-    "titleHighlight": "100% Community-gesteuert",
-    "title2": "und leistungsorientiert.",
-    "subtitle": "Reichen Sie Ihre Musik ein, erhalten Sie Community-Stimmen und gewinnen Sie jede Woche bis zu 200 €. Keine Jury, keine Bevorzugung.",
+    "title1": "Der Musikwettbewerb, bei dem",
+    "titleHighlight": "die Community",
+    "title2": "entscheidet.",
+    "subtitle": "Reichen Sie Ihre Musik ein, werden Sie nach 3 Kriterien bewertet und gewinnen Sie bis zu 200 € pro Woche. Keine Jury, keine Bevorzugung.",
     "badgeFreeVote": "100% kostenlose Abstimmung",
     "badgeAntiFraud": "KI-Anti-Betrug",
     "badgePrize": "200 € / Woche",
@@ -28,6 +28,7 @@
     "joinContest": "Am Wettbewerb teilnehmen",
     "createAccount": "Konto erstellen",
     "learnMore": "Mehr erfahren",
+    "howItWorks": "So funktioniert's",
     "meritocratic": "Das Ranking ist 100% leistungsorientiert — keine Zahlung beeinflusst die Ergebnisse",
     "voteEndIn": "Abstimmung endet in",
     "weekOpen": "offen",
@@ -363,7 +364,7 @@
     "close": "Schließen"
   },
   "seo": {
-    "defaultTitle": "Weekly Music Awards — Der einzige 100% Community-gesteuerte und leistungsorientierte Musikwettbewerb",
+    "defaultTitle": "Weekly Music Awards — Der Musikwettbewerb, bei dem die Community entscheidet",
     "defaultDescription": "Weekly Music Awards ist der wöchentliche Musikwettbewerb, bei dem die Community zuhört, abstimmt und unabhängige Künstler belohnt. Reichen Sie Ihre Musik ein, werden Sie nach 3 Kriterien bewertet und gewinnen Sie jede Woche bis zu 200 €."
   },
   "pricing": {
@@ -633,7 +634,7 @@
   "aboutPage": {
     "seoTitle": "Über uns",
     "seoDesc": "Weekly Music Awards ist der einzige 100% Community-gesteuerte und leistungsorientierte wöchentliche Musikwettbewerb.",
-    "teamBadge": "Team von Enthusiasten",
+    "teamBadge": "Unsere Mission",
     "title": "Über Weekly Music Awards",
     "intro": "Der einzige wöchentliche Musikwettbewerb, bei dem die Community über das Podium entscheidet.",
     "introDesc": "Keine undurchsichtige Jury, keine Bevorzugung: Künstler reichen ein, die Community hört zu und stimmt nach 3 Kriterien ab, und die Gewinner erhalten bis zu 200 € pro Woche.",

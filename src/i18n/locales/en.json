@@ -15,10 +15,10 @@
   },
   "hero": {
     "contestLive": "Contest live",
-    "title1": "The only music contest",
-    "titleHighlight": "100% community-driven",
-    "title2": "and meritocratic.",
-    "subtitle": "Submit your music, get community votes and win up to €200 every week. No jury, no favoritism.",
+    "title1": "The music contest where",
+    "titleHighlight": "the community",
+    "title2": "decides.",
+    "subtitle": "Submit your music, get rated on 3 criteria and win up to €200 every week. No jury, no favoritism.",
     "badgeFreeVote": "100% free voting",
     "badgeAntiFraud": "AI anti-fraud",
     "badgePrize": "€200 / week",
@@ -28,6 +28,7 @@
     "joinContest": "Join the contest",
     "createAccount": "Create my account",
     "learnMore": "Learn more",
+    "howItWorks": "How it works",
     "meritocratic": "Rankings are 100% meritocratic — no payment influences results",
     "voteEndIn": "Voting ends in",
     "weekOpen": "open",
@@ -363,7 +364,7 @@
     "close": "Close"
   },
   "seo": {
-    "defaultTitle": "Weekly Music Awards — The only 100% community-driven and meritocratic music contest",
+    "defaultTitle": "Weekly Music Awards — The music contest where the community decides",
     "defaultDescription": "Weekly Music Awards is the weekly music contest where the community listens, votes, and rewards independent artists. Submit your music, get rated on 3 criteria (originality, production, emotion), and win up to €200 every week."
   },
   "pricing": {
@@ -633,7 +634,7 @@
   "aboutPage": {
     "seoTitle": "About",
     "seoDesc": "Weekly Music Awards is the only 100% community-driven and meritocratic weekly music contest.",
-    "teamBadge": "Team of enthusiasts",
+    "teamBadge": "Our mission",
     "title": "About Weekly Music Awards",
     "intro": "The only weekly music contest where the community decides the podium.",
     "introDesc": "No opaque jury, no favoritism: artists submit, the community listens and votes on 3 criteria (originality, production, emotion), and winners earn up to €200 every week.",
