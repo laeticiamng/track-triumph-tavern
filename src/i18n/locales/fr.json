@@ -303,7 +303,8 @@
     "active": "ACTIVE",
     "pending": "EN ATTENTE",
     "inPrizes": "{{amount}}€ en prix",
-    "fallback": "Récompenses alternatives : visibilité, accompagnement, badges"
+    "fallback": "Récompenses alternatives : visibilité, accompagnement, badges",
+    "fundedBy": "Financé par les abonnements Elite — 100 % redistribué aux artistes"
   },
   "layout": {
     "skipToContent": "Aller au contenu principal"
@@ -440,6 +441,26 @@
     "whyEliteVisibilityDesc": "Votre profil personnalisé et votre bannière personnalisée vous font sortir du lot.",
     "whyEliteSubmission": "Soumission hebdomadaire",
     "whyEliteSubmissionDesc": "Participez chaque semaine au concours et développez votre audience régulièrement.",
+    "testimonials": [
+      {
+        "quote": "Le retour IA sur mon mix m'a fait gagner des heures de travail. J'ai décroché mon premier podium dès la 3e semaine.",
+        "initials": "L.M.",
+        "name": "L. Moreau",
+        "role": "Productrice electro — Paris"
+      },
+      {
+        "quote": "Les stats détaillées m'ont permis de comprendre quel style plaisait à la communauté. Mon taux de votes a doublé.",
+        "initials": "T.K.",
+        "name": "T. Kowalski",
+        "role": "Beatmaker — Varsovie"
+      },
+      {
+        "quote": "Pouvoir soumettre chaque semaine sans limite, c'est ce qui fait la différence. En 2 mois, j'ai trouvé mon public.",
+        "initials": "S.R.",
+        "name": "S. Rossi",
+        "role": "Auteure-compositrice — Milan"
+      }
+    ],
     "pricingFaqTitle": "Questions fréquentes",
     "pricingFaqQ1": "Est-ce que l'abonnement influence le classement ?",
     "pricingFaqA1": "Non, jamais. Le classement est 100 % basé sur les votes de la communauté. L'abonnement vous donne accès à des outils (IA, stats, soumission) mais n'affecte pas votre position.",
@@ -1343,23 +1364,6 @@
     "ctaInclusion": "Inclusion Tracks",
     "comingSoon": "Ces programmes sont en cours de développement et seront bientôt disponibles."
   },
-  "mentorship": {
-    "badge": "Programmes d'accompagnement",
-    "titlePrefix": "Grandir ensemble, créer au-delà des",
-    "titleHighlight": "frontières",
-    "subtitle": "Mentorat individuel et résidences virtuelles pour connecter les talents émergents à travers l'Europe.",
-    "programs": {
-      "mentorBadge": "Mentorat",
-      "mentorTitle": "Mentor Match",
-      "mentorDesc": "Des musiciens européens confirmés vous accompagnent : sessions vidéo de 30 min, feedback personnalisé et conseils de carrière.",
-      "mentorCta": "Trouver un mentor",
-      "residencyBadge": "Résidence",
-      "residencyTitle": "Virtual Residency",
-      "residencyDesc": "6 semaines de création collaborative : 5 artistes de 5 pays de l'UE co-créent un morceau présenté lors d'un événement culturel européen.",
-      "residencyCta": "Découvrir le programme"
-    },
-    "comingSoon": "Ces programmes sont en cours de développement et seront bientôt disponibles."
-  },
   "culturalExchange": {
     "badge": "Échange Culturel",
     "seo": {
@@ -1392,56 +1396,6 @@
       "carols": "Traditions vocales de Noël de toute l'Europe — du gospel au chant choral sacré."
     },
     "cta": "Participer au concours du mois"
-  },
-  "mentorMatch": {
-    "badge": "Mentor Match",
-    "seo": {
-      "title": "Mentor Match — Weekly Music Awards",
-      "description": "Programme de mentorat européen. Des musiciens confirmés vous accompagnent par sessions vidéo de 30 minutes."
-    },
-    "titlePrefix": "Apprenez des",
-    "titleHighlight": "meilleurs",
-    "subtitle": "Des musiciens européens confirmés partagent leur expertise lors de sessions vidéo individuelles de 30 minutes.",
-    "comingSoon": "Programme en préparation — les inscriptions ouvriront prochainement. Les mentors présentés ci-dessous sont des exemples illustratifs.",
-    "ourMentors": "Nos mentors",
-    "fictitious": "Exemples fictifs",
-    "requestSession": "Demander une session (bientôt)",
-    "steps": {
-      "choose": "Choisissez un mentor",
-      "chooseDesc": "Parcourez les profils selon votre genre et vos objectifs.",
-      "book": "Réservez une session",
-      "bookDesc": "Créneaux de 30 minutes, flexibles selon les fuseaux horaires.",
-      "exchange": "Échangez en vidéo",
-      "exchangeDesc": "Feedback personnalisé sur votre production, voix ou composition.",
-      "progress": "Progressez",
-      "progressDesc": "Recevez un rapport de session et des recommandations d'exercices."
-    },
-    "mentors": {
-      "elena": "Elena Vasquez", "elenaCountry": "Espagne 🇪🇸", "elenaSpeciality": "Flamenco / Fusion",
-      "lars": "Lars Eriksson", "larsCountry": "Suède 🇸🇪", "larsSpeciality": "Electronic / Ambient",
-      "chiara": "Chiara Bianchi", "chiaraCountry": "Italie 🇮🇹", "chiaraSpeciality": "Jazz / Neo-Soul",
-      "tomasz": "Tomasz Nowak", "tomaszCountry": "Pologne 🇵🇱", "tomaszSpeciality": "Hip-Hop / Production",
-      "marie": "Marie Dupont", "marieCountry": "France 🇫🇷", "marieSpeciality": "Chanson / Pop",
-      "dimitris": "Dimitris Papadopoulos", "dimitrisCountry": "Grèce 🇬🇷", "dimitrisSpeciality": "World Music / Rebetiko"
-    }
-  },
-  "virtualResidency": {
-    "badge": "Résidence Virtuelle",
-    "seo": {
-      "title": "Virtual Residency — Weekly Music Awards",
-      "description": "Résidence virtuelle européenne : 6 semaines de création collaborative entre 5 artistes de 5 pays de l'UE."
-    },
-    "titlePrefix": "5 pays, 5 artistes, 1",
-    "titleHighlight": "morceau",
-    "subtitle": "Une résidence créative virtuelle de 6 semaines où des talents de toute l'Europe collaborent pour produire un morceau présenté lors d'un événement culturel européen.",
-    "comingSoon": "Programme en préparation — les candidatures pour la première cohorte ouvriront prochainement.",
-    "apply": "Postuler pour la prochaine cohorte (bientôt)",
-    "timeline": {
-      "week1": "Semaine 1", "title1": "Rencontre & Inspiration", "desc1": "Les 5 artistes se découvrent, partagent leurs influences et choisissent une direction créative.",
-      "week2": "Semaine 2-3", "title2": "Exploration & Esquisses", "desc2": "Chacun contribue des éléments musicaux issus de sa tradition culturelle.",
-      "week3": "Semaine 4-5", "title3": "Production Collaborative", "desc3": "Sessions de co-création en ligne, mixage et arrangements collectifs.",
-      "week4": "Semaine 6", "title4": "Présentation", "desc4": "Le morceau co-créé est présenté lors d'un événement culturel européen en ligne."
-    }
   },
   "impact": {
     "badge": "Impact Dashboard",

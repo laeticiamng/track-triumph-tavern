@@ -303,7 +303,8 @@
     "active": "ACTIVE",
     "pending": "PENDING",
     "inPrizes": "€{{amount}} in prizes",
-    "fallback": "Alternative rewards: visibility, coaching, badges"
+    "fallback": "Alternative rewards: visibility, coaching, badges",
+    "fundedBy": "Funded by Elite subscriptions — 100% redistributed to artists"
   },
   "layout": {
     "skipToContent": "Skip to main content"
@@ -440,6 +441,26 @@
     "whyEliteVisibilityDesc": "Your custom profile and banner make you stand out from the crowd.",
     "whyEliteSubmission": "Weekly submission",
     "whyEliteSubmissionDesc": "Participate every week in the contest and grow your audience steadily.",
+    "testimonials": [
+      {
+        "quote": "The AI feedback on my mix saved me hours of work. I landed my first podium by the 3rd week.",
+        "initials": "L.M.",
+        "name": "L. Moreau",
+        "role": "Electro producer — Paris"
+      },
+      {
+        "quote": "The detailed stats helped me understand which style resonated with the community. My vote rate doubled.",
+        "initials": "T.K.",
+        "name": "T. Kowalski",
+        "role": "Beatmaker — Warsaw"
+      },
+      {
+        "quote": "Being able to submit every week with no limits is what makes the difference. In 2 months, I found my audience.",
+        "initials": "S.R.",
+        "name": "S. Rossi",
+        "role": "Singer-songwriter — Milan"
+      }
+    ],
     "pricingFaqTitle": "Frequently asked questions",
     "pricingFaqQ1": "Does the subscription influence rankings?",
     "pricingFaqA1": "Never. Rankings are 100% based on community votes. The subscription gives you access to tools (AI, stats, submission) but doesn't affect your position.",
@@ -1343,23 +1364,6 @@
     "ctaInclusion": "Inclusion Tracks",
     "comingSoon": "These programs are under development and will be available soon."
   },
-  "mentorship": {
-    "badge": "Support Programs",
-    "titlePrefix": "Grow together, create beyond",
-    "titleHighlight": "borders",
-    "subtitle": "Individual mentoring and virtual residencies to connect emerging talent across Europe.",
-    "programs": {
-      "mentorBadge": "Mentoring",
-      "mentorTitle": "Mentor Match",
-      "mentorDesc": "Established European musicians guide you: 30-min video sessions, personalized feedback and career advice.",
-      "mentorCta": "Find a mentor",
-      "residencyBadge": "Residency",
-      "residencyTitle": "Virtual Residency",
-      "residencyDesc": "6 weeks of collaborative creation: 5 artists from 5 EU countries co-create a track presented at a European cultural event.",
-      "residencyCta": "Discover the program"
-    },
-    "comingSoon": "These programs are under development and will be available soon."
-  },
   "culturalExchange": {
     "badge": "Cultural Exchange",
     "seo": {
@@ -1392,56 +1396,6 @@
       "carols": "Christmas vocal traditions from across Europe — from gospel to sacred choral singing."
     },
     "cta": "Join this month's contest"
-  },
-  "mentorMatch": {
-    "badge": "Mentor Match",
-    "seo": {
-      "title": "Mentor Match — Weekly Music Awards",
-      "description": "European mentoring program. Established musicians guide you through 30-minute video sessions."
-    },
-    "titlePrefix": "Learn from the",
-    "titleHighlight": "best",
-    "subtitle": "Established European musicians share their expertise during individual 30-minute video sessions.",
-    "comingSoon": "Program in preparation — registrations will open soon. The mentors shown below are illustrative examples.",
-    "ourMentors": "Our mentors",
-    "fictitious": "Fictitious examples",
-    "requestSession": "Request a session (coming soon)",
-    "steps": {
-      "choose": "Choose a mentor",
-      "chooseDesc": "Browse profiles based on your genre and goals.",
-      "book": "Book a session",
-      "bookDesc": "30-minute slots, flexible across time zones.",
-      "exchange": "Exchange via video",
-      "exchangeDesc": "Personalized feedback on your production, vocals or composition.",
-      "progress": "Progress",
-      "progressDesc": "Receive a session report and exercise recommendations."
-    },
-    "mentors": {
-      "elena": "Elena Vasquez", "elenaCountry": "Spain 🇪🇸", "elenaSpeciality": "Flamenco / Fusion",
-      "lars": "Lars Eriksson", "larsCountry": "Sweden 🇸🇪", "larsSpeciality": "Electronic / Ambient",
-      "chiara": "Chiara Bianchi", "chiaraCountry": "Italy 🇮🇹", "chiaraSpeciality": "Jazz / Neo-Soul",
-      "tomasz": "Tomasz Nowak", "tomaszCountry": "Poland 🇵🇱", "tomaszSpeciality": "Hip-Hop / Production",
-      "marie": "Marie Dupont", "marieCountry": "France 🇫🇷", "marieSpeciality": "Chanson / Pop",
-      "dimitris": "Dimitris Papadopoulos", "dimitrisCountry": "Greece 🇬🇷", "dimitrisSpeciality": "World Music / Rebetiko"
-    }
-  },
-  "virtualResidency": {
-    "badge": "Virtual Residency",
-    "seo": {
-      "title": "Virtual Residency — Weekly Music Awards",
-      "description": "European virtual residency: 6 weeks of collaborative creation between 5 artists from 5 EU countries."
-    },
-    "titlePrefix": "5 countries, 5 artists, 1",
-    "titleHighlight": "track",
-    "subtitle": "A 6-week virtual creative residency where talents from across Europe collaborate to produce a track presented at a European cultural event.",
-    "comingSoon": "Program in preparation — applications for the first cohort will open soon.",
-    "apply": "Apply for the next cohort (coming soon)",
-    "timeline": {
-      "week1": "Week 1", "title1": "Meeting & Inspiration", "desc1": "The 5 artists discover each other, share their influences and choose a creative direction.",
-      "week2": "Week 2-3", "title2": "Exploration & Sketches", "desc2": "Each contributes musical elements from their cultural tradition.",
-      "week3": "Week 4-5", "title3": "Collaborative Production", "desc3": "Online co-creation sessions, collective mixing and arrangements.",
-      "week4": "Week 6", "title4": "Presentation", "desc4": "The co-created track is presented at an online European cultural event."
-    }
   },
   "impact": {
     "badge": "Impact Dashboard",

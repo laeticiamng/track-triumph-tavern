@@ -49,8 +49,6 @@ const Articles = lazy(() => import("./pages/Articles"));
 const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const CulturalExchange = lazy(() => import("./pages/CulturalExchange"));
-const MentorMatch = lazy(() => import("./pages/MentorMatch"));
-const VirtualResidency = lazy(() => import("./pages/VirtualResidency"));
 const ImpactDashboard = lazy(() => import("./pages/ImpactDashboard"));
 const Sitemap = lazy(() => import("./components/seo/Sitemap"));
 
@@ -114,8 +112,9 @@ const App = () => (
             <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cultural-exchange" element={<CulturalExchange />} />
-            <Route path="/mentor-match" element={<MentorMatch />} />
-            <Route path="/virtual-residency" element={<VirtualResidency />} />
+            {/* Mentor Match & Virtual Residency removed — redirect to explore until programs launch */}
+            <Route path="/mentor-match" element={<Navigate to="/explore" replace />} />
+            <Route path="/virtual-residency" element={<Navigate to="/explore" replace />} />
             <Route path="/impact" element={<ImpactDashboard />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/stats/artist/:id" element={<ArtistStats />} />

@@ -41,10 +41,13 @@ export function RewardPoolBanner() {
               </Badge>
             </div>
             {isActive ? (
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">{t("rewardPool.inPrizes", { amount: totalPrize })}</span> — 
-                🥇 {pool.top1_amount_cents / 100}€ · 🥈 {pool.top2_amount_cents / 100}€ · 🥉 {pool.top3_amount_cents / 100}€
-              </p>
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">{t("rewardPool.inPrizes", { amount: totalPrize })}</span> —
+                  🥇 {pool.top1_amount_cents / 100}€ · 🥈 {pool.top2_amount_cents / 100}€ · 🥉 {pool.top3_amount_cents / 100}€
+                </p>
+                <p className="text-xs text-muted-foreground/70 mt-1">{t("rewardPool.fundedBy")}</p>
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground">{pool.fallback_label || t("rewardPool.fallback")}</p>
             )}
