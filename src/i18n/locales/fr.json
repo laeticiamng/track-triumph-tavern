@@ -65,34 +65,6 @@
     "badges": "Badges & classements",
     "badgesDesc": "Affichez vos résultats et vos badges sur votre profil artiste pour crédibiliser votre parcours."
   },
-  "whyUs": {
-    "badge": "Nos engagements",
-    "title": "Pourquoi",
-    "subtitle": "Un concours conçu pour mettre en avant le talent, pas le portefeuille.",
-    "merit": "100 % méritocratique",
-    "meritDesc": "Le classement repose uniquement sur les votes de la communauté. Aucun paiement n'influence les résultats.",
-    "antiFraud": "Anti-fraude IA",
-    "antiFraudDesc": "Chaque vote est analysé par notre système d'intelligence artificielle pour garantir l'intégrité du concours.",
-    "rewards": "Récompenses réelles",
-    "rewardsDesc": "200 € pour le 1er, 100 € pour le 2e, 50 € pour le 3e — chaque semaine, financés par les abonnements de la communauté.",
-    "community": "Communauté engagée",
-    "communityDesc": "Rejoignez des artistes et des passionnés de musique qui s'écoutent, se votent et se soutiennent."
-  },
-  "artistBenefits": {
-    "badge": "Pour les artistes",
-    "title": "Ce que vous gagnez en participant",
-    "subtitle": "Un concours pensé pour valoriser les artistes, pas seulement les classer.",
-    "prize": "Jusqu'à 200 € par semaine",
-    "prizeDesc": "Le podium est récompensé chaque semaine : 200 €, 100 € et 50 € pour les trois premiers.",
-    "visibility": "Visibilité garantie",
-    "visibilityDesc": "Les gagnants sont mis en avant sur la page d'accueil et la page Explore.",
-    "feedback": "Feedback détaillé",
-    "feedbackDesc": "Chaque vote évalue votre morceau sur 3 critères : émotion, originalité et production.",
-    "communityTitle": "Communauté de passionnés",
-    "communityDesc": "Faites-vous connaître auprès d'une audience qui écoute et note votre musique.",
-    "badges": "Badges & classements",
-    "badgesDesc": "Affichez vos résultats et vos badges sur votre profil artiste pour crédibiliser votre parcours."
-  },
   "categories": {
     "badge": "Tous les styles",
     "title": "{{count}} catégories musicales",
@@ -146,12 +118,11 @@
   },
   "footer": {
     "tagline": "Le concours musical hebdomadaire où la communauté vote pour les meilleurs artistes indépendants.",
-    "beta": "",
     "navigation": "Navigation",
     "explore": "Explorer",
     "ranking": "Classement",
     "hallOfFame": "Palmarès",
-    "subscriptions": "Abonnements",
+    "subscriptions": "Tarifs",
     "faq": "FAQ",
     "articles": "Articles",
     "about": "À propos",
@@ -1356,13 +1327,6 @@
     "freeVoting": "Vote 100% gratuit",
     "noCard": "Sans carte bancaire"
   },
-  "footer2": {
-    "programs": "Programmes",
-    "culturalExchange": "Échange Culturel",
-    "mentorMatch": "Mentor Match",
-    "virtualResidency": "Résidence Virtuelle",
-    "impact": "Tableau d'Impact"
-  },
   "socialMission": {
     "badge": "Mission Sociale",
     "titlePrefix": "La musique comme vecteur d'",
@@ -1510,19 +1474,5 @@
       "belgium": "Belgique",
       "portugal": "Portugal"
     }
-  },
-  "programsOverview": {
-    "title": "Nos 5 programmes engagés",
-    "subtitle": "Bien plus qu'un concours : une plateforme au service de l'inclusion et de la diversité culturelle européenne.",
-    "inclusionTitle": "Inclusion Tracks",
-    "inclusionDesc": "Catégorie dédiée aux artistes issus de milieux sous-représentés, avec Prix Impact Social.",
-    "exchangeTitle": "Échange Culturel",
-    "exchangeDesc": "Compétitions mensuelles thématiques intégrant les traditions musicales européennes.",
-    "mentorTitle": "Mentor Match",
-    "mentorDesc": "Sessions de mentorat vidéo avec des musiciens européens confirmés.",
-    "residencyTitle": "Résidence Virtuelle",
-    "residencyDesc": "Collaboration créative de 6 semaines entre 5 artistes de 5 pays de l'UE.",
-    "impactTitle": "Impact Dashboard",
-    "impactDesc": "Métriques d'engagement communautaire pour les partenaires institutionnels."
   }
 }

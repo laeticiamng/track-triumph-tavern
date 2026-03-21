@@ -65,34 +65,6 @@
     "badges": "Badges & rankings",
     "badgesDesc": "Display your results and badges on your artist profile to build credibility."
   },
-  "whyUs": {
-    "badge": "Our commitments",
-    "title": "Why",
-    "subtitle": "A contest designed to highlight talent, not wallets.",
-    "merit": "100% meritocratic",
-    "meritDesc": "Rankings are based solely on community votes. No payment influences results.",
-    "antiFraud": "AI anti-fraud",
-    "antiFraudDesc": "Every vote is analyzed by our AI system to ensure contest integrity.",
-    "rewards": "Real rewards",
-    "rewardsDesc": "€200 for 1st, €100 for 2nd, €50 for 3rd — every week, funded by community subscriptions.",
-    "community": "Engaged community",
-    "communityDesc": "Join artists and music lovers who listen, vote, and support each other."
-  },
-  "artistBenefits": {
-    "badge": "For artists",
-    "title": "What you gain by participating",
-    "subtitle": "A contest designed to value artists, not just rank them.",
-    "prize": "Up to €200 per week",
-    "prizeDesc": "The podium is rewarded every week: €200, €100, and €50 for the top three.",
-    "visibility": "Guaranteed visibility",
-    "visibilityDesc": "Winners are featured on the homepage and Explore page.",
-    "feedback": "Detailed feedback",
-    "feedbackDesc": "Each vote rates your track on 3 criteria: emotion, originality, and production.",
-    "communityTitle": "Community of enthusiasts",
-    "communityDesc": "Get discovered by an audience that listens to and rates your music.",
-    "badges": "Badges & rankings",
-    "badgesDesc": "Display your results and badges on your artist profile to build credibility."
-  },
   "categories": {
     "badge": "All styles",
     "title": "{{count}} music categories",
@@ -146,12 +118,11 @@
   },
   "footer": {
     "tagline": "The weekly music contest where the community votes for the best independent artists.",
-    "beta": "",
     "navigation": "Navigation",
     "explore": "Explore",
     "ranking": "Rankings",
     "hallOfFame": "Hall of Fame",
-    "subscriptions": "Plans",
+    "subscriptions": "Pricing",
     "faq": "FAQ",
     "articles": "Articles",
     "about": "About",
@@ -1356,13 +1327,6 @@
     "freeVoting": "100% free voting",
     "noCard": "No credit card required"
   },
-  "footer2": {
-    "programs": "Programs",
-    "culturalExchange": "Cultural Exchange",
-    "mentorMatch": "Mentor Match",
-    "virtualResidency": "Virtual Residency",
-    "impact": "Impact Dashboard"
-  },
   "socialMission": {
     "badge": "Social Mission",
     "titlePrefix": "Music as a vehicle for ",
@@ -1510,19 +1474,5 @@
       "belgium": "Belgium",
       "portugal": "Portugal"
     }
-  },
-  "programsOverview": {
-    "title": "Our 5 Engaged Programs",
-    "subtitle": "More than a contest: a platform for inclusion and European cultural diversity.",
-    "inclusionTitle": "Inclusion Tracks",
-    "inclusionDesc": "Category for artists from underrepresented backgrounds, with a Social Impact Prize.",
-    "exchangeTitle": "Cultural Exchange",
-    "exchangeDesc": "Monthly themed competitions integrating European musical traditions.",
-    "mentorTitle": "Mentor Match",
-    "mentorDesc": "Video mentoring sessions with established European musicians.",
-    "residencyTitle": "Virtual Residency",
-    "residencyDesc": "6-week creative collaboration between 5 artists from 5 EU countries.",
-    "impactTitle": "Impact Dashboard",
-    "impactDesc": "Community engagement metrics for institutional partners."
   }
 }
