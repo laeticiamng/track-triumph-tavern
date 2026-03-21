@@ -1,9 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { createLogger } from "../_shared/logger.ts";
 
+const log = createLogger("delete-account");
 const logStep = (step: string, details?: Record<string, unknown>) => {
-  console.log(`[DELETE-ACCOUNT] ${step}${details ? ` - ${JSON.stringify(details)}` : ''}`);
+  log.info(step, details);
 };
 
 serve(async (req) => {
@@ -34,37 +36,15 @@ serve(async (req) => {
     const userId = user.id;
     logStep("User authenticated", { userId });
 
-    // Delete user data in order (respecting foreign keys)
-    // 1. Delete votes & vote events
-    const { data: votes } = await supabaseClient.from("votes").select("id").eq("user_id", userId);
-    if (votes && votes.length > 0) {
-      const voteIds = votes.map(v => v.id);
-      await supabaseClient.from("vote_events").delete().in("vote_id", voteIds);
-      await supabaseClient.from("votes").delete().eq("user_id", userId);
-    }
+    // Delete all user data atomically in a single DB transaction
+    const { error: rpcError } = await supabaseClient.rpc("delete_user_data", {
+      _user_id: userId,
+    });
+    if (rpcError) throw new Error(`Failed to delete user data: ${rpcError.message}`);
 
-    // 2. Delete submissions
-    await supabaseClient.from("submissions").delete().eq("user_id", userId);
+    logStep("User data deleted", { userId });
 
-    // 3. Delete social data
-    await supabaseClient.from("follows").delete().eq("follower_id", userId);
-    await supabaseClient.from("follows").delete().eq("following_id", userId);
-    await supabaseClient.from("activities").delete().eq("user_id", userId);
-    await supabaseClient.from("notifications").delete().eq("user_id", userId);
-    await supabaseClient.from("push_subscriptions").delete().eq("user_id", userId);
-
-    // 4. Delete gamification data
-    await supabaseClient.from("weekly_badges").delete().eq("user_id", userId);
-    await supabaseClient.from("vote_streaks").delete().eq("user_id", userId);
-
-    // 5. Delete analytics
-    await supabaseClient.from("analytics_events").delete().eq("user_id", userId);
-
-    // 6. Delete profile & role
-    await supabaseClient.from("user_roles").delete().eq("user_id", userId);
-    await supabaseClient.from("profiles").delete().eq("id", userId);
-
-    // 7. Delete auth user
+    // Delete auth user (requires admin API, cannot be done inside the RPC)
     const { error: deleteError } = await supabaseClient.auth.admin.deleteUser(userId);
     if (deleteError) throw new Error(`Failed to delete auth user: ${deleteError.message}`);
 

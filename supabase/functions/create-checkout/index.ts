@@ -2,9 +2,11 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getCorsHeaders } from "../_shared/cors.ts";
+import { createLogger } from "../_shared/logger.ts";
 
+const log = createLogger("create-checkout");
 const logStep = (step: string, details?: Record<string, unknown>) => {
-  console.log(`[CREATE-CHECKOUT] ${step}${details ? ` - ${JSON.stringify(details)}` : ''}`);
+  log.info(step, details);
 };
 
 serve(async (req) => {
@@ -56,7 +58,19 @@ serve(async (req) => {
       }
     }
 
-    const origin = req.headers.get("origin") || "http://localhost:3000";
+    // Validate origin against allowlist to prevent open redirect
+    const ALLOWED_CHECKOUT_ORIGINS = [
+      "https://weeklymusicawards.com",
+      "https://www.weeklymusicawards.com",
+      "https://track-triumph-tavern.lovable.app",
+    ];
+    const rawOrigin = req.headers.get("origin") || "";
+    const isLovablePreview =
+      rawOrigin.endsWith(".lovableproject.com") ||
+      rawOrigin.endsWith(".lovable.app");
+    const origin = ALLOWED_CHECKOUT_ORIGINS.includes(rawOrigin) || isLovablePreview
+      ? rawOrigin
+      : ALLOWED_CHECKOUT_ORIGINS[0];
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
