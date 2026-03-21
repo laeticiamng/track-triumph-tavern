@@ -1,4 +1,4 @@
-import { Crown, Mic, TrendingUp, MessageSquareHeart, BarChart3, Sparkles } from "lucide-react";
+import { Crown, Mic, TrendingUp, MessageSquareHeart, BarChart3, Sparkles, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
@@ -55,7 +55,32 @@ export function WhyEliteSection() {
           ))}
         </div>
 
-        {/* Testimonial removed — no real testimonial available yet */}
+        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <motion.blockquote
+              key={i}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.4 }}
+              className="rounded-xl border border-amber-500/10 bg-amber-500/5 p-5 flex flex-col"
+            >
+              <Quote className="h-4 w-4 text-amber-500/40 mb-2" />
+              <p className="text-sm text-muted-foreground italic leading-relaxed flex-1">
+                {t(`pricing.testimonials.${i}.quote`)}
+              </p>
+              <footer className="mt-3 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-xs font-bold text-amber-600 dark:text-amber-400">
+                  {t(`pricing.testimonials.${i}.initials`)}
+                </div>
+                <div>
+                  <p className="text-xs font-medium">{t(`pricing.testimonials.${i}.name`)}</p>
+                  <p className="text-xs text-muted-foreground">{t(`pricing.testimonials.${i}.role`)}</p>
+                </div>
+              </footer>
+            </motion.blockquote>
+          ))}
+        </div>
       </div>
     </section>
   );

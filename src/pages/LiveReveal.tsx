@@ -156,7 +156,7 @@ function CategoryReveal({
           <span className="font-display text-lg text-muted-foreground/50">{category.name}</span>
         </div>
         <p className="mt-2 text-xs text-muted-foreground/30">
-          {t("reveal.waiting", "En attente du reveal...")}
+          {t("reveal.waiting", "En attente du dévoilement...")}
         </p>
       </motion.div>
     );
@@ -404,7 +404,7 @@ const LiveReveal = () => {
   return (
     <Layout>
       <SEOHead
-        title={t("reveal.seoTitle", "Reveal en direct — Weekly Music Awards")}
+        title={t("reveal.seoTitle", "Dévoilement en direct — Weekly Music Awards")}
         description={t("reveal.seoDesc", "Assistez au dévoilement en direct des résultats du concours musical hebdomadaire.")}
         url="/reveal"
       />
@@ -431,7 +431,7 @@ const LiveReveal = () => {
           </motion.div>
           <h1 className="font-display text-3xl font-black sm:text-4xl md:text-5xl">
             <span className="text-gradient">
-              {t("reveal.title", "Reveal des résultats")}
+              {t("reveal.title", "Dévoilement des résultats")}
             </span>
           </h1>
           <p className="mt-3 text-lg text-muted-foreground max-w-lg mx-auto">
@@ -468,7 +468,7 @@ const LiveReveal = () => {
               />
             </div>
             <h2 className="mt-6 font-display text-2xl font-bold">
-              {t("reveal.notYet", "Le reveal n'a pas encore commencé")}
+              {t("reveal.notYet", "Le dévoilement n'a pas encore commencé")}
             </h2>
             <p className="mt-2 text-muted-foreground max-w-md">
               {t("reveal.notYetDesc", "Les résultats seront révélés dès que la période de vote sera terminée. Revenez bientôt !")}
@@ -505,7 +505,7 @@ const LiveReveal = () => {
                   <Play className="h-12 w-12 ml-1" />
                 </motion.button>
                 <p className="mt-4 font-display text-lg font-semibold">
-                  {t("reveal.start", "Lancer le reveal")}
+                  {t("reveal.start", "Lancer le dévoilement")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {categoriesWithWinners.length} {t("reveal.categoriesToReveal", "catégories à révéler")}
@@ -616,7 +616,7 @@ const LiveReveal = () => {
                               </Badge>
                             )}
                             <Badge className="bg-primary text-primary-foreground font-display text-base px-3">
-                              {grandWinner.vote_count} {grandWinner.vote_count !== 1 ? "votes" : "vote"}
+                              {grandWinner.vote_count} {grandWinner.vote_count !== 1 ? t("hallOfFame.votePlural") : t("hallOfFame.voteSingular")}
                             </Badge>
                           </div>
                         </div>
@@ -646,7 +646,7 @@ const LiveReveal = () => {
                   </Button>
                   <Button variant="outline" asChild>
                     <Link to="/hall-of-fame">
-                      {t("reveal.hallOfFame", "Hall of Fame")}
+                      {t("reveal.hallOfFame", "Palmarès")}
                     </Link>
                   </Button>
                 </div>

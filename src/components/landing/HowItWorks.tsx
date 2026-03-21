@@ -27,7 +27,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 sm:py-24 md:py-32 relative">
+    <section id="how-it-works" className="py-16 sm:py-24 md:py-32 relative">
       <div className="section-divider mb-12 sm:mb-24" />
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">

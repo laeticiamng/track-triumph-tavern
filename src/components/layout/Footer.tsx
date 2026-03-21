@@ -62,6 +62,7 @@ export function Footer() {
           <div>
             <h4 className="font-display text-sm font-semibold mb-3">{t("footer.contact")}</h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
+              {t("footer.contactText")}<br />
               EMOTIONSCARE SASU<br />
               80000 Amiens, France
             </p>

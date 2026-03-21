@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Heart, Music, TrendingUp } from "lucide-react";
+import { Users, Heart, Music, TrendingUp, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface Stat {
@@ -90,9 +91,7 @@ export function SocialProof() {
   }, []);
 
   const totalValue = stats.reduce((sum, s) => sum + s.value, 0);
-
-  // Don't render if total stats < 10 — low numbers are counter-productive
-  if (totalValue < 10) return null;
+  const isEarlyStage = totalValue < 10;
 
   return (
     <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
@@ -101,27 +100,38 @@ export function SocialProof() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-4 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 mb-4">
             <TrendingUp className="h-3 w-3" />
-            {t("socialProof.growing")}
+            {isEarlyStage ? t("socialProof.launchSoon") : t("socialProof.growing")}
           </span>
           <h2 className="font-display text-3xl font-bold sm:text-4xl">
             {t("socialProof.communityNumbers")}
           </h2>
           <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
-            {t("socialProof.joinGrowing")}
+            {isEarlyStage ? t("socialProof.beFirst") : t("socialProof.joinGrowing")}
           </p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 sm:mt-12 grid gap-4 sm:gap-5 grid-cols-2 sm:grid-cols-3 max-w-3xl mx-auto px-4 sm:px-0">
-          {stats.map((stat) => (
-            <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-5 sm:p-8 text-center last:odd:col-span-2 sm:last:odd:col-span-1">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
-                <stat.icon className="h-5 w-5" />
+        {!isEarlyStage && (
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 sm:mt-12 grid gap-4 sm:gap-5 grid-cols-2 sm:grid-cols-3 max-w-3xl mx-auto px-4 sm:px-0">
+            {stats.map((stat) => (
+              <div key={stat.labelKey} className="card-elevated group flex flex-col items-center p-5 sm:p-8 text-center last:odd:col-span-2 sm:last:odd:col-span-1">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color} transition-transform duration-300 group-hover:scale-110`}>
+                  <stat.icon className="h-5 w-5" />
+                </div>
+                <AnimatedCounter value={stat.value} />
+                <span className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</span>
               </div>
-              <AnimatedCounter value={stat.value} />
-              <span className="mt-1 text-sm text-muted-foreground">{t(stat.labelKey)}</span>
-            </div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {isEarlyStage && (
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-8 text-center">
+            <Link to="/auth?tab=signup" className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-6 py-3 text-sm font-semibold text-primary hover:bg-primary/15 transition-colors">
+              {t("socialProof.joinContest")}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
+        )}
       </div>
     </section>
   );

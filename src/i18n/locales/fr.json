@@ -15,19 +15,20 @@
   },
   "hero": {
     "contestLive": "Concours en cours",
-    "title1": "Le seul concours musical",
-    "titleHighlight": "100% communautaire",
-    "title2": "et méritocratique.",
-    "subtitle": "Soumettez votre musique, recevez des votes communautaires et gagnez jusqu'à 200 € chaque semaine. Pas de jury, pas de passe-droits.",
+    "title1": "Le concours musical où",
+    "titleHighlight": "c'est la communauté",
+    "title2": "qui décide.",
+    "subtitle": "Soumettez votre musique, recevez des votes sur 3 critères et gagnez jusqu'à 200 € chaque semaine. Pas de jury, pas de passe-droits.",
     "badgeFreeVote": "Vote 100% gratuit",
     "badgeAntiFraud": "Anti-fraude IA",
     "badgePrize": "200 € / semaine",
     "badgeInclusion": "Inclusion européenne",
-    "badgeOpenToAll": "Ouvert à tous les artistes",
+    "badgeOpenToAll": "12 catégories musicales",
     "discoverContest": "Découvrir le concours",
     "joinContest": "Rejoindre le concours",
     "createAccount": "Créer mon compte",
     "learnMore": "En savoir plus",
+    "howItWorks": "Comment ça marche",
     "meritocratic": "Le classement est 100 % basé sur le talent — aucun paiement n'influence les résultats",
     "voteEndIn": "Fin du vote dans",
     "weekOpen": "ouverte",
@@ -61,34 +62,6 @@
     "feedbackDesc": "Chaque vote évalue votre morceau sur 3 critères : émotion, originalité et production.",
     "visibility": "Visibilité garantie",
     "visibilityDesc": "Les gagnants sont mis en avant sur la page d'accueil et la page Explorer.",
-    "badges": "Badges & classements",
-    "badgesDesc": "Affichez vos résultats et vos badges sur votre profil artiste pour crédibiliser votre parcours."
-  },
-  "whyUs": {
-    "badge": "Nos engagements",
-    "title": "Pourquoi",
-    "subtitle": "Un concours conçu pour mettre en avant le talent, pas le portefeuille.",
-    "merit": "100 % méritocratique",
-    "meritDesc": "Le classement repose uniquement sur les votes de la communauté. Aucun paiement n'influence les résultats.",
-    "antiFraud": "Anti-fraude IA",
-    "antiFraudDesc": "Chaque vote est analysé par notre système d'intelligence artificielle pour garantir l'intégrité du concours.",
-    "rewards": "Récompenses réelles",
-    "rewardsDesc": "200 € pour le 1er, 100 € pour le 2e, 50 € pour le 3e — chaque semaine, financés par les abonnements de la communauté.",
-    "community": "Communauté engagée",
-    "communityDesc": "Rejoignez des artistes et des passionnés de musique qui s'écoutent, se votent et se soutiennent."
-  },
-  "artistBenefits": {
-    "badge": "Pour les artistes",
-    "title": "Ce que vous gagnez en participant",
-    "subtitle": "Un concours pensé pour valoriser les artistes, pas seulement les classer.",
-    "prize": "Jusqu'à 200 € par semaine",
-    "prizeDesc": "Le podium est récompensé chaque semaine : 200 €, 100 € et 50 € pour les trois premiers.",
-    "visibility": "Visibilité garantie",
-    "visibilityDesc": "Les gagnants sont mis en avant sur la page d'accueil et la page Explore.",
-    "feedback": "Feedback détaillé",
-    "feedbackDesc": "Chaque vote évalue votre morceau sur 3 critères : émotion, originalité et production.",
-    "communityTitle": "Communauté de passionnés",
-    "communityDesc": "Faites-vous connaître auprès d'une audience qui écoute et note votre musique.",
     "badges": "Badges & classements",
     "badgesDesc": "Affichez vos résultats et vos badges sur votre profil artiste pour crédibiliser votre parcours."
   },
@@ -128,9 +101,9 @@
   "cta": {
     "registrationsOpen": "Inscriptions ouvertes",
     "title": "Prêt à rejoindre le concours ?",
-    "subtitle": "Les premières semaines sont décisives — faites-vous un nom dès le début.",
+    "subtitle": "Inscription gratuite, sans carte bancaire. Commencez à voter dès maintenant.",
     "joinContest": "Rejoindre le concours",
-    "viewPlans": "Voir les abonnements",
+    "viewPlans": "Découvrir les avantages Pro",
     "signup30s": "Inscription en 30s",
     "noCommitment": "Sans engagement",
     "freeVote": "Vote gratuit"
@@ -145,12 +118,11 @@
   },
   "footer": {
     "tagline": "Le concours musical hebdomadaire où la communauté vote pour les meilleurs artistes indépendants.",
-    "beta": "",
     "navigation": "Navigation",
     "explore": "Explorer",
     "ranking": "Classement",
     "hallOfFame": "Palmarès",
-    "subscriptions": "Abonnements",
+    "subscriptions": "Tarifs",
     "faq": "FAQ",
     "articles": "Articles",
     "about": "À propos",
@@ -331,7 +303,8 @@
     "active": "ACTIVE",
     "pending": "EN ATTENTE",
     "inPrizes": "{{amount}}€ en prix",
-    "fallback": "Récompenses alternatives : visibilité, coaching, badges"
+    "fallback": "Récompenses alternatives : visibilité, accompagnement, badges",
+    "fundedBy": "Financé par les abonnements Elite — 100 % redistribué aux artistes"
   },
   "layout": {
     "skipToContent": "Aller au contenu principal"
@@ -363,7 +336,7 @@
     "close": "Fermer"
   },
   "seo": {
-    "defaultTitle": "Weekly Music Awards — Le seul concours musical 100% communautaire et méritocratique",
+    "defaultTitle": "Weekly Music Awards — Le concours musical où c'est la communauté qui décide",
     "defaultDescription": "Weekly Music Awards est le concours musical hebdomadaire où la communauté écoute, vote et récompense les artistes indépendants. Soumettez votre musique, recevez des votes sur 3 critères (originalité, production, émotion) et gagnez jusqu'à 200 € chaque semaine."
   },
   "pricing": {
@@ -381,7 +354,7 @@
     "free": "Gratuit",
     "perMonth": "/mois",
     "currentPlan": "Plan actuel",
-    "upgrade": "Upgrader",
+    "upgrade": "Passer au plan supérieur",
     "startWinning": "Soumettre mon morceau",
     "createMyAccount": "Créer mon compte",
     "planFree": "Plan Free",
@@ -404,9 +377,9 @@
     "voteStats": "Statistiques de votes",
     "aiSummary": "Résumé IA des votes",
     "aiRecommendations": "Recommandations IA",
-    "aiChatbot": "Chatbot musical IA",
+    "aiChatbot": "Assistant musical IA",
     "aiFeedback": "Feedback IA structuré",
-    "bannerProfile": "Banner profil personnalisé",
+    "bannerProfile": "Bannière de profil personnalisée",
     "votes5": "5 votes",
     "unlimited": "Illimité",
     "onePerWeek": "1 / semaine",
@@ -432,15 +405,15 @@
     "proFeature5": "Statistiques de votes sur votre profil",
     "proFeature6": "Résumé IA des votes reçus",
     "proFeature7": "Recommandations IA personnalisées",
-    "proFeature8": "Chatbot assistant musical IA",
+    "proFeature8": "Assistant conversationnel musical IA",
     "proFeature9": "Écoute, classement et découverte inclus",
     "eliteFeature1": "Soumettre 1 morceau par semaine",
     "eliteFeature2": "Votes et commentaires illimités",
     "eliteFeature3": "Feedback IA structuré (analyse détaillée)",
     "eliteFeature4": "Résumé IA des votes reçus",
     "eliteFeature5": "Recommandations IA personnalisées",
-    "eliteFeature6": "Chatbot assistant musical IA",
-    "eliteFeature7": "Profil artiste premium (avatar, banner, liens sociaux)",
+    "eliteFeature6": "Assistant conversationnel musical IA",
+    "eliteFeature7": "Profil artiste premium (avatar, bannière, liens sociaux)",
     "eliteFeature8": "Badge Elite sur le profil",
     "eliteFeature9": "Statistiques de votes détaillées",
     "highlightVotes": "Votes",
@@ -465,11 +438,29 @@
     "whyEliteBadgeTitle": "Badge Elite exclusif",
     "whyEliteBadgeDesc": "Démarquez-vous avec un profil premium qui attire l'attention des votants.",
     "whyEliteVisibility": "Visibilité accrue",
-    "whyEliteVisibilityDesc": "Votre profil personnalisé et votre banner custom vous font sortir du lot.",
+    "whyEliteVisibilityDesc": "Votre profil personnalisé et votre bannière personnalisée vous font sortir du lot.",
     "whyEliteSubmission": "Soumission hebdomadaire",
     "whyEliteSubmissionDesc": "Participez chaque semaine au concours et développez votre audience régulièrement.",
-    "whyEliteTestimonial": "",
-    "whyEliteTestimonialAuthor": "",
+    "testimonials": [
+      {
+        "quote": "Le retour IA sur mon mix m'a fait gagner des heures de travail. J'ai décroché mon premier podium dès la 3e semaine.",
+        "initials": "L.M.",
+        "name": "L. Moreau",
+        "role": "Productrice electro — Paris"
+      },
+      {
+        "quote": "Les stats détaillées m'ont permis de comprendre quel style plaisait à la communauté. Mon taux de votes a doublé.",
+        "initials": "T.K.",
+        "name": "T. Kowalski",
+        "role": "Beatmaker — Varsovie"
+      },
+      {
+        "quote": "Pouvoir soumettre chaque semaine sans limite, c'est ce qui fait la différence. En 2 mois, j'ai trouvé mon public.",
+        "initials": "S.R.",
+        "name": "S. Rossi",
+        "role": "Auteure-compositrice — Milan"
+      }
+    ],
     "pricingFaqTitle": "Questions fréquentes",
     "pricingFaqQ1": "Est-ce que l'abonnement influence le classement ?",
     "pricingFaqA1": "Non, jamais. Le classement est 100 % basé sur les votes de la communauté. L'abonnement vous donne accès à des outils (IA, stats, soumission) mais n'affecte pas votre position.",
@@ -632,8 +623,8 @@
   },
   "aboutPage": {
     "seoTitle": "À propos",
-    "seoDesc": "Weekly Music Awards est le seul concours musical hebdomadaire 100% communautaire et méritocratique.",
-    "teamBadge": "Équipe de passionnés",
+    "seoDesc": "Weekly Music Awards est le concours musical hebdomadaire où c'est la communauté qui vote et récompense les artistes indépendants.",
+    "teamBadge": "Notre mission",
     "title": "À propos de Weekly Music Awards",
     "intro": "Le seul concours musical hebdomadaire où c'est la communauté qui décide du podium.",
     "introDesc": "Pas de jury opaque, pas de passe-droits : les artistes soumettent, la communauté écoute et vote sur 3 critères (originalité, production, émotion), et les gagnants remportent jusqu'à 200 € chaque semaine.",
@@ -657,7 +648,7 @@
     "season1": "Saison 1 — Printemps 2026",
     "season1Desc": "Cagnotte active chaque semaine, classement complet et premiers partenaires.",
     "growth": "Croissance — Été 2026",
-    "growthDesc": "Nouveaux genres, événements live, partenariats labels et coaching artistes.",
+    "growthDesc": "Nouveaux genres, événements en direct, partenariats labels et accompagnement d'artistes.",
     "international": "Internationalisation — Automne 2026",
     "internationalDesc": "Ouverture à de nouveaux pays et catégories musicales.",
     "inProgress": "En cours",
@@ -745,7 +736,7 @@
     "abo_q1": "Quels abonnements proposez-vous ?",
     "abo_a1": "Trois formules : Gratuit (écoute + 5 votes/semaine), Pro à 9,99 €/mois (soumission + votes illimités + outils IA) et Elite à 19,99 €/mois (toutes les fonctionnalités Pro + feedback IA détaillé + badge Elite + commentaires illimités).",
     "abo_q2": "Le paiement influence-t-il le classement ?",
-    "abo_a2": "Absolument pas. Le classement de Weekly Music Awards est 100 % méritocratique. Les abonnements donnent accès à des outils (soumission, analytics, IA) mais n'influencent jamais les résultats du concours.",
+    "abo_a2": "Absolument pas. Le classement de Weekly Music Awards est 100 % méritocratique. Les abonnements donnent accès à des outils (soumission, analyses, IA) mais n'influencent jamais les résultats du concours.",
     "abo_q3": "Puis-je résilier à tout moment ?",
     "abo_a3": "Oui, tous nos abonnements sont sans engagement. Vous pouvez résilier à tout moment depuis votre espace personnel. L'accès est maintenu jusqu'à la fin de la période facturée."
   },
@@ -1089,7 +1080,7 @@
     "followed": "Artiste suivi !",
     "errorFollow": "Erreur",
     "unfollowed": "Vous ne suivez plus {{name}}",
-    "errorUnfollow": "Erreur lors du unfollow"
+    "errorUnfollow": "Erreur lors du désabonnement"
   },
   "follow": {
     "follow": "Suivre",
@@ -1179,7 +1170,7 @@
     "afAuditDesc": "Chaque vote est enregistré avec horodatage, adresse IP, user-agent et métadonnées pour traçabilité complète.",
     "s6Title": "6. Équité & indépendance des abonnements",
     "s6Principle": "<strong>Principe fondamental :</strong> aucun paiement ne peut influencer le classement. Les abonnements Pro et Elite offrent exclusivement des services SaaS :",
-    "s6Item1": "Analytics avancés sur les performances de vos morceaux",
+    "s6Item1": "Analyses avancées des performances de vos morceaux",
     "s6Item2": "Feedback IA personnalisé sur votre production musicale",
     "s6Item3": "Kit marketing et partage social amélioré",
     "s6Item4": "Soumission prioritaire (file d'attente, pas de boost au classement)",
@@ -1190,7 +1181,7 @@
     "faq2Q": "Pourquoi les pondérations varient selon les genres ?",
     "faq2A": "Chaque genre musical a ses propres valeurs artistiques. Le Rap valorise l'originalité car l'innovation est centrale. Le Lofi met l'émotion en avant car l'atmosphère est l'essence du genre. Les pondérations sont définies par notre équipe éditoriale en concertation avec la communauté.",
     "faq3Q": "Les abonnements payants influencent-ils le classement ?",
-    "faq3A": "Jamais. Les abonnements Pro et Elite offrent des services SaaS (analytics, feedback IA, kit marketing) mais n'influencent en aucun cas les votes, le score ou le classement. Le concours est 100% méritocratique.",
+    "faq3A": "Jamais. Les abonnements Pro et Elite offrent des outils en ligne (analyses, retours IA, ressources marketing) mais n'influencent en aucun cas les votes, le score ou le classement. Le concours est 100% méritocratique.",
     "faq4Q": "Comment l'anti-fraude fonctionne-t-il ?",
     "faq4A": "Une IA analyse chaque vote en temps réel : détection de rafales, clusters d'IP, comptes suspects, comportements de bots. Les votes frauduleux sont automatiquement invalidés et exclus du classement. Chaque vote a un audit trail complet.",
     "faq5Q": "Que se passe-t-il en cas d'égalité ?",
@@ -1285,17 +1276,17 @@
     "breadcrumbArticles": "Articles"
   },
   "reveal": {
-    "waiting": "En attente du reveal...",
+    "waiting": "En attente du dévoilement...",
     "reward": "Prix",
-    "seoTitle": "Reveal en direct — Weekly Music Awards",
+    "seoTitle": "Dévoilement en direct — Weekly Music Awards",
     "seoDesc": "Assistez au dévoilement en direct des résultats du concours musical hebdomadaire.",
-    "title": "Reveal des résultats",
+    "title": "Dévoilement des résultats",
     "subtitle": "Découvrez les gagnants catégorie par catégorie",
-    "notYet": "Le reveal n'a pas encore commencé",
+    "notYet": "Le dévoilement n'a pas encore commencé",
     "notYetDesc": "Les résultats seront révélés dès que la période de vote sera terminée. Revenez bientôt !",
     "goVote": "Voter maintenant",
     "seeResults": "Page résultats",
-    "start": "Lancer le reveal",
+    "start": "Lancer le dévoilement",
     "categoriesToReveal": "catégories à révéler",
     "skipAll": "Tout révéler",
     "grandWinner": "Grand Gagnant",
@@ -1355,18 +1346,11 @@
     "freeVoting": "Vote 100% gratuit",
     "noCard": "Sans carte bancaire"
   },
-  "footer2": {
-    "programs": "Programmes",
-    "culturalExchange": "Échange Culturel",
-    "mentorMatch": "Mentor Match",
-    "virtualResidency": "Résidence Virtuelle",
-    "impact": "Tableau d'Impact"
-  },
   "socialMission": {
     "badge": "Mission Sociale",
     "titlePrefix": "La musique comme vecteur d'",
     "titleHighlight": "inclusion",
-    "subtitle": "Track Triumph s'engage pour la diversité culturelle et l'égalité des chances dans la création musicale européenne.",
+    "subtitle": "Weekly Music Awards s'engage pour la diversité culturelle et l'égalité des chances dans la création musicale européenne.",
     "pillars": {
       "inclusionTitle": "Inclusion Tracks",
       "inclusionDesc": "Une catégorie dédiée aux jeunes de quartiers prioritaires, artistes en situation de handicap et communautés sous-représentées.",
@@ -1380,27 +1364,10 @@
     "ctaInclusion": "Inclusion Tracks",
     "comingSoon": "Ces programmes sont en cours de développement et seront bientôt disponibles."
   },
-  "mentorship": {
-    "badge": "Programmes d'accompagnement",
-    "titlePrefix": "Grandir ensemble, créer au-delà des",
-    "titleHighlight": "frontières",
-    "subtitle": "Mentorat individuel et résidences virtuelles pour connecter les talents émergents à travers l'Europe.",
-    "programs": {
-      "mentorBadge": "Mentorat",
-      "mentorTitle": "Mentor Match",
-      "mentorDesc": "Des musiciens européens confirmés vous accompagnent : sessions vidéo de 30 min, feedback personnalisé et conseils de carrière.",
-      "mentorCta": "Trouver un mentor",
-      "residencyBadge": "Résidence",
-      "residencyTitle": "Virtual Residency",
-      "residencyDesc": "6 semaines de création collaborative : 5 artistes de 5 pays de l'UE co-créent un morceau présenté lors d'un événement culturel européen.",
-      "residencyCta": "Découvrir le programme"
-    },
-    "comingSoon": "Ces programmes sont en cours de développement et seront bientôt disponibles."
-  },
   "culturalExchange": {
     "badge": "Échange Culturel",
     "seo": {
-      "title": "Échange Culturel Européen — Track Triumph",
+      "title": "Échange Culturel Européen — Weekly Music Awards",
       "description": "Compétitions mensuelles thématiques célébrant les traditions musicales européennes. Flamenco, Balkans, Celtique et plus."
     },
     "titlePrefix": "Un continent, mille",
@@ -1430,60 +1397,10 @@
     },
     "cta": "Participer au concours du mois"
   },
-  "mentorMatch": {
-    "badge": "Mentor Match",
-    "seo": {
-      "title": "Mentor Match — Track Triumph",
-      "description": "Programme de mentorat européen. Des musiciens confirmés vous accompagnent par sessions vidéo de 30 minutes."
-    },
-    "titlePrefix": "Apprenez des",
-    "titleHighlight": "meilleurs",
-    "subtitle": "Des musiciens européens confirmés partagent leur expertise lors de sessions vidéo individuelles de 30 minutes.",
-    "comingSoon": "Programme en préparation — les inscriptions ouvriront prochainement. Les mentors présentés ci-dessous sont des exemples illustratifs.",
-    "ourMentors": "Nos mentors",
-    "fictitious": "Exemples fictifs",
-    "requestSession": "Demander une session (bientôt)",
-    "steps": {
-      "choose": "Choisissez un mentor",
-      "chooseDesc": "Parcourez les profils selon votre genre et vos objectifs.",
-      "book": "Réservez une session",
-      "bookDesc": "Créneaux de 30 minutes, flexibles selon les fuseaux horaires.",
-      "exchange": "Échangez en vidéo",
-      "exchangeDesc": "Feedback personnalisé sur votre production, voix ou composition.",
-      "progress": "Progressez",
-      "progressDesc": "Recevez un rapport de session et des recommandations d'exercices."
-    },
-    "mentors": {
-      "elena": "Elena Vasquez", "elenaCountry": "Espagne 🇪🇸", "elenaSpeciality": "Flamenco / Fusion",
-      "lars": "Lars Eriksson", "larsCountry": "Suède 🇸🇪", "larsSpeciality": "Electronic / Ambient",
-      "chiara": "Chiara Bianchi", "chiaraCountry": "Italie 🇮🇹", "chiaraSpeciality": "Jazz / Neo-Soul",
-      "tomasz": "Tomasz Nowak", "tomaszCountry": "Pologne 🇵🇱", "tomaszSpeciality": "Hip-Hop / Production",
-      "marie": "Marie Dupont", "marieCountry": "France 🇫🇷", "marieSpeciality": "Chanson / Pop",
-      "dimitris": "Dimitris Papadopoulos", "dimitrisCountry": "Grèce 🇬🇷", "dimitrisSpeciality": "World Music / Rebetiko"
-    }
-  },
-  "virtualResidency": {
-    "badge": "Résidence Virtuelle",
-    "seo": {
-      "title": "Virtual Residency — Track Triumph",
-      "description": "Résidence virtuelle européenne : 6 semaines de création collaborative entre 5 artistes de 5 pays de l'UE."
-    },
-    "titlePrefix": "5 pays, 5 artistes, 1",
-    "titleHighlight": "morceau",
-    "subtitle": "Une résidence créative virtuelle de 6 semaines où des talents de toute l'Europe collaborent pour produire un morceau présenté lors d'un événement culturel européen.",
-    "comingSoon": "Programme en préparation — les candidatures pour la première cohorte ouvriront prochainement.",
-    "apply": "Postuler pour la prochaine cohorte (bientôt)",
-    "timeline": {
-      "week1": "Semaine 1", "title1": "Rencontre & Inspiration", "desc1": "Les 5 artistes se découvrent, partagent leurs influences et choisissent une direction créative.",
-      "week2": "Semaine 2-3", "title2": "Exploration & Esquisses", "desc2": "Chacun contribue des éléments musicaux issus de sa tradition culturelle.",
-      "week3": "Semaine 4-5", "title3": "Production Collaborative", "desc3": "Sessions de co-création en ligne, mixage et arrangements collectifs.",
-      "week4": "Semaine 6", "title4": "Présentation", "desc4": "Le morceau co-créé est présenté lors d'un événement culturel européen en ligne."
-    }
-  },
   "impact": {
     "badge": "Impact Dashboard",
     "seo": {
-      "title": "Impact Dashboard — Track Triumph",
+      "title": "Impact Dashboard — Weekly Music Awards",
       "description": "Métriques d'impact social : engagement communautaire, diversité géographique et démographique des participants."
     },
     "titlePrefix": "Notre",
@@ -1509,19 +1426,5 @@
       "belgium": "Belgique",
       "portugal": "Portugal"
     }
-  },
-  "programsOverview": {
-    "title": "Nos 5 programmes engagés",
-    "subtitle": "Bien plus qu'un concours : une plateforme au service de l'inclusion et de la diversité culturelle européenne.",
-    "inclusionTitle": "Inclusion Tracks",
-    "inclusionDesc": "Catégorie dédiée aux artistes issus de milieux sous-représentés, avec Prix Impact Social.",
-    "exchangeTitle": "Échange Culturel",
-    "exchangeDesc": "Compétitions mensuelles thématiques intégrant les traditions musicales européennes.",
-    "mentorTitle": "Mentor Match",
-    "mentorDesc": "Sessions de mentorat vidéo avec des musiciens européens confirmés.",
-    "residencyTitle": "Résidence Virtuelle",
-    "residencyDesc": "Collaboration créative de 6 semaines entre 5 artistes de 5 pays de l'UE.",
-    "impactTitle": "Impact Dashboard",
-    "impactDesc": "Métriques d'engagement communautaire pour les partenaires institutionnels."
   }
 }

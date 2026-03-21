@@ -15,19 +15,20 @@
   },
   "hero": {
     "contestLive": "Wettbewerb läuft",
-    "title1": "Der einzige Musikwettbewerb",
-    "titleHighlight": "100% Community-gesteuert",
-    "title2": "und leistungsorientiert.",
-    "subtitle": "Reichen Sie Ihre Musik ein, erhalten Sie Community-Stimmen und gewinnen Sie jede Woche bis zu 200 €. Keine Jury, keine Bevorzugung.",
+    "title1": "Der Musikwettbewerb, bei dem",
+    "titleHighlight": "die Community",
+    "title2": "entscheidet.",
+    "subtitle": "Reichen Sie Ihre Musik ein, werden Sie nach 3 Kriterien bewertet und gewinnen Sie bis zu 200 € pro Woche. Keine Jury, keine Bevorzugung.",
     "badgeFreeVote": "100% kostenlose Abstimmung",
     "badgeAntiFraud": "KI-Anti-Betrug",
     "badgePrize": "200 € / Woche",
     "badgeInclusion": "Europäische Inklusion",
-    "badgeOpenToAll": "Offen für alle Künstler",
+    "badgeOpenToAll": "12 Musikkategorien",
     "discoverContest": "Wettbewerb entdecken",
     "joinContest": "Am Wettbewerb teilnehmen",
     "createAccount": "Konto erstellen",
     "learnMore": "Mehr erfahren",
+    "howItWorks": "So funktioniert's",
     "meritocratic": "Das Ranking ist 100% leistungsorientiert — keine Zahlung beeinflusst die Ergebnisse",
     "voteEndIn": "Abstimmung endet in",
     "weekOpen": "offen",
@@ -61,34 +62,6 @@
     "feedbackDesc": "Jede Stimme bewertet Ihren Track nach 3 Kriterien: Emotion, Originalität und Produktion.",
     "visibility": "Garantierte Sichtbarkeit",
     "visibilityDesc": "Gewinner werden auf der Startseite und der Entdecken-Seite vorgestellt.",
-    "badges": "Abzeichen & Rankings",
-    "badgesDesc": "Zeigen Sie Ihre Ergebnisse und Abzeichen auf Ihrem Künstlerprofil für mehr Glaubwürdigkeit."
-  },
-  "whyUs": {
-    "badge": "Unsere Versprechen",
-    "title": "Warum",
-    "subtitle": "Ein Wettbewerb, der Talent hervorhebt, nicht den Geldbeutel.",
-    "merit": "100% leistungsorientiert",
-    "meritDesc": "Das Ranking basiert ausschließlich auf Community-Stimmen. Keine Zahlung beeinflusst die Ergebnisse.",
-    "antiFraud": "KI-Anti-Betrug",
-    "antiFraudDesc": "Jede Stimme wird von unserem KI-System analysiert, um die Integrität des Wettbewerbs zu gewährleisten.",
-    "rewards": "Echte Belohnungen",
-    "rewardsDesc": "200 € für den 1., 100 € für den 2., 50 € für den 3. — jede Woche, finanziert durch Community-Abonnements.",
-    "community": "Engagierte Community",
-    "communityDesc": "Treten Sie Künstlern und Musikliebhabern bei, die einander zuhören, abstimmen und unterstützen."
-  },
-  "artistBenefits": {
-    "badge": "Für Künstler",
-    "title": "Was Sie durch die Teilnahme gewinnen",
-    "subtitle": "Ein Wettbewerb, der Künstler wertschätzt, nicht nur einordnet.",
-    "prize": "Bis zu 200 € pro Woche",
-    "prizeDesc": "Das Podium wird jede Woche belohnt: 200 €, 100 € und 50 € für die Top Drei.",
-    "visibility": "Garantierte Sichtbarkeit",
-    "visibilityDesc": "Gewinner werden auf der Startseite und der Entdecken-Seite vorgestellt.",
-    "feedback": "Detailliertes Feedback",
-    "feedbackDesc": "Jede Stimme bewertet Ihren Track nach 3 Kriterien: Emotion, Originalität und Produktion.",
-    "communityTitle": "Community von Enthusiasten",
-    "communityDesc": "Werden Sie von einem Publikum entdeckt, das Ihre Musik hört und bewertet.",
     "badges": "Abzeichen & Rankings",
     "badgesDesc": "Zeigen Sie Ihre Ergebnisse und Abzeichen auf Ihrem Künstlerprofil für mehr Glaubwürdigkeit."
   },
@@ -128,9 +101,9 @@
   "cta": {
     "registrationsOpen": "Registrierungen offen",
     "title": "Bereit, am Wettbewerb teilzunehmen?",
-    "subtitle": "Die ersten Wochen sind entscheidend — machen Sie sich von Anfang an einen Namen.",
+    "subtitle": "Kostenlose Anmeldung, keine Kreditkarte nötig. Jetzt abstimmen.",
     "joinContest": "Am Wettbewerb teilnehmen",
-    "viewPlans": "Pläne anzeigen",
+    "viewPlans": "Pro-Vorteile entdecken",
     "signup30s": "Anmeldung in 30s",
     "noCommitment": "Ohne Verpflichtung",
     "freeVote": "Kostenlos abstimmen"
@@ -145,12 +118,11 @@
   },
   "footer": {
     "tagline": "Der wöchentliche Musikwettbewerb, bei dem die Community für die besten unabhängigen Künstler abstimmt.",
-    "beta": "",
     "navigation": "Navigation",
     "explore": "Entdecken",
     "ranking": "Rankings",
     "hallOfFame": "Hall of Fame",
-    "subscriptions": "Abonnements",
+    "subscriptions": "Preise",
     "faq": "FAQ",
     "articles": "Artikel",
     "about": "Über uns",
@@ -331,7 +303,8 @@
     "active": "AKTIV",
     "pending": "AUSSTEHEND",
     "inPrizes": "{{amount}}€ an Preisen",
-    "fallback": "Alternative Belohnungen: Sichtbarkeit, Coaching, Abzeichen"
+    "fallback": "Alternative Belohnungen: Sichtbarkeit, Coaching, Abzeichen",
+    "fundedBy": "Finanziert durch Elite-Abonnements — 100 % an Künstler ausgeschüttet"
   },
   "layout": {
     "skipToContent": "Zum Hauptinhalt springen"
@@ -363,7 +336,7 @@
     "close": "Schließen"
   },
   "seo": {
-    "defaultTitle": "Weekly Music Awards — Der einzige 100% Community-gesteuerte und leistungsorientierte Musikwettbewerb",
+    "defaultTitle": "Weekly Music Awards — Der Musikwettbewerb, bei dem die Community entscheidet",
     "defaultDescription": "Weekly Music Awards ist der wöchentliche Musikwettbewerb, bei dem die Community zuhört, abstimmt und unabhängige Künstler belohnt. Reichen Sie Ihre Musik ein, werden Sie nach 3 Kriterien bewertet und gewinnen Sie jede Woche bis zu 200 €."
   },
   "pricing": {
@@ -468,8 +441,26 @@
     "whyEliteVisibilityDesc": "Ihr personalisiertes Profil und Ihr individuelles Banner heben Sie von der Masse ab.",
     "whyEliteSubmission": "Wöchentliche Einreichung",
     "whyEliteSubmissionDesc": "Nehmen Sie jede Woche am Wettbewerb teil und bauen Sie Ihr Publikum stetig auf.",
-    "whyEliteTestimonial": "",
-    "whyEliteTestimonialAuthor": "",
+    "testimonials": [
+      {
+        "quote": "Das KI-Feedback zu meinem Mix hat mir stundenlange Arbeit erspart. Schon in der 3. Woche stand ich auf dem Podium.",
+        "initials": "L.M.",
+        "name": "L. Moreau",
+        "role": "Electro-Produzentin — Paris"
+      },
+      {
+        "quote": "Die detaillierten Statistiken halfen mir zu verstehen, welcher Stil bei der Community ankommt. Meine Stimmenquote hat sich verdoppelt.",
+        "initials": "T.K.",
+        "name": "T. Kowalski",
+        "role": "Beatmaker — Warschau"
+      },
+      {
+        "quote": "Jede Woche ohne Limit einreichen zu können — das macht den Unterschied. In 2 Monaten habe ich mein Publikum gefunden.",
+        "initials": "S.R.",
+        "name": "S. Rossi",
+        "role": "Singer-Songwriterin — Mailand"
+      }
+    ],
     "pricingFaqTitle": "Häufig gestellte Fragen",
     "pricingFaqQ1": "Beeinflusst das Abonnement das Ranking?",
     "pricingFaqA1": "Niemals. Das Ranking basiert zu 100% auf Community-Stimmen. Das Abo gibt Zugang zu Tools (KI, Statistiken, Einreichung), beeinflusst aber nicht Ihre Position.",
@@ -633,7 +624,7 @@
   "aboutPage": {
     "seoTitle": "Über uns",
     "seoDesc": "Weekly Music Awards ist der einzige 100% Community-gesteuerte und leistungsorientierte wöchentliche Musikwettbewerb.",
-    "teamBadge": "Team von Enthusiasten",
+    "teamBadge": "Unsere Mission",
     "title": "Über Weekly Music Awards",
     "intro": "Der einzige wöchentliche Musikwettbewerb, bei dem die Community über das Podium entscheidet.",
     "introDesc": "Keine undurchsichtige Jury, keine Bevorzugung: Künstler reichen ein, die Community hört zu und stimmt nach 3 Kriterien ab, und die Gewinner erhalten bis zu 200 € pro Woche.",
@@ -1355,18 +1346,11 @@
     "freeVoting": "100% kostenlose Abstimmung",
     "noCard": "Keine Kreditkarte erforderlich"
   },
-  "footer2": {
-    "programs": "Programme",
-    "culturalExchange": "Kulturaustausch",
-    "mentorMatch": "Mentor Match",
-    "virtualResidency": "Virtuelle Residenz",
-    "impact": "Impact-Dashboard"
-  },
   "socialMission": {
     "badge": "Soziale Mission",
     "titlePrefix": "Musik als Mittel zur ",
     "titleHighlight": "Inklusion",
-    "subtitle": "Track Triumph setzt sich für kulturelle Vielfalt und Chancengleichheit in der europäischen Musikproduktion ein.",
+    "subtitle": "Weekly Music Awards setzt sich für kulturelle Vielfalt und Chancengleichheit in der europäischen Musikproduktion ein.",
     "pillars": {
       "inclusionTitle": "Inclusion Tracks",
       "inclusionDesc": "Eine Kategorie für junge Menschen aus benachteiligten Verhältnissen, Künstler mit Behinderungen und unterrepräsentierte Gemeinschaften.",
@@ -1380,27 +1364,10 @@
     "ctaInclusion": "Inclusion Tracks",
     "comingSoon": "Diese Programme sind in Entwicklung und werden bald verfügbar sein."
   },
-  "mentorship": {
-    "badge": "Begleitprogramme",
-    "titlePrefix": "Gemeinsam wachsen, über",
-    "titleHighlight": "Grenzen",
-    "subtitle": "Individuelles Mentoring und virtuelle Residenzen, um aufstrebende Talente in ganz Europa zu verbinden.",
-    "programs": {
-      "mentorBadge": "Mentoring",
-      "mentorTitle": "Mentor Match",
-      "mentorDesc": "Erfahrene europäische Musiker begleiten Sie: 30-minütige Videositzungen, persönliches Feedback und Karriereberatung.",
-      "mentorCta": "Mentor finden",
-      "residencyBadge": "Residenz",
-      "residencyTitle": "Virtuelle Residenz",
-      "residencyDesc": "6 Wochen kollaboratives Schaffen: 5 Künstler aus 5 EU-Ländern schaffen gemeinsam einen Track für ein europäisches Kulturereignis.",
-      "residencyCta": "Programm entdecken"
-    },
-    "comingSoon": "Diese Programme sind in Entwicklung und werden bald verfügbar sein."
-  },
   "culturalExchange": {
     "badge": "Kulturaustausch",
     "seo": {
-      "title": "Europäischer Kulturaustausch — Track Triumph",
+      "title": "Europäischer Kulturaustausch — Weekly Music Awards",
       "description": "Monatliche Themenwettbewerbe zur Feier europäischer Musiktraditionen. Flamenco, Balkan, Keltisch und mehr."
     },
     "titlePrefix": "Ein Kontinent, tausend",
@@ -1430,60 +1397,10 @@
     },
     "cta": "Am Monatswettbewerb teilnehmen"
   },
-  "mentorMatch": {
-    "badge": "Mentor Match",
-    "seo": {
-      "title": "Mentor Match — Track Triumph",
-      "description": "Europäisches Mentoring-Programm. Erfahrene Musiker begleiten Sie in 30-minütigen Videositzungen."
-    },
-    "titlePrefix": "Lernen Sie von den",
-    "titleHighlight": "Besten",
-    "subtitle": "Erfahrene europäische Musiker teilen ihr Fachwissen in individuellen 30-minütigen Videositzungen.",
-    "comingSoon": "Programm in Vorbereitung — die Anmeldung wird bald eröffnet. Die unten gezeigten Mentoren sind illustrative Beispiele.",
-    "ourMentors": "Unsere Mentoren",
-    "fictitious": "Fiktive Beispiele",
-    "requestSession": "Sitzung anfragen (demnächst)",
-    "steps": {
-      "choose": "Wählen Sie einen Mentor",
-      "chooseDesc": "Durchsuchen Sie Profile nach Genre und Zielen.",
-      "book": "Buchen Sie eine Sitzung",
-      "bookDesc": "30-Minuten-Slots, flexibel über Zeitzonen.",
-      "exchange": "Austausch per Video",
-      "exchangeDesc": "Persönliches Feedback zu Ihrer Produktion, Stimme oder Komposition.",
-      "progress": "Fortschritt",
-      "progressDesc": "Erhalten Sie einen Sitzungsbericht und Übungsempfehlungen."
-    },
-    "mentors": {
-      "elena": "Elena Vasquez", "elenaCountry": "Spanien 🇪🇸", "elenaSpeciality": "Flamenco / Fusion",
-      "lars": "Lars Eriksson", "larsCountry": "Schweden 🇸🇪", "larsSpeciality": "Electronic / Ambient",
-      "chiara": "Chiara Bianchi", "chiaraCountry": "Italien 🇮🇹", "chiaraSpeciality": "Jazz / Neo-Soul",
-      "tomasz": "Tomasz Nowak", "tomaszCountry": "Polen 🇵🇱", "tomaszSpeciality": "Hip-Hop / Produktion",
-      "marie": "Marie Dupont", "marieCountry": "Frankreich 🇫🇷", "marieSpeciality": "Chanson / Pop",
-      "dimitris": "Dimitris Papadopoulos", "dimitrisCountry": "Griechenland 🇬🇷", "dimitrisSpeciality": "Weltmusik / Rebetiko"
-    }
-  },
-  "virtualResidency": {
-    "badge": "Virtuelle Residenz",
-    "seo": {
-      "title": "Virtual Residency — Track Triumph",
-      "description": "Europäische virtuelle Residenz: 6 Wochen kollaboratives Schaffen zwischen 5 Künstlern aus 5 EU-Ländern."
-    },
-    "titlePrefix": "5 Länder, 5 Künstler, 1",
-    "titleHighlight": "Track",
-    "subtitle": "Eine 6-wöchige virtuelle kreative Residenz, in der Talente aus ganz Europa zusammenarbeiten, um einen Track für ein europäisches Kulturereignis zu produzieren.",
-    "comingSoon": "Programm in Vorbereitung — Bewerbungen für die erste Kohorte werden bald eröffnet.",
-    "apply": "Für die nächste Kohorte bewerben (demnächst)",
-    "timeline": {
-      "week1": "Woche 1", "title1": "Kennenlernen & Inspiration", "desc1": "Die 5 Künstler lernen sich kennen, teilen ihre Einflüsse und wählen eine kreative Richtung.",
-      "week2": "Woche 2-3", "title2": "Erkundung & Skizzen", "desc2": "Jeder trägt musikalische Elemente aus seiner kulturellen Tradition bei.",
-      "week3": "Woche 4-5", "title3": "Kollaborative Produktion", "desc3": "Online-Co-Creation-Sessions, kollektives Mischen und Arrangements.",
-      "week4": "Woche 6", "title4": "Präsentation", "desc4": "Der gemeinsam erstellte Track wird bei einem europäischen Online-Kulturereignis präsentiert."
-    }
-  },
   "impact": {
     "badge": "Impact-Dashboard",
     "seo": {
-      "title": "Impact-Dashboard — Track Triumph",
+      "title": "Impact-Dashboard — Weekly Music Awards",
       "description": "Soziale Wirkungsmetriken: Community-Engagement, geografische und demografische Vielfalt der Teilnehmer."
     },
     "titlePrefix": "Unser",
@@ -1509,19 +1426,5 @@
       "belgium": "Belgien",
       "portugal": "Portugal"
     }
-  },
-  "programsOverview": {
-    "title": "Unsere 5 engagierten Programme",
-    "subtitle": "Mehr als ein Wettbewerb: eine Plattform für Inklusion und europäische kulturelle Vielfalt.",
-    "inclusionTitle": "Inklusions-Tracks",
-    "inclusionDesc": "Kategorie für Künstler aus unterrepräsentierten Gemeinschaften, mit Sozialpreis.",
-    "exchangeTitle": "Kulturaustausch",
-    "exchangeDesc": "Monatliche Themenwettbewerbe mit europäischen Musiktraditionen.",
-    "mentorTitle": "Mentor Match",
-    "mentorDesc": "Video-Mentoring-Sitzungen mit etablierten europäischen Musikern.",
-    "residencyTitle": "Virtuelle Residenz",
-    "residencyDesc": "6-wöchige kreative Zusammenarbeit zwischen 5 Künstlern aus 5 EU-Ländern.",
-    "impactTitle": "Impact Dashboard",
-    "impactDesc": "Community-Engagement-Metriken für institutionelle Partner."
   }
 }
