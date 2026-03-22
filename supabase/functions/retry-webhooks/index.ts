@@ -126,8 +126,9 @@ serve(async (req) => {
   }
 });
 
-// deno-lint-ignore no-explicit-any
-async function processStripeEvent(event: Stripe.Event, supabase: any) {
+type SupabaseAdminClient = ReturnType<typeof createClient>;
+
+async function processStripeEvent(event: Stripe.Event, supabase: SupabaseAdminClient) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
