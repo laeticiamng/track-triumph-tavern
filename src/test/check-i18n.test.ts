@@ -6,7 +6,7 @@ const LOCALES_DIR = "src/i18n/locales";
 const SRC_DIR = "src";
 const EXTENSIONS = new Set([".tsx", ".ts"]);
 
-function getNestedKey(obj: any, keyPath: string) {
+function getNestedKey(obj: unknown, keyPath: string) {
   const parts = keyPath.split(".");
   let current = obj;
   for (const part of parts) {
@@ -33,7 +33,7 @@ function collectFiles(dir: string): string[] {
 
 describe("i18n key coverage", () => {
   const localeFiles = readdirSync(LOCALES_DIR).filter((f) => f.endsWith(".json"));
-  const locales: Record<string, any> = {};
+  const locales: Record<string, unknown> = {};
   for (const file of localeFiles) {
     const lang = file.replace(".json", "");
     locales[lang] = JSON.parse(readFileSync(join(LOCALES_DIR, file), "utf-8"));

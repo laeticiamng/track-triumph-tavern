@@ -1,5 +1,13 @@
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
 
+interface NavigatorWithStandalone extends Navigator {
+  standalone?: boolean;
+}
+
+interface WindowWithMSStream extends Window {
+  MSStream?: unknown;
+}
+
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -31,14 +39,15 @@ const DISMISS_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 function detectIos(): boolean {
   if (typeof navigator === "undefined") return false;
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  const iosWindow = window as WindowWithMSStream;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !iosWindow.MSStream;
 }
 
 function isStandalone(): boolean {
   if (typeof window === "undefined") return false;
   return (
     window.matchMedia("(display-mode: standalone)").matches ||
-    (navigator as any).standalone === true
+    (navigator as NavigatorWithStandalone).standalone === true
   );
 }
 
