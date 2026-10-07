@@ -52,7 +52,7 @@ serve(async (req) => {
   );
 
   // Log webhook event
-  await supabase.from("webhook_events" as any).insert({
+  await supabase.from("webhook_events").insert({
     stripe_event_id: event.id,
     event_type: event.type,
     payload: event.data.object,
@@ -116,7 +116,7 @@ serve(async (req) => {
 
     // Mark event as processed
     await supabase
-      .from("webhook_events" as any)
+      .from("webhook_events")
       .update({ status: "processed" })
       .eq("stripe_event_id", event.id);
 
@@ -129,7 +129,7 @@ serve(async (req) => {
     const nextRetry = new Date(Date.now() + 2 * 60 * 1000).toISOString();
 
     await supabase
-      .from("webhook_events" as any)
+      .from("webhook_events")
       .update({ status: "failed", error_message: msg, next_retry_at: nextRetry })
       .eq("stripe_event_id", event.id);
 

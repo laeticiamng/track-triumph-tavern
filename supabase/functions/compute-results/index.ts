@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
       .select("role")
       .eq("user_id", user.id);
 
-    if (!roles?.some((r: any) => r.role === "admin")) {
+    if (!roles?.some((r: { role: string }) => r.role === "admin")) {
       return new Response(JSON.stringify({ error: "Accès refusé" }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
       .from("categories")
       .select("id, scoring_criteria");
 
-    const criteriaMap: Record<string, any> = {};
+    const criteriaMap: Record<string, ReturnType<typeof getWeights>> = {};
     for (const cat of categories || []) {
       criteriaMap[cat.id] = getWeights(cat.scoring_criteria as ScoringCriterion[] | null);
     }

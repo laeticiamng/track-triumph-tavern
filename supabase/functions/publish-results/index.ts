@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
       .select("role")
       .eq("user_id", user.id);
 
-    if (!roles?.some((r: any) => r.role === "admin")) {
+    if (!roles?.some((r: { role: string }) => r.role === "admin")) {
       return new Response(JSON.stringify({ error: "Accès refusé" }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
       .select("id, scoring_criteria")
       .order("sort_order");
 
-    const criteriaMap: Record<string, any> = {};
+    const criteriaMap: Record<string, ReturnType<typeof getWeights>> = {};
     for (const cat of categories || []) {
       criteriaMap[cat.id] = getWeights(cat.scoring_criteria as ScoringCriterion[] | null);
     }
@@ -153,20 +153,21 @@ Deno.serve(async (req) => {
       .eq("status", "approved");
 
     // Rank submissions per category by weighted average score
+    type ApprovedSubmission = { id: string; user_id: string; category_id: string; vote_count: number | null };
     let winnersCount = 0;
-    const amountsByRank = pool
+    const amountsByRank: Record<number, number> = pool
       ? { 1: pool.top1_amount_cents, 2: pool.top2_amount_cents, 3: pool.top3_amount_cents }
       : { 1: 0, 2: 0, 3: 0 };
 
     for (const cat of categories || []) {
       const catSubs = (allSubs || [])
-        .filter((s: any) => s.category_id === cat.id)
-        .map((s: any) => {
+        .filter((s: ApprovedSubmission) => s.category_id === cat.id)
+        .map((s: ApprovedSubmission) => {
           const acc = scoreAcc[s.id];
           const avgScore = acc ? acc.totalScore / acc.count : 0;
           return { ...s, avgScore };
         })
-        .sort((a: any, b: any) => b.avgScore - a.avgScore);
+        .sort((a, b) => b.avgScore - a.avgScore);
 
       const top3 = catSubs.slice(0, 3);
 
@@ -193,11 +194,11 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const rewardData: any = {
+        const rewardData = {
           winner_id: winner.id,
           week_id,
           reward_type: isCashMode ? "cash" : "fallback",
-          amount_cents: isCashMode ? (amountsByRank as any)[rank] || 0 : 0,
+          amount_cents: isCashMode ? amountsByRank[rank] || 0 : 0,
           label: isCashMode ? null : (pool?.fallback_label || "Récompenses alternatives disponibles"),
           status: "pending",
         };

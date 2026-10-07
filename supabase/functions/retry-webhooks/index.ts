@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const logStep = (step: string, details?: Record<string, unknown>) => {
   console.log(`[RETRY-WEBHOOKS] ${step}${details ? ` — ${JSON.stringify(details)}` : ""}`);
@@ -126,8 +126,7 @@ serve(async (req) => {
   }
 });
 
-// deno-lint-ignore no-explicit-any
-async function processStripeEvent(event: Stripe.Event, supabase: any) {
+async function processStripeEvent(event: Stripe.Event, supabase: SupabaseClient) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
