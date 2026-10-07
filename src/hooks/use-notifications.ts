@@ -19,7 +19,7 @@ let sharedUnreadCount = 0;
 let sharedLoading = true;
 let lastFetchTime = 0;
 let fetchPromise: Promise<void> | null = null;
-let subscribers = new Set<() => void>();
+const subscribers = new Set<() => void>();
 let realtimeChannel: ReturnType<typeof supabase.channel> | null = null;
 let realtimeUserId: string | null = null;
 

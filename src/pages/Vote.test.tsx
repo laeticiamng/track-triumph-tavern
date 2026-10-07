@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { render } from "@testing-library/react";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter, Routes, Route, useLocation } from "react-router-dom";
 import Vote from "./Vote";
 
 vi.mock("react-i18next", () => ({
@@ -10,18 +10,24 @@ vi.mock("react-i18next", () => ({
   }),
 }));
 
+// Affiche l'URL courante pour vérifier la cible exacte de la redirection
+function LocationProbe() {
+  const location = useLocation();
+  return <div data-testid="explore-page">{location.pathname + location.search}</div>;
+}
+
 describe("Vote page", () => {
   it("redirects to /explore?mode=vote", () => {
-    let navigatedTo = "";
     render(
       <MemoryRouter initialEntries={["/vote"]}>
         <Routes>
           <Route path="/vote" element={<Vote />} />
-          <Route path="/explore" element={<div data-testid="explore-page">Explore</div>} />
+          <Route path="/explore" element={<LocationProbe />} />
         </Routes>
       </MemoryRouter>
     );
-    // The Navigate component should redirect — we can't easily assert the query param
-    // but we confirm it renders without crashing
+    // Auparavant ce test n'affirmait rien ; on vérifie désormais la redirection
+    // et le paramètre de requête mode=vote.
+    expect(screen.getByTestId("explore-page")).toHaveTextContent("/explore?mode=vote");
   });
 });

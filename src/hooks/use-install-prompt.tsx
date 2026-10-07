@@ -5,6 +5,10 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+// Propriétés non standard exposées par certains navigateurs (IE/Edge hérité, Safari iOS)
+type LegacyWindow = Window & { MSStream?: unknown };
+type IosNavigator = Navigator & { standalone?: boolean };
+
 interface InstallPromptContextValue {
   deferredPrompt: BeforeInstallPromptEvent | null;
   canInstall: boolean;
@@ -31,14 +35,14 @@ const DISMISS_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 function detectIos(): boolean {
   if (typeof navigator === "undefined") return false;
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as LegacyWindow).MSStream;
 }
 
 function isStandalone(): boolean {
   if (typeof window === "undefined") return false;
   return (
     window.matchMedia("(display-mode: standalone)").matches ||
-    (navigator as any).standalone === true
+    (navigator as IosNavigator).standalone === true
   );
 }
 
